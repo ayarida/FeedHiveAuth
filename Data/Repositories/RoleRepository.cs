@@ -1,0 +1,27 @@
+﻿using System;
+using System.Data.SqlClient;
+using System.Xml.Linq;
+using Dapper;
+using FeedHiveAuth.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
+
+namespace FeedHiveAuth.Data.Repositories
+{
+    public class RoleRepository : BaseRepository<Role>
+    {
+        public RoleRepository()
+        {
+            TableName = Database.Tables.Roles;
+            Columns = Database.Columns.Roles;           
+        }
+        public new void CreateRole(Role role)
+        {
+            _connection.DbSqlConnection.OpenWithRetry();
+            
+            string query = "INSERT INTO AspNetRoles(Id,Name,NormalizedName) values ('1234','" + role.Name + "','" + role.NormalizedName + "')";
+            ExecuteQuery(query);
+        } 
+    }
+}

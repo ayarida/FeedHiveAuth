@@ -1,8 +1,25 @@
-﻿@{
+﻿@model FeedHiveAuth.Models.User
+@{
     ViewData["Title"] = "Home Page";
+    var x = Model;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome @Model.FirstName</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<form asp-controller="Roles" asp-action="CreateRole" method="post">
+    <table>
+        <tr>
+            <td>Name: </td>
+            <td><input name="Name" type="text" /></td>
+        </tr>
+        <tr>
+            <td>NormalizedName: </td>
+            <td><input name="NormalizedName" type="text" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input id="Submit1" type="submit" value="submit" /></td>
+        </tr>
+    </table>
+</form>
