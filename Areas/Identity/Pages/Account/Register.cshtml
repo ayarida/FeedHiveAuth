@@ -2,34 +2,66 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    var x = Model;
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class ="sign-up-card">
+                <div class="sign-up-header">
+                    <h2 class="sign-up-title">Get started for free</h2>
+                    <div class="sign-up-title2">SIGN UP WITH</div>
+                    <button class="sign-up-google">
+                        Google
+                        <i class="bi bi-google"></i>
+                    </button>
+                </div>
+                <div class="sign-up-name">
+                    <p>Username</p>
+            <input asp-for="Input.Username"  class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="Username" />
+            <span asp-validation-for="Input.Username"  class="text-danger"></span>
+                </div>
+            <div class="sign-up-email">
+                <p>Email</p>
+                <input asp-for="Input.Email" class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="Email" />
+@*                 <label asp-for="Input.Email"></label>
+ *@                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+            <div class="password">
+            <p>Password</p>
+
+            <input asp-for="Input.Password" class="" autocomplete="new-password" aria-required="true" placeholder="Password" />
+@*                 <label asp-for="Input.Password"></label>
+ *@                <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div class="confirm-password">
+            <p>Confirm Password</p>
+
+                <input id="field-2" asp-for="Input.ConfirmPassword" class="" autocomplete="new-password" aria-required="true" type="password" placeholder="Confirm Password" />
+@*                 <label asp-for="Input.ConfirmPassword"></label>
+ *@                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+           
+            <div class="sign-up-control">
+                <button id="registerSubmit" type="submit" class="control">
+                    <span><i class="bi bi-arrow-right-short"></i></span>
+                    Sign up
+                </button>
+                <h4>
+                    By signing up, you agree to our
+                    <a href="">Terms of Service </a>
+                    and acknowledge our
+                    <a href="">Privacy Policy</a>
+                </h4>
+            </div>
+            </div>
         </form>
-    </div>
+
     <div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to register.</h3>
@@ -60,8 +92,6 @@
             }
         </section>
     </div>
-</div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

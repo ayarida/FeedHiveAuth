@@ -17,5 +17,7 @@
 
         public DateTime? ExpireDate { get; set; }
 
+        public MediaItem PostMediaItem { get; set; }      
+
     }
 }

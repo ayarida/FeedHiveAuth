@@ -1,4 +1,5 @@
 using FeedHiveAuth.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,9 +37,23 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "Default_Posts",
+        pattern: "{controller}/{action}/{id?}",
+        defaults: new { area = "", controller = "Home", action = "Index" }
+     );
+   /* endpoints.MapControllerRoute(
+       name: "myRoute",
+       pattern: "Posts/Create",
+       defaults: new { controller = "Posts", action = "Create" }
+   );*/
+});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

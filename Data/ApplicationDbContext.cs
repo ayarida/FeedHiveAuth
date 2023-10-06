@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using FeedHiveAuth.Models;
 
 namespace FeedHiveAuth.Data
 {
@@ -9,5 +10,6 @@ namespace FeedHiveAuth.Data
             : base(options)
         {
         }
+        public DbSet<FeedHiveAuth.Models.Post>? Post { get; set; }
     }
 }
