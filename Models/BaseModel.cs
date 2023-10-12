@@ -9,7 +9,7 @@
 
         public string? Id { get; set; }
         public int Status { get; set; }
-        public DateTime? CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; } = DateTime.MinValue;
         public DateTime? LastModified { get; set; }
         public string? SubscriptionId { get; set; }
     }

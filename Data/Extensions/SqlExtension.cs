@@ -128,47 +128,53 @@ namespace FeedHiveAuth.Data.Extensions
         {
             return guid != Guid.Empty ? string.Format("'{0}'", guid) : "NULL";
         }
-        //public static string EscapeForSql(this IEnumerable<Guid> guids)
-        //{
-        //    if (guids.None() || guids.None(x => x.HasValue()))
-        //        return "(" + Guid.Empty.EscapeForSql() + ")";
-        //    return " (" + string.Join(",", guids.Where(x => x.HasValue()).Select(g => g.EscapeForSql())) + ") ";
-        //}
-        //public static string EscapeForSql(this IEnumerable<int> array)
-        //{
-        //    return " (" + string.Join(",", array) + ") ";
-        //}
-        //public static string EscapeForSql(this IEnumerable<string> array)
-        //{
-        //    return " (" + string.Join(",", array.Where(x => x.IsNotNullOrEmpty()).Select(g => g.EscapeForSql())) + ") ";
-        //}
-        //public static string EscapeForSql(this string value, bool emptyIsNull = false, bool like = false)
-        //{
-        //    if (value == null)
-        //        return "NULL";
-        //    if (emptyIsNull && string.IsNullOrEmpty(value))
-        //        return "NULL";
-        //    return string.Format("N'{0}'", like ? "%" + value.CleanSql() + "%" : value.CleanSql());
-        //}
-        //public static string EscapeForSql(this DateTime value, bool withTime = false, bool nowIfNull = false)
-        //{
-        //    if (value == DateTime.MinValue && nowIfNull)
-        //        value = DomainTime.Now();
-        //    if (value == DateTime.MinValue)
-        //        return "NULL";
-        //    return string.Format("'{0}'", value.ToStandardFormat(withTime).CleanSql());
-        //}
-        //public static string EscapeForSql(this DateTime? date, bool withTime = false, bool nowIfNull = false)
-        //{
-        //    if (date.HasValue)
-        //        return date.Value.EscapeForSql(withTime, nowIfNull);
-        //    else
-        //    {
-        //        if (nowIfNull)
-        //            return DomainTime.Now().EscapeForSql(withTime, true);
-        //        else return "NULL";
-        //    }
-        //}
+
+
+
+
+
+
+        public static string EscapeForSql(this IEnumerable<Guid> guids)
+        {
+            if (guids.None() || guids.None(x => x.HasValue()))
+                return "(" + Guid.Empty.EscapeForSql() + ")";
+            return " (" + string.Join(",", guids.Where(x => x.HasValue()).Select(g => g.EscapeForSql())) + ") ";
+        }
+        public static string EscapeForSql(this IEnumerable<int> array)
+        {
+            return " (" + string.Join(",", array) + ") ";
+        }
+        public static string EscapeForSql(this IEnumerable<string> array)
+        {
+            return " (" + string.Join(",", array.Where(x => x.IsNotNullOrEmpty()).Select(g => g.EscapeForSql())) + ") ";
+        }
+        public static string EscapeForSql(this string value, bool emptyIsNull = false, bool like = false)
+        {
+            if (value == null)
+                return "NULL";
+            if (emptyIsNull && string.IsNullOrEmpty(value))
+                return "NULL";
+            return string.Format("'{0}'", like ? "%" + value.CleanSql() + "%" : value.CleanSql());
+        }
+       /* public static string EscapeForSql(this DateTime value, bool withTime = false, bool nowIfNull = false)
+        {
+            if (value == DateTime.MinValue && nowIfNull)
+                value = DomainTime.Now();
+            if (value == DateTime.MinValue)
+                return "NULL";
+            return string.Format("'{0}'", value.ToStandardFormat(withTime).CleanSql());
+        }*/
+       /* public static string EscapeForSql(this DateTime? date, bool withTime = false, bool nowIfNull = false)
+        {
+            if (date.HasValue)
+                return date.Value.EscapeForSql(withTime, nowIfNull);
+            else
+            {
+                if (nowIfNull)
+                    return DomainTime.Now().EscapeForSql(withTime, true);
+                else return "NULL";
+            }
+        }*/
         public static string BooleanToBit(this bool value)
         {
             return value ? "1" : "0";
@@ -261,6 +267,8 @@ namespace FeedHiveAuth.Data.Extensions
             }
             return "";
         }
+
+        
 
 
     }

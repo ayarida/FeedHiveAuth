@@ -539,3 +539,17 @@ main {
 .bg-white {
     box-shadow: -5px 6px 5px 0 rgb(0 0 0 / 5%), -2px 7px 10px 0 rgb(0 0 0 / 5%);
 }
+
+/*Create Post*/
+
+#richText-fxhbyg {
+    background-color: #f8fafc;
+}
+
+.richText .richText-toolbar:first-of-type {
+    background-color: #d5eaff !important;
+}
+
+.create-post {
+    background-color: white;
+}
