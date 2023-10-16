@@ -361,8 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/wwwroot/css/Sidebar/core.css
-/wwwroot/css/Sidebar/navbar.css
-/wwwroot/css/Sidebar/js/mdb.js
-/wwwroot/js/Sidebar/mdb.js
-/.gitignore
+
+# Local Uploaded Files
+wwwroot/Files
+wwwroot/uploads

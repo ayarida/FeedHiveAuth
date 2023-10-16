@@ -2,6 +2,7 @@
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 
 namespace FeedHiveAuth.Data.Repositories
@@ -10,7 +11,7 @@ namespace FeedHiveAuth.Data.Repositories
     {
         protected string SqlSelect => "SELECT " + Columns.AddBraces() + " FROM " + TableName;
         protected string SqlInsert => Columns.GenerateInsertQuery(TableName);
-        protected string SqlDelete => "DELETE FROM " + TableName + " WHERE Id=@Id;";
+        public string SqlDelete => "DELETE FROM " + TableName + " WHERE Id=@Id;";
         protected string SqlCount => "SELECT COUNT(*) FROM " + TableName;
         protected string KeyColumn = "Id";
         protected string TableName;
@@ -47,13 +48,25 @@ namespace FeedHiveAuth.Data.Repositories
                 return returnedUser;
             }
         }
+        public void Delete(string id)
+        {
+            using (var connection = _connection.DbSqlConnection)
+            {
+                var resultQuery = connection.Query<T>(SqlDelete, new { Id = new[] { id } });
+            }
+        }
 
         public void ExecuteQuery(string query)
         {
             SqlCommand cmd = new SqlCommand(query,_connection.globalSqlConnection);
-            _connection.globalSqlConnection.Open();
+            if (!_connection.globalSqlConnection.State.Equals(1))
+            {
+                _connection.globalSqlConnection.Open();
+            }
             int i = cmd.ExecuteNonQuery();
         }
+
+
 
     }
 }

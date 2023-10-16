@@ -9,13 +9,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Mangox.Core.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Mangox.Core.Extensions
+namespace FeedHiveAuth.Data.Extensions
 {
     public static class StringExtensions
     {

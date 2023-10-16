@@ -1,10 +1,20 @@
 ﻿namespace FeedHiveAuth.Models
 {
-    public class MediaItem
+    public class MediaItem : BaseModel
     {
-        public MediaItem() { }
-        public string? Id { get; set; }
+        public MediaItem(string subscriptionId) : base(subscriptionId)
+        {
+           
+        }
+
+        public MediaItem() : this(string.Empty)
+        {
+        }
+        //public string? Id { get; set; }
         public string?    Caption { get; set; }
+        public string? Description { get; set; }
+
+        public int? Duration { get; set; }
         public string? Tags { get; set; }
         public string? Path { get; set; }
         public string? Extension { get; set; }
@@ -18,6 +28,6 @@
         //public Post Post { get; set; }
         public IFormFile File { get; set; }
 
-
+        public List<IFormFile> Files { get; set; }
     }
 }
