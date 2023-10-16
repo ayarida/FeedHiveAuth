@@ -4,10 +4,7 @@
     var x = Model;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome @Model.FirstName</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
 @* <form asp-controller="Roles" asp-action="CreateRole" method="post">
     <table>
         <tr>
@@ -23,45 +20,3 @@
         </tr>
     </table>
 </form> *@
-<nav id="sidebarMenu"
-     class="collapse d-lg-block sidebar collapse bg-white">
-    <div class="position-sticky">
-        <div class="list-group list-group-flush mx-3 mt-4">
-            <a href="/Posts/Create"
-               class="list-group-item list-group-item-action py-2 ripple active"
-               aria-current="true">
-                <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
-            </a>
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple">
-                <i class="bi bi-calendar"></i><span>الجدول المحتوى</span>
-            </a>
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple"><i class="bi bi-grid"></i><span>المنشورات</span></a>
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple">
-                <i class="bi bi-building-gear"></i><span>التواصل الاجتماعي</span>
-            </a>
-            <a href="/MediaItem/Upload"
-               class="list-group-item list-group-item-action py-2 ripple">
-                <i class="bi bi-collection-fill"></i><span>الميديا</span>
-            </a>
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple">
-                <i class="bi bi-microsoft-teams"></i><span>الفريق</span>
-            </a>
-        </div>
-
-        <div class="list-group list-group-flush mx-3 bottom-list">
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple"
-               aria-current="true">
-                <i class="bi bi-gear"></i><span>الاعدادات</span>
-            </a>
-            <a href="#"
-               class="list-group-item list-group-item-action py-2 ripple">
-                <i class="bi bi-person-raised-hand"></i><span>دعم</span>
-            </a>
-        </div>
-    </div>
-</nav>

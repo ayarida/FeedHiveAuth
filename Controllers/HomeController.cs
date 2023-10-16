@@ -21,13 +21,13 @@ namespace FeedHiveAuth.Controllers
         {
             BaseRepository<User> bs = new BaseRepository<User>();
             var ss = bs.Get("301dfa17-d9b0-411a-a742-daaa49c7e0ce");
-            User U = new User()
-            {
-                FirstName = ss.Username,
-                LastName = ss.LastName,
-            };
+            //User U = new User()
+            //{
+            //    FirstName = ss.Username,
+            //    LastName = ss.LastName,
+            //};
 
-            return View(U);
+            return View();
         }
 
         public IActionResult Privacy()

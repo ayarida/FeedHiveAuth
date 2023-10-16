@@ -1,82 +1,4 @@
-﻿/*SIGN-up-CARD STYLE  */
-.sign-up-card {
-    margin: 50px auto;
-    border: 2px solid #3477F5;
-    border-radius: 25px;
-    max-width: 500px;
-    height: 800px;
-    text-align: left;
-    padding-left: 50px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-
-    .sign-up-card p {
-        font-weight: bold;
-    }
-
-
-
-.sign-up-title {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-right: 20px;
-}
-
-.sign-up-title2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.sign-up-text {
-    text-align: center;
-}
-
-button {
-    width: 400px;
-    height: 60px;
-    border-radius: 40px;
-    background: white;
-    font-size: 1.1rem;
-    border-style: none;
-    box-shadow: 0px 3px 6px #00000029;
-}
-
-input {
-    width: 400px;
-    height: 60px;
-    border-radius: 40px;
-    background: white;
-    font-size: 1.1rem;
-    border-style: none;
-    box-shadow: 0px 3px 6px #00000029;
-    text-align: left;
-    padding-left: 20px;
-}
-
-.sign-up-control button {
-    background: #3477F5;
-    color: white;
-    margin-bottom: 5px;
-}
-
-.sign-up-card a {
-    text-decoration: none;
-    margin-top: 10px;
-    color: #3477F5;
-    opacity: 0.8;
-}
-
-::placeholder {
-    opacity: 0.1;
-}
-
-.sign-up-control h4 {
-    font-weight: normal;
-}
-
+﻿
 :root {
     --primary-font: Arabic;
     --green-color: #52c282;
@@ -350,192 +272,126 @@ button {
     }
 }
 
-.card-banner {
-    margin: auto;
-    width: 1170px;
-    height: 150px;
-    background: white;
-    box-shadow: 0px 3px 6px #00000029;
+#fr-logo {
+    display: none;
+}
+
+.post-info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+
+.post-stats {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+
+    .post-stats i {
+        color: #707a82;
+    }
+
+
+
+/*SIGN-up-CARD STYLE  */
+.sign-up-card {
+    margin: 50px auto;
+    border: 2px solid #3477F5;
     border-radius: 25px;
+    max-width: 500px;
+    height: 800px;
+    text-align: left;
+    padding-left: 50px;
+    background: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-evenly;
 }
 
-    .card-banner .title {
-        color: #3a7cf4;
+    .sign-up-card p {
+        font-weight: bold;
     }
 
-    .card-banner button {
-        background: #3477f5;
-        border-radius: 15px;
-        color: white;
-    }
 
-.search {
-    width: 20%;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: gray;
-}
 
-.search-text {
-    font-size: 20px;
+.sign-up-title {
+    text-align: center;
+    margin-bottom: 20px;
     padding-right: 20px;
 }
 
-.header {
-    width: 80%;
-    height: 42px;
-    display: flex;
-    justify-content: space-between;
-    margin-right: 20%;
-}
-
-.left-header {
-    display: flex;
-    flex-direction: row;
-    width: 25%;
-}
-
-    .left-header .bell-icon {
-        margin-top: 40px;
-        font-size: 20px;
-    }
-
-.dot {
-    height: 30px;
-    width: 30px;
-    background: rgb(61, 97, 61);
-    border-radius: 50%;
-    margin-right: 20px;
-    color: azure;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.dot-bell {
-    width: 20px;
-    height: 19px;
-    background: #e95c7b;
-    border-radius: 50%;
-    margin-top: 10px;
-    margin-left: 5px;
-    color: white;
-    padding: 8px;
+.sign-up-title2 {
     text-align: center;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.arrow {
-    padding-top: 20px;
-    color: gray;
+.sign-up-text {
+    text-align: center;
 }
 
-ul.navbar-nav.d-flex.flex-row {
-    align-items: center;
+button {
+    width: 400px;
+    height: 60px;
+    border-radius: 40px;
+    background: white;
+    font-size: 1.1rem;
+    border-style: none;
+    box-shadow: 0px 3px 6px #00000029;
 }
 
-i.bi.bi-bell.bell-icon {
-    font-size: 20px;
+input {
+    width: 400px;
+    height: 60px;
+    border-radius: 40px;
+    background: white;
+    font-size: 1.1rem;
+    border-style: none;
+    box-shadow: 0px 3px 6px #00000029;
+    text-align: left;
+    padding-left: 20px;
 }
 
-.list-group.list-group-flush a {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
+.sign-up-control button {
+    background: #3477F5;
+    color: white;
+    margin-bottom: 5px;
 }
 
-@media (min-width: 992px) {
-    nav#sidebarMenu .position-sticky {
-        display: flex;
-        height: 100%;
-        flex-direction: column;
-    }
-
-    .bottom-list {
-        margin-top: auto;
-        margin-bottom: 10px;
-    }
+.sign-up-card a {
+    text-decoration: none;
+    margin-top: 10px;
+    color: #3477F5;
+    opacity: 0.8;
 }
 
-@media (max-width: 992px) {
-    .list-group.list-group-flush.mx-3.mt-4:not(.bottom-list).list-group-flush > .list-group-item:last-child {
-        border-width: 0 0 var(--bs-list-group-border-width);
-    }
-
-    a.navbar-brand {
-        display: none !important;
-    }
+::placeholder {
+    opacity: 0.1;
 }
 
-a.navbar-brand {
-    display: flex;
-    flex-direction: row-reverse;
-    column-gap: 10px;
+.sign-up-control h4 {
+    font-weight: normal;
 }
 
-form.d-none.d-md-flex.input-group.w-auto.my-auto input {
-    border-left: none;
-    border-right: 0;
-    border-top: none;
-    border-radius: 0;
-    border-bottom: 1px solid;
+.navbar-toggler {
+    width: 71px;
+    height: 42px;
 }
 
-.input-group-text {
-    background-color: transparent;
+.editor input{
+    border-radius: inherit;
 }
 
-/* Sidebar */
-.sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    padding: 58px 0 0; /* Height of navbar */
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
-    width: 240px;
-    z-index: 999;
+input[type="file"] {
+    display: none;
 }
 
-@media (max-width: 991.98px) {
-    .sidebar {
-        width: 100%;
-    }
-}
-
-.sidebar .active {
-    border-radius: 5px;
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-}
-
-.sidebar-sticky {
-    position: relative;
-    top: 0;
-    height: calc(100vh - 48px);
-    padding-top: 0.5rem;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-}
-
-@media (min-width: 991.98px) {
-    main {
-        padding-right: 240px;
-        padding-top: 50px;
-    }
-}
-
-main {
-    padding-top: 50px;
-}
-
-.bg-white {
-    box-shadow: -5px 6px 5px 0 rgb(0 0 0 / 5%), -2px 7px 10px 0 rgb(0 0 0 / 5%);
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
 }

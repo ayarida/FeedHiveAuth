@@ -5,52 +5,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<main class="editor">
+    <div class="container pt-4 mt-4">
+        <div class="card p-4">
+            <h1>Create</h1>
 
-<h4>Post</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Posts" asp-action="Create" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <h4>Post</h4>
+            <hr />
+            <div class="row">
+                <div class="create-post">
+                    <div class="card-head my-2">
+
+                        <form asp-controller="Posts" asp-action="Create" enctype="multipart/form-data" method="post" style="max-width: 100%">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="Title" class="control-label"></label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="ShortTitle" class="control-label"></label>
+                                    <input asp-for="ShortTitle" class="form-control" />
+                                    <span asp-validation-for="ShortTitle" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="Summary" class="control-label"></label>
+                                    <input asp-for="Summary" class="form-control" />
+                                    <span asp-validation-for="Summary" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="Content" class="control-label"></label>
+                                    <input asp-for="Content" class="form-control" />
+                                    <span asp-validation-for="Content" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="PostDate" class="control-label"></label>
+                                    <input asp-for="PostDate" class="form-control" />
+                                    <span asp-validation-for="PostDate" class="text-danger"></span>
+                                </div>
+                                <label class="custom-file-upload mb-3">
+                                    Upload
+                                    <input type="file" name="File" />
+                                </label>
+                                <div class="form-group mb-4">
+                                <input type="submit" value="Create" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
+                                </div>
+
+                                <textarea class="content" name="example"></textarea>
+                            </form>
+                      
+
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ShortTitle" class="control-label"></label>
-                <input asp-for="ShortTitle" class="form-control" />
-                <span asp-validation-for="ShortTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
-                <span asp-validation-for="Summary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostDate" class="control-label"></label>
-                <input asp-for="PostDate" class="form-control" />
-                <span asp-validation-for="PostDate" class="text-danger"></span>
-            </div>
-            <label>Upload</label>
-            <input type="file" name="File" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
-</div>
+</main>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script>
+<link rel="stylesheet" href="~/css/Editor/richtext.min.css" />
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
