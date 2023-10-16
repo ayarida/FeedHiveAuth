@@ -223,7 +223,7 @@ namespace FeedHiveAuth.Data.Extensions
             var columnsArr = columns.Replace(" ", "").Split(',').Where(x => excludedColumns == null || !excludedColumns.Split(',').Contains(x));
             return string.Join(", ", columnsArr.Select(col => string.Format("[{0}]", col)));
         }
-        public static string GenerateUpdateQuery(this string columns, string table, string key, string excludedColumns = "PublicId,Id,Status,CreationDate,SubscriptionId")
+        public static string GenerateUpdateQuery(this string columns, string table, string key, string excludedColumns = "Id,CreationDate")
         {
             var columnsArr = columns.Replace(" ", "").Split(',').Where(x => !excludedColumns.Split(',').Contains(x));
             bool notSubscription = false;// removed by zahraa. columns.Contains("SubscriptionId");

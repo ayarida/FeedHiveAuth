@@ -1,4 +1,5 @@
 ﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
@@ -10,6 +11,9 @@ namespace FeedHiveAuth.Controllers
 {
     public class PostsController : Controller
     {
+        protected PostRepository _postService = Instances.Repositories.PostRepository;
+        protected MediaItemRepository _mediaItemRepository = Instances.Repositories.MediaItemRepository;
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -32,27 +36,19 @@ namespace FeedHiveAuth.Controllers
                 //Multi Media Upload
                 MultiUpload(HttpContext.Request.Form.Files);
             }
-            post.Id = Guid.NewGuid().ToString();
             post.Title = HttpContext.Request.Form["Title"];
             post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
             post.Summary = HttpContext.Request.Form["Summary"];
             post.Content = HttpContext.Request.Form["Content"];
-            //post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"].ToString());
             post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
-            
+            post.CreatedBy = Instances.Repositories.UserRepository.GetByUsername("testnew").Id;
 
-            List<MediaItem> postMedias = Instances.Repositories.MediaItemRepository.MediasList(HttpContext.Request.Form.Files);
-            //JsonResult PostMediaItems = Json(files);
-            //Save all post media in DB
-
+            List<MediaItem> postMedias = _mediaItemRepository.MediasList(HttpContext.Request.Form.Files);
             post.PostMediaItems = postMedias;
+
+            _postService.Save(post);
+
             SavePostMedias(post);
-
-            //var jsonObject = JsonSerializer.Serialize(postmedia);
-
-
-
-            //Instances.Repositories.PostRepository.SavePost(post);
 
             return View("~/Views/Posts/Create.cshtml");
         }
@@ -133,8 +129,23 @@ namespace FeedHiveAuth.Controllers
         {
             if (post.PostMediaItems.Any())
             {
-                Instances.Repositories.MediaItemRepository.InsertPostMedia(post.PostMediaItems, post.Id);
+                _mediaItemRepository.InsertPostMedia(post.PostMediaItems, post.Id);
             }
+        }
+
+        [HttpGet]
+        public void DeletePost(Post post)
+        {
+            _postService.Delete(post.Id);
+        }
+
+        [HttpGet]
+        public void Publish()
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+
+            string x = "Ssss";
+
         }
 
     }
