@@ -40,10 +40,5 @@ namespace FeedHiveAuth.Data.Repositories
                                     );
             ExecuteQuery(query);
         }
-
-        /*public new void Update(Post post)
-        {
-            Execute(SqlUpdate, post);
-        }*/
     }
 }

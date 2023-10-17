@@ -20,5 +20,8 @@ namespace FeedHiveAuth.Data.Repositories
             return Query<User>(SqlSelect + " WHERE UserName=@username", new { UserName = username }).FirstOrDefault();
         }
 
+        
+
+
     }
 }
