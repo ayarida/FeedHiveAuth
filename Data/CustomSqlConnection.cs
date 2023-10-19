@@ -30,7 +30,7 @@ namespace FeedHiveAuth.Data
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to execute query: " + query, ex);
-                Close();
+                //Close();
                 throw;
             }
         }
@@ -39,13 +39,13 @@ namespace FeedHiveAuth.Data
             try
             {
                 var results = _connection.Query(query, param, transaction);
-                Close();
+                //Close();
                 return results;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to execute query: " + query, ex);
-                Close();
+                //Close();
                 throw;
             }
         }
@@ -54,13 +54,13 @@ namespace FeedHiveAuth.Data
             try
             {
                 var results = _connection.Query<T>(query, param, transaction);
-                Close();
+                //Close();
                 return results;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to execute query: " + query + "\n" + JsonConvert.SerializeObject(param), ex);
-                Close();
+                //Close();
                 throw;
             }
         }
@@ -70,13 +70,13 @@ namespace FeedHiveAuth.Data
             {
 
                 var results = await _connection.QueryAsync<T>(query, param, transaction);
-                Close();
+                //Close();
                 return results;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to execute query: " + query + "\n" + JsonConvert.SerializeObject(param), ex);
-                Close();
+                //Close();
                 throw;
             }
         }

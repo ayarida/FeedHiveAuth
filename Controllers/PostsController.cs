@@ -148,10 +148,11 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpGet]
-        public void Publish()
+        public void Publish(string id)
+        
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-
+            var post = _postService.Publish(id);
             string x = "Ssss";
 
         }

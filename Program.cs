@@ -44,11 +44,11 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller}/{action}/{id?}",
         defaults: new { area = "", controller = "Home", action = "Index" }
      );
-   /* endpoints.MapControllerRoute(
+    endpoints.MapControllerRoute(
        name: "myRoute",
-       pattern: "Posts/Create",
+       pattern: "Posts/Publish/{id?}",
        defaults: new { controller = "Posts", action = "Create" }
-   );*/
+   );
 });
 app.MapControllerRoute(
     name: "default",
