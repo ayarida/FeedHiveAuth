@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
 using NuGet.Protocol;
+using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -22,15 +23,14 @@ namespace FeedHiveAuth.Controllers
         public ActionResult Create()
         {
             return View("~/Views/Posts/Create.cshtml");
-
         }
 
         [HttpPost]
         public ActionResult CreatePost()
         {
-            GetCurrentUser();
-
+            
             Post post = new Post();
+            var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
             //Single Media Upload
             /*if(HttpContext.Request.Form.Files!=null && HttpContext.Request.Form.Files.Count() == 1)
@@ -48,16 +48,20 @@ namespace FeedHiveAuth.Controllers
             post.Summary = HttpContext.Request.Form["Summary"];
             post.Content = HttpContext.Request.Form["Content"];
             post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
-
+            
+            post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"]);
+            if (currentUser != null)
+            {
+                post.ModifiedBy = currentUser.Id;
+                post.CreatedBy = currentUser.Id;
+            }
+            _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
             {
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
                 post.PostMediaItems = postMedias;
+                SavePostMedias(post);
             }
-
-            _postService.Save(post);
-            SavePostMedias(post);
-
             return View("~/Views/Posts/Create.cshtml");
         }
 
@@ -132,7 +136,6 @@ namespace FeedHiveAuth.Controllers
 
             return stringBuilder.ToString().ToLower();
         }
-
         public void SavePostMedias(Post post)
         {
             if (post.PostMediaItems.Any())
@@ -148,29 +151,32 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpGet]
-        public void Publish(string id)
-        
+        public void Publish(string Id)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var post = _postService.Publish(id);
-            string x = "Ssss";
-
+            //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var currUser = GetCurrentUser();           
+            _postService.Publish(Id, currUser.Id);
+           
         }
 
-
-        public void GetCurrentUser()
+        [HttpGet]
+        public List<Post> PublishedPosts()
         {
-/*            string email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
-
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;*/
-            
-            var nmid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var namm = User.FindFirstValue(ClaimTypes.Name);
+            List<Post> publishedPosts = _postService.GetPublishedPosts();
+            return publishedPosts;          
+        }
+        public User GetCurrentUser()
+        {
+            /*            string email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
+                        System.Security.Claims.ClaimsPrincipal currentUser = this.User;*/
             //Console.WriteLine("Role: " + User.FindFirstValue(ClaimTypes.Role));
             //Console.WriteLine("First name: " + User.FindFirstValue("firstname"));
             //Console.WriteLine("Last name: " + User.FindFirstValue("lastname"));
-            var x = "S";
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User currentUser = _userService.Get(userId);
+            return currentUser;
         }
+
 
     }
 }

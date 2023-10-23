@@ -22,16 +22,6 @@ namespace FeedHiveAuth.Data.Repositories
         protected string Columns;
         public DatabaseConnection _connection = new DatabaseConnection();
        
-
-        /*public T Get(string id)
-        {
-            using (var connection = _connection.DbSqlConnection)
-            {
-                var returnedUser = connection.Query<T>("SELECT * FROM AspNetUsers WHERE id IN @ids", new { ids = new[] { id } }).FirstOrDefault();
-                return returnedUser;
-            }
-        }*/
-
         public T Get(string id)
         {
             if (string.IsNullOrEmpty(SqlSelect))
@@ -63,8 +53,8 @@ namespace FeedHiveAuth.Data.Repositories
 
         public void UpdateColumn(string column, object value, string id)
         {
-            _connection.globalSqlConnection.Query<T>("UPDATE POST SET STATUS=@value WHERE Id=@id", new { value, Id = id });               
-            
+            var x = "Ssksl";
+            _connection.globalSqlConnection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });               
             //Execute("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, id });
         }
         public int Execute(string sql, dynamic param = null)

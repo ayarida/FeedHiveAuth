@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Posts\Partials\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

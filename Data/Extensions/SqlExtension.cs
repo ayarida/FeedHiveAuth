@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using FeedHiveAuth.Data.Extensions;
+using Mangox.Data.Extensions;
 
 namespace FeedHiveAuth.Data.Extensions
 {
@@ -129,10 +130,25 @@ namespace FeedHiveAuth.Data.Extensions
             return guid != Guid.Empty ? string.Format("'{0}'", guid) : "NULL";
         }
 
-
-
-
-
+        public static string EscapeForSql(this DateTime value, bool withTime = false, bool nowIfNull = false)
+        {
+            if (value == DateTime.MinValue && nowIfNull)
+                value = DomainTime.Now();
+            if (value == DateTime.MinValue)
+                return "NULL";
+            return string.Format("'{0}'", value.ToStandardFormat(withTime).CleanSql());
+        }
+        public static string EscapeForSql(this DateTime? date, bool withTime = false, bool nowIfNull = false)
+        {
+            if (date.HasValue)
+                return date.Value.EscapeForSql(withTime, nowIfNull);
+            else
+            {
+                if (nowIfNull)
+                    return DomainTime.Now().EscapeForSql(withTime, true);
+                else return "NULL";
+            }
+        }
 
         public static string EscapeForSql(this IEnumerable<Guid> guids)
         {

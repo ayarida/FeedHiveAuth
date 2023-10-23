@@ -46,8 +46,8 @@ app.UseEndpoints(endpoints =>
      );
     endpoints.MapControllerRoute(
        name: "myRoute",
-       pattern: "Posts/Publish/{id?}",
-       defaults: new { controller = "Posts", action = "Create" }
+       pattern: "Posts/Publish/{postId?}",
+       defaults: new { controller = "Posts", action = "Publish" }
    );
 });
 app.MapControllerRoute(
