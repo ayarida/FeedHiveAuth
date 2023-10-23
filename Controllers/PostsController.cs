@@ -1,28 +1,39 @@
 ﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
 using NuGet.Protocol;
+using System.Globalization;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-
 namespace FeedHiveAuth.Controllers
 {
     public class PostsController : Controller
     {
+        protected PostRepository _postService = Instances.Repositories.PostRepository;
+        protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+        protected UserRepository _userService = Instances.Repositories.UserRepository;
+        [Authorize]
         [HttpGet]
         public ActionResult Create()
         {
             return View("~/Views/Posts/Create.cshtml");
-
         }
+
         [HttpPost]
         public ActionResult CreatePost()
         {
+            
             Post post = new Post();
+            var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
             //Single Media Upload
-            if(HttpContext.Request.Form.Files!=null && HttpContext.Request.Form.Files.Count() == 1)
+            /*if(HttpContext.Request.Form.Files!=null && HttpContext.Request.Form.Files.Count() == 1)
             {
                 postmedia.File = HttpContext.Request.Form.Files[0];
 
@@ -31,29 +42,26 @@ namespace FeedHiveAuth.Controllers
             {
                 //Multi Media Upload
                 MultiUpload(HttpContext.Request.Form.Files);
-            }
-            post.Id = Guid.NewGuid().ToString();
+            }*/
             post.Title = HttpContext.Request.Form["Title"];
             post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
             post.Summary = HttpContext.Request.Form["Summary"];
             post.Content = HttpContext.Request.Form["Content"];
-            //post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"].ToString());
             post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
             
-
-            List<MediaItem> postMedias = Instances.Repositories.MediaItemRepository.MediasList(HttpContext.Request.Form.Files);
-            //JsonResult PostMediaItems = Json(files);
-            //Save all post media in DB
-
-            post.PostMediaItems = postMedias;
-            SavePostMedias(post);
-
-            //var jsonObject = JsonSerializer.Serialize(postmedia);
-
-
-
-            //Instances.Repositories.PostRepository.SavePost(post);
-
+            post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"]);
+            if (currentUser != null)
+            {
+                post.ModifiedBy = currentUser.Id;
+                post.CreatedBy = currentUser.Id;
+            }
+            _postService.Save(post);
+            if (HttpContext.Request.Form.Files.Any())
+            {
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
+                post.PostMediaItems = postMedias;
+                SavePostMedias(post);
+            }
             return View("~/Views/Posts/Create.cshtml");
         }
 
@@ -128,14 +136,47 @@ namespace FeedHiveAuth.Controllers
 
             return stringBuilder.ToString().ToLower();
         }
-
         public void SavePostMedias(Post post)
         {
             if (post.PostMediaItems.Any())
             {
-                Instances.Repositories.MediaItemRepository.InsertPostMedia(post.PostMediaItems, post.Id);
+                _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
+
+        [HttpGet]
+        public void DeletePost(Post post)
+        {
+            _postService.Delete(post.Id);
+        }
+
+        [HttpGet]
+        public void Publish(string Id)
+        {
+            //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var currUser = GetCurrentUser();           
+            _postService.Publish(Id, currUser.Id);
+           
+        }
+
+        [HttpGet]
+        public List<Post> PublishedPosts()
+        {
+            List<Post> publishedPosts = _postService.GetPublishedPosts();
+            return publishedPosts;          
+        }
+        public User GetCurrentUser()
+        {
+            /*            string email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
+                        System.Security.Claims.ClaimsPrincipal currentUser = this.User;*/
+            //Console.WriteLine("Role: " + User.FindFirstValue(ClaimTypes.Role));
+            //Console.WriteLine("First name: " + User.FindFirstValue("firstname"));
+            //Console.WriteLine("Last name: " + User.FindFirstValue("lastname"));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User currentUser = _userService.Get(userId);
+            return currentUser;
+        }
+
 
     }
 }

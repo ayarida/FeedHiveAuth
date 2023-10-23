@@ -1,4 +1,6 @@
-﻿namespace FeedHiveAuth.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FeedHiveAuth.Models
 {
     public class MediaItem : BaseModel
     {
@@ -25,8 +27,9 @@
         public string? Info { get; set; }
 
         public string? PostId {  get; set; }
-        //public Post Post { get; set; }
+        [NotMapped]
         public IFormFile File { get; set; }
+        [NotMapped]
 
         public List<IFormFile> Files { get; set; }
     }

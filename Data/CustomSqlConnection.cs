@@ -60,7 +60,7 @@ namespace FeedHiveAuth.Data
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to execute query: " + query + "\n" + JsonConvert.SerializeObject(param), ex);
-                Close();
+                //Close();
                 throw;
             }
         }
