@@ -12,7 +12,7 @@ namespace FeedHiveAuth.Data.Repositories
     {
         public MediaItemRepository() {
             TableName = Database.Tables.MediaItem;
-            Columns = Database.Tables.MediaItem;
+            Columns = Database.Columns.MediaItem;
         }
 
         public List<MediaItem> MediasList(IFormFileCollection files)
@@ -34,26 +34,13 @@ namespace FeedHiveAuth.Data.Repositories
 
        public void InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
-             //= "INSERT INTO AspNetRoles(Id,Name,NormalizedName) values ('1234','" + role.Name + "','" + role.NormalizedName + "')";
             foreach(var mediaItem in postMedias) {
                 string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15})",
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4})",
                                     TableName,
                                     Columns.AddBraces(),
                                     Guid.NewGuid().EscapeForSql(),
-
                                     mediaItem.Caption.EscapeForSql(),
-                                    mediaItem.Description.EscapeForSql(),
-                                    mediaItem.Tags.EscapeForSql(),
-                                    mediaItem.Path.EscapeForSql(),
-                                    mediaItem.Extension.EscapeForSql(),
-                                    mediaItem.Type,
-                                    mediaItem.ThumbnailUrl.EscapeForSql(),
-                                    mediaItem.CreationDate, 
-                                    mediaItem.CreatedBy.EscapeForSql(),
-                                    mediaItem.Version,
-                                    mediaItem.Duration, 
-                                    mediaItem.Info.EscapeForSql(),
                                     postId.EscapeForSql()
                                     );
                 ExecuteQuery(query);

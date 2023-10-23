@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Models;
+﻿using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Models;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -8,6 +9,19 @@ namespace FeedHiveAuth.Data.Repositories
             TableName = Database.Tables.Users;
             Columns = Database.Columns.Users;
         }
-       
+
+        public User GetByUsername(string username)
+        {
+            var query =
+                $"SELECT {Columns.AddBraces()}, " +
+                $"FROM {TableName} u " +
+                $"WHERE u.Username = {username.EscapeForSql()}";
+
+            return Query<User>(SqlSelect + " WHERE UserName=@username", new { UserName = username }).FirstOrDefault();
+        }
+
+        
+
+
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using FeedHiveAuth.Data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -16,11 +17,11 @@ namespace FeedHiveAuth.Controllers
         {
             _logger = logger;
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             BaseRepository<User> bs = new BaseRepository<User>();
-            var ss = bs.Get("301dfa17-d9b0-411a-a742-daaa49c7e0ce");
+            //var ss = bs.Get("301dfa17-d9b0-411a-a742-daaa49c7e0ce");
             //User U = new User()
             //{
             //    FirstName = ss.Username,
