@@ -49,6 +49,14 @@ app.UseEndpoints(endpoints =>
        pattern: "Posts/Publish/{postId?}",
        defaults: new { controller = "Posts", action = "Publish" }
    );
+
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
 });
 app.MapControllerRoute(
     name: "default",
