@@ -23,10 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Social\Controllers\" />
     <Folder Include="Areas\Social\Data\" />
     <Folder Include="Areas\Social\Models\" />
-    <Folder Include="Areas\Social\Views\" />
     <Folder Include="Views\Posts\Partials\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

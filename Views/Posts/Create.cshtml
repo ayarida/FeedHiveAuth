@@ -1,5 +1,7 @@
 ﻿@model FeedHiveAuth.Models.Post
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,6 +13,15 @@
             <h1>Create</h1>
 
             <h4>Post</h4>
+            <H4>@User.Identity?.Name </H4>
+            @if (User.IsInRole("Admin"))
+            {
+                <p>this is an Admin User</p>
+            }
+            else
+            {
+                <p>this is a normal role and user @User.Identity. </p>
+            }
             <hr />
             <div class="row">
                 <div class="create-post">
