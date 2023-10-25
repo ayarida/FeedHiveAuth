@@ -1,12 +1,14 @@
 ﻿namespace FeedHiveAuth.Models
 {
-    public class Subscription : BaseModel
+    public class Subscription
     {
-        public Subscription() : base(string.Empty) { }
+        public Subscription() { }
 
+        public string Id {  get; set; }
         public string? Code { get; set; }
         public string? Name { get; set; }
-        public string? Description { get; set; }
+        public int Status { get; set; }
+        public DateTime? CreationDate { get; set; }
         public string? Hosts { get; set; }
         public bool Master { get; set; }
         //public MediaItem Logo { get; set; }
