@@ -20,15 +20,25 @@ namespace FeedHiveAuth.Data.Repositories
         protected string SqlCount => "SELECT COUNT(*) FROM " + TableName;
         protected string TableName;
         protected string Columns;
-        public DatabaseConnection _connection = new DatabaseConnection();
-       
+        public static string _connectionString = DatabaseConnection.GetConnectionStrings();
+
+        public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
+
+        /*public static string GetConnectionStrings()
+        {
+            var builder = new ConfigurationBuilder();
+            builder.AddJsonFile("appsettings.json");
+            IConfiguration configuration = builder.Build();
+            var connString = configuration.GetConnectionString("DefaultConnection");
+            return connString;
+        }*/
         public T Get(string id)
         {
             if (string.IsNullOrEmpty(SqlSelect))
                 return default;
 
             var sql = SqlSelect + $" WHERE Id=@Id;";
-            using (var connection = _connection.DbSqlConnection)
+            using (connection)
             {
                 var record = connection.Query<T>(SqlSelect + $" WHERE Id=@Id;", new { Id = new[] { id } }).FirstOrDefault();
                 return record;
@@ -37,7 +47,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public void Delete(string id)
         {
-            using (var connection = _connection.DbSqlConnection)
+            using (connection)
             {
                 var resultQuery = connection.Query<T>(SqlDelete, new { Id = new[] { id } });
             }
@@ -45,7 +55,7 @@ namespace FeedHiveAuth.Data.Repositories
 
         public void Update(T entity)
         {
-            using (var connection = _connection.DbSqlConnection)
+            using (connection)
             {
                 var resultQuery = connection.Query<T>(SqlUpdate);
             }
@@ -54,7 +64,13 @@ namespace FeedHiveAuth.Data.Repositories
         public void UpdateColumn(string column, object value, string id)
         {
             var x = "Ssksl";
-            _connection.globalSqlConnection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });               
+            using (connection)
+            {
+                var result = connection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });
+
+            }
+
+            //_connection.globalSqlConnection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });               
             //Execute("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, id });
         }
         public int Execute(string sql, dynamic param = null)
@@ -64,7 +80,7 @@ namespace FeedHiveAuth.Data.Repositories
                 var query = sql += "\nGO";
                 var sqlBatch = "";
                 var res = 0;
-                using (var connection = _connection.DbSqlConnection)
+                using (connection)
                 {
                     foreach (string line in query.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -91,10 +107,11 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public void ExecuteQuery(string query)
         {
-            SqlCommand cmd = new SqlCommand(query,_connection.globalSqlConnection);
-            if (_connection.globalSqlConnection.State != ConnectionState.Open)
+            var sqlConxn = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand(query, sqlConxn);
+            if (sqlConxn.State != ConnectionState.Open)
             {
-                _connection.globalSqlConnection.Open();
+                sqlConxn.Open();
             }
             int i = cmd.ExecuteNonQuery();
         }
@@ -104,7 +121,7 @@ namespace FeedHiveAuth.Data.Repositories
             try
             {
                 //var start = DateTime.Now.Ticks;
-                using (var connection = _connection.DbSqlConnection)
+                using (connection)
                 {
                     var result = connection.Query<T>(sql, param);
 #if DEBUG
