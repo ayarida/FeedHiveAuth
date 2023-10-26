@@ -28,6 +28,7 @@
             <table id="filter" class="table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Title</th>
                         <th>ShortTitle</th>
                         <th>Content</th>
@@ -35,6 +36,11 @@
                         <th>Status</th>
                     </tr>
                 </thead>
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-primary">Edit</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-success">Publish</button>
+                </div>
 
                 <tbody>
 
@@ -44,7 +50,7 @@
                         @foreach (var post in posts)
                         {
                             <tr>
-
+                                <td> <input type="checkbox" class="check" value="@post.Id"></td>
                                 <td>@post.Title</td>
                                 <td>@post.ShortTitle</td>
                                 <td>@post.Content</td>
@@ -69,22 +75,33 @@
 </div>
 
 
-    <script src="TableFilter.min.js" defer ></script>
-    <style>
-        main input{
+<script src="TableFilter.min.js" defer></script>
+<style>
+    main input {
         max-width: 100%;
         margin-bottom: 20px;
         border: none;
         border-radius: 5px;
-        }
+    }
 
     ::placeholder {
         color: black;
-        opacity:  0.4;
-    </style>
+        opacity: 0.4;
+    }
 
-@* <script type="text/javascript" src="~/js/TableFilter/qjsearch.js"></script> *@
+    .check {
+        width: 20px;
+        height: auto;
+        box-shadow: none;
+    }
+
+  .action-buttons  {
+        display: flex;
+        justify-content: space-around;
+        max-width: 200px;
+        column-gap: 10px;
+     } 
+</style>
+
 <script type="text/javascript" src="~/js/TableFilter/tableFilter.js"></script>
-@* <link rel="stylesheet" href="~/css/TableFilter/tableFilter1.css" />
-<link rel="stylesheet" href="~/css/TableFilter/tableFilter2.css" /> *@
 
