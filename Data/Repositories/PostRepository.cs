@@ -22,6 +22,7 @@ namespace FeedHiveAuth.Data.Repositories
             //save publishedBy 
             //check permission before
             var post = Get(postId);
+            int comp = DateTime.Compare(post.PostDate.Value, DomainTime.Now());
             var published = StatusEnum.Published.Value();
             if (post.Status == published)
             {
@@ -36,7 +37,7 @@ namespace FeedHiveAuth.Data.Repositories
             else
             {
                 //SCHEDULED
-                if(post.PostDate > DomainTime.Now())
+                if(post.PostDate.Value > DomainTime.Now())
                 {
                     post.Status = StatusEnum.Scheduled.Value();
                 }
@@ -53,7 +54,7 @@ namespace FeedHiveAuth.Data.Repositories
         {
             List<Post> posts  = new List<Post>();
             var query = SqlSelect + " WHERE STATUS = 20";
-            posts = _connection.globalSqlConnection.Query<Post>(query).ToList();
+            posts = connection.Query<Post>(query).ToList();
             return posts;
         }
 

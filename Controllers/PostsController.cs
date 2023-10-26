@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
 using NuGet.Protocol;
+using System;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +19,17 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
+
+
         [Authorize]
+        [HttpGet]
+/*        public void GetUserCreds()
+        {
+            SignInManager<IdentityUser> SignInManager;
+            UserManager <IdentityUser> UserManager;
+        }*/
+
+        /*[Authorize(Policy = "Admin",Roles = "Admin")]*/
         [HttpGet]
         public ActionResult Create()
         {

@@ -3,19 +3,19 @@ using FeedHiveAuth.Models;
 
 namespace FeedHiveAuth.Data.Repositories
 {
-    public class SubscriptionRepository : BaseRepository<Subscription>
+    public class SubscriptionRepository
     {
         public SubscriptionRepository()
         {
         }
-        public new Subscription Get(string id)
+       /* public new Subscription Get(string id)
         {
-            using (var connection = _connection.DbSqlConnection)
+            using (connection)
             {
                 var returnedUser = connection.Query<Subscription>("SELECT * FROM AspNetUsers WHERE id IN @ids", new { ids = new[] { id } }).FirstOrDefault();
                 return returnedUser;
             }
-        }
+        }*/
 
     }
 }

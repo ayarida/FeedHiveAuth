@@ -10,8 +10,11 @@ namespace FeedHiveAuth.Data
     public class CustomSqlConnection : IDisposable
     {
         public readonly IDbConnection _connection;
+        
         public CustomSqlConnection(string connectionString)
         {
+            //_connection.ConnectionString = DatabaseConnection.GetConnectionStrings();
+            //DatabaseConnection.GetConnection(_connectionString);
             _connection = new SqlConnection(connectionString);
         }
 
@@ -82,12 +85,16 @@ namespace FeedHiveAuth.Data
         }
         public void Dispose()
         {
-            _connection.Dispose();
+           // _connection.Dispose();
         }
 
         public void Close()
         {
             _connection.Close();
+        }
+        public ConnectionState State()
+        {
+            return _connection.State;
         }
     }
 }

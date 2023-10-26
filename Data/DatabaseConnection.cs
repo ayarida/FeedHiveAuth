@@ -1,17 +1,21 @@
-﻿using System.Data.SqlClient;
+﻿using FeedHiveAuth.Data.Extensions;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace FeedHiveAuth.Data
 {
-    public class DatabaseConnection
+    public static class DatabaseConnection
     {
-        public DatabaseConnection() {
+        /*public DatabaseConnection() {
             ConnectionString = GetConnectionStrings();
             DbSqlConnection = GetConnection(ConnectionString);
             globalSqlConnection = new SqlConnection(ConnectionString);
-        }
-        public SqlConnection globalSqlConnection; 
-        public string ConnectionString;
-        public CustomSqlConnection DbSqlConnection;
+            globalSqlConnection.ConnectionString = ConnectionString;
+            if (globalSqlConnection.State.Value()!= ConnectionState.Open.Value()) { globalSqlConnection.Open(); }
+        }*/
+        public static SqlConnection globalSqlConnection; 
+        public static string ConnectionString = GetConnectionStrings();
+        public static CustomSqlConnection DbSqlConnection;
 
         public static string GetConnectionStrings()
         {

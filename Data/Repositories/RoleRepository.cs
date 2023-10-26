@@ -18,7 +18,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public new void CreateRole(Role role)
         {
-            _connection.DbSqlConnection.OpenWithRetry();
+            connection.OpenWithRetry();
             
             string query = "INSERT INTO AspNetRoles(Id,Name,NormalizedName) values ('1234','" + role.Name + "','" + role.NormalizedName + "')";
             ExecuteQuery(query);

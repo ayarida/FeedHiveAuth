@@ -5,7 +5,7 @@ namespace FeedHiveAuth.Data.Extensions
 {
     public static class DomainTime
     {
-        public static Func<DateTime> Now = () => DateTime.UtcNow;
+        public static Func<DateTime> Now = () => DateTime.Now;
 
         public static DateTime? Parse(string date, string format = "yyyy-MM-dd")
         {
