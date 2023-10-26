@@ -1,0 +1,90 @@
+﻿@model List<FeedHiveAuth.Models.Post>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Post> posts = Model;
+
+}
+
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            Example
+        </div>
+        <div class="card-body" style="max-width: 100%;overflow: scroll;">
+
+            <div style="margin-bottom: 20px;max-width: 100%;">
+
+                <input type="text" id="filter0" placeholder="Filter By Title">
+                <input type="text" id="filter1" placeholder="Filter By ShortTitle">
+                <input type="text" id="filter2" placeholder="Filter By Content">
+                <input type="text" id="filter3" placeholder="Filter By Date">
+                <input type="text" id="filter4" placeholder="Filter By Status">
+
+            </div>
+
+            <table id="filter" class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>ShortTitle</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (posts.Any())
+                    {
+
+                        @foreach (var post in posts)
+                        {
+                            <tr>
+
+                                <td>@post.Title</td>
+                                <td>@post.ShortTitle</td>
+                                <td>@post.Content</td>
+                                <td>@post.PostDate</td>
+                                @if (post.Status == 20)
+                                {
+                                    <td>Published</td>
+                                }
+                                else
+                                {
+                                    <td>New</td>
+                                }
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+    <script src="TableFilter.min.js" defer ></script>
+    <style>
+        main input{
+        max-width: 100%;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 5px;
+        }
+
+    ::placeholder {
+        color: black;
+        opacity:  0.4;
+    </style>
+
+@* <script type="text/javascript" src="~/js/TableFilter/qjsearch.js"></script> *@
+<script type="text/javascript" src="~/js/TableFilter/tableFilter.js"></script>
+@* <link rel="stylesheet" href="~/css/TableFilter/tableFilter1.css" />
+<link rel="stylesheet" href="~/css/TableFilter/tableFilter2.css" /> *@
+

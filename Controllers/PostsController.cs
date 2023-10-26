@@ -24,6 +24,13 @@ namespace FeedHiveAuth.Controllers
         {
             return View("~/Views/Posts/Create.cshtml");
         }
+        [HttpGet]
+        public ActionResult List()
+        {
+           var posts  = _postService.GetPosts();
+            return View("~/Views/Posts/List.cshtml", posts);
+        }
+
 
         [HttpPost]
         public ActionResult CreatePost()
@@ -165,6 +172,9 @@ namespace FeedHiveAuth.Controllers
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;          
         }
+
+
+
         public User GetCurrentUser()
         {
             /*            string email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
