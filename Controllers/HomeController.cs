@@ -38,7 +38,7 @@ namespace FeedHiveAuth.Controllers
 
         public IActionResult Welcome()
         {
-            return View("~/Views/Home/Welcome");
+            return View();
         }
 
         public IActionResult Privacy()
