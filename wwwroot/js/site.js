@@ -19,4 +19,9 @@ catch (error) {
     console.log("no swiper found");
 }
 
-
+function toggle(source) {
+    checkboxes = $("tbody tr input");
+    console.log(checkboxes)
+    for (var checkbox in checkboxes)
+        checkbox.checked = source.checked;
+}

@@ -22,14 +22,7 @@ namespace FeedHiveAuth.Controllers
 
 
         [Authorize]
-        [HttpGet]
-/*        public void GetUserCreds()
-        {
-            SignInManager<IdentityUser> SignInManager;
-            UserManager <IdentityUser> UserManager;
-        }*/
 
-        /*[Authorize(Policy = "Admin",Roles = "Admin")]*/
         [HttpGet]
         public ActionResult Create()
         {
