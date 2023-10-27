@@ -1,18 +1,23 @@
-﻿@model FeedHiveAuth.Models.User
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model FeedHiveAuth.Models.User
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <link rel="stylesheet" href="~/css/LandingPage/landingPage.css" />
 
-
-
 <div class="container pt-4">
     <div class="row user">
         <div class="greeting my-4">
             <div class="user-greet">
-                <h2>مساء الخير، إيمان</h2>
-                <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <h2> @User?.Identity.Name ،مساء الخير</h2>
+                    <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
+                }
             </div>
             <button class="btn purple-btn">
                 أنشر المنشور الحالي
