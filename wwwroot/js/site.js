@@ -3,6 +3,7 @@
 
 // Write your JavaScript code.
 
+//Swiper
 try {
     const swiper = new Swiper('.swiper', {
         loop: true,
@@ -19,9 +20,31 @@ catch (error) {
     console.log("no swiper found");
 }
 
+
+//Table List
 function toggle(source) {
     checkboxes = $("tbody tr input");
     console.log(checkboxes)
-    for (var checkbox in checkboxes)
-        checkbox.checked = source.checked;
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
 }
+
+function deleteSelected() {
+    selected = $("tbody input:checkbox:checked");
+    var deleteArr = [];
+    selected.each(function (index, value) {
+        deleteArr.push($(value).val());
+    })
+    console.log(deleteArr);
+}
+
+function publishSelected() {
+    selected = $("tbody input:checkbox:checked");
+    var publishArr = [];
+    selected.each(function (index, value) {
+        publishArr.push($(value).val());
+    })
+    console.log(publishArr);
+}
+
