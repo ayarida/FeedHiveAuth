@@ -3,6 +3,7 @@ using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace FeedHiveAuth.Data.Repositories
@@ -65,6 +66,13 @@ namespace FeedHiveAuth.Data.Repositories
             posts = connection.Query<Post>(query).ToList();
             return posts;
         }
+
+        /*public IEnumerable<string?> GetPostsByIds(string idsStr)
+        {
+            var postIds = JsonConvert.DeserializeObject<List<string?>>(idsStr).Where(x => x != null);
+            return postIds;
+
+        }*/
 
         public void Save(Post post)
         {

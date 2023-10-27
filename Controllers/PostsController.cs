@@ -19,15 +19,20 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
-
-
         [Authorize]
         [HttpGet]
-/*        public void GetUserCreds()
+        /*        public void GetUserCreds()
+                {
+                    SignInManager<IdentityUser> SignInManager;
+                    UserManager <IdentityUser> UserManager;
+                }*/
+
+        [Authorize(Policy = "Admin", Roles = "Admin")]
+        [HttpGet]
+        public string RegisterUserstoSubscription()
         {
-            SignInManager<IdentityUser> SignInManager;
-            UserManager <IdentityUser> UserManager;
-        }*/
+            return "You are admin and have access";
+        }
 
         /*[Authorize(Policy = "Admin",Roles = "Admin")]*/
         [HttpGet]
@@ -35,6 +40,15 @@ namespace FeedHiveAuth.Controllers
         {
             return View("~/Views/Posts/Create.cshtml");
         }
+
+
+        [HttpGet]
+        /*public void PostsByIds(string Ids)
+        {
+            _postService.GetPostsByIds(Ids);
+        }*/
+
+
         [HttpGet]
         public ActionResult List()
         {
@@ -176,6 +190,37 @@ namespace FeedHiveAuth.Controllers
             _postService.Publish(Id, currUser.Id);
            
         }
+
+       /* public void MultiplePublish(string idsStr)
+        {
+            var posts = _postService.GetPostsByIds(idsStr);
+            foreach(var post in posts)
+            {
+                try
+                {
+                    Publish(post.Id);
+                }catch(Exception ex)
+                {
+                    Console.WriteLine("Error while publishing this post", post);
+                }
+            }
+        }
+
+        public void MultipleDelete(string idsStr)
+        {
+            var posts = _postService.GetPostsByIds(idsStr);
+            foreach (var post in posts)
+            {
+                try
+                {
+                    DeletePost(post);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while deleting this post", post);
+                }
+            }
+        }*/
 
         [HttpGet]
         public List<Post> PublishedPosts()
