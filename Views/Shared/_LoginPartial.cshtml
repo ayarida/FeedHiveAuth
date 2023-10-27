@@ -3,6 +3,25 @@
 @inject UserManager<IdentityUser> UserManager
 
 
+
+<ul class="navbar-nav d-flex flex-row nav-left  mr-auto d-md-flex ">
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<li class="user-name">
+			<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+		</li>
+
+		<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+			<button type="submit" class="nav-link btn btn-link text-dark log-out">Logout</button>
+		</form>
+
+	}
+	else
+	{
+		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+		<a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Create">New Subscription</a>
+	}
 @{
     var x = SignInManager.UserManager;
 }
@@ -37,3 +56,20 @@
  *@    }
 </ul>
 
+<style>
+	.log-out {
+		background-color: red;
+		color: white !important;
+		width: fit-content;
+	}
+
+	.user-name {
+		background-color: var(--green-color);
+		padding: 10px;
+		
+	}
+
+	.user-name a {
+		color: white !important;
+	}
+</style>

@@ -11,7 +11,7 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-            Example
+            Post history
         </div>
         <div class="card-body" style="max-width: 100%;overflow: scroll;">
 
@@ -28,18 +28,19 @@
             <table id="filter" class="table">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll">Select All</lablel></th>
                         <th>Title</th>
                         <th>ShortTitle</th>
                         <th>Content</th>
                         <th>Date</th>
+                        <th></th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <div class="action-buttons">
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                    <button type="button" class="btn btn-success">Publish</button>
+
+                    <button type="button" class="btn btn-danger" onClick="deleteSelected()">Delete</button>
+                    <button type="button" class="btn green-btn" onClick="publishSelected()">Publish</button>
                 </div>
 
                 <tbody>
@@ -55,6 +56,7 @@
                                 <td>@post.ShortTitle</td>
                                 <td>@post.Content</td>
                                 <td>@post.PostDate</td>
+                                <td><i class="bi bi-pencil-square"></i></td>
                                 @if (post.Status == 20)
                                 {
                                     <td>Published</td>
@@ -75,7 +77,7 @@
 </div>
 
 
-<script src="TableFilter.min.js" defer></script>
+
 <style>
     main input {
         max-width: 100%;
@@ -95,13 +97,24 @@
         box-shadow: none;
     }
 
-  .action-buttons  {
+    .action-buttons {
         display: flex;
         justify-content: space-around;
         max-width: 200px;
         column-gap: 10px;
-     } 
+    }
+
+    .navbar > .container, .navbar > .container-fluid, .navbar > .container-lg, .navbar > .container-md, .navbar > .container-sm, .navbar > .container-xl, .navbar > .container-xxl {
+        flex-direction: row !important;
+    }
 </style>
 
+@* <script>
+    function toggle(source) {
+        checkboxes = $("input");
+        for (var checkbox in checkboxes)
+            checkbox.checked = source.checked;
+    }
+</script> *@
 <script type="text/javascript" src="~/js/TableFilter/tableFilter.js"></script>
 
