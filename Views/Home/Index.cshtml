@@ -1,214 +1,234 @@
 ﻿@model FeedHiveAuth.Models.User
 @{
     ViewData["Title"] = "Home Page";
-    var x = Model;
 }
-
-<div>TESTT </div>
-
-@* <form asp-controller="Roles" asp-action="CreateRole" method="post">
-    <table>
-        <tr>
-            <td>Name: </td>
-            <td><input name="Name" type="text" /></td>
-        </tr>
-        <tr>
-            <td>NormalizedName: </td>
-            <td><input name="NormalizedName" type="text" /></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input id="Submit1" type="submit" value="submit" /></td>
-        </tr>
-    </table>
-</form> *@
 
 <link rel="stylesheet" href="~/css/LandingPage/landingPage.css" />
 
-<div class="container-hero">
-    <div class="container-block-1">
-        <div class="container-1">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="container-2">"Amazing social media scheduler "</div>
-    </div>
 
-    <div class="container-block-2">
-        <div class="container-1">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="container-2">"Never going back to the others"</div>
-    </div>
 
-    <div class="container-block-3">
-        <div class="container-1">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="container-2">"Best features for the money"</div>
-    </div>
-</div>
-
-<div class="block">
-    <div class="block-1">
-        Create
-        <span class="text-span">content at scale</span>
-        <br />
-        .Social media using Automation
-    </div>
-    <div class="block-2">
-        <p class="text-paragraph">
-            Create, schedule, publish, and easily manage your social media content
-            at scale with FeedHive's
-        </p>
-    </div>
-</div>
-
-<div class="block-3">
-    <div class="rated">
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <strong>Rated 4.9/5</strong>
-    </div>
-    <div class="block-social">
-        <i class="bi bi-google"></i>
-        <i class="bi bi-threads-fill"></i>
-        <i class="bi bi-linkedin"></i>
-        <i class="bi bi-tiktok"></i>
-        <i class="bi bi-youtube"></i>
-        <i class="bi bi-pinterest"></i>
-        <i class="bi bi-facebook"></i>
-        <i class="bi bi-instagram"></i>
-    </div>
-</div>
-<div class="started">
-    <button class="btn-started">
-        <i class="bi bi-arrow-right-short"></i>
-        Get Started
-    </button>
-</div>
-
-<div class="box">
-    <div class="solution">
-        <div class="title">
-            <button class="btn-solution">Solution</button>
-            <div class="text">
-                <h2>
-                    One-stop platform - everything you need to
-                    <span class="text-2">grow on social </span>
-                </h2>
-                <p>
-                    We give you everything you need to build a dedicated fanbase,
-                    nurture your audience, create leads, and grow your business
-                </p>
+<div class="container pt-4">
+    <div class="row user">
+        <div class="greeting my-4">
+            <div class="user-greet">
+                <h2>مساء الخير، إيمان</h2>
+                <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
             </div>
+            <button class="btn purple-btn">
+                أنشر المنشور الحالي
+                <i class="bi bi-plus-lg"></i>
+            </button>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <div class="row gx-2 mb-4">
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>FeedHive AI</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
+    <div class="row p-2 row row-cols-1 row-cols-md-2 g-4 mb-3">
+        <!-- Normal Card -->
+        <div class="col-lg-6 no-slide">
+            <div class="card p-4">
+                <div class="card-head">
+                    <div class="card-icon">
+                        <img src="~/Static/Icons/Group35.png" />
+                    </div>
+                    <div class="card-text">
+                        <h1>مساء الخير، إيمان</h1>
+                        <h2>لديك منشورات جديدة</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h1>0 أيام</h1>
+                    <button type="button" class="btn green-btn">
+                        أنشئ منشور
+
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
                 </div>
             </div>
         </div>
+        <div class="col-lg-6 no-slide">
+            <div class="card p-4">
+                <div class="card-head">
+                    <div class="card-icon">
+                        <img src="~/Static/Icons/Group35.png" />
+                    </div>
+                    <div class="card-text">
+                        <h1>جدول المنشورات</h1>
+                        <h2>لديك منشورات جديدة</h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h1>0 أيام</h1>
+                    <button type="button" class="btn green-btn">
+                        أنشئ منشور
 
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>Social Inbox</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>Scheduling</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
+        <!-- Card with button slider -->
+        <div class="col-lg-6">
+            <div class="card p-4">
+                <div class="card-head">
+                    <div class="card-icon">
+                        <img src="~/Static/Icons/Group35.png" />
+                    </div>
+                    <div class="card-text">
+                        <h1>————</h1>
+                        <h2>
+                            اختر نموذج تم إنشاؤه بواسطة الذكاء الاصطناعي لتبدء منه.
+                        </h2>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stroke-div mb-0">
+                        <button type="button" class="btn grey-btn p-2 my-3">
+                            اللياقة والصحة
+                        </button>
+                        <p class="stroke-text">
+                            الأكل الصحي لا يجب أن يكون مملاً أو لا طعم له! في الواقع،
+                            يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
+                        </p>
+                    </div>
+                    <div class="container">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div>
+                                <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div> <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row gx-2 mb-4">
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>FeedHive</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
+        <div class="col-lg-6">
+            <div class="card p-4">
+                <div class="card-head">
+                    <div class="card-icon">
+                        <img src="~/Static/Icons/Group35.png" />
+                    </div>
+                    <div class="card-text">
+                        <h1>————</h1>
+                        <h2>
+                            اختر نموذج تم إنشاؤه بواسطة الذكاء الاصطناعي لتبدء منه.
+                        </h2>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>Social Inbox</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card p-3">
-                <img src="~/static/Icons/Group35.png" />
-                <div class="card-title">
-                    <h3>Scheduling</h3>
-                    <p>
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit
-                        longer
-                    </p>
+                <div class="card-body">
+                    <div class="stroke-div mb-0">
+                        <button type="button" class="btn grey-btn p-2 my-3">
+                            اللياقة والصحة
+                        </button>
+                        <p class="stroke-text">
+                            الأكل الصحي لا يجب أن يكون مملاً أو لا طعم له! في الواقع،
+                            يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
+                        </p>
+                    </div>
+                    <div class="container">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div>
+                                <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div> <div class="swiper-slide ">
+                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="card-banner my-4">
+            <div class="title">لا توجد منشورات قادمة هذا الاسبوع</div>
+            <div class="body">
+                <button type="button" class="btn">
+                    منشور جديد
+
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-4">
+            <div class="archive-card card mx-2 p-2">
+                <div class="arc-card-header">
+                    <div class="card-date">2016 - Jul 23 2003</div>
+                    <i class="bi bi-images"></i>
+                </div>
+                <bdi class="arc-card-body my-4">
+                    Hey perfectionists! its totally okay, sometimes not to be
+                    okay! We are Real not Perfect
+                </bdi>
+                <div class="arc-card-footer">
+                    <div class="arc-user">
+                        <i class="bi bi-person-circle"></i>
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="archive-card card mx-2 p-2">
+                <div class="arc-card-header">
+                    <div class="card-date">2016 - Jul 23 2003</div>
+                    <i class="bi bi-images"></i>
+                </div>
+                <bdi class="arc-card-body my-4">
+                    Hey perfectionists! its totally okay, sometimes not to be
+                    okay! We are Real not Perfect
+                </bdi>
+                <div class="arc-card-footer">
+                    <div class="arc-user">
+                        <i class="bi bi-person-circle"></i>
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="archive-card card mx-2 p-2">
+                <div class="arc-card-header">
+                    <div class="card-date">2016 - Jul 23 2003</div>
+                    <i class="bi bi-images"></i>
+                </div>
+                <bdi class="arc-card-body my-4">
+                    Hey perfectionists! its totally okay, sometimes not to be
+                    okay! We are Real not Perfect
+                </bdi>
+                <div class="arc-card-footer">
+                    <div class="arc-user">
+                        <i class="bi bi-person-circle"></i>
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="get-started">
-    <button class="btn-solution">
-        <i class="bi bi-arrow-right-short"></i>
-        Get Started
-    </button>
-</div>
+
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+

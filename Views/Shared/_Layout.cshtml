@@ -31,10 +31,11 @@
 
     <link rel="stylesheet" href="~/css/Sidebar/core.css" />
  
-    <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
     <link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
-    @* <script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script> *@
     <link rel="stylesheet" href="~/css/Editor/richtext.min.css" />
+    <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
+
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
 </head>
 <body>
 
@@ -47,37 +48,37 @@
                 <div class="position-sticky">
                     <div class="list-group list-group-flush mx-3 mt-4">
                         <a href="/Posts/Create"
-                           class="list-group-item list-group-item-action py-2 ripple active"
+                           class="list-group-item list-group-item-action py-2  active"
                            aria-current="true">
                             <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+                        <a href="#" class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-calendar"></i><span>الجدول المحتوى</span>
                         </a>
                         <a href="/Posts/List"
-                           class="list-group-item list-group-item-action py-2 ripple"><i class="bi bi-grid"></i><span>المنشورات</span></a>
+                           class="list-group-item list-group-item-action py-2 "><i class="bi bi-grid"></i><span>المنشورات</span></a>
                         <a href="#"
-                           class="list-group-item list-group-item-action py-2 ripple">
+                           class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-building-gear"></i><span>التواصل الاجتماعي</span>
                         </a>
                         <a href="/MediaItem/Upload"
-                           class="list-group-item list-group-item-action py-2 ripple">
+                           class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-collection-fill"></i><span>الميديا</span>
                         </a>
                         <a href="#"
-                           class="list-group-item list-group-item-action py-2 ripple">
+                           class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-microsoft-teams"></i><span>الفريق</span>
                         </a>
                     </div>
 
                     <div class="list-group list-group-flush mx-3 bottom-list">
                         <a href="#"
-                           class="list-group-item list-group-item-action py-2 ripple"
+                           class="list-group-item list-group-item-action py-2 "
                            aria-current="true">
                             <i class="bi bi-gear"></i><span>الاعدادات</span>
                         </a>
                         <a href="#"
-                           class="list-group-item list-group-item-action py-2 ripple">
+                           class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-person-raised-hand"></i><span>دعم</span>
                         </a>
                     </div>
@@ -118,21 +119,12 @@
         </div>
     </div>
 
-@*     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - FeedHiveAuth - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer> *@
+
     <script type="text/javascript" src="~/js/site.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    @* <script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script> *@
-    @* <script> *@
-    @*     $(document).ready(function () { *@
-    @*         $(".content").richText(); *@
-    @*     }); *@
-    @* </script> *@
+
 </body>
 </html>

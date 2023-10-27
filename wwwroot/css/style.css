@@ -56,35 +56,28 @@ button {
 }
 
 .card-icon img {
-    max-width: 50px;
+    max-width: 50px !important;
 }
 
 .card-head {
     display: flex;
     align-items: center;
     column-gap: 15px;
-    .cardtext h1
-
-{
     font-size: var(--card-head);
+    justify-content: end;
 }
 
-.card-text {
-    > h1
-
-{
-    font-size: var(--card-head);
-    font-weight: bold;
-}
-
-> h2 {
-    font-size: 0.9rem;
+.card-text h2 {
+    font-size: 0.9rem !important;
     color: #b9c2cc;
-    font-weight: 300;
+    font-weight: 300 !important;
 }
 
-}
-}
+/*.card-head .card-text h1 { 
+      font-size: var(--card-head) !important;
+      font-weight: bold;
+   
+}*/
 
 .card-body {
     display: flex;
@@ -96,11 +89,12 @@ button {
 }
 
 .green-btn {
-    background-color: var(--green-color);
+    background-color: var(--green-color) !important;
+    color: white !important;
 }
 
 .purple-btn {
-    background-color: var(--purple-color);
+    background-color: var(--purple-color) !important;
 }
 
 .grey-btn {
@@ -118,32 +112,30 @@ button {
     }
 }
 
-.card-body button {
+.no-slide .card-body button {
     border-color: transparent;
     display: flex;
     column-gap: 10px;
     align-items: center;
+    justify-content: center;
 }
 
-/*.card-body button {
-    color: white;
-}
-*/
+
 .stroke-div {
     border: 2px dashed #c7d2de;
     padding: 10px;
     margin: 20px 0;
-    > .stroke-text
-
-{
-    font-size: var(--card-head);
 }
+
+    .stroke-div .stroke-text {
+        font-size: var(--card-head);
+    }
 
 .btn {
     font-size: var(--card-head);
 }
 
-}
+
 
 .img-gallery {
     display: flex;
@@ -196,74 +188,22 @@ button {
   flex-wrap: nowrap !important;
 } */
 
-/* Slider */
-
-.regular.slider {
-    direction: ltr;
-}
-
-.slider {
-    width: 100%;
-    margin: 50px auto;
-}
-
-.slick-slide {
-    margin: 0px 20px;
-}
-
-    .slick-slide img {
-        width: 100%;
-    }
-
-.slick-prev:before,
-.slick-next:before {
-    color: black;
-}
-
-.slick-slide {
-    transition: all ease-in-out 0.3s;
-    opacity: 0.2;
-}
-
-.slick-active {
-    opacity: 0.5;
-}
-
-.slick-current {
-    opacity: 1;
-}
-
-/* .container {
-  max-width: 100%;
-} */
-
-/* .card-body .slick-slide button {
-  margin: auto;
-} */
-
-.slick-slide.slick-current.slick-active {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
 .greeting {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    > .btn.purple-btn
-
-{
-    background-color: var(--purple-color);
-    display: flex;
-    column-gap: 10px;
-    align-items: center;
-    color: white;
-    height: fit-content;
+    flex-direction: row-reverse;
 }
 
-}
+    .greeting .btn.purple-btn {
+        background-color: var(--purple-color);
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+        color: white;
+        width: fit-content;
+    }
 
 @media (max-width: 480px) {
     .greeting {
@@ -400,4 +340,57 @@ input[type="file"] {
     max-width: 100%;
     margin-left: auto !important;
     margin-right: auto !important;
+}
+
+div[class^="ripple"] {
+    display: none;
+}
+/**/
+.card-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-head .card-text h1 {
+    font-size: var(--card-head);
+    font-weight: bold;
+}
+
+.no-slide .card-body .btn {
+    max-width: 200px;
+}
+
+.card-text {
+    text-align: end;
+}
+
+.stroke-div {
+    max-width: 100%;
+}
+
+    .stroke-div button {
+        max-width: 100%;
+    }
+
+.body, .body * {
+    max-width: 100%;
+}
+
+.swiper-slide button {
+    max-width: 200px;
+    margin: auto;
+}
+
+@media only screen and (max-width: 992px) {
+    .swiper-button-next::after, .swiper-rtl .swiper-button-prev::after {
+        color: white;
+    }
+
+    .swiper-button-prev::after, .swiper-rtl .swiper-button-next::after {
+        color: white;
+    }
+}
+
+.stroke-div .stroke-text p{
+    text-align: initial;
 }
