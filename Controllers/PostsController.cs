@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
+using NuGet.Packaging.Signing;
 using NuGet.Protocol;
 using System;
 using System.Globalization;
@@ -20,32 +21,35 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
-
-
         [Authorize]
+        [HttpGet]
+        /*        public void GetUserCreds()
+                {
+                    SignInManager<IdentityUser> SignInManager;
+                    UserManager <IdentityUser> UserManager;
+                }*/
 
+        [Authorize(Policy = "Admin", Roles = "Admin")]
+        [HttpGet]
+        public string RegisterUserstoSubscription()
+        {
+            return "You are admin and have access";
+        }
+
+        /*[Authorize(Policy = "Admin",Roles = "Admin")]*/
         [HttpGet]
         public ActionResult Create()
         {
             return View("~/Views/Posts/Create.cshtml");
         }
+
+
         [HttpGet]
         public ActionResult List()
         {
            var posts  = _postService.GetPosts();
             return View("~/Views/Posts/List.cshtml", posts);
         }
-
-
-        [HttpGet()]
-        public ActionResult PostInfo([FromQuery] string postId)
-        {
-            var posts = _postService.GetPostById(postId);
-            return View("~/Views/Posts/PostInfo.cshtml");
-        }
-
-
-
 
 
         [HttpPost]
@@ -55,17 +59,7 @@ namespace FeedHiveAuth.Controllers
             Post post = new Post();
             var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
-            //Single Media Upload
-            /*if(HttpContext.Request.Form.Files!=null && HttpContext.Request.Form.Files.Count() == 1)
-            {
-                postmedia.File = HttpContext.Request.Form.Files[0];
 
-            }
-            else
-            {
-                //Multi Media Upload
-                MultiUpload(HttpContext.Request.Form.Files);
-            }*/
             post.Title = HttpContext.Request.Form["Title"];
             post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
             post.Summary = HttpContext.Request.Form["Summary"];
@@ -193,14 +187,60 @@ namespace FeedHiveAuth.Controllers
            
         }
 
+        public void MultiplePublish([FromQuery] string idsStr)
+        {
+            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+            List<string> stringList = new List<string>();
+            foreach (Guid guid in idsArray)
+            {
+                stringList.Add(guid.ToString());
+            }
+            
+            var posts = _postService.GetPostsByIds(stringList);
+
+            foreach (var post in posts)
+            {
+                try
+                {
+                    Publish(post.Id);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while publishing this post", post);
+                }
+            }
+        }
+
+        public void MultipleDelete([FromQuery] string idsStr)
+        {
+
+            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+            List<string> stringList = new List<string>();
+            foreach (Guid guid in idsArray)
+            {
+                stringList.Add(guid.ToString());
+            }          
+            var posts = _postService.GetPostsByIds(stringList);
+
+            foreach (var post in posts)
+            {
+                try
+                {
+                    DeletePost(post);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while deleting this post", post);
+                }
+            }
+        }
+
         [HttpGet]
         public List<Post> PublishedPosts()
         {
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;          
         }
-
-
 
         public User GetCurrentUser()
         {
@@ -213,7 +253,5 @@ namespace FeedHiveAuth.Controllers
             User currentUser = _userService.Get(userId);
             return currentUser;
         }
-
-
     }
 }

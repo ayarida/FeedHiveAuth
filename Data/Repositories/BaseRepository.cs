@@ -63,7 +63,6 @@ namespace FeedHiveAuth.Data.Repositories
 
         public void UpdateColumn(string column, object value, string id)
         {
-            var x = "Ssksl";
             using (connection)
             {
                 var result = connection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });
@@ -120,19 +119,13 @@ namespace FeedHiveAuth.Data.Repositories
         {
             try
             {
-                //var start = DateTime.Now.Ticks;
                 using (connection)
                 {
                     var result = connection.Query<T>(sql, param);
 #if DEBUG
-                    //WriteStaticJsonData(result, sql, param);
 #endif
                     return result;
-                }
-                //var end = DateTime.Now.Ticks;
-                //var diff = end - start;
-                //var span = TimeSpan.FromTicks(diff).TotalSeconds;
-                //Logger.Info(typeof(RequestHelper), sql + "\ntook " + span + " sec to execute");
+                }               
             }
             catch (Exception ex)
             {
@@ -140,7 +133,6 @@ namespace FeedHiveAuth.Data.Repositories
                 throw new Exception(ex.FullMessage());
             }
         }
-
 
     }
 }

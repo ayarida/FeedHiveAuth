@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using FeedHiveAuth.Models;
+using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +31,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+       
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -102,6 +105,9 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Username")]
             public string Username { get; set; }
+
+            public string SubscriptionId {get; set; }
+
         }
 
 

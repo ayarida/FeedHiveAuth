@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Register";
     var x = Model;
+    var subId = HttpContext.Session.GetString("subscriptionId");
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -46,8 +47,12 @@
 @*                 <label asp-for="Input.ConfirmPassword"></label>
  *@                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-           
-            <div class="sign-up-control">
+            <div>
+            <input type="hidden" id="userSubId" asp-for="Input.SubscriptionId" value="@subId.ToString()" />
+
+            </div>
+
+        <div class="sign-up-control">
                 <button id="registerSubmit" type="submit" class="control">
                     <span><i class="bi bi-arrow-right-short"></i></span>
                     Sign up

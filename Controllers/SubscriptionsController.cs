@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Services;
 
 namespace FeedHiveAuth.Controllers
 {
     public class SubscriptionsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         public SubscriptionsController(ApplicationDbContext context)
         {
             _context = context;
@@ -59,7 +59,10 @@ namespace FeedHiveAuth.Controllers
         {
             var ms = ModelState;
                 subscription.Id = Guid.NewGuid().ToString();
+                
                 _context.Add(subscription);
+                HttpContext.Items.Add("SubscriptionId", subscription.Id);
+                HttpContext.Session.SetString("subscriptionId", subscription.Id);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             

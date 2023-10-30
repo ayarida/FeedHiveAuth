@@ -28,6 +28,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Editor", policy => policy.RequireRole("Editor"));
     options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
 });
+builder.Services.AddMvc().AddSessionStateTempDataProvider();
+builder.Services.AddSession();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -43,6 +45,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -55,7 +58,6 @@ else
     app.UseHsts();
 }
 
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -63,7 +65,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

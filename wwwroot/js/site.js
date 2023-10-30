@@ -35,8 +35,27 @@ function deleteSelected() {
     var deleteArr = [];
     selected.each(function (index, value) {
         deleteArr.push($(value).val());
-    })
+    });
+    console.log(deleteArr.join(','));
+    var idsString = deleteArr.join(',');
+    var serviceURL = '/Posts/MultipleDelete';  
+    $.ajax({
+        type: "GET",
+        url: serviceURL,
+        data: { idsStr: idsString },
+        contentType: "application/json; charset=utf-8",  
+        dataType: "JSON",
+        success: successFunc,
+        error: errorFunc
+    });
     console.log(deleteArr);
+}
+function successFunc(data, status) {
+    alert(data);
+}
+
+function errorFunc() {
+    alert('error');
 }
 
 function publishSelected() {
@@ -45,6 +64,18 @@ function publishSelected() {
     selected.each(function (index, value) {
         publishArr.push($(value).val());
     })
+    console.log(publishArr.join(','));
+    var idsString = publishArr.join(',');
+    var serviceURL = '/Posts/MultiplePublish';
+    $.ajax({
+        type: "GET",
+        url: serviceURL,
+        data: { idsStr: idsString },
+        contentType: "application/json; charset=utf-8",
+        dataType: "JSON",
+        success: successFunc,
+        error: errorFunc
+    });
     console.log(publishArr);
 }
 
