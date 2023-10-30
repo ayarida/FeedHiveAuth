@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Schema;
+using NuGet.Packaging.Signing;
 using NuGet.Protocol;
 using System;
 using System.Globalization;
@@ -43,20 +44,12 @@ namespace FeedHiveAuth.Controllers
 
 
         [HttpGet]
-        /*public void PostsByIds(string Ids)
-        {
-            _postService.GetPostsByIds(Ids);
-        }*/
-
-
-        [HttpGet]
         public ActionResult List()
         {
            var posts  = _postService.GetPosts();
             return View("~/Views/Posts/List.cshtml", posts);
         }
-
-
+        
         [HttpPost]
         public ActionResult CreatePost()
         {
@@ -64,17 +57,7 @@ namespace FeedHiveAuth.Controllers
             Post post = new Post();
             var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
-            //Single Media Upload
-            /*if(HttpContext.Request.Form.Files!=null && HttpContext.Request.Form.Files.Count() == 1)
-            {
-                postmedia.File = HttpContext.Request.Form.Files[0];
 
-            }
-            else
-            {
-                //Multi Media Upload
-                MultiUpload(HttpContext.Request.Form.Files);
-            }*/
             post.Title = HttpContext.Request.Form["Title"];
             post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
             post.Summary = HttpContext.Request.Form["Summary"];
@@ -191,24 +174,41 @@ namespace FeedHiveAuth.Controllers
            
         }
 
-       /* public void MultiplePublish(string idsStr)
+        public void MultiplePublish([FromQuery] string idsStr)
         {
-            var posts = _postService.GetPostsByIds(idsStr);
-            foreach(var post in posts)
+            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+            List<string> stringList = new List<string>();
+            foreach (Guid guid in idsArray)
+            {
+                stringList.Add(guid.ToString());
+            }
+            
+            var posts = _postService.GetPostsByIds(stringList);
+
+            foreach (var post in posts)
             {
                 try
                 {
                     Publish(post.Id);
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine("Error while publishing this post", post);
                 }
             }
         }
 
-        public void MultipleDelete(string idsStr)
+        public void MultipleDelete([FromQuery] string idsStr)
         {
-            var posts = _postService.GetPostsByIds(idsStr);
+
+            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+            List<string> stringList = new List<string>();
+            foreach (Guid guid in idsArray)
+            {
+                stringList.Add(guid.ToString());
+            }          
+            var posts = _postService.GetPostsByIds(stringList);
+
             foreach (var post in posts)
             {
                 try
@@ -220,7 +220,7 @@ namespace FeedHiveAuth.Controllers
                     Console.WriteLine("Error while deleting this post", post);
                 }
             }
-        }*/
+        }
 
         [HttpGet]
         public List<Post> PublishedPosts()
@@ -228,8 +228,6 @@ namespace FeedHiveAuth.Controllers
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;          
         }
-
-
 
         public User GetCurrentUser()
         {
@@ -242,7 +240,5 @@ namespace FeedHiveAuth.Controllers
             User currentUser = _userService.Get(userId);
             return currentUser;
         }
-
-
     }
 }

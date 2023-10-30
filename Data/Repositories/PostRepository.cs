@@ -23,7 +23,8 @@ namespace FeedHiveAuth.Data.Repositories
             //save publishedBy 
             //check permission before
             var post = Get(postId);
-            int comp = DateTime.Compare(post.PostDate.Value, DomainTime.Now());
+            
+            //int comp = DateTime.Compare(post.PostDate.Value, DomainTime.Now());
             var published = StatusEnum.Published.Value();
             if (post.Status == published)
             {
@@ -73,7 +74,12 @@ namespace FeedHiveAuth.Data.Repositories
             return postIds;
 
         }*/
+        public List<Post> GetPostsByIds(List<string> idsArray)
+        {
+            var posts = Query<Post>(SqlSelect + " WHERE Id in @Ids", new { Ids = idsArray }).ToList();
 
+            return posts;
+        }
         public void Save(Post post)
         {
             if(post.Id == null)
