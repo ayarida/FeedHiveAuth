@@ -76,7 +76,12 @@ namespace FeedHiveAuth.Data.Repositories
             posts = connection.Query<Post>(query).ToList();
             return posts;
         }
+        public List<Post> GetPostsByIds(List<string> idsArray)
+        {
+            var posts = Query<Post>(SqlSelect + " WHERE Id in @Ids", new { Ids = idsArray }).ToList();
 
+            return posts;
+        }
         public void Save(Post post)
         {
             if(post.Id == null)
