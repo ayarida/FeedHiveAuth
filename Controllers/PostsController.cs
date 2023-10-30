@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 namespace FeedHiveAuth.Controllers
 {
+
     public class PostsController : Controller
     {
         protected PostRepository _postService = Instances.Repositories.PostRepository;
@@ -34,6 +35,17 @@ namespace FeedHiveAuth.Controllers
            var posts  = _postService.GetPosts();
             return View("~/Views/Posts/List.cshtml", posts);
         }
+
+
+        [HttpGet()]
+        public ActionResult PostInfo([FromQuery] string postId)
+        {
+            var posts = _postService.GetPostById(postId);
+            return View("~/Views/Posts/PostInfo.cshtml");
+        }
+
+
+
 
 
         [HttpPost]
@@ -75,6 +87,16 @@ namespace FeedHiveAuth.Controllers
             }
             return View("~/Views/Posts/Create.cshtml");
         }
+
+
+        [HttpGet]
+        public void UpdatePost(string Id)
+        {
+            var posts = _postService.GetPosts();
+            //_postService.Update();
+        }
+
+
 
         public MediaItem UploadMedia(MediaItem model)
         {
@@ -154,6 +176,7 @@ namespace FeedHiveAuth.Controllers
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
+
 
         [HttpGet]
         public void DeletePost(Post post)

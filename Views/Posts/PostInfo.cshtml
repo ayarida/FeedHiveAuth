@@ -1,0 +1,9 @@
+﻿@model List<FeedHiveAuth.Models.Post>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Post> posts = Model;
+    var post = posts.FirstOrDefault();
+}
+
+<div>@post</div>
