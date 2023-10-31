@@ -78,6 +78,12 @@ app.UseEndpoints(endpoints =>
        pattern: "Posts/Publish/{postId?}",
        defaults: new { controller = "Posts", action = "Publish" }
    );
+    endpoints.MapAreaControllerRoute(
+        name: "SocialRoutes",
+        areaName:"Social",
+        pattern: "Social/{controller=SocialHome}/{action=Index}/{id?}",
+        defaults: new { controller = "SocialHome", action = "Index" }
+        );
 
 });
 app.UseEndpoints(endpoints =>
@@ -87,6 +93,7 @@ app.UseEndpoints(endpoints =>
       pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
 });
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
