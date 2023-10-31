@@ -11,6 +11,8 @@
         ProcessedFailed = 55,
         Success = 60,
         Failed = 70,
+        Active = 90,
+        InActive = 100,
         Expired = -150,
         Scheduled = 150,
         Deleted = -100,
