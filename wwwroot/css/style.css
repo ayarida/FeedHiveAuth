@@ -391,10 +391,19 @@ div[class^="ripple"] {
     }
 }
 
-.stroke-div .stroke-text p{
+.stroke-div .stroke-text p {
     text-align: initial;
 }
 
 .navbar > .container, .navbar > .container-fluid, .navbar > .container-lg, .navbar > .container-md, .navbar > .container-sm, .navbar > .container-xl, .navbar > .container-xxl {
     flex-direction: row-reverse !important;
+}
+
+
+.list-group-item {
+    color: inherit !important;
+}
+
+.list-group-item.active {
+    color: white !important;
 }
