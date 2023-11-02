@@ -3,28 +3,22 @@ using System.Security.Claims;
 
 namespace FeedHiveAuth.Services
 {
-    public class GlobalContext
+    public static class GlobalContext
     {
-        public HttpContext _globalHttpContext;
-        public string SubscriptionId;
-        public string currentUser;
-
-        public GlobalContext() {
-        }
-
+        public static HttpContext _globalHttpContext;
+        public static string SubscriptionId;
+        public static string currentUser;
        
-        public void SetSubscriptionId(string subId)
+        public static Dictionary<string, string> Application = new Dictionary<string, string>();
+        public static string GetCurrentSubscription()
         {
-            _globalHttpContext.Session.SetString("subscriptionId",subId);
+            return Application["currentSubscription"];
         }
 
-        public void SetCurrentUserId(string userId)
+        public static string GetCurrentUser()
         {
-            //this.currentUser = 
-            //register new value in session
+            return Application["currentUser"];
         }
-
-
 
     }
 }

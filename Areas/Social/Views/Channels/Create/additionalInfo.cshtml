@@ -1,0 +1,10 @@
+﻿<div class="step-pane info" data-step="3">
+    <div class="infobox-container" v-bind:class="[network]">
+       @*  @await Html.PartialAsync("~/Areas/Social/Views/Channel/create/additionalInfo/telegram.cshtml")
+        @await Html.PartialAsync("~/Areas/Social/Views/Channel/create/additionalInfo/firebase.cshtml")
+        @await Html.PartialAsync("~/Areas/Social/Views/Channel/create/additionalInfo/channels.cshtml") *@
+        <div class="col-12" v-if="submitting">
+            <span class="fas fa-spinner fa-spin fa-5x"></span>
+        </div>
+    </div>
+</div>

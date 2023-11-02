@@ -1,0 +1,48 @@
+﻿@using FeedHiveAuth.Models.Enums
+@using FeedHiveAuth.Data.Extensions
+
+<div class="step-pane accounts" data-step="2">
+    <div class="infobox-container" v-bind:class="[network]">
+        <h1>SelectAccountType</h1>
+        <div class="infobox" v-show="showProfile" v-on:click="authorize('@SocialAccountTypeEnum.Profile.Key()')">
+            <div class="infobox-icon">
+                <i class="ace-icon bi bi-person-circle"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-text">Profile</span>
+            </div>
+        </div>
+        <div class="infobox" v-show="showPage" v-on:click="authorize('@SocialAccountTypeEnum.Page.Key()')">
+            <div class="infobox-icon">
+                <i class="ace-icon bi bi-flag"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-text">Page</span>
+            </div>
+        </div>
+        <div class="infobox" v-show="showBusiness" v-on:click="authorize('@SocialAccountTypeEnum.Business.Key()')">
+            <div class="infobox-icon">
+                <i class="ace-icon bi bi-suitcase"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-text">Business</span>
+            </div>
+        </div>
+        <div class="infobox" v-show="showGroup" v-on:click="authorize('@SocialAccountTypeEnum.Group.Key()')">
+            <div class="infobox-icon">
+                <i class="ace-icon bi bi-people-fill"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-text">Group</span>
+            </div>
+        </div>
+        <div class="infobox" v-show="showAdManager" v-on:click="authorize('@SocialAccountTypeEnum.AdManager.Key()')">
+            <div class="infobox-icon">
+                <i class="ace-icon bi bi-volume-up"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-text">AdManager</span>
+            </div>
+        </div>
+    </div>
+</div>

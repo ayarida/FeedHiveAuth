@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using FeedHiveAuth.Services;
 
 namespace FeedHiveAuth.Areas.Identity.Pages.Account
 {
@@ -117,6 +118,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    //GlobalContext.Application["currentUser"] = result.Succeeded.ToString();
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
