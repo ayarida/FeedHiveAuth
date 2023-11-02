@@ -5,6 +5,7 @@ using FeedHiveAuth.Models.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using FeedHiveAuth.Data.Repositories;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -69,13 +70,20 @@ namespace FeedHiveAuth.Data.Repositories
         }
 
 
-        public List<Post>  GetPostById(string id)
+        public Post GetPostById (string id)
         {
-            List<Post> posts = new List<Post>();
             var query = SqlSelect + $" WHERE ID = '{id}'";
-            posts = connection.Query<Post>(query).ToList();
+            Post posts = connection.Query<Post>(query).ToList().FirstOrDefault();
+            //posts = SqlUpdate + $"WHERE ID = '{id}'";
             return posts;
         }
+
+        public Post UpdatePostData(Post post)
+        {
+            var updatedPost = UpdatePostInfo(post);
+            return updatedPost;
+        }
+
         public List<Post> GetPostsByIds(List<string> idsArray)
         {
             var posts = Query<Post>(SqlSelect + " WHERE Id in @Ids", new { Ids = idsArray }).ToList();

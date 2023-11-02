@@ -83,11 +83,12 @@ namespace FeedHiveAuth.Controllers
         }
 
 
-        [HttpGet]
-        public void UpdatePost(string Id)
+        [HttpPost]
+        public ActionResult UpdatePost(string Id)
         {
-            var posts = _postService.GetPosts();
-            //_postService.Update();
+            Post post = _postService.GetPostById(Id);
+            _postService.UpdatePostData(post);
+            return View("~/Views/Home/Index.cshtml");
         }
 
 
@@ -252,6 +253,14 @@ namespace FeedHiveAuth.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User currentUser = _userService.Get(userId);
             return currentUser;
+        }
+
+
+        [HttpGet]
+        public ActionResult PostInfo (string Id)
+        {
+            var post = _postService.GetPostById(Id);
+            return View("~/Views/Posts/PostInfo.cshtml", post);
         }
     }
 }

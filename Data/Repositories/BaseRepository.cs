@@ -2,9 +2,12 @@
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -72,6 +75,17 @@ namespace FeedHiveAuth.Data.Repositories
             //_connection.globalSqlConnection.Query<T>("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, Id = id });               
             //Execute("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, id });
         }
+
+        public Post UpdatePostInfo(Post post)
+        {
+            using (connection)
+            {
+                //var result = (Post) connection.Query<T>("UPDATE " + TableName + " SET " + "Title = " + post.Title + ", ShortTitle = " + post.ShortTitle + ", Summary = " + post.Summary + ", Content = " + post.Content + "=@value WHERE Id=" + post.Id);
+                var result = (Post)connection.Query<T>("UPDATE " + TableName + " SET " + "Title = " + post.Title + "=@value WHERE Id=" + new { Id = new[] { post.Id } });
+                return result;
+            }
+        }
+
         public int Execute(string sql, dynamic param = null)
         {
             try
