@@ -53,7 +53,7 @@
                         {
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td><a href="/posts/PostInfo?postId=@(post.Id)">@post.Title</a></td>
+                                <td>@Html.ActionLink(post.Title,"PostInfo","Posts", new{@post.Id})</td>
                                 <td>@post.ShortTitle</td>
                                 <td>@post.Content</td>
                                 <td>@post.PostDate</td>

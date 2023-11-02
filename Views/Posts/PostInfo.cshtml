@@ -1,9 +1,76 @@
-﻿@model List<FeedHiveAuth.Models.Post>
+﻿@model FeedHiveAuth.Models.Post
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<Post> posts = Model;
-    var post = posts.FirstOrDefault();
+    Post post = Model;
+
 }
 
-<div>@post</div>
+
+<h2>Edit Post: @post?.Title</h2>
+
+<hr />
+
+<main class="editor">
+    <div class="container pt-4 mt-4">
+        <div class="card p-4">
+
+            <div class="row">
+                <div class="create-post">
+                    <div class="card-head my-2">
+
+                        <form asp-route="/Posts/UpdatePostData/@post.Id" enctype="multipart/form-data" method="post" style="max-width: 100%">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Title" class="control-label"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="ShortTitle" class="control-label"></label>
+                                <input asp-for="ShortTitle" class="form-control" />
+                                <span asp-validation-for="ShortTitle" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Summary" class="control-label"></label>
+                                <input asp-for="Summary" class="form-control" />
+                                <span asp-validation-for="Summary" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Content" class="control-label"></label>
+                                <input asp-for="Content" class="form-control" />
+                                <span asp-validation-for="Content" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="PostDate" class="control-label"></label>
+                                <input asp-for="PostDate" class="form-control" />
+                                <span asp-validation-for="PostDate" class="text-danger"></span>
+                            </div>
+                            <label class="custom-file-upload mb-3">
+                                Upload
+                                <input type="file" name="File" />
+                            </label>
+                            <div class="form-group mb-4">
+                                <input type="submit" value="Update" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
+                            </div>
+
+                            <textarea class="content-area" name="example"></textarea>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+
+<style>
+    .card-head {
+        justify-content: start;
+    }
+</style>
