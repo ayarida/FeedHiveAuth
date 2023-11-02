@@ -78,6 +78,17 @@ app.UseEndpoints(endpoints =>
        pattern: "Posts/Publish/{postId?}",
        defaults: new { controller = "Posts", action = "Publish" }
    );
+    endpoints.MapControllerRoute(
+      name: "postInfo",
+      pattern: "Posts/PostInfo/{Id?}",
+      defaults: new { controller = "Posts", action = "Publish" }
+  );
+
+    endpoints.MapControllerRoute(
+     name: "UpdatePost",
+     pattern: "{controller = Posts}/{action = UpdatePost}/{id?}",
+     defaults: new { controller = "Posts", action = "UpdatePost" }
+  );
 
 });
 app.UseEndpoints(endpoints =>
@@ -89,7 +100,7 @@ app.UseEndpoints(endpoints =>
 });
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{Post}");
 
 app.MapRazorPages();
 
