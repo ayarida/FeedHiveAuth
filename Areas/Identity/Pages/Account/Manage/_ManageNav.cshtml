@@ -13,3 +13,15 @@
     <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
 </ul>
+
+<style>
+    .nav-link:not(.active) {
+        color: unset;
+    }
+
+    #profile-form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+    }
+</style>

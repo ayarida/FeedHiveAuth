@@ -32,14 +32,13 @@
 @media (min-width: 991.98px) {
   main {
     padding-right: 240px;
-    padding-top: 50px;
   }
     footer {
         padding-right: 240px;
     }
 }
 main {
-  padding-top: 50px;
+  padding-top: 70px;
 }
 
 .bg-white {

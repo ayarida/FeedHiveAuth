@@ -4,7 +4,7 @@
 
 
 
-<ul class="navbar-nav d-flex flex-row nav-left  mr-auto d-md-flex ">
+@* <ul class="navbar-nav d-flex flex-row nav-left  mr-auto d-md-flex ">
 	@if (SignInManager.IsSignedIn(User))
 	{
 		<li class="user-name">
@@ -21,15 +21,19 @@
 		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
 		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
 		<a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Create">New Subscription</a>
-	}
+	} *@
 @{
     var x = SignInManager.UserManager;
 }
-<ul class="navbar-nav d-flex flex-row nav-left  mr-auto " >
+<ul class="navbar-nav d-flex flex-row nav-left mr-auto greeting " >
     @if (SignInManager.IsSignedIn(User))
     {
 
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+
+			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+				<button type="submit" class="nav-link btn btn-link text-dark log-out">Logout</button>
+			</form>
         //var userIdentities = User.Identities.Select(x => x.RoleClaimType).FirstOrDefault();       
         //var test = User.Claims.Where(x=>x.Value == User.Identities.)
         //var cI = User.Identities.FirstOrDefault().RoleClaimType;
@@ -61,6 +65,10 @@
 		width: fit-content;
 	}
 
+		.log-out:hover{
+			background-color: red;
+		}
+
 	.user-name {
 		background-color: var(--green-color);
 		padding: 10px;
@@ -69,5 +77,11 @@
 
 	.user-name a {
 		color: white !important;
+	}
+
+	@@media (max-width: 992px){
+		.greeting{
+			display: none !important;
+		}
 	}
 </style>

@@ -4,45 +4,91 @@
 <div class="step-pane accounts" data-step="2">
     <div class="infobox-container" v-bind:class="[network]">
         <h1>SelectAccountType</h1>
-        <div class="infobox" v-show="showProfile" v-on:click="authorize('@SocialAccountTypeEnum.Profile.Key()')">
-            <div class="infobox-icon">
-                <i class="ace-icon bi bi-person-circle"></i>
+        <div class="account-type my-5">
+            <div class="infobox" v-show="showProfile" v-on:click="authorize('@SocialAccountTypeEnum.Profile.Key()')">
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-person-circle"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">Profile</span>
+                </div>
             </div>
-            <div class="infobox-data">
-                <span class="infobox-text">Profile</span>
+            <div class="infobox" v-show="showPage" v-on:click="authorize('@SocialAccountTypeEnum.Page.Key()')">
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-flag"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">Page</span>
+                </div>
             </div>
-        </div>
-        <div class="infobox" v-show="showPage" v-on:click="authorize('@SocialAccountTypeEnum.Page.Key()')">
-            <div class="infobox-icon">
-                <i class="ace-icon bi bi-flag"></i>
+            <div class="infobox" v-show="showBusiness" v-on:click="authorize('@SocialAccountTypeEnum.Business.Key()')">
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-suitcase"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">Business</span>
+                </div>
             </div>
-            <div class="infobox-data">
-                <span class="infobox-text">Page</span>
+            <div class="infobox" v-show="showGroup" v-on:click="authorize('@SocialAccountTypeEnum.Group.Key()')">
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-people-fill"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">Group</span>
+                </div>
             </div>
-        </div>
-        <div class="infobox" v-show="showBusiness" v-on:click="authorize('@SocialAccountTypeEnum.Business.Key()')">
-            <div class="infobox-icon">
-                <i class="ace-icon bi bi-suitcase"></i>
+            <div class="infobox" v-show="showAdManager" v-on:click="authorize('@SocialAccountTypeEnum.AdManager.Key()')">
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-volume-up"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">AdManager</span>
+                </div>
             </div>
-            <div class="infobox-data">
-                <span class="infobox-text">Business</span>
-            </div>
-        </div>
-        <div class="infobox" v-show="showGroup" v-on:click="authorize('@SocialAccountTypeEnum.Group.Key()')">
-            <div class="infobox-icon">
-                <i class="ace-icon bi bi-people-fill"></i>
-            </div>
-            <div class="infobox-data">
-                <span class="infobox-text">Group</span>
-            </div>
-        </div>
-        <div class="infobox" v-show="showAdManager" v-on:click="authorize('@SocialAccountTypeEnum.AdManager.Key()')">
-            <div class="infobox-icon">
-                <i class="ace-icon bi bi-volume-up"></i>
-            </div>
-            <div class="infobox-data">
-                <span class="infobox-text">AdManager</span>
-            </div>
+
         </div>
     </div>
 </div>
+
+
+<style>
+    .infobox {
+        padding: 20px;
+        background: #679bcf;
+        color: white;
+        width: 200px;
+        text-align: center;
+    }
+
+        .infobox > .infobox-icon > .ace-icon::before {
+            font-size: 45px;
+        }
+
+    .account-type {
+        display: flex;
+        justify-content: center;
+        column-gap: 10%;
+        row-gap: 27px;
+        align-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .infobox {
+        border:;
+        padding: 5%;
+        background: #679bcf;
+        color: white;
+    }
+
+    .infobox-data {
+        margin-top: 10px;
+    }
+    #next {
+        background-color: #67cf81;
+    }
+
+    #back {
+        background-color: #cf6767;
+    }
+</style>

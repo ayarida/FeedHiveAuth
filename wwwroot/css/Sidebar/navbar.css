@@ -92,7 +92,6 @@ i.bi.bi-bell.bell-icon {
   display: flex;
   align-items: center;
   column-gap: 10px;
-  justify-content: space-between;
 }
 
 @media (min-width: 992px) {
