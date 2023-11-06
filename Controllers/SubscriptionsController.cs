@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Services;
+using FeedHiveAuth.Data.Repositories;
 
 namespace FeedHiveAuth.Controllers
 {
     public class SubscriptionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
         public SubscriptionsController(ApplicationDbContext context)
         {
             _context = context;
@@ -160,6 +162,12 @@ namespace FeedHiveAuth.Controllers
         private bool SubscriptionExists(string id)
         {
           return (_context.Subscription?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet]
+        public Subscription GetById(string id)
+        {
+            return _subscriptionService.Get(id);
         }
     }
 }

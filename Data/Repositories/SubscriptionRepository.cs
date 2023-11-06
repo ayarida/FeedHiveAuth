@@ -5,17 +5,21 @@ namespace FeedHiveAuth.Data.Repositories
 {
     public class SubscriptionRepository
     {
-        public SubscriptionRepository()
+        public static string _connectionString = DatabaseConnection.GetConnectionStrings();
+        public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
+        
+        public SubscriptionRepository() 
         {
+            
         }
-       /* public new Subscription Get(string id)
+        public new Subscription Get(string id)
         {
             using (connection)
             {
-                var returnedUser = connection.Query<Subscription>("SELECT * FROM AspNetUsers WHERE id IN @ids", new { ids = new[] { id } }).FirstOrDefault();
+                var returnedUser = connection.Query<Subscription>("SELECT * FROM Subscription WHERE id IN @ids", new { ids = new[] { id } }).FirstOrDefault();
                 return returnedUser;
             }
-        }*/
+        }
 
     }
 }
