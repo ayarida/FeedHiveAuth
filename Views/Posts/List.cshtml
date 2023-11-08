@@ -1,12 +1,14 @@
 ﻿@model List<FeedHiveAuth.Models.Post>
-
+@using FeedHiveAuth.Models.Enums
+@using FeedHiveAuth.Data.Extensions
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model;
-
+    
 }
 
 
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 <div class="col-md-12">
     <div class="card">
@@ -48,9 +50,12 @@
 
                     @if (posts.Any())
                     {
+                        
+
 
                         @foreach (var post in posts)
                         {
+                           
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
                                 <td>@Html.ActionLink(post.Title,"PostInfo","Posts", new{@post.Id})</td>
@@ -58,14 +63,8 @@
                                 <td>@post.Content</td>
                                 <td>@post.PostDate</td>
                                 <td><a href="#" style="color: inherit;"><i class="bi bi-pencil-square"></i></a></td>
-                                @if (post.Status == 20)
-                                {
-                                    <td>Published</td>
-                                }
-                                else
-                                {
-                                    <td>New</td>
-                                }
+                                <td>@(EnumExtension.FromValue<StatusEnum>(post.Status).Key())</td>
+
                             </tr>
                         }
 
