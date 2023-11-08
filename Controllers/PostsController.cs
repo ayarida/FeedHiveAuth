@@ -47,7 +47,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult List()
         {
-           var posts  = _postService.GetPosts();
+            var posts = _postService.GetPosts();
             return View("~/Views/Posts/List.cshtml", posts);
         }
 
@@ -55,7 +55,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public ActionResult CreatePost()
         {
-            
+
             Post post = new Post();
             var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
@@ -65,7 +65,7 @@ namespace FeedHiveAuth.Controllers
             post.Summary = HttpContext.Request.Form["Summary"];
             post.Content = HttpContext.Request.Form["Content"];
             post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
-            
+
             post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"]);
             if (currentUser != null)
             {
@@ -116,31 +116,31 @@ namespace FeedHiveAuth.Controllers
 
         public void MultiUpload(IFormFileCollection Files)
         {
-           /* if (ModelState.IsValid)
+            /* if (ModelState.IsValid)
+             {
+                 if (model.Files.Count > 0)
+                 {*/
+            foreach (var file in Files)
             {
-                if (model.Files.Count > 0)
-                {*/
-                    foreach (var file in Files)
-                    {
 
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files");
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files");
 
-                        //create folder if not exist
-                        if (!Directory.Exists(path))
-                            Directory.CreateDirectory(path);
+                //create folder if not exist
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
 
-                        string fileNameWithPath = Path.Combine(path, file.FileName);
+                string fileNameWithPath = Path.Combine(path, file.FileName);
 
-                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
-                    }
-                   
-                /*}
-                
-            }*/
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+            }
+
+            /*}
+
+        }*/
         }
         public static string GeneratePostLink(string input)
         {
@@ -183,9 +183,9 @@ namespace FeedHiveAuth.Controllers
         public void Publish(string Id)
         {
             //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var currUser = GetCurrentUser();           
+            var currUser = GetCurrentUser();
             _postService.Publish(Id, currUser.Id);
-           
+
         }
 
         public void MultiplePublish([FromQuery] string idsStr)
@@ -196,7 +196,7 @@ namespace FeedHiveAuth.Controllers
             {
                 stringList.Add(guid.ToString());
             }
-            
+
             var posts = _postService.GetPostsByIds(stringList);
 
             foreach (var post in posts)
@@ -220,7 +220,7 @@ namespace FeedHiveAuth.Controllers
             foreach (Guid guid in idsArray)
             {
                 stringList.Add(guid.ToString());
-            }          
+            }
             var posts = _postService.GetPostsByIds(stringList);
 
             foreach (var post in posts)
@@ -240,7 +240,7 @@ namespace FeedHiveAuth.Controllers
         public List<Post> PublishedPosts()
         {
             List<Post> publishedPosts = _postService.GetPublishedPosts();
-            return publishedPosts;          
+            return publishedPosts;
         }
 
         public User GetCurrentUser()
@@ -257,10 +257,19 @@ namespace FeedHiveAuth.Controllers
 
 
         [HttpGet]
-        public ActionResult PostInfo (string Id)
+        public ActionResult PostInfo(string Id)
         {
             var post = _postService.GetPostById(Id);
             return View("~/Views/Posts/PostInfo.cshtml", post);
         }
+
+
+        [HttpGet]
+        public ActionResult Calendar()
+        {
+            return View("~/Views/Posts/Calendar.cshtml");
+        }
+
+
     }
 }
