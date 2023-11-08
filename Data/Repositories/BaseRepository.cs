@@ -15,6 +15,8 @@ namespace FeedHiveAuth.Data.Repositories
     {
         protected string KeyColumn = "Id";
         protected string SqlSelect => "SELECT " + Columns.AddBraces() + " FROM " + TableName;
+
+        protected string SqlSelectWhole => "SELECT * FROM " + TableName;
         protected string SqlInsert => Columns.GenerateInsertQuery(TableName);
         protected string SqlDelete => "DELETE FROM " + TableName + " WHERE Id=@Id;";
 

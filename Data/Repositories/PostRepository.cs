@@ -18,37 +18,39 @@ namespace FeedHiveAuth.Data.Repositories
         }
 
 
-        public int Publish(string postId , string userId=null)
+        public int Publish(string postId , string userId = null)
         {
             //change status 
             //save publishedBy 
-            //check permission before
+            //check permission before           
             var post = Get(postId);
-            
-            //int comp = DateTime.Compare(post.PostDate.Value, DomainTime.Now());
-            var published = StatusEnum.Published.Value();
-            if (post.Status == published)
-            {
-                return PostErrorEnum.POST_ALREADY_PUBLISHED.Value();
-            }
-            //check postdate on publish
+            //If it has no postdate so by default current and give new status
             if (post.PostDate == null)
             {
-                post.PostDate = DomainTime.Now();
+                post.PostDate = DateTime.Now;
+                post.Status = StatusEnum.Published.Value();
+                UpdateColumn("PostDate", post.PostDate, post.Id);
                 //UpdateColumn("PostDate", post.PostDate, post.Id);
             }
             else
             {
-                //SCHEDULED
-                if(post.PostDate.Value > DomainTime.Now())
+                DateTime currentDateTime = DateTime.Now;
+                int comp = DateTime.Compare(post.PostDate.Value, currentDateTime);
+                if(comp > 0 )
                 {
                     post.Status = StatusEnum.Scheduled.Value();
                 }
                 else
-                    post.Status = published;
+                {
+                    post.Status = StatusEnum.Published.Value();
+                }
+            }         
+/*            if (post.Status == published)
+            {
+                return PostErrorEnum.POST_ALREADY_PUBLISHED.Value();
             }
+            */
             UpdateColumn("Status", post.Status, post.Id);
-            //get current user and update PublishedBy to current user id
             UpdateColumn("PublishedBy",userId, post.Id);
             return 0;
         }
@@ -64,7 +66,7 @@ namespace FeedHiveAuth.Data.Repositories
         public List<Post> GetPosts()
         {
             List<Post> posts = new List<Post>();
-            var query = SqlSelect;
+            var query = SqlSelectWhole;
             posts = connection.Query<Post>(query).ToList();
             return posts;
         }
