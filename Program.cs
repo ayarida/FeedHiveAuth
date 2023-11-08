@@ -74,6 +74,11 @@ app.UseEndpoints(endpoints =>
         defaults: new { area = "", controller = "Home", action = "Index" }
      );
     endpoints.MapControllerRoute(
+        name: "Default_Posts",
+        pattern: "Subscriptions/GetById/{id?}",
+        defaults: new { area = "", controller = "Home", action = "Index" }
+     );
+    endpoints.MapControllerRoute(
        name: "myRoute",
        pattern: "Posts/Publish/{postId?}",
        defaults: new { controller = "Posts", action = "Publish" }
