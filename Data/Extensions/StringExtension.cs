@@ -485,8 +485,55 @@ namespace FeedHiveAuth.Data.Extensions
                 return "https:" + (url.StartsWith("//") ? "" : "//") + url;
 
             return url.Replace("http://", "https://");
-        }    
-      
+        }
+
+        public static string AddParameter(this string url, string key, string value, bool overwrite = true)
+        {
+            if (string.IsNullOrEmpty(url))
+                return url;
+            var ourl = url;
+            if (url.StartsWith("//")) url = "http:" + url;
+
+
+            Uri uri;
+            bool validUrl = Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri);
+
+            if (!validUrl)
+                return url;
+
+            //var uri = new Uri(url, UriKind.RelativeOrAbsolute);
+            if (uri.IsAbsoluteUri)
+            {
+                var builder = new UriBuilder(uri);
+                var newUrl = QueryHelpers.AddQueryString(url, key, value);
+                // qs.Add();
+                //builder.Query = qs.ToString();
+                // var newurl = builder.Uri.ToString();
+                return ourl.StartsWith("http:") ? newUrl : newUrl.Replace("http://", "//");
+            }
+            else
+            {
+                try
+                {
+                    var pre = url.Contains("?") ? "&" : "?";
+                    url = url + pre + key + "=" + value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in AddParameter " + ex.Message + " " + url + "EXCEPTION:" + ex);
+
+                }
+                return url;
+            }
+        }
+        public static string Resize(this string url, int width, int height)
+        {
+            return url.AddParameter("width", width.ToString()).AddParameter("height", height.ToString()).AddParameter("mode", "crop").AddParameter("scale", "both");
+        }
+        public static string Resize(this string url, int width)
+        {
+            return url.AddParameter("width", width.ToString());
+        }
         public static string AddPreset(this string url, string value)
         {
             if (string.IsNullOrEmpty(url))
