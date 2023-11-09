@@ -468,3 +468,14 @@ try {
 catch {
     console.log("no calendar");
 }
+
+
+$(".editor").ready(function () {
+    try {
+        $(".content-area").richText();
+    }
+    catch {
+        console.log("no editor found")
+    }
+});
+
