@@ -4,7 +4,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model;
-    
+
 }
 
 
@@ -12,6 +12,7 @@
 
 <div class="col-md-12">
     <div class="card">
+        
         <div class="card-header">
             Post history
         </div>
@@ -50,12 +51,12 @@
 
                     @if (posts.Any())
                     {
-                        
+
 
 
                         @foreach (var post in posts)
                         {
-                           
+
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
                                 <td>@Html.ActionLink(post.Title,"PostInfo","Posts", new{@post.Id})</td>
@@ -73,12 +74,32 @@
             </table>
 
         </div>
+
     </div>
 </div>
 
 
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+</script>
+
 
 <style>
+
+    #popup-button {
+        display:none;
+    }
+
+    .modal-footer{
+        justify-content: center;
+    }
+
+    .modal-body {
+        text-align: center;
+    }
+
     main input {
         max-width: 100%;
         margin-bottom: 20px;
@@ -104,7 +125,7 @@
         column-gap: 10px;
     }
 
-    a{
+    a {
         color: initial;
     }
 

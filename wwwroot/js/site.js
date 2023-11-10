@@ -43,10 +43,13 @@ function deleteSelected() {
         type: "GET",
         url: serviceURL,
         data: { idsStr: idsString },
-        contentType: "application/json; charset=utf-8",
-        dataType: "JSON",
-        success: successFunc,
-        error: errorFunc
+        success: function (data) {
+            alert("Selected Posts Deleted!");
+            location.reload();
+        },
+        error: function (data) {
+            alert("An error occured please try again");
+        }
     });
     console.log(deleteArr);
 }
@@ -71,10 +74,13 @@ function publishSelected() {
         type: "GET",
         url: serviceURL,
         data: { idsStr: idsString },
-        contentType: "application/json; charset=utf-8",
-        dataType: "JSON",
-        success: successFunc,
-        error: errorFunc
+        success: function (data) {
+            alert("Selected Posts Published!");
+            location.reload();
+        },
+        error: function (data) {
+            alert("An error occured please try again");
+        }
     });
     console.log(publishArr);
 }

@@ -190,7 +190,7 @@ namespace FeedHiveAuth.Controllers
 
         public void MultiplePublish([FromQuery] string idsStr)
         {
-            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
             List<string> stringList = new List<string>();
             foreach (Guid guid in idsArray)
             {
@@ -212,10 +212,12 @@ namespace FeedHiveAuth.Controllers
             }
         }
 
+
         public void MultipleDelete([FromQuery] string idsStr)
         {
 
-            Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray();
+
+            Guid[] idsArray = idsStr?.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
             List<string> stringList = new List<string>();
             foreach (Guid guid in idsArray)
             {
@@ -234,6 +236,7 @@ namespace FeedHiveAuth.Controllers
                     Console.WriteLine("Error while deleting this post", post);
                 }
             }
+
         }
 
         [HttpGet]
