@@ -71,12 +71,12 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "Default_Posts",
         pattern: "{controller}/{action}/{id?}",
-        defaults: new { area = "", controller = "Home", action = "Index" }
+        defaults: new { area = "", controller = "Home", action = "Welcome" }
      );
     endpoints.MapControllerRoute(
         name: "Default_Posts",
         pattern: "Subscriptions/GetById/{id?}",
-        defaults: new { area = "", controller = "Home", action = "Index" }
+        defaults: new { area = "", controller = "Home", action = "Welcome" }
      );
     endpoints.MapControllerRoute(
        name: "myRoute",
@@ -85,7 +85,7 @@ app.UseEndpoints(endpoints =>
    );
     endpoints.MapAreaControllerRoute(
         name: "SocialRoutes",
-        areaName:"Social",
+        areaName: "Social",
         pattern: "Social/{controller=SocialHome}/{action=Index}/{id?}",
         defaults: new { controller = "SocialHome", action = "Index" }
         );
@@ -106,13 +106,15 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+      pattern: "{area:exists}/{controller=Home}/{action=Welcome}/{id?}"
     );
 });
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{Post}");
+    pattern: "{controller=Home}/{action=Welcome}/{Post}",
+    defaults: new { controller = "Home", action = "Welcome" });
+
 
 app.MapRazorPages();
 

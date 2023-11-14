@@ -23,7 +23,6 @@ namespace FeedHiveAuth.Controllers
         {
             _logger = logger;
         }
-        [AllowAnonymous]
         /*     public IActionResult Index()
              {
 
@@ -40,16 +39,16 @@ namespace FeedHiveAuth.Controllers
                  return View(posts);
              }*/
 
-
+        [Authorize]
         public IActionResult Index()
         {
 
-            return View("~/Views/Home/Welcome.cshtml");
+            return View();
         }
 
         public IActionResult Welcome()
         {
-            return View("~/Views/Home/Index.cshtml");
+            return View();
         }
 
         public IActionResult Privacy()
