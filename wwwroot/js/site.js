@@ -44,11 +44,15 @@ function deleteSelected() {
         url: serviceURL,
         data: { idsStr: idsString },
         success: function (data) {
-            alert("Selected Posts Deleted!");
-            location.reload();
+            $('#success-message').modal('show');
+            $(".close-popup").click(function () {
+                $('#success-message').modal('hide');
+                location.reload();
+            })
+
         },
         error: function (data) {
-            alert("An error occured please try again");
+            errorFunc();
         }
     });
     console.log(deleteArr);
@@ -58,7 +62,11 @@ function successFunc(data, status) {
 }
 
 function errorFunc() {
-    alert('error');
+    $('#error-message').modal('show');
+    $(".close-popup").click(function () {
+        $('#success-message').modal('hide');
+        location.reload();
+    })
 }
 
 function publishSelected() {
@@ -75,11 +83,14 @@ function publishSelected() {
         url: serviceURL,
         data: { idsStr: idsString },
         success: function (data) {
-            alert("Selected Posts Published!");
-            location.reload();
+            $('#success-message-published').modal('show');
+            $(".close-popup").click(function () {
+                $('#success-message-published').modal('hide');
+                location.reload();
+            })
         },
         error: function (data) {
-            alert("An error occured please try again");
+            errorFunc();
         }
     });
     console.log(publishArr);
@@ -482,6 +493,16 @@ $(".editor").ready(function () {
     }
     catch {
         console.log("no editor found")
+    }
+});
+
+$("#create-form").ready(function () {
+    if ($("#create-form .submit-button").length > 0) {
+        $("#create-form").on("click", function () {
+            if (!$("#title").val()) {
+                alert("no title");
+            }
+        })
     }
 });
 

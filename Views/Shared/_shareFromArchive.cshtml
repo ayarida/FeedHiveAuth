@@ -1,0 +1,48 @@
+﻿@model List<FeedHiveAuth.Models.Post>
+@using FeedHiveAuth.Models.Enums
+@using FeedHiveAuth.Data.Extensions
+@{
+    var EmptyList = new List<Post>();
+    List<Post> posts = Model== null ? EmptyList : Model;
+
+}
+
+<div class="row mb-3 gy-3">
+
+   @if (posts.Count != 0)
+        {
+            @foreach (var post in posts)
+            {
+                if (post.Status == StatusEnum.Scheduled.Value())
+                {
+                    <div class="col-lg-4">
+                        <div class="archive-card card mx-2 p-2">
+                            <div class="arc-card-header">
+                                <div class="card-date">@post.PostDate</div>
+                                <i class="bi bi-images"></i>
+                            </div>
+                            <bdi class="arc-card-body my-4">
+                                @post.Content
+                            </bdi>
+                            <div class="arc-card-footer">
+                                <div class="arc-user">
+                                    <i class="bi bi-person-circle"></i>
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+       
+
+    }
+
+    else
+    {
+        <div class="col-lg-12">
+            No Previous Posts!
+        </div>
+    }
+</div>
