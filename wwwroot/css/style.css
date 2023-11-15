@@ -8,6 +8,8 @@
     --card-head: 1rem;
     --publish-color: #2e844a;
     --delete-color: #ba0517;
+    --orange-color: #dd7a01;
+    --blue-color: #008CBA;
 }
 
 @font-face {
