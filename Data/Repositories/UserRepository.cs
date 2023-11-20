@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -20,6 +21,13 @@ namespace FeedHiveAuth.Data.Repositories
             return Query<User>(SqlSelect + " WHERE UserName=@username", new { UserName = username }).FirstOrDefault();
         }
 
+
+        /*public IAction RegisterSubscriptionUser(string id)
+        {
+            //param: id for user subscription
+            return View("")
+
+        }*/
         
 
 

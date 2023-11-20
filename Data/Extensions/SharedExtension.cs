@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using FeedHiveAuth.Models.Enums;
 
 namespace FeedHiveAuth.Data.Extensions
 {
@@ -549,5 +550,35 @@ namespace FeedHiveAuth.Data.Extensions
             }
             return default;
         }
+
+        //public static string ServiceUrl(this ApplicationEnum app, Guid subscriptionId, bool? privatee = null,
+        //   bool addprotocol = true, bool debugging = false)
+        //{
+        //    var configs = AppConfigs.InstanceOf(subscriptionId)?.Services;
+        //    if (configs == null)
+        //    {
+        //        return "";
+        //    }
+
+        //    var service = configs.Services.FirstOrDefault(x => x.Type == app.Value().ToString() && x.Canonical == true) ?? configs.Services.FirstOrDefault(x => x.Type == app.Value().ToString());
+        //    if (service == null)
+        //    {
+        //        return "";
+        //    }
+
+        //    if (privatee == null)
+        //    {
+        //        privatee = debugging;
+        //    }
+
+        //    //return privatee.Value
+        //    //    ? service.PrivateUrl.ComposeSafeUrl(!addprotocol ? (bool?)null : service.EnableSsl && !debugging) + "/"
+        //    //    : service.PublicUrl.ComposeSafeUrl(!addprotocol ? (bool?)null : service.EnableSsl && !debugging) + "/";
+
+
+        //    return privatee.Value
+        //        ? service.PrivateUrl.ComposeSafeUrl(!addprotocol ? null : service.EnableSsl) + "/"
+        //        : service.PublicUrl.ComposeSafeUrl(!addprotocol ? null : service.EnableSsl) + "/";
+        //}
     }
 }

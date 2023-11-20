@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Identity.Pages.Account;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +9,66 @@ namespace FeedHiveAuth.Controllers
     public class UsersController : Controller
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
+        //get current subscription value
 
         public UsersController(UserManager<IdentityUser> userManager)
         {
             this.userManager = userManager;
         }
 
-        [HttpGet]
-        public IActionResult ListUsers()
+
+        public IActionResult Login()
         {
+            return View("~/Areas/Identity/Pages/Account/Login.cshtml");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            // Your existing login logic
+            return RedirectToAction("Register", "Account", new { area = "Identity" });
+        }
+
+        /* [HttpGet]
+         public async Task<IActionResult> Register(LoginModel model)
+         {
+             // Your existing login logic
+
+             return RedirectToAction("Index", "Home");
+         }*/
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterNewUser(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var newUser = new IdentityUser { UserName = model.Input.Email, Email = model.Input.Email };
+                var result = await userManager.CreateAsync(newUser, model.Input.Password);
+
+                if (result.Succeeded)
+                {
+                    // You can sign in the new user if needed
+                    // await _signInManager.SignInAsync(newUser, isPersistent: false);
+
+                    // Your additional logic after successful registration
+                    return RedirectToAction("Index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            // If registration fails, redisplay the form
+            return View("Register", model);
+        }
+
+        [HttpGet]
+        public IActionResult List()
+        {
+            //TODO: Update users returned based on current subscriptionId
             List<IdentityUser> users = userManager.Users.ToList();
             return View(users);
         }
@@ -37,7 +89,7 @@ namespace FeedHiveAuth.Controllers
         {
             //var subscriptionId =
             //var currentUser = await _adminWorkContext.GetCurrentUserAsync();
-            Instances.Repositories.UserRepository.Delete("9372960b-9d59-47c9-a7e5-de38bfb4aa38");
+            //Instances.Repositories.UserRepository.Delete("9372960b-9d59-47c9-a7e5-de38bfb4aa38");
         }
 
        /* public async Task<List<User>> GetUsersAsync()
@@ -47,6 +99,7 @@ namespace FeedHiveAuth.Controllers
                 return await context.Users.ToList();
             }
         }*/
+
 
 
     }

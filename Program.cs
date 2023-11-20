@@ -99,6 +99,13 @@ app.UseEndpoints(endpoints =>
      name: "UpdatePost",
      pattern: "{controller = Posts}/{action = UpdatePost}/{id?}",
      defaults: new { controller = "Posts", action = "UpdatePost" }
+     );
+
+      endpoints.MapControllerRoute(
+     name: "RegisterNewUser",
+     pattern: "{controller = User}/{action = Register}/{id?}",
+     defaults: new { controller = "Posts", action = "UpdatePost" }
+
   );
 
 });
