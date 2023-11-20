@@ -6,6 +6,10 @@
     --grey-color: #dee5ee;
     direction: rtl;
     --card-head: 1rem;
+    --publish-color: #2e844a;
+    --delete-color: #ba0517;
+    --orange-color: #dd7a01;
+    --blue-color: #008CBA;
 }
 
 @font-face {
@@ -413,4 +417,41 @@ div[class^="ripple"] {
     flex-direction: row !important;
 }
 
-/*animation for popup*/
+.publish-btn {
+    background: var(--publish-color);
+    color: white;
+    border-radius: 5px;
+}
+
+.delete-btn{
+    background-color: var(--delete-color);
+    color: white;
+    border-radius: 5px;
+}
+
+/*Modal popup*/
+.modal-body {
+    background: #198a55;
+    color: white;
+}
+
+.close-popup {
+    width: 200px;
+    background: #ea001e;
+}
+
+#popup-button {
+    display: none;
+}
+
+.modal-footer {
+    justify-content: center !important;
+}
+
+.modal-body {
+    text-align: center;
+}
+
+#error-message .modal-body {
+    background: #dd7a01;
+}

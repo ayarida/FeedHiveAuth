@@ -12,7 +12,7 @@
 
 <div class="col-md-12">
     <div class="card">
-        
+
         <div class="card-header">
             Post history
         </div>
@@ -43,8 +43,8 @@
                 </thead>
                 <div class="action-buttons">
 
-                    <button type="button" class="btn btn-danger" onClick="deleteSelected()">Delete</button>
-                    <button type="button" class="btn green-btn" onClick="publishSelected()">Publish</button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
+                    <button type="button" class="publish-btn"  onClick="publishSelected()">Publish</button>
                 </div>
 
                 <tbody>
@@ -67,6 +67,7 @@
                                 <td>@(EnumExtension.FromValue<StatusEnum>(post.Status).Key())</td>
 
                             </tr>
+
                         }
 
                     }
@@ -79,26 +80,61 @@
 </div>
 
 
-<script>
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
+<div class="modal fade" id="success-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Selected Messages Deleted
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="success-message-published" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Selected Messages Published
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="error-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                An error occured please try again !
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* <script>
+    $(".close").click(function () {
+        $('#success-message').modal('hide');
+        location.reload();
     })
-</script>
+
+
+</script> *@
 
 
 <style>
 
-    #popup-button {
-        display:none;
-    }
 
-    .modal-footer{
-        justify-content: center;
-    }
-
-    .modal-body {
-        text-align: center;
-    }
 
     main input {
         max-width: 100%;

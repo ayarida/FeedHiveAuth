@@ -1,13 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@model FeedHiveAuth.Models.User
+@model List<FeedHiveAuth.Models.Post>
 
 @{
     ViewData["Title"] = "Home Page";
+    var data = Model;
 }
 
-<link rel="stylesheet" href="~/css/LandingPage/landingPage.css" />
 
 <div class="container pt-4">
     <div class="row user">
@@ -174,62 +174,8 @@
         </div>
     </div>
 
-    <div class="row mb-3 gy-3">
-        <div class="col-lg-4">
-            <div class="archive-card card mx-2 p-2">
-                <div class="arc-card-header">
-                    <div class="card-date">2016 - Jul 23 2003</div>
-                    <i class="bi bi-images"></i>
-                </div>
-                <bdi class="arc-card-body my-4">
-                    Hey perfectionists! its totally okay, sometimes not to be
-                    okay! We are Real not Perfect
-                </bdi>
-                <div class="arc-card-footer">
-                    <div class="arc-user">
-                        <i class="bi bi-person-circle"></i>
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="archive-card card mx-2 p-2">
-                <div class="arc-card-header">
-                    <div class="card-date">2016 - Jul 23 2003</div>
-                    <i class="bi bi-images"></i>
-                </div>
-                <bdi class="arc-card-body my-4">
-                    Hey perfectionists! its totally okay, sometimes not to be
-                    okay! We are Real not Perfect
-                </bdi>
-                <div class="arc-card-footer">
-                    <div class="arc-user">
-                        <i class="bi bi-person-circle"></i>
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="archive-card card mx-2 p-2">
-                <div class="arc-card-header">
-                    <div class="card-date">2016 - Jul 23 2003</div>
-                    <i class="bi bi-images"></i>
-                </div>
-                <bdi class="arc-card-body my-4">
-                    Hey perfectionists! its totally okay, sometimes not to be
-                    okay! We are Real not Perfect
-                </bdi>
-                <div class="arc-card-footer">
-                    <div class="arc-user">
-                        <i class="bi bi-person-circle"></i>
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data);
 </div>
 
 

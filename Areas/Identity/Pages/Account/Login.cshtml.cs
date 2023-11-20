@@ -60,7 +60,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public class InputModel
-        {           
+        {
             public string Username { get; set; }
 
             /// <summary>
@@ -106,7 +106,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Home/Index");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

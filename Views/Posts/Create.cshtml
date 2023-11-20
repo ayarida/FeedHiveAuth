@@ -27,11 +27,11 @@
                 <div class="create-post">
                     <div class="card-head my-2">
 
-                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%">
+                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%" id="create-form">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group mb-4">
                                     <label asp-for="Title" class="control-label"></label>
-                                    <input asp-for="Title" class="form-control" required />
+                                    <input asp-for="Title" class="form-control required-field" required />
                                     <span asp-validation-for="Title" class="text-danger"></span>
                                 </div>
                                 <div class="form-group mb-4">
@@ -59,12 +59,12 @@
                                     <input type="file" name="File" />
                                 </label>
                                 <div class="form-group mb-4">
-                                <input type="submit" value="Create" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
+                                <input type="submit" value="Create" class="btn btn-primary submit-button" style="max-width: 100%;width: 100%;" />
                                 </div>
 
-                            <div class="page-wrapper box-content">
+                       @*      <div class="page-wrapper box-content">
                                 <textarea class="content-area" name="example"></textarea>
-                            </div>
+                            </div> *@
                             </form>
                       
 
@@ -87,6 +87,11 @@
         justify-content: start;
     }
 </style>
+
+
+
+
+
 
 @section Scripts {
     @{
