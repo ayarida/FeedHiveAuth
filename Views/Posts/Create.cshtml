@@ -7,9 +7,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<main class="editor">
+<main class="editor" dir="auto">
     <div class="container pt-4 mt-4">
-        <div class="card p-4">
+        <div class="back-container">
+            <button class="mb-4 back-btn">
+                <a asp-action="Index" style="text-decoration: none;color: black;"><i class="bi bi-arrow-left"></i></a>
+            </button>
+        </div>
+
+        <div class="card p-4" style="background: #8080800f;accent-color: ;">
             <h1>Create</h1>
 
             <h4>Post</h4>
@@ -20,72 +26,212 @@
             }
             else
             {
-                <p>this is a normal role and user @User.Identity. </p>
+                <p dir="auto" style="text-align: match-parent;">this is a normal role and user @User.Identity. </p>
             }
             <hr />
             <div class="row">
                 <div class="create-post">
                     <div class="card-head my-2">
 
-                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%" id="create-form">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <div class="form-group mb-4">
-                                    <label asp-for="Title" class="control-label"></label>
-                                    <input asp-for="Title" class="form-control required-field" required />
-                                    <span asp-validation-for="Title" class="text-danger"></span>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label asp-for="ShortTitle" class="control-label"></label>
-                                    <input asp-for="ShortTitle" class="form-control" />
-                                    <span asp-validation-for="ShortTitle" class="text-danger"></span>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label asp-for="Summary" class="control-label"></label>
-                                    <input asp-for="Summary" class="form-control" />
-                                    <span asp-validation-for="Summary" class="text-danger"></span>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label asp-for="Content" class="control-label"></label>
-                                    <input asp-for="Content" class="form-control" />
-                                    <span asp-validation-for="Content" class="text-danger"></span>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label asp-for="PostDate" class="control-label"></label>
-                                    <input asp-for="PostDate" class="form-control" />
-                                    <span asp-validation-for="PostDate" class="text-danger"></span>
-                                </div>
-                                <label class="custom-file-upload mb-3">
+                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Title" class="control-label"></label>
+                                <input asp-for="Title" class="form-control required-field" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="ShortTitle" class="control-label"></label>
+                                <input asp-for="ShortTitle" class="form-control" />
+                                <span asp-validation-for="ShortTitle" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Summary" class="control-label"></label>
+                                <input asp-for="Summary" class="form-control" />
+                                <span asp-validation-for="Summary" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Content" class="control-label"></label>
+                                <input asp-for="Content" class="form-control" />
+                                <span asp-validation-for="Content" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="PostDate" class="control-label"></label>
+                                <input asp-for="PostDate" class="form-control" />
+                                <span asp-validation-for="PostDate" class="text-danger"></span>
+                            </div>
+                            <div style="display: flex;align-items: center;column-gap: 20px;" class="my-5">
+                                <div class="mb-3">Image/Video</div>
+                                <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
                                     Upload
+                                    <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
                                     <input type="file" name="File" />
                                 </label>
-                                <div class="form-group mb-4">
-                                <input type="submit" value="Create" class="btn btn-primary submit-button" style="max-width: 100%;width: 100%;" />
-                                </div>
+                            </div>
 
-                       @*      <div class="page-wrapper box-content">
-                                <textarea class="content-area" name="example"></textarea>
+                            <div class="form-group mb-4" style="display: flex;justify-content: center;">
+                                <input type="submit" value="Create Post" class="btn btn-primary submit-button" style="max-width: 50%;width: 100%; border-radius: 28px;" />
+                            </div>
+
+                            @*      <div class="page-wrapper box-content">
+                            <textarea class="content-area" name="example"></textarea>
                             </div> *@
-                            </form>
-                      
+                        </form>
+
+
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
+
     </div>
+
+    <div id="snackbar" style="background-color:var(--delete-color);border-radius:10px" dir="auto">Title is required !</div>
+
 </main>
 
-<script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script>
-<link rel="stylesheet" href="~/css/Editor/richtext.min.css" />
+@* <script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script>
+<link rel="stylesheet" href="~/css/Editor/richtext.min.css" /> *@
 
 <style>
     .card-head {
         justify-content: start;
     }
+
+    .control-label {
+        margin-bottom: 10px;
+    }
+
+    .custom-file-upload {
+        width: 20%;
+    }
+
+
+    input {
+        border-radius: 5px !important;
+    }
+    /*Toast animation*/
+    #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        top: 100px;
+        font-size: 17px;
+        height: fit-content !important;
+    }
+
+        #snackbar.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+    @@-webkit-keyframes fadein {
+        from {
+            top: 0;
+            opacity: 0;
+        }
+
+        to {
+            top: 30px;
+            opacity: 1;
+        }
+    }
+
+    @@keyframes fadein {
+        from {
+            top: 0;
+            top: 0;
+        }
+
+        to {
+            bottom: 30px;
+            opacity: 1;
+        }
+    }
+
+    @@-webkit-keyframes fadeout {
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+
+        to {
+            top: 0;
+            opacity: 0;
+        }
+    }
+
+    @@keyframes fadeout {
+        from {
+            top: 30px;
+            opacity: 1;
+        }
+
+        to {
+            top: 0;
+            opacity: 0;
+        }
+    }
+    /*Back button */
+    .back-btn:hover i {
+        display: none;
+    }
+
+    .back-container {
+        width: 67px;
+    }
+
+    .back-btn:hover:before {
+        content: "Back to post list";
+    }
+
+    .back-btn {
+        width: fit-content;
+        white-space: nowrap;
+        overflow: hidden;
+        border: 1px solid #c2b1b1;
+    }
+
+        .back-btn:hover {
+            animation: width ease-in-out 0.1s;
+        }
+
+
+            .back-btn:hover::before {
+                white-space: nowrap;
+                overflow: hidden;
+                animation: width 0.1s linear forwards;
+            }
+
+
+    .back-container {
+        white-space: nowrap;
+        overflow: hidden;
+        animation: width 0.1s linear forwards;
+    }
+
+
+    @@keyframes width {
+        from {
+            width: 67px;
+        }
+
+        to {
+            width: 164px;
+        }
+    }
+
 </style>
 
 

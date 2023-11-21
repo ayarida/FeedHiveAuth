@@ -496,11 +496,14 @@ $(".editor").ready(function () {
     }
 });
 
-$("#create-form").ready(function () {
+$("main").ready(function () {
     if ($("#create-form .submit-button").length > 0) {
-        $("#create-form").on("click", function () {
+        $(document).on("submit", "#create-form", function (event) {
             if (!$("#title").val()) {
-                alert("no title");
+                var x = document.getElementById("snackbar");
+                event.preventDefault()
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
             }
         })
     }

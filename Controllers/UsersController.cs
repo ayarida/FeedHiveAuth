@@ -40,13 +40,23 @@ namespace FeedHiveAuth.Controllers
             Instances.Repositories.UserRepository.Delete("9372960b-9d59-47c9-a7e5-de38bfb4aa38");
         }
 
-       /* public async Task<List<User>> GetUsersAsync()
+
+        [HttpGet]
+        public IActionResult UsersList()
         {
-            using (var context = new ApplicationDbContext())
-            {
-                return await context.Users.ToList();
-            }
-        }*/
+
+            List<IdentityUser> users = userManager.Users.ToList();
+            return View("~/Views/Users/UsersList.cshtml", users);
+
+        }
+
+        /* public async Task<List<User>> GetUsersAsync()
+         {
+             using (var context = new ApplicationDbContext())
+             {
+                 return await context.Users.ToList();
+             }
+         }*/
 
 
     }

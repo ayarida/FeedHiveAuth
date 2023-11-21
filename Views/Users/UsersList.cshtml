@@ -1,0 +1,48 @@
+﻿@model List<IdentityUser>
+@{
+    var users = Model;
+}
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Users List
+            </div>
+            <table id="filter" class="table">
+                <thead>
+                    <tr>
+                       
+                        <th>Title</th>
+                        <th>Role</th>
+                        <th>Status</th>
+
+                    </tr>
+                </thead>
+                <div class="action-buttons">
+
+                    <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
+                    <button type="button" class="publish-btn" onClick="publishSelected()">Publish</button>
+                </div>
+
+                <tbody>
+
+                    @if (users.Count != 0)
+                    {
+
+                        @foreach (var user in users)
+                        {
+
+                            <tr>
+                                <td>@user.UserName</td>
+                           @*      <td>@user.RoleId</td> *@
+
+                            </tr>
+
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
