@@ -18,9 +18,9 @@ namespace FeedHiveAuth.Areas.Social.Models
                 {
                     Application = new FacebookApp
                     {
-                        DisplayName = "TestApp",
-                        AppId = "1234",
-                        AppSecret = "123456"
+                        DisplayName = "FHiveAuth",
+                        AppId = "315090498130849",
+                        AppSecret = "d3fb385638ae42a8079be0d2e4266481"
                     }
                 }
             };

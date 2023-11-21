@@ -3,7 +3,7 @@
     public enum SocialNetworkTypeEnum
     {
         None = -1,
-        Facebook,
+        Facebook = 0,
         Twitter,
         Instagram,
         Youtube,

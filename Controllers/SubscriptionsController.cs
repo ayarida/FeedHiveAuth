@@ -16,6 +16,7 @@ namespace FeedHiveAuth.Controllers
     {
         private readonly ApplicationDbContext _context;
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
+        protected UserRepository _userService = Instances.Repositories.UserRepository;
         public SubscriptionsController(ApplicationDbContext context)
         {
             _context = context;
@@ -57,7 +58,7 @@ namespace FeedHiveAuth.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Code,Name,Hosts,Master,ParentId,Id,Status,CreationDate")] Subscription subscription)
+        public async Task<IActionResult> Create([Bind("Code,Name,Hosts,Master,Id,Status,CreationDate")] Subscription subscription)
         {
             var ms = ModelState;
                 subscription.Id = Guid.NewGuid().ToString();
@@ -165,6 +166,20 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> RegisterSubscriptionUser(string id)
+        {
+            if (_context.Subscription == null)
+                return NotFound();
+
+var subscription = await _context.Subscription
+                .FirstOrDefaultAsync(m => m.Id == id);
+            //ViewData["subscriptionId"] = subscription.Id;
+            //var regUser = _userService.RegisterSubscriptionUser(id);\
+            
+            return View("~/Areas/Identity/Pages/Account/Register.cshtml",subscription);
+    }
+
+    [HttpGet]
         public Subscription GetById(string id)
         {
             return _subscriptionService.Get(id);
