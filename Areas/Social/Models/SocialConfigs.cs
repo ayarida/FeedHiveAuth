@@ -9,7 +9,7 @@ namespace FeedHiveAuth.Areas.Social.Models
         public bool EnableShareOnAllNetworks { get; set; }
         public FacebookConfigs FacebookConfigs { get; set; }
 
-        public static SocialConfigs Construct(Guid subscriptionId)
+        public static SocialConfigs Construct(string subscriptionId = "")
         {
             return new SocialConfigs
             {

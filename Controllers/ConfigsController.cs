@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FeedHiveAuth.Areas.Social.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FeedHiveAuth.Controllers
 {
     public class ConfigsController : Controller
     {
 
-        [Area("Social")]
-
-
-        public ActionResult TechincalConfigs()
+        [HttpGet]
+        public ActionResult TechnicalConfigs()
         {
-            return View("~/Areas/Social/Views/Channels/Configs/TechincalConfigs.cshtml");
+
+            var socialConfigs = SocialConfigs.Construct();
+            return View("~/Areas/Social/Views/Channels/Configs/TechnicalConfigs.cshtml", socialConfigs);
         }
     }
 }

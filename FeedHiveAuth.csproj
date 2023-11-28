@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Areas\Social\Data\" />
     <Folder Include="Views\Posts\Partials\" />
+    <Folder Include="wwwroot\js\JsonForm\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

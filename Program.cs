@@ -100,8 +100,12 @@ app.UseEndpoints(endpoints =>
      pattern: "{controller = Posts}/{action = UpdatePost}/{id?}",
      defaults: new { controller = "Posts", action = "UpdatePost" }
      );
+    endpoints.MapControllerRoute(
+     name: "TechConfigs",
+     pattern: "{controller = Configs}/{action = TechnicalConfigs}"
+     );
 
-      endpoints.MapControllerRoute(
+    endpoints.MapControllerRoute(
      name: "RegisterNewUser",
      pattern: "{controller = User}/{action = Register}/{id?}",
      defaults: new { controller = "Posts", action = "UpdatePost" }

@@ -509,3 +509,54 @@ $("main").ready(function () {
     }
 });
 
+$("#details").ready(function () {
+
+
+
+    $(function () {
+        // some json data
+        var FJsonData = {
+
+
+            //pass defualt data to form inputs
+            /*      name: "facebook",
+                  id: "123",
+                  enabled: true,*/
+
+        };
+
+        // initialize the form, prefix is optional and defaults to data
+
+        /*        $("#configsList").jsForm({
+        
+                });
+        */
+
+        $("#facebookConfigs").jsForm({
+            /*data: FJsonData,*/
+        });
+
+        $("#twitterConfigs").jsForm({
+
+        });
+
+        $("#telegramConfigs").jsForm({
+
+        });
+
+        $("#instagramConfigs").jsForm({
+
+        });
+
+        $("#whatsappConfigs").jsForm({
+
+        });
+
+
+
+/*        $("#show").click(function () {
+            // show the json data
+            alert(JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " "));
+        });*/
+    });
+});
