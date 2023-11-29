@@ -96,5 +96,21 @@ namespace FeedHiveAuth.Data
         {
             return _connection.State;
         }
+
+        public int Execute(string query, object param = null, IDbTransaction transaction = null)
+        {
+            try
+            {
+                var result = _connection.Execute(query, param, transaction);
+                Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
+               Console.WriteLine("Failed to execute query: " + query + ex);
+                Close();
+                throw;
+            }
+        }
     }
 }

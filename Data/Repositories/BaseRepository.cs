@@ -17,7 +17,7 @@ namespace FeedHiveAuth.Data.Repositories
         protected string SqlSelect => "SELECT " + Columns.AddBraces() + " FROM " + TableName;
 
         protected string SqlSelectWhole => "SELECT * FROM " + TableName;
-        protected string SqlInsert => Columns.GenerateInsertQuery(TableName);
+        protected string SqlInsert => Columns.GenerateInsertQuery(TableName, ExcludedColumns);
         protected string SqlDelete => "DELETE FROM " + TableName + " WHERE Id=@Id;";
 
         protected string SqlUpdate => Columns.GenerateUpdateQuery(TableName, KeyColumn, "Id,CreationDate");
@@ -25,6 +25,8 @@ namespace FeedHiveAuth.Data.Repositories
         protected string SqlCount => "SELECT COUNT(*) FROM " + TableName;
         protected string TableName;
         protected string Columns;
+        protected string ExcludedColumns = "PublicId";
+
         public static string _connectionString = DatabaseConnection.GetConnectionStrings();
 
         public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
@@ -102,7 +104,7 @@ namespace FeedHiveAuth.Data.Repositories
                         if (line.ToUpperInvariant().Trim() == "GO")
                         {
                             if (sqlBatch.IsNotNullOrEmpty())
-                                res = connection.Query<T>(sqlBatch, param);
+                                res = connection.Execute(sqlBatch, param);
                             sqlBatch = string.Empty;
                         }
                         else
@@ -149,6 +151,26 @@ namespace FeedHiveAuth.Data.Repositories
                 throw new Exception(ex.FullMessage());
             }
         }
+            
+            
+        public void Insert(T model, DateTime? creationDate = null)
+        {
+            model.LastModified = DomainTime.Now();
+            model.CreationDate = creationDate.HasValue ? creationDate.Value : DomainTime.Now();
+            var sql = SqlInsert;
+            Execute(sql, model);
+        }
+        public void Insert(IEnumerable<T> models, DateTime? creationDate = null)
+        {
+            foreach (var model in models)
+            {
+                model.CreationDate = creationDate.HasValue ? creationDate.Value : DomainTime.Now();
+                model.LastModified = DomainTime.Now();
+            }
+            if (SqlInsert.IsNotNullOrEmpty())
+                Execute(SqlInsert, models);
+        }
+
 
     }
 }
