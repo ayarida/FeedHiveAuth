@@ -1,0 +1,317 @@
+﻿@model FeedHiveAuth.Areas.Social.Models.SocialConfigs
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var configs = Model; 
+
+}
+
+
+<div class="py-4" id="configsList">
+
+
+    <div id="facebookConfigs" class="mt-3">
+        <h6 class="config-title mb-5">Facebook Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="facebook-name">Display Name</label>
+                <input type="text" id="facebook-name" name="data.name">
+            </div>
+
+            <div class="setting-instance">
+                <label for="facebook-id">App ID</label>
+                <input type="text" id="facebook-id" name="data.id"/>
+            </div>
+
+
+            <div class="setting-instance enable-setting">
+                <label for="facebook-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="facebook-status" name="data.status">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="twitterConfigs" class="mt-5">
+        <h6 class="config-title mb-5">twitter Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="twitter-name">Display Name</label>
+                <input type="text" id="twitter-name" name="data.name" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="twitter-id">App ID</label>
+                <input type="text" id="twitter-id" name="data.id" />
+            </div>
+
+
+            <div class="setting-instance enable-setting">
+                <label for="twitter-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="twitter-status" name="data.enabled">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div id="telegramConfigs" class="mt-5">
+        <h6 class="config-title mb-5">telegram Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="telegram-name">Display Name</label>
+                <input type="text" id="telegram-name" name="data.name" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="telegram-id">App ID</label>
+                <input type="text" id="telegram-id" name="data.id" />
+            </div>
+
+
+            <div class="setting-instance enable-setting">
+                <label for="telegram-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="telegram-status" name="data.enabled">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div id="instagramConfigs" class="mt-5">
+        <h6 class="config-title mb-5">instagram Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="instagram-name">Display Name</label>
+                <input type="text" id="instagram-name" name="data.name" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="instagram-id">App ID</label>
+                <input type="text" id="instagram-id" name="data.id" />
+            </div>
+
+
+            <div class="setting-instance enable-setting">
+                <label for="instagram-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="instagram-status" name="data.enabled">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div id="whatsappConfigs" class="mt-5">
+        <h6 class="config-title mb-5">whatsapp Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="whatsapp-name">Display Name</label>
+                <input type="text" id="whatsapp-name" name="data.name" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="whatsapp-id">App ID</label>
+                <input type="text" id="whatsapp-id" name="data.id" />
+            </div>
+
+
+            <div class="setting-instance enable-setting">
+                <label for="whatsapp-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="whatsapp-status" name="data.enabled">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <button id="saveData" class="mt-5">Save Changes</button>
+
+
+
+
+</div>
+<script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
+
+@if (configs.FacebookConfigs != null)
+{
+    var facebookCofigs = Model.FacebookConfigs.Application;
+    
+    <script>
+        $("#details").ready(function () {
+        var facebook = {
+          @*   name: "@facebookCofigs.DisplayName",
+            id: @facebookCofigs.AppId,
+            enabled: true, *@
+        }
+
+        $("#facebookConfigs").jsForm({
+            data: facebook,
+        });
+        });
+
+    </script>
+}
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var facebook = {
+                name:,
+                id: 0,
+                enabled: false,
+
+            }
+        });
+    </script>
+}
+
+<script>
+
+    $("#saveData").click(function () {  
+        var configsJson = ( '"Configs" :{' + '"Facebook: "' + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " ") + "," + '"Twitter: "' + JSON.stringify($("#twitterConfigs").jsForm("get"), null, " ") + "," + '"Telegram: "' + JSON.stringify($("#telegramConfigs").jsForm("get"), null, " ") + "," + '"Instagram: "' + JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + "," + '"Whatsapp: "' + JSON.stringify($("#whatsappConfigs").jsForm("get"), null, " ") + "}");
+
+        console.log(configsJson);
+
+        var serviceURL = "/Social/Controllers/TechnicalController"
+        $.ajax({
+            type: "GET",
+            url: serviceURL,
+            data: { json: configsJson},
+
+            success: function (data) {
+                alert("success");
+            },
+            error: function (data) {
+                aler("error");
+            }
+
+        });
+    })
+
+</script>
+
+<style>
+    #configsList {
+        display: flex;
+        flex-direction: column;
+        background: #dee5ee54;
+        padding-left: 32px;
+    }
+
+        #configsList input {
+            width: fit-content;
+        }
+
+    .setting-instance label:not(.switch) {
+            width: 7rem;
+            color: var(--blue-color);
+        }
+    .config-title {
+        color: var(--blue-color);
+        font-weight: bold;
+    }
+
+    .config-settings {
+        padding-left: 10px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+        .config-settings input {
+            border-radius: 5px;
+        }
+
+    .setting-instance {
+        display: flex;
+        column-gap: 10px;
+       
+    }
+    
+    .enable-setting{
+        align-items: center;
+    }
+
+    /* Toggle Style */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>

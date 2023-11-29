@@ -4,6 +4,12 @@
     text-align: left;
 }
 
+
+body{
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
 .container-hero {
     display: flex;
     justify-content: space-evenly;
@@ -12,6 +18,7 @@
     column-gap: 10px;
     flex-wrap: wrap;
     row-gap: 10px;
+    margin-top: 60px;
 }
 
 @media screen and (max-width: 600px) {
@@ -228,4 +235,28 @@ body {
 
 .card.p-3.ani {
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.navbar-nav.d-flex.flex-row.nav-left.mr-auto.greeting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex !important;
+    justify-content: flex-end;
+    column-gap: 28px;
+    padding-left: 26px;
+}
+
+.navbar-nav.d-flex.flex-row.nav-left.mr-auto.greeting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex !important;
+    justify-content: flex-end;
+    column-gap: 28px;
+    padding-left: 26px;
+    box-shadow: -5px 6px 5px 0 rgb(0 0 0 / 5%), -2px 7px 10px 0 rgb(0 0 0 / 5%);
+    height: 56px;
 }

@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Log in";
+    Layout = null;
 }
 
 <h1 class="mt-5">@ViewData["Title"]</h1>
@@ -26,7 +27,7 @@
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="mt-3">
-                    <div class="checkbox">
+                    <div class="checkbox" style="display: flex;justify-content: flex-start;" dir="auto">
                         <label asp-for="Input.RememberMe" class="form-label">
                             <input class="form-check-input" asp-for="Input.RememberMe" />
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
@@ -36,15 +37,15 @@
                 <div class="mt-3">
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
                 </div>
-                <div class="mt-4">
+                <div class="mt-4 account-options">
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword" dir="auto">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto">Register as a new user</a>
                     </p>
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto">Resend email confirmation</a>
                     </p>
                 </div>
             </form>
@@ -84,31 +85,63 @@
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
 
 <style>
     main {
         direction: ltr;
         text-align: left;
-        p {
-            direction: ltr;
-        }
-        a{
-            text-decoration: none;
-            color: inherit;
-        }
+      
+      p{
+          direction: ltr;
+      }
+
+    a {
+        text-decoration: none;
+        color: inherit;
     }
 
-    .login-section{
+    }
+
+    .login-section {
         border: 8px solid #707efd;
         border-radius: 20px;
     }
 
-    #account{
+    #account {
         row-gap: 5px;
         display: flex;
-     flex-direction: column;
+        flex-direction: column;
     }
+
+    .account-options p{
+        text-align: end;
+    }
+
+    .login-section a {
+        color: inherit;
+        text-decoration: none;
+    }
+
 </style>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+
+
+<link rel="stylesheet" href="~/css/LandingPage/landingPage.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&display=swap"
+      rel="stylesheet" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+
+<link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
+<link rel="stylesheet" href="~/css/Sidebar/core.css" />

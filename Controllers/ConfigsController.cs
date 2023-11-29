@@ -14,7 +14,7 @@ namespace FeedHiveAuth.Controllers
         [Area("Social")]
         public ActionResult TechincalConfigs()
         {
-            return View("~/Areas/Social/Views/Channels/Configs/TechincalConfigs.cshtml");
+            return View();
         }
     }
 }
