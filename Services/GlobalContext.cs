@@ -1,24 +1,41 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using FeedHiveAuth.Data.Extensions;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Telegram.Bot.Types;
 
 namespace FeedHiveAuth.Services
 {
     public static class GlobalContext
     {
-        public static HttpContext _globalHttpContext;
-        public static string SubscriptionId;
-        public static string currentUser;
-       
-        public static Dictionary<string, string> Application = new Dictionary<string, string>();
-        public static string GetCurrentSubscription()
-        {
-            return Application["currentSubscription"];
-        }
+        public static UserConfigs UserConfigs {  get; set; }
 
-        public static string GetCurrentUser()
+/*        public static 
+*/        
+        public static UserConfigs Construct(IdentityUser user)
         {
-            return Application["currentUser"];
+            UserConfigs = new UserConfigs
+            {
+                UserData = new UserData
+                {
+                    Name = user.UserName,
+                    Email = user.Email,
+                    Id = user.Id
+                }
+            };
+            return UserConfigs;
         }
+    }
+    public class UserConfigs
+    {
+        public UserData UserData { get; set; }
+    }
+    public class UserData
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
 
+        public string Id { get; set; }
     }
 }
