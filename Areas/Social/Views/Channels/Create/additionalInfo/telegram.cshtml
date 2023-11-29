@@ -1,0 +1,81 @@
+﻿@using FeedHiveAuth.Areas.Social.Models;
+@using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
+@{
+    var configs = SocialConfigs.Construct().TelegramConfigs;
+    var telegramEnabled = configs!= null && configs.Bot.Enabled;
+    if (!telegramEnabled)
+    {
+        return;
+    }
+    var language = "en";
+    var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+}
+
+<h1 v-if="network === 'telegram'">AdditionalInfo</h1>
+<div v-if="network === 'telegram'" class="row">
+    <div class="col-12" v-if="!submitting">
+        <ul class="list-unstyled spaced2" style="text-align: ltr">
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                OpenThisBotInTelegram
+                <a target="_blank" href="@TelegramService.GetBotUrl(Guid.Parse(subscription))">@TelegramService.GetBot(Guid.Parse(subscription)).Username</a>
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                ClickSendMessageButton
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                ClickStartButton
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                GoToYourTelegramChannel
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                ClickAddMembers
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                EnterBotName
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                ClickInviteButton
+            </li>
+
+            <li>
+                <i class="ace-icon fa fa-check green"></i>
+                ClickMakeAdminButton
+            </li>
+
+            <li>
+                <div class="form-group Username" style="margin-bottom: 15px;">
+                    EnterChannelUsername              
+                    <div class="col-sm-10">
+                        <input class="col-12" id="id" name="id" type="text" v-model="id" />
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="form-group" style="margin-top: 15px;">
+                    ClickAuthorizeButton                    <div class="col-sm-3">
+                        <a v-bind:disabled="!id" v-on:click="signIn" class="btn btn-new success" style="margin-bottom: 0;">
+                            <i class="ace-icon fa fa-unlock bigger-110"></i>
+                            <span>Authorize</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>
