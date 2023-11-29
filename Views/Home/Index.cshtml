@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using FeedHiveAuth.Services;
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @model List<FeedHiveAuth.Models.Post>
@@ -6,6 +7,7 @@
 @{
     ViewData["Title"] = "Home Page";
     var data = Model;
+    var currUser = GlobalContext.UserConfigs?.UserData;
 }
 
 
@@ -13,9 +15,9 @@
     <div class="row user">
         <div class="greeting my-4">
             <div class="user-greet">
-                @if (SignInManager.IsSignedIn(User))
+                @if (currUser != null)
                 {
-                    <h2> @User?.Identity.Name ،مساء الخير</h2>
+                    <h2> @currUser.Name ،مساء الخير</h2>
                     <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
                 }
             </div>
