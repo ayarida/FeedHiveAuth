@@ -479,6 +479,7 @@ namespace FeedHiveAuth.Data.Extensions
 
 
         }
+        
         public static string SslUrl(this string url)
         {
             if (!url.StartsWith("http"))
