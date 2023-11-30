@@ -365,3 +365,7 @@ FodyWeavers.xsd
 # Local Uploaded Files
 wwwroot/Files
 wwwroot/uploads
+/.idea/.idea.FeedHiveAuth/.idea/dictionaries
+/.idea/.idea.FeedHiveAuth/.idea
+/FeedHiveAuth.csproj
+/Program.cs
