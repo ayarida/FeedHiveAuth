@@ -21,12 +21,18 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        private readonly ILogger<LoginModel> _logger;
+        
+
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<LoginModel> logger)
         {
+           
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -109,7 +115,6 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/Home/Index");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -118,7 +123,8 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    //GlobalContext.Application["currentUser"] = result.Succeeded.ToString();
+                    var user = await _userManager.FindByNameAsync(Input.Username);
+                    GlobalContext.Construct(user);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

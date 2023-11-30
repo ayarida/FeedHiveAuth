@@ -1,17 +1,20 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Data.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeedHiveAuth.Controllers
 {
     public class ConfigsController : Controller
     {
-
-        [HttpGet]
-        public ActionResult TechnicalConfigs()
+        public SocialConfigs GetSubscriptionSocialConfigs(string subscriptionId)
         {
+            return SocialServiceHelper.GetConfigs(subscriptionId);
+        }
 
-            var socialConfigs = SocialConfigs.Construct();
-            return View("~/Areas/Social/Views/Channels/Configs/TechnicalConfigs.cshtml", socialConfigs);
+        [Area("Social")]
+        public ActionResult TechincalConfigs()
+        {
+            return View();
         }
     }
 }

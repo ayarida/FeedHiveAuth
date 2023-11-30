@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using FeedHiveAuth.Data.Repositories;
+using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -120,6 +121,16 @@ namespace FeedHiveAuth.Data.Repositories
                                     post.PostDate.EscapeForSql(true)
                                     );
             ExecuteQuery(query);
+        }
+
+        public MediaItem GetPostMedia(string postId, string mediaId, out PublishErrorEnum error)
+        {
+            var media = postId.HasValue() && mediaId.HasValue() ? Instances.Repositories.MediaItemRepository.Get(mediaId) : null;
+            if (media == null)
+                error = PublishErrorEnum.NO_MEDIA;
+            else
+                error = PublishErrorEnum.NO_ERROR;
+            return media;
         }
     }
 }
