@@ -154,39 +154,39 @@
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
 
-@if (configs.FacebookConfigs != null)
-{
-    var facebookCofigs = Model.FacebookConfigs.Application;
+  @*@if (configs.FacebookConfigs != null)
+  {
+      var facebookCofigs = Model.FacebookConfigs.Application;
     
-    <script>
-        $("#details").ready(function () {
-        var facebook = {
-          @*   name: "@facebookCofigs.DisplayName",
-            id: @facebookCofigs.AppId,
-            enabled: true, *@
-        }
+      <script>
+          $("#details").ready(function () {
+          var facebook = {
+              name: "@facebookCofigs.DisplayName",
+              id: @facebookCofigs.AppId,
+              enabled: true, 
+          }
 
-        $("#facebookConfigs").jsForm({
-            data: facebook,
-        });
-        });
+          $("#facebookConfigs").jsForm({
+              data: facebook,
+          });
+          });
 
-    </script>
-}
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var facebook = {
-                name:,
-                id: 0,
-                enabled: false,
+      </script>
+  }
+  else
+  {
+      <script>
+          $("#details").ready(function () {
+              var facebook = {
+                  name:,
+                  id: 0,
+                  enabled: false,
 
-            }
-        });
-    </script>
-}
-
+              }
+          });
+      </script>
+  }
+  *@
 <script>
 
     $("#saveData").click(function () {  
