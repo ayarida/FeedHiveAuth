@@ -1,5 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using FeedHiveAuth.Areas.Social.Models;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model FeedHiveAuth.Areas.Social.Models.ShareView
 @{
+    var post = Model.Post;
+    var media = Model.Media;
+    var socialConfigs = new SocialConfigs();
+    var activeNetworkTypes = Model.ActiveSocialNetworks;
+
+    var allChannels = Model.Channels.Where(channel => activeNetworkTypes.Select(networkType => networkType.ToString().ToLower()).Contains(channel.Network.ToLower()));
+    var channelIds = allChannels.Select(x => x.NetworkId);
+    var loggedInUser = User?.Identity.Name;
 }
+
+<div class="page-content">
+</div>
