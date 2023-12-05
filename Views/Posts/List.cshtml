@@ -38,6 +38,7 @@
                         <th>Date</th>
                         <th>Edit</th>
                         <th>Status</th>
+                        <th>Share</th>
 
                     </tr>
                 </thead>
@@ -65,7 +66,7 @@
                                 <td>@post.PostDate</td>
                                 <td><a href="#" style="color: inherit;"><i class="bi bi-pencil-square"></i></a></td>
                                 <td>@(EnumExtension.FromValue<StatusEnum>(post.Status).Key())</td>
-
+                                <td><a href=""><i class="bi bi-share-fill"></i></a></td>
                             </tr>
 
                         }

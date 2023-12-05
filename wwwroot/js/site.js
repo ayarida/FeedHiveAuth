@@ -496,18 +496,18 @@ $(".editor").ready(function () {
     }
 });
 
-$("main").ready(function () {
-    if ($("#create-form .submit-button").length > 0) {
-        $(document).on("submit", "#create-form", function (event) {
-            if (!$("#title").val()) {
-                var x = document.getElementById("snackbar");
-                event.preventDefault()
-                x.className = "show";
-                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-            }
-        })
-    }
-});
+//$("main").ready(function () {
+//    if ($("#create-form .submit-button").length > 0) {
+//        $(document).on("submit", "#create-form", function (event) {
+//            if (!$("#title").val()) {
+//                var x = document.getElementById("snackbar");
+//                event.preventDefault()
+//                x.className = "show";
+//                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+//            }
+//        })
+//    }
+//});
 
 $("#details").ready(function () {
 
@@ -532,31 +532,42 @@ $("#details").ready(function () {
                 });
         */
 
-        $("#facebookConfigs").jsForm({
-            /*data: FJsonData,*/
-        });
+        try {
 
-        $("#twitterConfigs").jsForm({
+            $("#facebookConfigs").jsForm({
+                /*data: FJsonData,*/
+            });
 
-        });
+            $("#twitterConfigs").jsForm({
 
-        $("#telegramConfigs").jsForm({
+            });
 
-        });
+            $("#telegramConfigs").jsForm({
 
-        $("#instagramConfigs").jsForm({
+            });
 
-        });
+            $("#instagramConfigs").jsForm({
 
-        $("#whatsappConfigs").jsForm({
+            });
 
-        });
+            $("#whatsappConfigs").jsForm({
+
+            });
+
+        }
 
 
 
-/*        $("#show").click(function () {
-            // show the json data
-            alert(JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " "));
-        });*/
+        catch {
+            console.log("no formjs")
+        }
+
+
+        /*        $("#show").click(function () {
+                    // show the json data
+                    alert(JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " "));
+                });*/
     });
+
+
 });

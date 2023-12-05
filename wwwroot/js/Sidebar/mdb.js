@@ -8682,11 +8682,11 @@
                         var zs = qs;
                         const Qs = "ripple",
                             Vs = "mdb.ripple",
-                            P = "ripple-surface",
+                            P = "nothing",
                             Us = "ripple-wave",
-                            Ys = "input-wrapper",
+                            Ys = "nothing",
                             Xs = [".btn", ".ripple"],
-                            Ks = "ripple-surface-unbound",
+                            Ks = "nothing",
                             $s = [0, 0, 0],
                             Gs = [
                                 "primary",
@@ -8746,26 +8746,9 @@
                                         "input" === this._element.tagName.toLowerCase())
                                 ) {
                                     var t = this._element.parentNode;
-                                    if (
-                                        ((this._rippleInSpan = !0),
-                                            "span" === t.tagName.toLowerCase() && t.classList.contains(P))
-                                    )
-                                        this._element = t;
-                                    else {
-                                        var n = getComputedStyle(this._element).boxShadow;
-                                        const r = this._element;
-                                        var i = document.createElement("span");
-                                        r.classList.contains("btn-block") &&
-                                            (i.style.display = "block"),
-                                            s.one(i, "mouseup", (t) => {
-                                                0 === t.button && r.click();
-                                            }),
-                                            i.classList.add(P, Ys),
-                                            c.addStyle(i, { border: 0, "box-shadow": n }),
-                                            t.replaceChild(i, this._element),
-                                            i.appendChild(this._element),
-                                            (this._element = i);
-                                    }
+
+                                    this._element = t;
+
                                     this._element.focus();
                                 }
                                 this._element.style.minWidth ||
@@ -9051,11 +9034,11 @@
                                     (this._thumb = null);
                             }
                             _addThumb() {
-                                var t = F("span");
-                                c.addClass(t, "thumb"),
-                                    (t.innerHTML = '<span class="thumb-value"></span>'),
-                                    this._element.append(t),
-                                    (this._thumb = a.findOne(sa, this._element));
+                                //var t = F("span");
+                                //c.addClass(t, "thumb"),
+                                //    (t.innerHTML = '<span class="thumb-value"></span>'),
+                                //    this._element.append(t),
+                                //    (this._thumb = a.findOne(sa, this._element));
                             }
                             _handleEvents() {
                                 s.on(this.rangeInput, "mousedown", () => this._showThumb()),

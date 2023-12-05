@@ -5,17 +5,23 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    // var posts = Model.Title. ;
 }
 
+<div>
+     
+</div>
 <main class="editor" dir="auto">
     <div class="container pt-4 mt-4">
         <div class="back-container">
             <button class="mb-4 back-btn">
-                <a asp-action="Index" style="text-decoration: none;color: black;"><i class="bi bi-arrow-left"></i></a>
+                <a asp-action="Index" style="text-decoration: none;color: black;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
             </button>
         </div>
 
-        <div class="card p-4" style="background: #8080800f;accent-color: ;">
+        <div class="card p-4" style="background: #8080800f;">
             <h1>Create</h1>
 
             <h4>Post</h4>
@@ -37,11 +43,11 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group mb-4">
                                 <label asp-for="Title" class="control-label"></label>
-                                <input asp-for="Title" class="form-control required-field" />
+                                <input asp-for="Title" class="form-control req" />
                                 <span asp-validation-for="Title" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="ShortTitle" class="control-label"></label>
+                                <label asp-for="ShortTitle" class="control-label "></label>
                                 <input asp-for="ShortTitle" class="form-control" />
                                 <span asp-validation-for="ShortTitle" class="text-danger"></span>
                             </div>
@@ -73,11 +79,8 @@
                                 <input type="submit" value="Create Post" class="btn btn-primary submit-button" style="max-width: 50%;width: 100%; border-radius: 28px;" />
                             </div>
 
-                            @*      <div class="page-wrapper box-content">
-                            <textarea class="content-area" name="example"></textarea>
-                            </div> *@
-                        </form>
 
+                        </form>
 
 
                     </div>
@@ -88,12 +91,56 @@
 
     </div>
 
-    <div id="snackbar" style="background-color:var(--delete-color);border-radius:10px" dir="auto">Title is required !</div>
+    <div id="snackbar" style="background-color:var(--delete-color);border-radius:10px" dir="auto">Please fill the missing fields !</div> 
 
 </main>
 
-@* <script type="text/javascript" src="~/js/Editor/jquery.richtext.min.js"></script>
-<link rel="stylesheet" href="~/css/Editor/richtext.min.css" /> *@
+
+<script>
+
+
+
+    $(".create-post").ready(function () {
+
+        $(".submit-button").on("click", function () {
+
+            $("input.form-control.req").each(function (index, element) {
+                if ($(element).val() === 0 || $(element).val() === '') {
+                    $(this).prev().addClass("star");
+                    var x = document.getElementById("snackbar");
+                    x.className = "show";
+                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                    window.scrollTo(xCoord, yCoord);
+                    event.preventDefault();
+                }
+
+                else {
+                    $(this).prev().removeClass("star");
+                }
+
+            })
+
+        })
+    });
+
+               // if ($("#create-form .submit-button").length > 0) {
+               //     $(document).on("submit", "#create-form", function (event) {
+               //         $(".req").each(function () {
+               //             if (!$(this).val()) {
+               //                 var x = $("#snackbar");
+               //                 x.className = "show";
+               //                 setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+               //                 event.preventDefault();
+               //             }
+
+               //             else {
+               //                $(this).prev().removeClass("star");
+               //             }
+               //         });
+               //     })
+               // }
+</script>
+
 
 <style>
     .card-head {
@@ -112,6 +159,12 @@
     input {
         border-radius: 5px !important;
     }
+
+    .star:after {
+        content: " *";
+        color: red;
+    }
+
     /*Toast animation*/
     #snackbar {
         visibility: hidden;
@@ -153,7 +206,7 @@
             top: 0;
             top: 0;
         }
-
+re
         to {
             bottom: 30px;
             opacity: 1;
@@ -231,12 +284,7 @@
             width: 164px;
         }
     }
-
 </style>
-
-
-
-
 
 
 @section Scripts {
