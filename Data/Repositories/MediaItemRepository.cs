@@ -10,7 +10,8 @@ namespace FeedHiveAuth.Data.Repositories
 {
     public class MediaItemRepository : BaseRepository<MediaItem>
     {
-        public MediaItemRepository() {
+        public MediaItemRepository()
+        {
             TableName = Database.Tables.MediaItem;
             Columns = Database.Columns.MediaItem;
         }
@@ -21,7 +22,7 @@ namespace FeedHiveAuth.Data.Repositories
             //convert objects to mediaItem objects 
             //save mediaItem objects in Db with post.Id foreign key
             List<MediaItem> medias = new List<MediaItem>();
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 MediaItem mediaItem = new MediaItem();
                 mediaItem.ThumbnailUrl = file.FileName;
@@ -32,9 +33,10 @@ namespace FeedHiveAuth.Data.Repositories
 
         }
 
-       public void InsertPostMedia(List<MediaItem> postMedias, string postId)
+        public void InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
-            foreach(var mediaItem in postMedias) {
+            foreach (var mediaItem in postMedias)
+            {
                 string query = string.Format(
                                     "Insert Into {0} ({1}) Values ({2},{3},{4})",
                                     TableName,
