@@ -10,7 +10,7 @@
 
     public class ShareFormData
     {
-        public Guid ChannelId { get; set; }
+        public string ChannelId { get; set; }
         public string Text { get; set; }
         public string Link { get; set; }
         public IEnumerable<Guid> MediaItemIds { get; set; }

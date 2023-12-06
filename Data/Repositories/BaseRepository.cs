@@ -52,6 +52,13 @@ namespace FeedHiveAuth.Data.Repositories
             }
 
         }
+
+        public IEnumerable<T> Get(IEnumerable<string> ids)
+        {
+            if (ids == null || string.IsNullOrEmpty(SqlSelect))
+                return default(IEnumerable<T>);
+            return Query<T>(SqlSelect + " WHERE Id IN @Ids", new { Ids = ids });
+        }
         public void Delete(string id)
         {
             using (connection)
@@ -170,7 +177,6 @@ namespace FeedHiveAuth.Data.Repositories
             if (SqlInsert.IsNotNullOrEmpty())
                 Execute(SqlInsert, models);
         }
-
 
     }
 }

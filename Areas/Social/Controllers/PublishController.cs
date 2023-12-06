@@ -1,4 +1,5 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Areas.Social.Models.Services;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
@@ -6,6 +7,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
+using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
@@ -28,7 +30,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return channels;
         }
         [Area("Social")]
-        [HttpGet(template:"/Publish/Share", Name = "SocialPublish")]
+        [HttpGet(template: "/Publish/Share", Name = "SocialPublish")]
         public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
         {
             //get current subscription
@@ -45,7 +47,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
                 Post = post,
                 Media = media,
-                Channels = channels, 
+                Channels = channels,
                 ActiveSocialNetworks = activeNetworkTypes
             };
             return View(model);
@@ -56,9 +58,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             var activeNetworkTypes = new List<SocialNetworkTypeEnum>();
             //return an empty list
-            if (socialConfigs == null) return new List<SocialNetworkTypeEnum> { }; 
+            if (socialConfigs == null) return new List<SocialNetworkTypeEnum> { };
 
-            if(socialConfigs.FacebookConfigs?.Application?.Enabled ?? false) 
+            if (socialConfigs.FacebookConfigs?.Application?.Enabled ?? false)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.Facebook);
 
             if (socialConfigs.TelegramConfigs?.Bot?.Enabled ?? false)
@@ -66,6 +68,39 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
             return activeNetworkTypes;
         }
-    }
 
+        [HttpPost]
+        public async void Send(ShareForm form)
+        {
+            try
+            {
+                var currUser = GlobalContext.UserConfigs?.UserData;
+                if (form.Channels.Empty())
+                {
+                    Console.WriteLine("NoChannelsSelected");
+                    //create an Error Page to redirect 
+                    //return View();
+                }
+                if (form.Data.Empty())
+                {
+                    Console.WriteLine("NoData");
+                    //create an Error Page to redirect 
+                    //return View();
+                }
+                var channels = Instances.Repositories.ChannelRepository.GlobalGetAll();
+                var creationDate = DomainTime.Now();
+                foreach (var data in form.Data.Where(formData => formData.ChannelId.In(form.Channels)))
+                {
+                    var channel = channels.FirstOrDefault(x => x.Id.Equals(data.ChannelId) && x.Id.In(form.Channels));
+                    if (channel == null) continue;
+                    var operationId = SocialPublishService.Send(form.PostId, form.MediaId, data, channel, creationDate);
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+    }
 }

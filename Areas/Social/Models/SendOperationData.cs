@@ -8,6 +8,6 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string NetworkId { get; set; }
         public string Text { get; set; }
         public DateTime? ScheduleTime { get; set; }
-        public IEnumerable<Guid> MediaItemIds { get; set; }
+        public IEnumerable<string> MediaItemIds { get; set; }
     }
 }

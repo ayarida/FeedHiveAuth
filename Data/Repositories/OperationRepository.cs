@@ -1,6 +1,8 @@
-﻿namespace FeedHiveAuth.Data.Repositories
+﻿using FeedHiveAuth.Models;
+
+namespace FeedHiveAuth.Data.Repositories
 {
-    public class OperationRepository
+    public class OperationRepository : BaseRepository<Operation>
     {
     }
 }
