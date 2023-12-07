@@ -46,9 +46,9 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
 
         public static void ProcessShareOperation(Operation operation)
         {
-            OperationHelper.StartShareOperation(operation);
+            //OperationHelper.StartShareOperation(operation);
             var operationData = operation.Parameters.FromJson<SendOperationData>();
-            var channel = Collections.ChannelsOf(operation.SubscriptionId).FirstOrDefault(x => x.NetworkId.Equals(operationData.NetworkId));
+            var channel = Collections.ChannelsOf("1f59028d-15d0-4bf6-a61b-28f33b895310").FirstOrDefault(x => x.NetworkId.Equals(operationData.NetworkId));
             if(channel == null)
             {
                 OperationHelper.EndShareOperation(operation, StatusEnum.Failed, "No channel");

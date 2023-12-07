@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
+    [Area("Social")]
     public class PublishController : Controller
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
@@ -29,8 +30,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
-        [Area("Social")]
-        [HttpGet(template: "/Publish/Share", Name = "SocialPublish")]
+
+        [HttpGet]
         public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
         {
             //get current subscription
@@ -71,10 +72,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         [HttpPost]
         public async void Send(ShareForm form)
+        
         {
             try
             {
-                var currUser = GlobalContext.UserConfigs?.UserData;
+                var currUser = GlobalContext.Construct;
                 if (form.Channels.Empty())
                 {
                     Console.WriteLine("NoChannelsSelected");

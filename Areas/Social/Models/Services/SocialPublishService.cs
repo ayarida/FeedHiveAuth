@@ -29,7 +29,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 MediaId = mediaId,
                 Parameters = sendData.Serialize()
             };
-            Instances.Repositories.OperationRepository.Insert(operation);
+            //Instances.Repositories.OperationRepository.Insert(operation);
             OperationsService.ProcessOperation(operation);
             return operation.Id;
         }

@@ -27,6 +27,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISubscriptionContext, SubscriptionService>();
 
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -90,6 +91,11 @@ app.UseEndpoints(endpoints =>
         "Social/{controller=SocialHome}/{action=Index}/{id?}",
         new { controller = "SocialHome", action = "Index" }
     );
+    endpoints.MapAreaControllerRoute(
+       "SocialShare",
+       "Social",
+       "Social/{controller=Publish}/{action=Share}"
+   );
     endpoints.MapControllerRoute(
         "postInfo",
         "Posts/PostInfo/{Id?}",

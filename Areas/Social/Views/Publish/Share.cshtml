@@ -12,7 +12,24 @@
     var allChannels = Model.Channels.Where(channel => activeNetworkTypes.Select(networkType => networkType.ToString().ToLower()).Contains(channel.Network.ToLower()));
     var channelIds = allChannels.Select(x => x.NetworkId);
     var loggedInUser = User?.Identity.Name;
+
 }
 
-<div class="page-content">
-</div>
+<form method="post" action="/Social/Publish/Send" id="sharing-form-social">
+    <label for="Channels[0]">channel:</label>
+    <input type="text" name="Channels[0]" value="f461e1cb-885e-11ee-9416-d027889076a7">
+
+    <label for="PostId">Name:</label>
+    <input type="text" name="PostId" id="PostId" value="@post.Id"/>
+
+    <label for="Data_ChannelId">channel:</label>
+    <input type="text" name="Data[0].ChannelId" id="Data_ChannelId" value="f461e1cb-885e-11ee-9416-d027889076a7" />
+
+    <label for="Data_Text">text:</label>
+    <input type="text" name="Data[0].Text" id="Data_Text" value="test for dummy request from project" />
+
+    <label for="Data_ChannelId">text:</label>
+    <input type="text" name="Data[0].ChannelId" id="Data_ChannelId" value="f461e1cb-885e-11ee-9416-d027889076a7" />
+
+    <input type="submit" value="Submit" />
+</form>
