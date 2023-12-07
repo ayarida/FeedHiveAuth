@@ -46,8 +46,8 @@ namespace FeedHiveAuth.Data.Repositories
                                     Guid.NewGuid().EscapeForSql(),
                                     mediaItem.Caption.EscapeForSql(),
                                     postId.EscapeForSql(),
-                                    DateTime.Now, 
-                                    mediaItem.Path
+                                    DateTime.Now.EscapeForSql(), 
+                                    mediaItem.Path.EscapeForSql()
                                     );
                 ExecuteQuery(query);
             }
