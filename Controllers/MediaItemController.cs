@@ -1,11 +1,17 @@
-﻿using FeedHiveAuth.Models;
+﻿using FeedHiveAuth.Data.Repositories;
+using FeedHiveAuth.Data;
+using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeedHiveAuth.Controllers
 {
     public class MediaItemController : Controller
     {
-        public MediaItemController() { }
+        protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+
+        public MediaItemController() {   
+            
+        }
 
         public ActionResult Upload()
         {
@@ -39,6 +45,12 @@ namespace FeedHiveAuth.Controllers
         public ActionResult MediaUpload(string type)
         {
             return View("Upload/_mediaUploadWizard", type);
+        }
+
+        [HttpGet]
+        public IActionResult List() {
+            var mediaItemsList = _mediaItemService.GetMediaList();
+            return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
         }
     }
 }

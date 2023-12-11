@@ -52,5 +52,12 @@ namespace FeedHiveAuth.Data.Repositories
                 ExecuteQuery(query);
             }
         }
+
+        public IEnumerable<MediaItem> GetMediaList()
+        {
+            var query = SqlSelectWhole;
+            IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList(); ;
+            return mediaItems;
+        }
     }
 }
