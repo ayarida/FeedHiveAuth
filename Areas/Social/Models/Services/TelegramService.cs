@@ -128,6 +128,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 {
                     Message result = null;
                     var mediaItem = Instances.Repositories.MediaItemRepository.Get(operationData.MediaItemIds.FirstOrDefault());
+                    
                     if (mediaItem!=null)
                     {
                         text += "\n" + mediaItem.Path;

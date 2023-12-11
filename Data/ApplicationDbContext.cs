@@ -13,5 +13,6 @@ namespace FeedHiveAuth.Data
         public DbSet<FeedHiveAuth.Models.Post>? Post { get; set; }
         public DbSet<FeedHiveAuth.Models.Subscription>? Subscription { get; set; }
         public DbSet<FeedHiveAuth.Models.Channel>? Channel { get; set; }
+        public DbSet<FeedHiveAuth.Models.MediaItem>? MediaItem { get; set; }
     }
 }
