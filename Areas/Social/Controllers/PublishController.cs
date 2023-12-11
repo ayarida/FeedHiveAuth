@@ -30,14 +30,17 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
-
-        [HttpGet]
+        [Area("Social")]
+        [HttpGet(template:"/Publish/Share", Name = "SocialPublish")]
         public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
         {
             //get current subscription
             var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
             //get the required post by Id 
             PublishErrorEnum error;
+            //Aya's local DB ids for API testing reasons
+            //postid: d9eaf13b-cf1d-44c3-b302-89817cf88d1e
+            //mediaid: 45ccc3f1-53ae-4635-98ec-9d5de3f57404
             var post = _postService.Get(postid);
             var media = _postService.GetPostMedia(postid, mediaid, out error);
 
@@ -72,7 +75,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         [HttpPost]
         public async void Send(ShareForm form)
-        
+
         {
             try
             {
