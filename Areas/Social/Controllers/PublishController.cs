@@ -35,7 +35,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
         {
             //get current subscription
-            var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+            var subscriptionId = "680d5712-636d-4dde-86b4-ed88b88fc328";
             //get the required post by Id 
             PublishErrorEnum error;
             var post = _postService.Get(postid);
@@ -72,7 +72,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         [HttpPost]
         public async void Send(ShareForm form)
-        
+
         {
             try
             {

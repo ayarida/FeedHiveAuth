@@ -3,33 +3,160 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @model FeedHiveAuth.Areas.Social.Models.ShareView
+
 @{
     var post = Model.Post;
     var media = Model.Media;
     var socialConfigs = new SocialConfigs();
     var activeNetworkTypes = Model.ActiveSocialNetworks;
 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     var allChannels = Model.Channels.Where(channel => activeNetworkTypes.Select(networkType => networkType.ToString().ToLower()).Contains(channel.Network.ToLower()));
     var channelIds = allChannels.Select(x => x.NetworkId);
-    var loggedInUser = User?.Identity.Name;
-
+    var loggedInUser = User?.Identity?.Name;
 }
 
-<form method="post" action="/Social/Publish/Send" id="sharing-form-social">
-    <label for="Channels[0]">channel:</label>
-    <input type="text" name="Channels[0]" value="f461e1cb-885e-11ee-9416-d027889076a7">
 
-    <label for="PostId">Name:</label>
-    <input type="text" name="PostId" id="PostId" value="@post.Id"/>
+<div class="editor" dir="auto" style="background: #ced4daa6; max-width: 510px">
+    <div class="container pt-4 mt-4">
+        <div class="channel-list d-flex flex-row gap-5 mb-5 rounded " style="background: #ced4da;padding: 20px; overflow-x: auto ">
+            @foreach (var channel in allChannels)
+            {
 
-    <label for="Data_ChannelId">channel:</label>
-    <input type="text" name="Data[0].ChannelId" id="Data_ChannelId" value="f461e1cb-885e-11ee-9416-d027889076a7" />
+                <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>
 
-    <label for="Data_Text">text:</label>
-    <input type="text" name="Data[0].Text" id="Data_Text" value="test for dummy request from project" />
 
-    <label for="Data_ChannelId">text:</label>
-    <input type="text" name="Data[0].ChannelId" id="Data_ChannelId" value="f461e1cb-885e-11ee-9416-d027889076a7" />
+                <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>
+                <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>
+                <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>
 
-    <input type="submit" value="Submit" />
-</form>
+                <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>     <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>     <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>     <div class="flex-column d-flex align-items-center">
+                    <img src="~/Static/Images/channelLogo.jpg" width="70" height="70" class="rounded-2 mb-2" />
+                    <div style=" font-size: 14px; text-transform: capitalize;color: var(--bs-emphasis-color);">
+                        @channel.Network
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        @Html.RenderPartialAsync("_PersonViewModel", post)
+
+        @using (Html.BeginForm("Send", "Publish", new { area = "Social" }, FormMethod.Post))
+        {
+
+            <form>
+                <div class="d-flex flex-column form-container">
+                    <span>Title</span>
+                    @Html.TextAreaFor(n => n.Post.Title)
+
+
+
+                    <span>Media ID</span>
+                    @Html.TextAreaFor(n => n.Media.Id)
+
+
+
+                    <span>Media ID</span>
+                    @Html.TextAreaFor(n => n.Media.Id)
+
+
+                    <span>Media ID</span>
+                    @Html.TextAreaFor(n => n.Media.Id)
+
+                </div>
+            </form>
+            <input type="submit" value="Submit" class="btn btn-primary mt-4" style="max-width: 200px;" />
+        }
+    </div>
+</div>
+
+
+<div class="page-content">
+</div>
+
+<style>
+
+    textarea {
+        width: 100%;
+        height: 58px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 14px;
+        max-width: 400px;
+        resize: none;
+    }
+
+    .channel-list {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ===== Scrollbar CSS ===== */
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #918b92 #ffffff;
+    }
+
+        /* Chrome, Edge, and Safari */
+        *::-webkit-scrollbar {
+            width: 5px;
+            height: 15px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: #918b92;
+            border-radius: 10px;
+            border: 4px solid #ffffff;
+        }
+
+
+    .form-container {
+        row-gap: 7px;
+    }
+</style>
+
+
