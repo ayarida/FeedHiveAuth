@@ -30,8 +30,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
-        [Area("Social")]
-        [HttpGet(template:"/Publish/Share", Name = "SocialPublish")]
         public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
         {
             //get current subscription
