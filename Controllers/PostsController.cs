@@ -1,18 +1,10 @@
 ﻿using FeedHiveAuth.Data;
-using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Schema;
-using NuGet.Packaging.Signing;
-using NuGet.Protocol;
-using System;
-using System.Globalization;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 namespace FeedHiveAuth.Controllers
 {
 
