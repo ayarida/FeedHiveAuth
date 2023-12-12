@@ -76,34 +76,19 @@
         </div>
 
 
-        @Html.RenderPartialAsync("_PersonViewModel", post)
 
-        @using (Html.BeginForm("Send", "Publish", new { area = "Social" }, FormMethod.Post))
-        {
+
+       
 
             <form>
                 <div class="d-flex flex-column form-container">
-                    <span>Title</span>
-                    @Html.TextAreaFor(n => n.Post.Title)
 
-
-
-                    <span>Media ID</span>
-                    @Html.TextAreaFor(n => n.Media.Id)
-
-
-
-                    <span>Media ID</span>
-                    @Html.TextAreaFor(n => n.Media.Id)
-
-
-                    <span>Media ID</span>
-                    @Html.TextAreaFor(n => n.Media.Id)
+                    @await Html.PartialAsync("/Areas/Social/Views/Shared/_PersonViewModel.cshtml", Model)
 
                 </div>
             </form>
-            <input type="submit" value="Submit" class="btn btn-primary mt-4" style="max-width: 200px;" />
-        }
+            @*              <input type="submit" value="Submit" class="btn btn-primary mt-4" style="max-width: 200px;" /> *@
+
     </div>
 </div>
 
