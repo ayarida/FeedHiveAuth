@@ -124,7 +124,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByNameAsync(Input.Username);
-                    GlobalContext.Construct(user);
+                    GlobalContext.UserConfigs = GlobalContext.Construct(user);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
