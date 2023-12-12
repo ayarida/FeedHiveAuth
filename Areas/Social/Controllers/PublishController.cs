@@ -77,7 +77,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             try
             {
-                var currUser = GlobalContext.Construct;
+                var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
                     Console.WriteLine("NoChannelsSelected");

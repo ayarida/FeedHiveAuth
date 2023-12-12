@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -28,7 +29,9 @@ namespace FeedHiveAuth.Data.Repositories
                 mediaItem.ThumbnailUrl = file.FileName;
                 mediaItem.Caption = file.FileName;
                 mediaItem.Path = "~/wwwroot/uploads/" + file.FileName;
+                mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
                 medias.Add(mediaItem);
+                
             }
             return medias;
 
@@ -37,17 +40,18 @@ namespace FeedHiveAuth.Data.Repositories
         public void InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
             foreach(var mediaItem in postMedias) {
-                //Id, Caption, postId, creationDate, path
+                //Id, Caption, postId, creationDate, path, createdBy
 
                 string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6})",
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7})",
                                     TableName,
                                     Columns.AddBraces(),
                                     Guid.NewGuid().EscapeForSql(),
                                     mediaItem.Caption.EscapeForSql(),
                                     postId.EscapeForSql(),
                                     DateTime.Now.EscapeForSql(), 
-                                    mediaItem.Path.EscapeForSql()
+                                    mediaItem.Path.EscapeForSql(), 
+                                    mediaItem.CreatedBy.EscapeForSql()
                                     );
                 ExecuteQuery(query);
             }
