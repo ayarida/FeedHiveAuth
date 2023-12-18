@@ -72,6 +72,13 @@ namespace FeedHiveAuth.Data.Repositories
             return posts;
         }
 
+        public List<Post> GetScheduledPosts()
+        {
+            var query = SqlSelect + $" WHERE Status = 150";
+            List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
+            
+            return scheduledPosts;
+        }
 
         public Post GetPostById (string id)
         {
