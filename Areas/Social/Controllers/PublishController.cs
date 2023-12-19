@@ -16,6 +16,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     public class PublishController : Controller
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
+        MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
 
         public IEnumerable<Channel> GetChannels(string subscriptionId, out PublishErrorEnum error)
         {
@@ -30,17 +31,16 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
-        public async Task<IActionResult> Share(string? postid = null, string? mediaid = null)
+        public async Task<IActionResult> Share(string? postid = null)
         {
             //get current subscription
-            var subscriptionId = "680d5712-636d-4dde-86b4-ed88b88fc328";
-            //get the required post by Id 
+            var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+            var media = _mediaItemService.GetMediaByPostId(postid);
             PublishErrorEnum error;
             //Aya's local DB ids for API testing reasons
-            //postid: d9eaf13b-cf1d-44c3-b302-89817cf88d1e
-            //mediaid: 45ccc3f1-53ae-4635-98ec-9d5de3f57404
+         
             var post = _postService.Get(postid);
-            var media = _postService.GetPostMedia(postid, mediaid, out error);
+            var postMedia = _postService.GetPostMedia(postid, media.Id, out error);
 
             var subSocialConfigs = SocialServiceHelper.GetConfigs(subscriptionId);
             var channels = GetChannels(subscriptionId, out error);
@@ -48,12 +48,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var model = new ShareView
             {
                 Post = post,
-                Media = media,
+                Media = postMedia,
                 Channels = channels,
                 ActiveSocialNetworks = activeNetworkTypes
             };
             return View(model);
-
         }
 
         public List<SocialNetworkTypeEnum> GetActiveNetworkTypes(SocialConfigs socialConfigs)
