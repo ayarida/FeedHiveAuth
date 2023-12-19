@@ -16,12 +16,12 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
         private readonly bool UseFbLogin;
         private readonly string CallbackUrl;
 
-        private const string FacebookApiUrl = "https://graph.facebook.com/v18.0";
-        private const string InstagramApiUrl = "https://graph.instagram.com";
+        private const string FacebookGraphApiUrl = "https://graph.facebook.com/v18.0";
+        private const string InstagramGraphApiUrl = "https://graph.instagram.com";
         private const string FacebookLoginUrl = "https://www.facebook.com/v18.0/dialog/oauth";
         private const string InstagramLoginUrl = "https://api.instagram.com/oauth/authorize";
 
-        public AuthorizationClient(FacebookConfigs configs, string baseCallbackUrl = null, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook, bool useFbLogin = true, string nodeUrl = "/oauth") : base(configs, nodeUrl: nodeUrl, url: useFbLogin ? FacebookApiUrl : InstagramApiUrl)
+        public AuthorizationClient(FacebookConfigs configs, string baseCallbackUrl = null, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook, bool useFbLogin = true, string nodeUrl = "/oauth") : base(configs, nodeUrl: nodeUrl, url: useFbLogin ? FacebookGraphApiUrl : InstagramGraphApiUrl)
         {
             if (string.IsNullOrWhiteSpace(baseCallbackUrl))
             {
@@ -35,7 +35,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
         public string GetLoginUrl(string type, bool reauthorize, string subscriptionCode, string scope)
         {
             var apiUrl = UseFbLogin ? FacebookLoginUrl : InstagramLoginUrl;
-            var state = "{type:'" + type + "',subscriptionCode:'" + subscriptionCode + "',reauthorize:" + reauthorize.ToString().ToLower() + "}";
+            var state = "{type:'" + type + "',subscriptionCode:'SocialPublisher',reauthorize:" + reauthorize.ToString().ToLower() + "}";
             var redirect_uri = CallbackUrl.AddParameter("state", state).AddParameter("scope", "pages_manage_metadata,pages_read_engagement,pages_read_user_content,pages_manage_posts,pages_manage_engagement,pages_show_list").Decode();
             var redirectUrl = apiUrl.
                 AddParameter("client_id", GetAppId()).
