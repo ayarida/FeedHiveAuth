@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -13,13 +14,21 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
-        [Authorize]
-        [HttpGet]
-        /*        public void GetUserCreds()
-                {
-                    SignInManager<IdentityUser> SignInManager;
-                    UserManager <IdentityUser> UserManager;
-                }*/
+
+        private readonly IUserService _userServiceContext;
+
+        public PostsController(IUserService _userService)
+        {
+            _userServiceContext = _userService;
+        }
+
+        /*public IActionResult CurrentCreds()
+        {
+            var userId = _userServiceContext.GetCurrentUserId();
+            var userName = _userServiceContext.GetCurrentUserName();
+           
+            return View();
+        }*/
 
         [Authorize(Policy = "Admin", Roles = "Admin")]
         [HttpGet]
@@ -265,6 +274,12 @@ namespace FeedHiveAuth.Controllers
             return View("~/Views/Posts/Calendar.cshtml");
         }
 
-
+        [HttpGet]
+        public List<Post> GetCurrUserPosts()
+        {
+            var currUser = _userServiceContext?.GetCurrentUserId();
+            var userPosts = _postService.GetUserPosts(currUser);
+            return userPosts;
+        }
     }
 }
