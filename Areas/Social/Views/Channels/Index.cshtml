@@ -9,7 +9,7 @@
     var channelStatuses = new List<StatusEnum>{ StatusEnum.Active, StatusEnum.InActive, StatusEnum.Deleted, StatusEnum.Expired };
     var networks = EnumExtension.GetAllList<SocialNetworkTypeEnum>();
     var accounts = EnumExtension.GetAllList<SocialAccountTypeEnum>();
-    // var curr = GlobalContext.Application["currentUser"];
+    var curr = GlobalContext.UserConfigs?.UserData;
     // var subscription = GlobalContext.Application["currentSubscription"];
 }
 
