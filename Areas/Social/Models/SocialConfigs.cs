@@ -20,9 +20,9 @@ namespace FeedHiveAuth.Areas.Social.Models
                 {
                     Application = new FacebookApp
                     {
-                        DisplayName = "FHiveAuth",
-                        AppId = "315090498130849",
-                        AppSecret = "d3fb385638ae42a8079be0d2e4266481"
+                        DisplayName = "OCPublisher",
+                        AppId = "1629657670987973",
+                        AppSecret = "7e2fd21dedf5a4249c4fc638ee82fcb6"
                     }
                 },
                 TelegramConfigs = new TelegramConfigs
