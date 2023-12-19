@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -14,6 +11,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     public class ChannelsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        protected ChannelRepository _channelRepository = Instances.Repositories.ChannelRepository;
+
 
         public ChannelsController(ApplicationDbContext context)
         {
@@ -21,11 +20,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // GET: Social/Channels
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-              return _context.Channel != null ? 
-                          View(await _context.Channel.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Channel'  is null.");
+            var channels = _channelRepository.GlobalGetAll();
+            return View("~/Areas/Social/Views/Channels/Index.cshtml", channels);
+            //return _context.Channel != null ?
+            //            View(await _context.Channel.ToListAsync()) :
+            //            Problem("Entity set 'ApplicationDbContext.Channel'  is null.");
         }
 
         // GET: Social/Channels/Details/5
@@ -75,6 +77,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
                 return NotFound();
             }
+            x
 
             var channel = await _context.Channel.FindAsync(id);
             if (channel == null)
@@ -151,14 +154,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
                 _context.Channel.Remove(channel);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ChannelExists(string id)
         {
-          return (_context.Channel?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Channel?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
