@@ -1,9 +1,11 @@
 ﻿@model List<FeedHiveAuth.Models.Post>
+@using FeedHiveAuth.Data;
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model;
+    var _mediaService = Instances.Repositories.MediaItemRepository;
 
 }
 
@@ -52,12 +54,9 @@
 
                     @if (posts.Any())
                     {
-
-
-
                         @foreach (var post in posts)
                         {
-
+                            //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
                                 <td>@Html.ActionLink(post.Title,"PostInfo","Posts", new{@post.Id})</td>
@@ -66,11 +65,10 @@
                                 <td>@post.PostDate</td>
                                 <td><a href="#" style="color: inherit;"><i class="bi bi-pencil-square"></i></a></td>
                                 <td>@(EnumExtension.FromValue<StatusEnum>(post.Status).Key())</td>
-                                <td><a href=""><i class="bi bi-share-fill"></i></a></td>
+                                <td><a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a></td>
                             </tr>
 
                         }
-
                     }
                 </tbody>
             </table>
