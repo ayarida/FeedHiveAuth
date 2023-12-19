@@ -1,4 +1,5 @@
 using FeedHiveAuth.Data;
+using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Editor", policy => policy.RequireRole("Editor"));
     options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
 });
+builder.Services.AddHostedService<TasksBgService>();
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
 builder.Services.AddSession();
 

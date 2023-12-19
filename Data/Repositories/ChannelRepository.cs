@@ -1,7 +1,7 @@
-﻿using FeedHiveAuth.Models;
+﻿using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
-using FeedHiveAuth.Data.Extensions;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -9,7 +9,8 @@ namespace FeedHiveAuth.Data.Repositories
     {
         public static string _connectionString = DatabaseConnection.GetConnectionStrings();
         public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
-        public ChannelRepository() {
+        public ChannelRepository()
+        {
             TableName = Database.Tables.Channel;
             Columns = Database.Columns.Channel;
         }
@@ -48,7 +49,7 @@ namespace FeedHiveAuth.Data.Repositories
 
         public IEnumerable<Channel> AddChannels(IEnumerable<Channel> channels)
         {
-            foreach(var ch in channels)
+            foreach (var ch in channels)
             {
                 ch.Status = StatusEnum.Active.Value();
                 ch.Id = GuidExtension.GenerateGuid().ToString();
