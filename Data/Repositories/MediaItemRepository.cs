@@ -63,5 +63,11 @@ namespace FeedHiveAuth.Data.Repositories
             IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList(); ;
             return mediaItems;
         }
+
+        public MediaItem GetMediaByPostId(string id) {
+            var query = "SELECT * FROM MediaItem Where PostId='" + @id + "' "; 
+            MediaItem postMediaItem =  connection.Query<MediaItem>(query).FirstOrDefault();
+            return postMediaItem;
+        }
     }
 }

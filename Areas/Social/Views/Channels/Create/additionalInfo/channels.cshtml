@@ -1,0 +1,47 @@
+﻿@{
+    var searchLabel = "ChannelSearchQuery";
+}
+
+<h1 v-if="newChannels.length">SelectPagesToAddToYourAccount</h1>
+<div v-if="newChannels.length" class="row">
+    <div class="col-12" v-if="!submitting">
+        <div class="channels-header">
+            <div class="channel-search-wrapper input-group d-inline-block w-auto">
+                <input type="text" class="form-control" placeholder="Search..." aria-label="@searchLabel" aria-describedby="@searchLabel" v-on:keyup="searchNewChannels">
+                <div class="input-group-append">
+                    <span class="input-group-text fas fa-search" id="ChannelSearch"></span>
+                </div>
+            </div>
+            <div class="custom-control custom-checkbox select-all-channels">
+                <input v-model="selectAllChannels" type="checkbox" class="custom-control-input" id="SelectAllChannels" v-on:change="updateSelectedChannels">
+                <label class="custom-control-label" for="SelectAllChannels">SelectAllChannels</label>
+            </div>
+        </div>
+        <ul class="authorized-channels-list">
+            <li v-for="(channel, index) in filteredChannels" v-bind:class="{ 'disabled': channelIsOld(channel.NetworkId) }">
+                <div class="channel-container">
+                    <img class="channel-img" v-bind:src="channel.ProfileImageUrl" v-bind:alt="channel.OriginalName" />
+                    <div class="channel-details">
+                        <a class="channel-link" v-bind:href="channel.NetworkUrl" v-text="channel.OriginalName"></a>
+                        <div class="channel-type-icon" v-bind:class="channel.Network + '-icon'">
+                            <i class="ace-icon" v-bind:class="channel.Icon"></i>
+                            <span class="channel-username" v-text="channel.Code"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input v-bind:value="channel.NetworkId" v-model="selectedChannelsId" type="checkbox" class="custom-control-input" v-bind:id="'SelectChannel-' + index" v-bind:disabled="channelIsOld(channel.NetworkId)">
+                    <label class="custom-control-label" v-bind:for="'SelectChannel-' + index"></label>
+                </div>
+            </li>
+
+            <li class="authorize-btn">
+                <a v-on:click="submitChannels" class="btn btn-new success" style="margin-bottom: 0;">
+                    <i class="ace-icon fa fa-unlock bigger-110"></i>
+                    <span>Authorize</span>
+                </a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>

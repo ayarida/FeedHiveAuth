@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using FeedHiveAuth.Data.Helpers;
 using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Clients;
+using Microsoft.Extensions.Logging;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Authorization;
 
 namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 {
@@ -64,6 +66,20 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                 default:
                     throw new Exception($"Network Type {network.Key()} not supported");
             }
+        }
+
+        public static FacebookCredentials ExchangeCode(string baseCallbackUrl, string code, string subscriptionId, out string msg, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook)
+        {
+            msg = "";
+            var client = new AuthorizationClient(GetConfigs(network, subscriptionId), baseCallbackUrl, network);
+            var result = network.Equals(SocialNetworkTypeEnum.Facebook) ? client.ExchangeCode(code) : client.ExchangeInstaCode(code);
+            if (!result.IsSuccessful)
+            {
+                Console.WriteLine(result.Data.Error.ErrorUserMsg ?? result.Data.Error.Message);
+                msg = result.Data.Error.ErrorUserMsg ?? result.Data.Error.Message;
+                return null;
+            }
+            return result.Data;
         }
     }
 }

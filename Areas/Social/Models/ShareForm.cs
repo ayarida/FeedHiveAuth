@@ -16,19 +16,6 @@
         public IEnumerable<Guid> MediaItemIds { get; set; }
         public DateTime? ScheduleTime { get; set; }
 
-        //for push only
-        public string Title { get; set; }
-        public string Topics { get; set; }
-        public bool ForMobile { get; set; }
-        public bool ForWeb { get; set; }
-
-        //for youtube
-        public string Privacy { get; set; }
-        public string Category { get; set; }
-        public string Playlist { get; set; }
-        public IEnumerable<string> Tags { get; set; }
-        public IEnumerable<string> Labels { get; set; }
-
         //for whatsapp only
         public bool SendToContacts { get; set; }
         public bool SendToGroups { get; set; }

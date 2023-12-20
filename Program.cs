@@ -1,4 +1,5 @@
 using FeedHiveAuth.Data;
+using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Identity;
@@ -29,12 +30,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISubscriptionContext, SubscriptionService>();
 
 
-builder.Services.AddAuthorization(options =>
+/*builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     options.AddPolicy("Editor", policy => policy.RequireRole("Editor"));
     options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
-});
+});*/
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHostedService<TasksBgService>();
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
 builder.Services.AddSession();

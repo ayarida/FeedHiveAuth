@@ -18,7 +18,6 @@ namespace FeedHiveAuth.Data.Repositories
             Columns = Database.Columns.Post;
         }
 
-
         public int Publish(string postId , string userId = null)
         {
             //change status 
@@ -138,6 +137,14 @@ namespace FeedHiveAuth.Data.Repositories
             else
                 error = PublishErrorEnum.NO_ERROR;
             return media;
+        }
+
+        public List<Post> GetUserPosts(string userId)
+        {
+            var query = SqlSelect + $" WHERE PublishedBy='{userId}'";
+            List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
+
+            return scheduledPosts;
         }
     }
 }

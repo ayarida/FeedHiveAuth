@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Models.Common;
+using Newtonsoft.Json.Linq;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -25,7 +26,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             switch (type)
             {
                 case SocialNetworkTypeEnum.Facebook:
-                    return FacebookOAuthFlow(account, subscription, reauthorize);
+                    var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
+                    var obj = jsonRes.TryCast<JObject>();
+                    var objResult = obj.ValueFromJson("Value", new JObject());
+                    var redirect = objResult.ValueFromJson<string>("redirect", null);
+                    return Redirect(redirect);
                 //        /*case SocialNetworkTypeEnum.Instagram:
                 //            return InstagramOAuthFlow(account, subscription, reauthorize);
                 //        case SocialNetworkTypeEnum.Twitter:
@@ -61,7 +66,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             try
             {
 
-                var result = AuthorizationManager.StartOAuthFlow("https://localhost:7157", type, reauthorize, subscription).Decode();
+                var result = AuthorizationManager.StartOAuthFlow("https://social.octipulse.net", type, reauthorize, subscription).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
