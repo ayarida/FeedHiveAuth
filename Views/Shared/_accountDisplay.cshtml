@@ -12,9 +12,11 @@
         <span> الإشتراك الحالي : مايكروسوفت</span>
     </a>
     <a class="list-group-item list-group-item-action py-2 my-2">
-        <span>
-            @User.Identity?.Name</span>
+        
         <span style="border-radius: 50%;color: white !important;background: #728894;width: fit-content;padding: 8px 15px;"> @User.Identity?.Name!.Substring(0,1).ToUpper()</span>
+        <span>
+            @User.Identity?.Name
+        </span>
       </a>
 
     }
