@@ -36,8 +36,8 @@
                         <th>Title</th>
                         <th>ShortTitle</th>
                         <th>Date</th>
-                        <th>Edit</th>
-                        <th>Share</th>
+                        <th>Actions</th>
+                        
 
                     </tr>
                 </thead>
@@ -61,14 +61,9 @@
                                 <td>@post.ShortTitle</td>
                                 <td>@post.PostDate</td>
                                 <td>
-                                    @*              <a href="@Url.Action("Posts", @post.Id)">
-
-                            <span><i class='bi bi-penc0i
-                            l-square'></i></span>
-                            </a> *@
-                                    <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
                                 </td>
-                                <td><a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a></td>
                             </tr>
 
                         }
