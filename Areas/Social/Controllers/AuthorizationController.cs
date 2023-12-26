@@ -8,6 +8,7 @@ using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Models.Common;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -26,11 +27,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             switch (type)
             {
                 case SocialNetworkTypeEnum.Facebook:
-                    var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
-                    var obj = jsonRes.TryCast<JObject>();
-                    var objResult = obj.ValueFromJson("Value", new JObject());
-                    var redirect = objResult.ValueFromJson<string>("redirect", null);
-                    return Redirect(redirect);
+                    var resultreturned = FacebookOAuthFlow(account, subscription, reauthorize);
+                    return FacebookSignIn("type:'Page',subscriptionCode:'SocialPublisher',reauthorize:false", "SocialPublisher");
+
+                /*var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
+                var obj = jsonRes.TryCast<JObject>();
+                var objResult = obj.ValueFromJson("Value", new JObject());
+                var redirect = objResult.ValueFromJson<string>("redirect", null);
+                return Redirect(redirect);*/
                 //        /*case SocialNetworkTypeEnum.Instagram:
                 //            return InstagramOAuthFlow(account, subscription, reauthorize);
                 //        case SocialNetworkTypeEnum.Twitter:
@@ -66,7 +70,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             try
             {
 
-                var result = AuthorizationManager.StartOAuthFlow("https://social.octipulse.net", type, reauthorize, subscription).Decode();
+                var result = AuthorizationManager.StartOAuthFlow("https://localhost:7055/", type, reauthorize, subscription).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
@@ -91,9 +95,47 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
 
-        public ActionResult FacebookSignIn(string state)
+        public IActionResult FacebookSignIn(string state,string code)
         {
-            return GetAdminUrl("");
+            try
+            {
+                var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+                var channels = FacebookService.GetChannelsInfo("https://localhost:7055", code,
+                                state, subscription, out string msg);
+                if (channels.Empty())
+                {
+                    Debug.WriteLine(msg ?? "Couldn't authorize the selected Facebook account");
+                    return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
+                }
+                var reauthorize = false;
+                return SaveChannels(channels, subscription, reauthorize, SocialNetworkTypeEnum.Facebook);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Couldn't authorize the selected Facebook account: " + ex.FullMessage());
+                return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
+            }
+        }
+
+        private IActionResult SaveChannels(IEnumerable<Channel> channels, string subscriptionId, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
+        {
+            if (reauthorize)
+            {
+                var networkType = networkTypeEnum.Key();
+                var existingChannelsIds = Collections.ChannelsOf(subscriptionId).Where(channel => channel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() })).Select(channel => channel.NetworkId);
+                channels = channels.Where(channel => existingChannelsIds.ContainsIgnoreCase(channel.NetworkId));
+                if (channels.Empty())
+                {
+                    Debug.WriteLine($"The reauthorized {networkTypeEnum} channel doesn't exist");
+                    return RedirectToAction("Create", "Channels", new { area = "social", type = networkType });
+                }
+            }
+
+            TempData["channels"] = channels.ToList();
+            if (channels.Count() == 1 && !reauthorize)
+                //SaveNewChannels(channels, subscriptionId);
+                Debug.WriteLine("NICE TO REACH HERE");
+            return RedirectToAction(reauthorize ? "Save" : "Create", "Channel", new { area = "social" });
         }
         public IActionResult TelegramSignIn(string username, Subscription subscription, User currentUser, bool reauthorize = false)
         {

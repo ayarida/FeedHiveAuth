@@ -14,7 +14,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
         private readonly FacebookConfigs Configs;
         private readonly string AccessToken;
 
-        public FacebookClient(FacebookConfigs configs, string accessToken = null, string nodeUrl = "", string url = "https://graph.facebook.com/v9.0") : base(url + (string.IsNullOrWhiteSpace(nodeUrl) || nodeUrl.StartsWith("/") ? "" : "/") + nodeUrl)
+        public FacebookClient(FacebookConfigs configs, string accessToken = null, string nodeUrl = "", string url = "https://graph.facebook.com/v18.0") : base(url + (string.IsNullOrWhiteSpace(nodeUrl) || nodeUrl.StartsWith("/") ? "" : "/") + nodeUrl)
         {
             Configs = configs ?? new FacebookConfigs();
             AccessToken = accessToken;

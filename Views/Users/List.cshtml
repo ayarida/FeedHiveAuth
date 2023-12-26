@@ -1,6 +1,9 @@
 ﻿@model List<IdentityUser>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     var users = Model;
+
 }
 
 
@@ -15,14 +18,11 @@
                        
                         <th>Title</th>
                         <th>Role</th>
-                        <th>Status</th>
-
                     </tr>
                 </thead>
                 <div class="action-buttons">
 
                     <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
-                    <button type="button" class="publish-btn" onClick="publishSelected()">Publish</button>
                 </div>
 
                 <tbody>
@@ -32,13 +32,16 @@
 
                         @foreach (var user in users)
                         {
-
-                            <tr>
+                        var userRole = await UserManager.GetRolesAsync(user);
+                        
+                        <tr>
                                 <td>@user.UserName</td>
-                           @*      <td>@user.RoleId</td> *@
-
+                            @if (userRole.Any()) 
+                            { 
+                                var ur = userRole.First();
+                                <td>@ur</td>
+                            }
                             </tr>
-
                         }
 
                     }

@@ -93,14 +93,7 @@ namespace FeedHiveAuth.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult UsersList()
-        {
-
-            List<IdentityUser> users = userManager.Users.ToList();
-            return View("~/Views/Users/UsersList.cshtml", users);
-
-        }
+        
 
         /* public async Task<List<User>> GetUsersAsync()
          {
