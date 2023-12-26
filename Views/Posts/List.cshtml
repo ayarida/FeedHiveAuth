@@ -18,28 +18,25 @@
         <div class="card-header">
             Post history
         </div>
-        <div class="card-body" style="max-width: 100%;overflow: scroll;">
+        <div class="card-body" style="max-width: 100%;overflow: auto;">
 
             <div style="margin-bottom: 20px;max-width: 100%;">
 
                 <input type="text" id="filter0" placeholder="Filter By Title">
                 <input type="text" id="filter1" placeholder="Filter By ShortTitle">
-                <input type="text" id="filter2" placeholder="Filter By Content">
                 <input type="text" id="filter3" placeholder="Filter By Date">
-                <input type="text" id="filter4" placeholder="Filter By Status">
+
 
             </div>
 
             <table id="filter" class="table">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll">Select All</lablel></th>
+                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> Select All</lablel></th>
                         <th>Title</th>
                         <th>ShortTitle</th>
-                        <th>Content</th>
                         <th>Date</th>
                         <th>Edit</th>
-                        <th>Status</th>
                         <th>Share</th>
 
                     </tr>
@@ -47,7 +44,7 @@
                 <div class="action-buttons">
 
                     <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
-                    <button type="button" class="publish-btn"  onClick="publishSelected()">Publish</button>
+                    <button type="button" class="publish-btn" onClick="publishSelected()">Publish</button>
                 </div>
 
                 <tbody>
@@ -57,14 +54,20 @@
                         @foreach (var post in posts)
                         {
                             //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
+                            var shareIcon = "< i class='bi bi-penc0il-square'></i>";
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td>@Html.ActionLink(post.Title,"PostInfo","Posts", new{@post.Id})</td>
+                                <td>@Html.ActionLink(post.Title, "PostInfo", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
-                                <td>@post.Content</td>
                                 <td>@post.PostDate</td>
-                                <td><a href="#" style="color: inherit;"><i class="bi bi-pencil-square"></i></a></td>
-                                <td>@(EnumExtension.FromValue<StatusEnum>(post.Status).Key())</td>
+                                <td>
+                                    @*              <a href="@Url.Action("Posts", @post.Id)">
+
+                            <span><i class='bi bi-penc0i
+                            l-square'></i></span>
+                            </a> *@
+                                    <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                </td>
                                 <td><a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a></td>
                             </tr>
 
