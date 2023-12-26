@@ -1,0 +1,51 @@
+﻿@model List<IdentityUser>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    var users = Model;
+
+}
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Users List
+            </div>
+            <table id="filter" class="table">
+                <thead>
+                    <tr>
+                       
+                        <th>Title</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <div class="action-buttons">
+
+                    <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
+                </div>
+
+                <tbody>
+
+                    @if (users.Count != 0)
+                    {
+
+                        @foreach (var user in users)
+                        {
+                        var userRole = await UserManager.GetRolesAsync(user);
+                        
+                        <tr>
+                                <td>@user.UserName</td>
+                            @if (userRole.Any()) 
+                            { 
+                                var ur = userRole.First();
+                                <td>@ur</td>
+                            }
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
