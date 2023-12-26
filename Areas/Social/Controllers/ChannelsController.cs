@@ -77,7 +77,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
                 return NotFound();
             }
-            x
+            
 
             var channel = await _context.Channel.FindAsync(id);
             if (channel == null)
