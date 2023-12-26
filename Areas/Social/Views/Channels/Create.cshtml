@@ -8,146 +8,14 @@
     //Configs
     //
 }
-@* <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Network" class="control-label"></label>
-                <input asp-for="Network" class="form-control" />
-                <span asp-validation-for="Network" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Account" class="control-label"></label>
-                <input asp-for="Account" class="form-control" />
-                <span asp-validation-for="Account" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NetworkId" class="control-label"></label>
-                <input asp-for="NetworkId" class="form-control" />
-                <span asp-validation-for="NetworkId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NetworkUrl" class="control-label"></label>
-                <input asp-for="NetworkUrl" class="form-control" />
-                <span asp-validation-for="NetworkUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OriginalName" class="control-label"></label>
-                <input asp-for="OriginalName" class="form-control" />
-                <span asp-validation-for="OriginalName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfileImageUrl" class="control-label"></label>
-                <input asp-for="ProfileImageUrl" class="form-control" />
-                <span asp-validation-for="ProfileImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Credentials" class="control-label"></label>
-                <input asp-for="Credentials" class="form-control" />
-                <span asp-validation-for="Credentials" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Settings" class="control-label"></label>
-                <input asp-for="Settings" class="form-control" />
-                <span asp-validation-for="Settings" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Order" class="control-label"></label>
-                <input asp-for="Order" class="form-control" />
-                <span asp-validation-for="Order" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Configs" class="control-label"></label>
-                <input asp-for="Configs" class="form-control" />
-                <span asp-validation-for="Configs" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastModified" class="control-label"></label>
-                <input asp-for="LastModified" class="form-control" />
-                <span asp-validation-for="LastModified" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubscriptionId" class="control-label"></label>
-                <input asp-for="SubscriptionId" class="form-control" />
-                <span asp-validation-for="SubscriptionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
- *@
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@* <div id="add-channel-wizard-container" v-cloak>
-    <div class="steps-container">
-        <ul class="steps">
-            <li data-step="1" class="active">
-                <span class="step">1</span>
-                <span class="title">Networks</span>
-                @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/networks.cshtml")
-            </li>
-            <li data-step="2">
-                <span class="step">2</span>
-                <span class="title">Account Type</span>
-            </li>
-            <li data-step="3">
-                <span class="step">3</span>
-                <span class="title">AdditionalInfo</span>
-            </li>
-            <li data-step="4">
-                <span class="step">4</span>
-                <span class="title">Finish</span>
-            </li>
-        </ul>
-    </div>
-    <div class="step-content pos-rel">
-        @*
-        @await Html.PartialAsync("~/Areas/Social/Views/Channel/create/additionalInfo.cshtml")
-        @await Html.PartialAsync("~/Areas/Social/Views/Channel/create/finish.cshtml")
-    </div>
-</div> *@
 <div id="root">
     <div class="main-app" id="nw-bg-video-wrapper">
         <main id="content">
             <div class="contact-wrapper">
                 <div class="card">
-                        <div class="card-header">
-                        <h1 class="text-center p-5 font-weight-bold">Create A New Channel</h1>
+                    <div class="card-header">
+                        <h1 class="text-center p-3 font-weight-bold">إنشاء قناة جديدة</h1>
 
                     </div>
                     <div class="card-body">
@@ -155,8 +23,8 @@
 
 
                             <div class="page active">
-                                <span class="step">1</span>
-                                <span class="title">Networks</span>
+                                @*                       <span class="step">1</span>
+                                <span class="title">Networks</span> *@
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/networks.cshtml")
                             </div>
                             <div class="page">
@@ -169,21 +37,21 @@
                             <div class="page">
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/finish.cshtml")
                             </div>
-                            <div class="row d-flex flex-wrap">
-                                <div class="my-5 w-100">
-                                    <button class="nw-button  w-100" type="button" id="next">
-                                        Next <i class="fa fa-arrow-right"></i>
+                            <div class="row d-flex nav-buttons justify-content-center ">
+                                <div class="">
+                                    <button type="button" id="next">
+                                        التالي <i class="fa fa-arrow-right"></i>
                                     </button>
                                 </div>
 
-                                <div class="w-100">
-                                    <button class="nw-button  w-100" type="button" id="back">
-                                        <i class="fa fa-arrow-left"></i>Previous
+                                <div class="back-button">
+                                    <button type="button" id="back">
+                                        <i class="fa fa-arrow-left"></i>السابق
 
                                     </button>
-                                  </div>
+                                </div>
 
-          
+
                             </div>
                         </form>
                     </div>
@@ -194,13 +62,6 @@
 
 </div>
 
-
-<div class="wizard-actions mt-3" v-if="wizard.currentStep !== 4">
-    <button class="btn btn-new btn-sm btn-prev" v-bind:enabled="wizard.currentStep !== 1 && !submitting" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;margin-left: auto;margin-right: auto;display: block;">
-        <i class="ace-icon fa fa-arrow-en.Direction()"></i>
-        Back
-    </button>
-</div>
 
 @section Scripts {
     @{
@@ -216,13 +77,21 @@
     const firstPage = $(pages).first()[0];
     const lastPage = $(pages).last()[0];
     const activeClass = "active";
-    const nextButtonContent = "Next Page <i class='fa fa-arrow-right'></i>";
+    const nextButtonContent = "التالي <i class='fa fa-arrow-right'></i>";
+
+    // if ($(".page.active").prev().length) {
+    //     console.log("firs page")
+    // }
+
+    $(".back-button").hide();
+
 
     nextButton.addEventListener("click", function () {
         const activePage = $("#assessment-form .page.active");
         // validate before going to the next page.
         const isValid = true;
         if (isValid) {
+            $(".back-button").show();
             nextPage(activePage);
         } else {
             alert(
@@ -301,6 +170,7 @@
         if (previousElement[0] === firstPage) {
             // no backbutton on the first page.
             $(backButton).css("display", "none");
+            $(".back-button").hide();
         }
         // change from "submit" text
         nextButton.innerHTML = nextButtonContent;
@@ -310,7 +180,7 @@
     /**
      * Validates a form page.
      */
-            // validate elements before proceeding to the nxt page
+    // validate elements before proceeding to the nxt page
 </script>
 <style>
     /* website assessment form */
@@ -319,10 +189,11 @@
         font-style: italic;
     }
 
-/*     #back.nw-button {
-        display: none;
+
+    .back-button {
+        display: b
     }
- */
+
     /* initially hide all of the pages that are not active */
     #assessment-form .page:not(.active) {
         display: none;
@@ -337,7 +208,7 @@
         background-color: #9e78fb;
         border: none;
         border-radius: 9px;
-        box-shadow: 2px 3px 2px #000;
+        /*  box-shadow: 2px 3px 2px #000; */
         color: #fff;
         cursor: pointer;
         font-weight: 700;
@@ -347,7 +218,7 @@
     }
 
         .nw-button:hover {
-            background-color: rgb(241, 175, 12);
+            ` background-color: rgb(241, 175, 12);
         }
 
     .contact-me-header {
@@ -413,4 +284,66 @@
     select.nw-form-control {
         padding: 0.5rem;
     }
+
+
+    .nav-buttons button {
+        width: 200px;
+        max-width: 100%;
+    }
+
+    .nav-buttons {
+        row-gap: 10px;
+    }
+
+
+
+    .row.d-flex.nav-buttons > div {
+        width: fit-content;
+    }
+
+
+    #assessment-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .social .infobox {
+        cursor: pointer;
+        text-align: center !important;
+        border: 1px solid transparent;
+        background: #2e88e1;
+        color: white;
+        border-radius: 5px;
+        padding: 20px;
+        width: 200px;
+    }
+
+
+    .selected-div {
+        border: 6px solid #2262a2;
+    }
+
+    /* Style for channel selection */
+
+    .radio-group {
+        position: relative;
+    }
+
+    .radio {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        background-color: lightblue;
+        border: 2px solid lightblue;
+        cursor: pointer;
+        margin: 2px 0;
+    }
+
+        .radio.selected {
+            border-color: blue;
+        }
 </style>

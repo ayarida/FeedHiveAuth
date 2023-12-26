@@ -25,16 +25,24 @@
 @{
     var x = SignInManager.UserManager;
 }
-<ul class="navbar-nav d-flex flex-row nav-left mr-auto greeting " >
+<ul class="navbar-nav d-flex flex-row nav-left greeting w-100">
     @if (SignInManager.IsSignedIn(User))
     {
 
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <a class="nav-link text-dark " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a>
 
-			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button type="submit" class="nav-link btn btn-link text-dark log-out">Logout</button>
-			</form>
-        //var userIdentities = User.Identities.Select(x => x.RoleClaimType).FirstOrDefault();       
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="nav-link btn btn-link text-dark log-out">تسجيل خروج</button>
+        </form>
+
+
+        <a href="/Home/Index" class="me-auto">
+            <img src="~/uploads/logo.png" style="
+             width: 86px;
+             max-width: 100%; border-radius: 5px;" />
+        </a>
+
+        //var userIdentities = User.Identities.Select(x => x.RoleClaimType).FirstOrDefault();
         //var test = User.Claims.Where(x=>x.Value == User.Identities.)
         //var cI = User.Identities.FirstOrDefault().RoleClaimType;
         var userRoles = User.Claims.Where(x => x.Type == User.Identities.Select(x => x.RoleClaimType).FirstOrDefault()).Select(c => c.Value);
@@ -46,10 +54,10 @@
 
             }
         }
-      @*    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-             <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-         </form> *@
-        
+        @*    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+    </form> *@
+
     }
     else
     {
@@ -59,29 +67,28 @@
 </ul>
 
 <style>
-	.log-out {
-		background-color: red;
-		color: white !important;
-		width: fit-content;
-	}
+    .log-out {
+        background-color: red;
+        color: white !important;
+        width: fit-content;
+    }
 
-		.log-out:hover{
-			background-color: red;
-		}
+        .log-out:hover {
+            background-color: red;
+        }
 
-	.user-name {
-		background-color: var(--green-color);
-		padding: 10px;
-		
-	}
+    .user-name {
+        background-color: var(--green-color);
+        padding: 10px;
+    }
 
-	.user-name a {
-		color: white !important;
-	}
+        .user-name a {
+            color: white !important;
+        }
 
-	@@media (max-width: 992px){
-		.greeting{
-			display: none !important;
-		}
-	}
+    @@media (max-width: 992px) {
+        .greeting {
+            display: none !important;
+        }
+    }
 </style>

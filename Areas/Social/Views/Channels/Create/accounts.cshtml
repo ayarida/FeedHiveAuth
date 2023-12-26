@@ -3,8 +3,8 @@
 
 <div class="step-pane accounts" data-step="2">
     <div class="infobox-container" v-bind:class="[network]">
-        <h1>SelectAccountType</h1>
-        <div class="account-type my-5">
+        <h1>اختر نوع الحساب</h1>
+        <div class="account-type my-5 social">
             <div class="infobox" v-show="showProfile" v-on:click="authorize('@SocialAccountTypeEnum.Profile.Key()')">
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-person-circle"></i>
@@ -52,43 +52,44 @@
 
 
 <style>
-    .infobox {
+/*     .infobox {
         padding: 20px;
         background: #679bcf;
         color: white;
         width: 200px;
         text-align: center;
-    }
+    } */
 
         .infobox > .infobox-icon > .ace-icon::before {
             font-size: 45px;
         }
 
     .account-type {
-        display: flex;
-        justify-content: center;
-        column-gap: 10%;
-        row-gap: 27px;
-        align-content: center;
+        display: grid;
         flex-wrap: wrap;
-        width: 100%;
+        grid-template-rows: auto;
+        row-gap: 20px;
+        column-gap: 32px;
+        grid-template-columns: repeat(auto-fill, 186px);
     }
 
-    .infobox {
+/*     .infobox {
         border:;
         padding: 5%;
         background: #679bcf;
         color: white;
-    }
+    } */
 
     .infobox-data {
         margin-top: 10px;
     }
     #next:not(.infobox) {
-        background-color: #67cf81;
+        background-color: #314357;
+        color: white;
     }
 
     #back:not(.infobox) {
-        background-color: #cf6767;
+        background-color: #d0d5de;
+        color: #314357;
     }
 </style>
