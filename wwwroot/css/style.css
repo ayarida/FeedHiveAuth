@@ -43,13 +43,15 @@ h3,
 h4 {
     margin: 0;
     padding: 0;
+    direction: rtl;
 }
 
 h1,
 h2,
 h3,
-h4, p, a {
+h4, p, a, label, input{
     font-family: 'Noto Sans Arabic';
+    direction: rtl;
 }
 
 .bi::before,

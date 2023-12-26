@@ -8,54 +8,54 @@
 }
 
 
-<h2>Edit Post: @post?.Title</h2>
+<h2 dir="rtl">تعديل المحتوى @post?.Title</h2>
 
 <hr />
 
 <main class="editor">
     <div class="container pt-4 mt-4">
-        <div class="card p-4">
+        <div class="card px-4 py-5">
 
             <div class="row">
                 <div class="create-post">
                     <div class="card-head my-2">
 
-                        <form asp-route="/Posts/UpdatePostData/@post.Id" enctype="multipart/form-data" method="post" style="max-width: 100%">
+                        <form asp-route="/Posts/UpdatePostData/@post?.Id" enctype="multipart/form-data" method="post" style="max-width: 100%" dir="rtl">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group mb-4">
-                                <label asp-for="Title" class="control-label"></label>
+                                <label asp-for="Title" class="control-label">عنوان</label>
                                 <input asp-for="Title" class="form-control" />
                                 <span asp-validation-for="Title" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="ShortTitle" class="control-label"></label>
+                                <label asp-for="ShortTitle" class="control-label">عنوان قصير</label>
                                 <input asp-for="ShortTitle" class="form-control" />
                                 <span asp-validation-for="ShortTitle" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="Summary" class="control-label"></label>
+                                <label asp-for="Summary" class="control-label">ملخص</label>
                                 <input asp-for="Summary" class="form-control" />
                                 <span asp-validation-for="Summary" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="Content" class="control-label"></label>
+                                <label asp-for="Content" class="control-label">محتوى</label>
                                 <input asp-for="Content" class="form-control" />
                                 <span asp-validation-for="Content" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="PostDate" class="control-label"></label>
+                                <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
                                 <input asp-for="PostDate" class="form-control" />
                                 <span asp-validation-for="PostDate" class="text-danger"></span>
                             </div>
                             <label class="custom-file-upload mb-3">
-                                Upload
+                                تحميل
                                 <input type="file" name="File" />
                             </label>
                             <div class="form-group mb-4">
-                                <input type="submit" value="Update" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
+                                <input type="submit" value="تحديث" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
                             </div>
 
-                            <textarea class="content-area" name="example"></textarea>
+                            @* <textarea class="content-area" name="example"></textarea> *@
                         </form>
 
 
@@ -71,6 +71,10 @@
 
 <style>
     .card-head {
-        justify-content: start;
+        justify-content: end;
     }
+    input{
+        text-align: start;
+    }
+
 </style>
