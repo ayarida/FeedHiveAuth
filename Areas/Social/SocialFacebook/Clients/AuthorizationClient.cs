@@ -48,7 +48,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
         public IRestResponse<FacebookCredentials> ExchangeCode(string code)
         {
             var URL = CallbackUrl;
-            URL += "?state={type:'page',subscriptionCode:'mangopulse',reauthorize:false}";
+            URL += "?state={type:'page',subscriptionCode:'SocialPublisher',reauthorize:false}";
             //URL = "https%3A%2F%2Flocalhost%3A7055%2FAuthorization%2FFacebookSignIn%3Fstate%3D%257Btype%253A%2527page%2527%252CsubscriptionCode%253A%2527mangopulse%2527%252Creauthorize%253Afalse%257D";
             var parms = new Dictionary<string, object>
             {
