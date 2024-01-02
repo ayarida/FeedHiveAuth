@@ -1,179 +1,111 @@
 ﻿@model IEnumerable<FeedHiveAuth.Models.MediaItem>
+@using FeedHiveAuth.Data;
+@using FeedHiveAuth.Models.Enums
+@using FeedHiveAuth.Data.Extensions
+
 
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var _mediaService = Instances.Repositories.MediaItemRepository;
 }
 
-<h1>View</h1>
+<h1>قائمة الميديا</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div  class="table-surround">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Caption)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tags)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Path)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Extension)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ThumbnailUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Version)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Info)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastModified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubscriptionId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Caption)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tags)
-            </td>
-            <td>
-                        <img src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U "@*  style="width: 200px; height: 200px ; max-width: 100%" *@/>
-            @*         <img src="@item.Path" /> *@
-                @* @Html.DisplayFor(modelItem => item.Path) *@
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Extension)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ThumbnailUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Version)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Info)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubscriptionId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+<div class="d-flex flex-row flex-wrap media-list">
+
+    @foreach (var item in Model)
+    {
+
+        <div class="media-item">
+            <img src="https://fastly.picsum.photos/id/73/200/200.jpg?hmac=IYjgRq-Ok9gn3_MVxJ4TlfhLPONQ97qWvp2Ir1Y1z6c"
+                 style="
+    max-width: 100%;" />
+            @* <img src="@item.Path" style="width: 225px;
+        max-width: 100%;" /> *@
+            <div class="media-details">
+                <div class="p-3 caption">
+                    <p>@item.Caption</p>
+                </div>
+                <div class="delete d-flex p-3">
+                    <button onclick="deleteMedia(this.id)" id="@item.Id">
+                        حذف
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    }
+
 </div>
 
+
+
+
 <style>
-
-    /* table styling */
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: #918b92 #ffffff;
+    .media-list {
+        column-gap: 10px;
+        row-gap: 20px;
     }
 
-        /* Chrome, Edge, and Safari */
-        *::-webkit-scrollbar {
-            width: 5px;
-            height: 15px;
+    @@media (max-width: 452px) {
+        .media-list {
+            justify-content: center;
         }
-
-        *::-webkit-scrollbar-track {
-            background: #ffffff;
-        }
-
-        *::-webkit-scrollbar-thumb {
-            background-color: #918b92;
-            border-radius: 10px;
-            border: 4px solid #ffffff;
-        }
-
-    .table-surround{
-        max-width: 100%;
-        overflow:auto;
     }
 
-    .table-surround a{
-       color: inherit;
-       /* text-decoration: none; */
+    .media-list img {
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
     }
 
-/*     table {
-        border: none;
-        border-collapse: collapse;
-    } */
+    .media-details {
+        border: 1px solid black;
+        width: 100%;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        overflow: auto;
+    }
 
-/*         table td {
-            border-left: 1px solid #000;
-            border-right: 1px solid #000;
+    button {
+        width: 100%;
+        background-color: #a5a5a5;
+    }
+
+    .delete {
+        background-color: #f8f7fd;
+        border-top: 1px solid #d0d0d5;
+    }
+
+        .delete button {
+            color: red;
+            width: fit-content;
+            background: transparent;
+            height: fit-content;
+            border: none;
+            box-shadow: none;
+            padding: 0 !important;
         }
 
-            table td:first-child {
-                border-left: none;
-            }
 
-            table td:last-child {
-                border-right: none;
-            }
- */
 
+        .delete i::before {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+    .caption {
+        background-color: white;
+    }
 </style>

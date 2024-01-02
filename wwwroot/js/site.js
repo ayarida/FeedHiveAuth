@@ -5,26 +5,23 @@
 
 //Swiper
 try {
-    const swiper = new Swiper('.swiper', {
+    const swiper = new Swiper(".swiper", {
         loop: true,
         centeredSlides: true,
-        slidesPerView: '1',
+        slidesPerView: "1",
         navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
         },
     });
-}
-
-catch (error) {
+} catch (error) {
     console.log("no swiper found");
 }
-
 
 //Table List
 function toggle(source) {
     checkboxes = $("tbody tr input");
-    console.log(checkboxes)
+    console.log(checkboxes);
     for (var i = 0, n = checkboxes.length; i < n; i++) {
         checkboxes[i].checked = source.checked;
     }
@@ -36,37 +33,58 @@ function deleteSelected() {
     selected.each(function (index, value) {
         deleteArr.push($(value).val());
     });
-    console.log(deleteArr.join(','));
-    var idsString = deleteArr.join(',');
-    var serviceURL = '/Posts/MultipleDelete';
+    console.log(deleteArr.join(","));
+    var idsString = deleteArr.join(",");
+    var serviceURL = "/Posts/MultipleDelete";
     $.ajax({
         type: "GET",
         url: serviceURL,
         data: { idsStr: idsString },
         success: function (data) {
-            $('#success-message').modal('show');
+            $("#success-message").modal("show");
             $(".close-popup").click(function () {
-                $('#success-message').modal('hide');
+                $("#success-message").modal("hide");
                 location.reload();
-            })
-
+            });
         },
         error: function (data) {
             errorFunc();
-        }
+        },
     });
     console.log(deleteArr);
 }
+
+
+function deleteMedia(event) {
+
+    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
+    var mediaId = event;
+
+    $.ajax({
+        type: "DELETE",
+        url: serviceURL,
+        data: mediaId,
+        success: function (data) {
+            /*alert("success");*/
+            window.location.reload()
+        },
+        error: function (data) {
+            alert("error");
+        },
+    })
+
+}
+
 function successFunc(data, status) {
     alert(data);
 }
 
 function errorFunc() {
-    $('#error-message').modal('show');
+    $("#error-message").modal("show");
     $(".close-popup").click(function () {
-        $('#success-message').modal('hide');
+        $("#success-message").modal("hide");
         location.reload();
-    })
+    });
 }
 
 function publishSelected() {
@@ -74,30 +92,29 @@ function publishSelected() {
     var publishArr = [];
     selected.each(function (index, value) {
         publishArr.push($(value).val());
-    })
-    console.log(publishArr.join(','));
-    var idsString = publishArr.join(',');
-    var serviceURL = '/Posts/MultiplePublish';
+    });
+    console.log(publishArr.join(","));
+    var idsString = publishArr.join(",");
+    var serviceURL = "/Posts/MultiplePublish";
     $.ajax({
         type: "GET",
         url: serviceURL,
         data: { idsStr: idsString },
         success: function (data) {
-            $('#success-message-published').modal('show');
+            $("#success-message-published").modal("show");
             $(".close-popup").click(function () {
-                $('#success-message-published').modal('hide');
+                $("#success-message-published").modal("hide");
                 location.reload();
-            })
+            });
         },
         error: function (data) {
             errorFunc();
-        }
+        },
     });
     console.log(publishArr);
 }
 
 try {
-
     var calendarInstance = new calendarJs("myCalendar", {
         exportEventsEnabled: true,
         manualEditingEnabled: true,
@@ -114,20 +131,24 @@ try {
         onEventDragDrop: onDragEventDrop,
         onBeforeEventAddEdit: null,
         addYearButtonsOnMainDisplay: false,
-        useAmPmForTimeDisplays: false
+        useAmPmForTimeDisplays: false,
     });
 
     document.title += " v" + calendarInstance.getVersion();
-    document.getElementById("header").innerText += " v" + calendarInstance.getVersion();
+    document.getElementById("header").innerText +=
+        " v" + calendarInstance.getVersion();
 
     function turnOnEventNotifications() {
         calendarInstance.setOptions({
-            eventNotificationsEnabled: true
+            eventNotificationsEnabled: true,
         });
     }
 
     function addEventType() {
-        console.log("Event type added: " + calendarInstance.addEventType(5, "A New Event Type"));
+        console.log(
+            "Event type added: " +
+            calendarInstance.addEventType(5, "A New Event Type")
+        );
     }
 
     function removeEventType() {
@@ -168,20 +189,20 @@ try {
             showHolidays: false,
             allowHtmlInDisplay: true,
             workingDays: [],
-            startOfWeekDay: 0
+            startOfWeekDay: 0,
         });
     }
 
     function setSearchOptions() {
         calendarInstance.setSearchOptions({
             left: 10,
-            top: 10
+            top: 10,
         });
     }
 
     function onlyDotsDisplay() {
         calendarInstance.setOptions({
-            useOnlyDotEventsForMainDisplay: true
+            useOnlyDotEventsForMainDisplay: true,
         });
     }
 
@@ -220,11 +241,24 @@ try {
         today9.setHours(9);
 
         firstDayInNextMonth.setDate(1);
-        firstDayInNextMonth.setDate(firstDayInNextMonth.getDate() + daysInMonth(firstDayInNextMonth.getFullYear(), firstDayInNextMonth.getMonth()));
+        firstDayInNextMonth.setDate(
+            firstDayInNextMonth.getDate() +
+            daysInMonth(
+                firstDayInNextMonth.getFullYear(),
+                firstDayInNextMonth.getMonth()
+            )
+        );
 
         lastDayInNextMonth.setDate(1);
         lastDayInNextMonth.setMonth(lastDayInNextMonth.getMonth() + 1);
-        lastDayInNextMonth.setDate(lastDayInNextMonth.getDate() + daysInMonth(lastDayInNextMonth.getFullYear(), lastDayInNextMonth.getMonth()) - 1);
+        lastDayInNextMonth.setDate(
+            lastDayInNextMonth.getDate() +
+            daysInMonth(
+                lastDayInNextMonth.getFullYear(),
+                lastDayInNextMonth.getMonth()
+            ) -
+            1
+        );
 
         today.setHours(21, 59, 0, 0);
         today.setDate(today.getDate() + 3);
@@ -256,171 +290,171 @@ try {
         overlappingEventTo5.setHours(4, 40, 0, 0);
 
         /*   return [
-               {
-                   from: overlappingEvent1,
-                   to: overlappingEventTo1,
-                   title: "Overlapping Event 1",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   group: "Group 1",
-                   type: 1,
-                   customTags: {
-                       testTag: true
+                   {
+                       from: overlappingEvent1,
+                       to: overlappingEventTo1,
+                       title: "Overlapping Event 1",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       group: "Group 1",
+                       type: 1,
+                       customTags: {
+                           testTag: true
+                       }
+                   },
+                   {
+                       from: overlappingEvent2,
+                       to: overlappingEventTo2,
+                       title: "Overlapping Event 2",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       group: "Group 1",
+                       type: 1,
+                       customTags: true
+                   },
+                   {
+                       from: overlappingEvent3,
+                       to: overlappingEventTo3,
+                       title: "Overlapping Event 3",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       group: "Group 1",
+                       type: 1,
+                       customTags: [1]
+                   },
+                   {
+                       from: overlappingEvent4,
+                       to: overlappingEventTo4,
+                       title: "Overlapping Event 4",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       group: "Group 1",
+                       type: 1,
+                       customTags: 1
+                   },
+                   {
+                       from: overlappingEvent5,
+                       to: overlappingEventTo5,
+                       title: "Overlapping Event 5",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       group: "Group 1",
+                       type: 1,
+                       customTags: "Test Tag"
+                   },
+                   {
+                       from: previousYear,
+                       to: previousYear,
+                       title: "Previous Year",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       group: "Group 2",
+                       type: 2
+                   },
+                   {
+                       from: nextYear,
+                       to: nextYear,
+                       title: "Next Year",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       group: "Group 2",
+                       type: 2
+                   },
+                   {
+                       from: previousDay,
+                       to: previousDay,
+                       title: "Previous Day",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       color: "#FF0000",
+                       colorText: "#FFFF00",
+                       colorBorder: "#00FF00",
+                       repeatEvery: 5,
+                       id: "1234-5678-9",
+                       group: "Group 1",
+                       locked: true,
+                       type: 3
+                   },
+                   {
+                       from: today11,
+                       to: tomorrow,
+                       title: "Title 1",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: false,
+                       group: "group 1"
+                   },
+                   {
+                       from: tomorrow,
+                       to: today11,
+                       title: "Title Bad (should not show)",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: false,
+                       group: "group 1",
+                       type: 0
+                   },
+                   {
+                       from: today9,
+                       to: today9,
+                       title: "Title 2",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       group: "Group 1",
+                       url: "https://www.google.com/",
+                       type: 4
+                   },
+                   {
+                       from: firstDayInNextMonth,
+                       to: firstDayInNextMonth,
+                       title: "First Day 1",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       color: "#00FF00",
+                       colorText: "#FF0000",
+                       repeatEvery: 4,
+                       type: 0
+                   },
+                   {
+                       from: firstDayInNextMonth,
+                       to: firstDayInNextMonth,
+                       title: "First Day 2",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       color: "#00FF00",
+                       colorText: "#FF0000",
+                       repeatEvery: 4,
+                       type: 0
+                   },
+                   {
+                       from: lastDayInNextMonth,
+                       to: lastDayInNextMonth,
+                       title: "Last Day 1",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       location: "Teams Meeting",
+                       isAllDay: true,
+                       color: "#0000FF",
+                       repeatEvery: 2,
+                       type: 0
+                   },
+                   {
+                       from: today,
+                       to: today3HoursAhead,
+                       title: "Regular Event",
+                       description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
+                       repeatEvery: 1,
+                       repeatEveryExcludeDays: [6, 0],
+                       repeatEnds: new Date(today.getFullYear() + 1, 0, 1),
+                       group: "Group 1",
+                       type: 0
                    }
-               },
-               {
-                   from: overlappingEvent2,
-                   to: overlappingEventTo2,
-                   title: "Overlapping Event 2",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   group: "Group 1",
-                   type: 1,
-                   customTags: true
-               },
-               {
-                   from: overlappingEvent3,
-                   to: overlappingEventTo3,
-                   title: "Overlapping Event 3",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   group: "Group 1",
-                   type: 1,
-                   customTags: [1]
-               },
-               {
-                   from: overlappingEvent4,
-                   to: overlappingEventTo4,
-                   title: "Overlapping Event 4",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   group: "Group 1",
-                   type: 1,
-                   customTags: 1
-               },
-               {
-                   from: overlappingEvent5,
-                   to: overlappingEventTo5,
-                   title: "Overlapping Event 5",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   group: "Group 1",
-                   type: 1,
-                   customTags: "Test Tag"
-               },
-               {
-                   from: previousYear,
-                   to: previousYear,
-                   title: "Previous Year",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   group: "Group 2",
-                   type: 2
-               },
-               {
-                   from: nextYear,
-                   to: nextYear,
-                   title: "Next Year",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   group: "Group 2",
-                   type: 2
-               },
-               {
-                   from: previousDay,
-                   to: previousDay,
-                   title: "Previous Day",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   color: "#FF0000",
-                   colorText: "#FFFF00",
-                   colorBorder: "#00FF00",
-                   repeatEvery: 5,
-                   id: "1234-5678-9",
-                   group: "Group 1",
-                   locked: true,
-                   type: 3
-               },
-               {
-                   from: today11,
-                   to: tomorrow,
-                   title: "Title 1",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: false,
-                   group: "group 1"
-               },
-               {
-                   from: tomorrow,
-                   to: today11,
-                   title: "Title Bad (should not show)",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: false,
-                   group: "group 1",
-                   type: 0
-               },
-               {
-                   from: today9,
-                   to: today9,
-                   title: "Title 2",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   group: "Group 1",
-                   url: "https://www.google.com/",
-                   type: 4
-               },
-               {
-                   from: firstDayInNextMonth,
-                   to: firstDayInNextMonth,
-                   title: "First Day 1",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   color: "#00FF00",
-                   colorText: "#FF0000",
-                   repeatEvery: 4,
-                   type: 0
-               },
-               {
-                   from: firstDayInNextMonth,
-                   to: firstDayInNextMonth,
-                   title: "First Day 2",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   color: "#00FF00",
-                   colorText: "#FF0000",
-                   repeatEvery: 4,
-                   type: 0
-               },
-               {
-                   from: lastDayInNextMonth,
-                   to: lastDayInNextMonth,
-                   title: "Last Day 1",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   location: "Teams Meeting",
-                   isAllDay: true,
-                   color: "#0000FF",
-                   repeatEvery: 2,
-                   type: 0
-               },
-               {
-                   from: today,
-                   to: today3HoursAhead,
-                   title: "Regular Event",
-                   description: "This is a another <b>description</b> of the event that has been added, so it can be shown in the pop-up dialog.",
-                   repeatEvery: 1,
-                   repeatEveryExcludeDays: [6, 0],
-                   repeatEnds: new Date(today.getFullYear() + 1, 0, 1),
-                   group: "Group 1",
-                   type: 0
-               }
-           ];*/
+               ];*/
     }
 
     function onDragEventStart(eventDetails) {
@@ -432,7 +466,9 @@ try {
     }
 
     function onDragEventDrop(eventDetails, dropDate) {
-        console.log("Event drag dropped: " + eventDetails.id + ". Date dropped: " + dropDate);
+        console.log(
+            "Event drag dropped: " + eventDetails.id + ". Date dropped: " + dropDate
+        );
     }
 
     function getCopiedEvent() {
@@ -445,9 +481,10 @@ try {
             from: today,
             to: todayPlus1Hour,
             title: "Copied Event",
-            description: "This is a another description of the event that has been added, so it can be shown in the pop-up dialog.",
-            group: "Group 1"
-        }
+            description:
+                "This is a another description of the event that has been added, so it can be shown in the pop-up dialog.",
+            group: "Group 1",
+        };
     }
 
     function addNewHolidays() {
@@ -460,7 +497,7 @@ try {
             title: "Google Day",
             onClick: function () {
                 window.open("https://www.google.com/", "_blank");
-            }
+            },
         };
 
         var holiday2 = {
@@ -471,7 +508,7 @@ try {
             textColor: "maroon",
             onClick: function () {
                 window.open("https://github.com/williamtroup/Calendar.js", "_blank");
-            }
+            },
         };
 
         calendarInstance.addHolidays([holiday1, holiday2]);
@@ -480,94 +517,47 @@ try {
     function removeNewHolidays() {
         calendarInstance.removeHolidays(["Google Day", "Calendar.js Day"]);
     }
-
-}
-catch {
+} catch {
     console.log("no calendar");
 }
 
-
-$(".editor").ready(function () {
-    try {
-        $(".content-area").richText();
-    }
-    catch {
-        console.log("no editor found")
-    }
-});
-
-//$("main").ready(function () {
-//    if ($("#create-form .submit-button").length > 0) {
-//        $(document).on("submit", "#create-form", function (event) {
-//            if (!$("#title").val()) {
-//                var x = document.getElementById("snackbar");
-//                event.preventDefault()
-//                x.className = "show";
-//                setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-//            }
-//        })
-//    }
-//});
-
 $("#details").ready(function () {
-
-
-
     $(function () {
         // some json data
         var FJsonData = {
-
-
             //pass defualt data to form inputs
             /*      name: "facebook",
-                  id: "123",
-                  enabled: true,*/
-
+                        id: "123",
+                        enabled: true,*/
         };
 
         // initialize the form, prefix is optional and defaults to data
 
         /*        $("#configsList").jsForm({
-        
-                });
-        */
+            
+                    });
+            */
 
         try {
-
             $("#facebookConfigs").jsForm({
                 /*data: FJsonData,*/
             });
 
-            $("#twitterConfigs").jsForm({
+            $("#twitterConfigs").jsForm({});
 
-            });
+            $("#telegramConfigs").jsForm({});
 
-            $("#telegramConfigs").jsForm({
+            $("#instagramConfigs").jsForm({});
 
-            });
-
-            $("#instagramConfigs").jsForm({
-
-            });
-
-            $("#whatsappConfigs").jsForm({
-
-            });
-
+            $("#whatsappConfigs").jsForm({});
+        } catch {
+            console.log("no formjs");
         }
-
-
-
-        catch {
-            console.log("no formjs")
-        }
-
 
         /*        $("#show").click(function () {
-                    // show the json data
-                    alert(JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " "));
-                });*/
+                        // show the json data
+                        alert(JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " "));
+                    });*/
     });
-
-
 });
+
