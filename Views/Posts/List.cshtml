@@ -20,31 +20,29 @@
         </div>
         <div class="card-body" style="max-width: 100%;overflow: auto;">
 
-            <div style="margin-bottom: 20px;max-width: 100%;">
+            <div style="margin-bottom: 20px;max-width: 100%; display: flex;flex-wrap: wrap;column-gap: 10px; row-gap: 10px" class="filter" dir="rtl">
 
-                <input type="text" id="filter0" placeholder="Filter By Title">
-                <input type="text" id="filter1" placeholder="Filter By ShortTitle">
-                <input type="text" id="filter3" placeholder="Filter By Date">
+                <input type="text" id="posts-id1" placeholder="التصفية حسب العنوان">
+                <input type="text" id="posts-id0" placeholder="التصفية حسب العنوان القصير">
+                <input type="text" id="posts-id2" placeholder="التصفية حسب التاريخ">
+
 
 
             </div>
 
-            <table id="filter" class="table">
+            <table id="posts-id" class="table" dir="rtl">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> Select All</lablel></th>
-                        <th>Title</th>
-                        <th>ShortTitle</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                        
-
+                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> اختر الكل</lablel></th>
+                        <th>عنوان</th>
+                        <th>عنوان قصير</th>
+                        <th>التاريخ</th>
+                        <th>عمليات</th>
                     </tr>
                 </thead>
                 <div class="action-buttons">
-
-                    <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
-                    <button type="button" class="publish-btn" onClick="publishSelected()">Publish</button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()">مسح</button>
+                    <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button>
                 </div>
 
                 <tbody>
@@ -61,9 +59,11 @@
                                 <td>@post.ShortTitle</td>
                                 <td>@post.PostDate</td>
                                 <td>
-                                <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
+                                    <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
                                 </td>
+                                @* <td></td> *@
+
                             </tr>
 
                         }
@@ -168,6 +168,12 @@
 
     main input {
         margin-bottom: 0px;
+    }
+
+    .filter input {
+        border: 1px solid black;
+        text-align: right;
+        padding-right: 10px;
     }
 
 </style>
