@@ -27,8 +27,13 @@ namespace FeedHiveAuth.Controllers
             List<IdentityUser> nonMembers = new List<IdentityUser>();
             foreach (IdentityUser user in userManager.Users)
             {
-                var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
-                list.Add(user);
+                var checkIfHasRole = await userManager.GetRolesAsync(user);
+                if (!checkIfHasRole.Any())
+                {
+                    var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                    list.Add(user);
+                }
+                
             }
             return View(new RoleEdit
             {
