@@ -9,5 +9,10 @@ namespace FeedHiveAuth.Data.Helpers
             var configs = SocialConfigs.Construct(subscriptionId);
             return configs;
         }
+        public static SocialConfigs GetConfigs()
+        {
+            var configs = SocialConfigs.Construct();
+            return configs;
+        }
     }
 }
