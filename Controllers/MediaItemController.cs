@@ -1,5 +1,5 @@
-﻿using FeedHiveAuth.Data.Repositories;
-using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +9,15 @@ namespace FeedHiveAuth.Controllers
     {
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
 
-        public MediaItemController() {   
-            
+        public MediaItemController()
+        {
+
         }
 
         public ActionResult Upload()
         {
 
-            return  View("~/Views/MediaItem/Upload.cshtml");
+            return View("~/Views/MediaItem/Upload.cshtml");
         }
 
         [HttpPost]
@@ -48,9 +49,17 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpGet]
-        public IActionResult List() {
+        public IActionResult List()
+        {
             var mediaItemsList = _mediaItemService.GetMediaList();
             return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
         }
+
+        [HttpDelete]
+        public void DeleteMediaItem(MediaItem mediaItem)
+        {
+            _mediaItemService.Delete(mediaItem.Id);
+        }
+
     }
 }
