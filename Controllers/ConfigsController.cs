@@ -15,7 +15,8 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult TechnicalConfigs()
         {
-            return View();
+            var socialConfigs = SocialServiceHelper.GetConfigs();
+            return View(socialConfigs);
         }
     }
 }
