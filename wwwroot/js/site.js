@@ -54,7 +54,29 @@ function deleteSelected() {
     console.log(deleteArr);
 }
 
-
+function deleteSelectedUsers() {
+    selected = $("tbody input:checkbox:checked");
+    var deleteArr = [];
+    selected.each(function (index, value) {
+        deleteArr.push($(value).val());
+    });
+    console.log(deleteArr.join(","));
+    var idsString = deleteArr.join(",");
+    var serviceURL = "/Users/MultipleDelete";
+    $.ajax({
+        type: "POST",
+        url: serviceURL,
+        contentType: "application; charset=utf-8",
+        data: { userList: idsString },
+        success: function (data) {
+            windows.reload();
+        },
+        error: function (data) {
+           alert("asdas")
+        },
+    });
+    
+};
 function deleteMedia(event) {
 
     var serviceURL = "/MediaItem/DeleteMediaItem/" + event;

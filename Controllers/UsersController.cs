@@ -1,6 +1,5 @@
 ﻿using FeedHiveAuth.Areas.Identity.Pages.Account;
 using FeedHiveAuth.Data;
-using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -85,15 +84,41 @@ namespace FeedHiveAuth.Controllers
             return identityUser;
         }
 
+        [HttpPost]
         public void Delete(string id)
         {
-            //var subscriptionId =
-            //var currentUser = await _adminWorkContext.GetCurrentUserAsync();
-            //Instances.Repositories.UserRepository.Delete("9372960b-9d59-47c9-a7e5-de38bfb4aa38");
+            /*    var subscriptionId =
+                var currentUser = await _adminWorkContext.GetCurrentUserAsync();*/
+            Instances.Repositories.UserRepository.Delete(id);
+        }
+
+        public void MultipleDelete([FromForm] string userList)
+        {
+
+
+            Guid[] idsArray = userList?.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
+            List<string> stringList = new List<string>();
+            foreach (Guid guid in idsArray)
+            {
+                stringList.Add(guid.ToString());
+            }
+
+
+            foreach (var user in stringList)
+            {
+                try
+                {
+                    Delete(user);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error while deleting this post", user);
+                }
+            }
+
         }
 
 
-        
 
         /* public async Task<List<User>> GetUsersAsync()
          {

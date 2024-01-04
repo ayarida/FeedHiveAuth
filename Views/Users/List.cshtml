@@ -7,45 +7,62 @@
 }
 
 
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                Users List
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            قائمة المستخدم
+        </div>
+        <table id="filter" class="table" dir="rtl">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> اختر الكل</lablel></th>
+                    <th>المستخدم</th>
+                    <th>دور</th>
+                </tr>
+            </thead>
+            <div class="action-buttons">
+
+                <button type="button" class="delete-btn my-3 me-2" onClick="deleteSelectedUsers()" style="width: 100px; height: auto">حذف</button>
             </div>
-            <table id="filter" class="table">
-                <thead>
-                    <tr>
-                       
-                        <th>Username</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <div class="action-buttons">
 
-                    <button type="button" class="delete-btn" onClick="deleteSelected()">Delete</button>
-                </div>
+            <tbody>
 
-                <tbody>
+                @if (users.Count != 0)
+                {
 
-                    @if (users.Count != 0)
+                    @foreach (var user in users)
                     {
-
-                        @foreach (var user in users)
-                        {
                         var userRole = await UserManager.GetRolesAsync(user);
-                        
+
                         <tr>
-                                <td>@user.UserName</td>
-                            @if (userRole.Any()) 
-                            { 
+                            <td> <input type="checkbox" class="check" value="@user.Id"></td>
+                            <td>@user.UserName</td>
+                            @if (userRole.Any())
+                            {
                                 var ur = userRole.First();
                                 <td>@ur</td>
                             }
-                            </tr>
-                        }
-
+                        </tr>
                     }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
+</div>
+
+
+<style>
+    .check {
+        width: 20px;
+        height: auto;
+        box-shadow: none;
+    }
+
+    main input {
+        max-width: 100%;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 0px;
+    }
+</style>
