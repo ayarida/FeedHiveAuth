@@ -16,19 +16,10 @@ namespace FeedHiveAuth.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
 
         private readonly IUserService _userServiceContext;
-
         public PostsController(IUserService _userService)
         {
             _userServiceContext = _userService;
         }
-
-        /*public IActionResult CurrentCreds()
-        {
-            var userId = _userServiceContext.GetCurrentUserId();
-            var userName = _userServiceContext.GetCurrentUserName();
-           
-            return View();
-        }*/
 
         [Authorize(Policy = "Admin", Roles = "Admin")]
         [HttpGet]
@@ -76,9 +67,12 @@ namespace FeedHiveAuth.Controllers
             _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
             {
+                var oneFile = HttpContext.Request.Form.Files[0];
+                var message = UploadMedia(oneFile);
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
                 post.PostMediaItems = postMedias;
                 SavePostMedias(post);
+                //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             return View("~/Views/Posts/Create.cshtml");
         }
@@ -94,25 +88,22 @@ namespace FeedHiveAuth.Controllers
 
 
 
-        public MediaItem UploadMedia(MediaItem model)
+        public string UploadMedia(IFormFile file)
         {
-            if (model.File != null && model.File.Length > 0)
+            if (file!=null)
             {
-                var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + model.File.FileName;
-                var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
-
+                //var wwwPath = this.Environment.WebRootPath;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","uploads", file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    model.File.CopyTo(stream);
+                    file.CopyTo(stream);
                 }
 
-                // You can save the file path or other information in your database if needed.
-
-                return model; // Redirect to a relevant page after successful upload.
+                //Uploaded Successfully
+                return "File Uploaded Successfully";
             }
 
-            return model;
+            return "File Failed to upload!";
         }
 
         public void MultiUpload(IFormFileCollection Files)
