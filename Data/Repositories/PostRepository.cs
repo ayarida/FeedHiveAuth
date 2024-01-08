@@ -1,11 +1,7 @@
-﻿using Dapper;
-using FeedHiveAuth.Data.Extensions;
+﻿using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using FeedHiveAuth.Data.Repositories;
 using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Data.Repositories
@@ -18,7 +14,7 @@ namespace FeedHiveAuth.Data.Repositories
             Columns = Database.Columns.Post;
         }
 
-        public int Publish(string postId , string userId = null)
+        public int Publish(string postId, string userId = null)
         {
             //change status 
             //save publishedBy 
@@ -36,7 +32,7 @@ namespace FeedHiveAuth.Data.Repositories
             {
                 DateTime currentDateTime = DateTime.Now;
                 int comp = DateTime.Compare(post.PostDate.Value, currentDateTime);
-                if(comp > 0 )
+                if (comp > 0)
                 {
                     post.Status = StatusEnum.Scheduled.Value();
                 }
@@ -44,20 +40,20 @@ namespace FeedHiveAuth.Data.Repositories
                 {
                     post.Status = StatusEnum.Published.Value();
                 }
-            }         
-/*            if (post.Status == published)
-            {
-                return PostErrorEnum.POST_ALREADY_PUBLISHED.Value();
             }
-            */
+            /*            if (post.Status == published)
+                        {
+                            return PostErrorEnum.POST_ALREADY_PUBLISHED.Value();
+                        }
+                        */
             UpdateColumn("Status", post.Status, post.Id);
-            UpdateColumn("PublishedBy",userId, post.Id);
+            UpdateColumn("PublishedBy", userId, post.Id);
             return 0;
         }
 
         public List<Post> GetPublishedPosts()
         {
-            List<Post> posts  = new List<Post>();
+            List<Post> posts = new List<Post>();
             var query = SqlSelect + " WHERE STATUS = 20";
             posts = connection.Query<Post>(query).ToList();
             return posts;
@@ -75,11 +71,11 @@ namespace FeedHiveAuth.Data.Repositories
         {
             var query = SqlSelect + $" WHERE Status = 150";
             List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
-            
+
             return scheduledPosts;
         }
 
-        public Post GetPostById (string id)
+        public Post GetPostById(string id)
         {
             var query = SqlSelect + $" WHERE ID = '{id}'";
             Post posts = connection.Query<Post>(query).ToList().FirstOrDefault();
@@ -101,7 +97,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public void Save(Post post)
         {
-            if(post.Id == null)
+            if (post.Id == null)
             {
                 SavePost(post);
             }
@@ -109,7 +105,7 @@ namespace FeedHiveAuth.Data.Repositories
             {
                 //Update(post);
             }
-            
+
         }
         public void SavePost(Post post)
         {
