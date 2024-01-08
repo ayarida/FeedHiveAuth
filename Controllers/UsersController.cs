@@ -9,6 +9,7 @@ namespace FeedHiveAuth.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+
         //get current subscription value
 
         public UsersController(UserManager<IdentityUser> userManager)
@@ -25,6 +26,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
+
             // Your existing login logic
             return RedirectToAction("Register", "Account", new { area = "Identity" });
         }

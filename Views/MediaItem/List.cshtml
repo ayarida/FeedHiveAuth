@@ -23,11 +23,7 @@
     {
 
         <div class="media-item">
-            <img src="https://fastly.picsum.photos/id/73/200/200.jpg?hmac=IYjgRq-Ok9gn3_MVxJ4TlfhLPONQ97qWvp2Ir1Y1z6c"
-                 style="
-    max-width: 100%;" />
-            @* <img src="@item.Path" style="width: 225px;
-        max-width: 100%;" /> *@
+            <img src="@item.Path.Remove(0,1)" style="width: 200px; max-width: 100%;"/>
             <div class="media-details">
                 <div class="p-3 caption">
                     <p>@item.Caption</p>
