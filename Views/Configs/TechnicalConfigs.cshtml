@@ -160,15 +160,15 @@
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
 
-@if (configs.FacebookConfigs != null)
+@if (fbConfigs != null)
 {
-    var facebookCofigs = Model.FacebookConfigs.Application;
+
 
     <script>
         $("#details").ready(function () {
             var facebook = {
-                name: "@facebookCofigs.DisplayName",
-                id: @facebookCofigs.AppId,
+                name: "@fbConfigs.Application.DisplayName",
+                id: @fbConfigs.Application.AppId,
                 enabled: @fbConfigs.Application.Enabled.ToString().ToLower(),
                 secret: "@fbConfigs.Application.AppSecret",
             }
@@ -197,14 +197,14 @@ else
 
 
 
-@if (configs.TelegramConfigs != null)
+@if (telegramConfigs != null)
 {
-    var telConfigs = configs.TelegramConfigs;
+   
     <script>
         $("#details").ready(function () {
             var telegram = {
-                name: "@telConfigs.Bot.Username",
-                token: "@telConfigs.Bot.Token",
+                name: "@telegramConfigs.Bot.Username",
+                token: "@telegramConfigs.Bot.Token",
                 enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
             }
 
