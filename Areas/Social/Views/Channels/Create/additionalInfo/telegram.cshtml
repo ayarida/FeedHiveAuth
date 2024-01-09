@@ -7,8 +7,6 @@
     {
         return;
     }
-    var language = "en";
-    var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
 }
 
 <h1 v-if="network === 'telegram'">AdditionalInfo</h1>
@@ -18,7 +16,7 @@
             <li>
                 <i class="ace-icon fa fa-check green"></i>
                 OpenThisBotInTelegram
-                <a target="_blank" href="@TelegramService.GetBotUrl(Guid.Parse(subscription))">@TelegramService.GetBot(Guid.Parse(subscription)).Username</a>
+                <a target="_blank" href="@TelegramService.GetBotUrl()">@TelegramService.GetBot().Username</a>
             </li>
 
             <li>

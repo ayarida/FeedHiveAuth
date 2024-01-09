@@ -28,7 +28,7 @@ namespace FeedHiveAuth.Data.Repositories
                 MediaItem mediaItem = new MediaItem();
                 mediaItem.ThumbnailUrl = file.FileName;
                 mediaItem.Caption = file.FileName;
-                mediaItem.Path = "~/uploads/" + file.FileName;
+                mediaItem.Path = "/uploads/" + file.FileName;
                 mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
                 medias.Add(mediaItem);
                 

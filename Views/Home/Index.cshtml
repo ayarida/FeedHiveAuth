@@ -8,7 +8,7 @@
     ViewData["Title"] = "Home Page";
     var data = Model;
     var currUser = GlobalContext.UserConfigs?.UserData;
-
+    var signedIn = SignInManager.IsSignedIn(User);
     IWebHostEnvironment _hostingEnvironment;
     var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
     var photoStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
@@ -19,9 +19,9 @@
     <div class="row user">
         <div class="greeting my-4">
             <div class="user-greet">
-                @if (currUser != null)
+                @if (signedIn)
                 {
-                    <h2> @currUser.Name ،مساء الخير</h2>
+                    <h2> @User.Identity.Name ،مساء الخير</h2>
                     <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
                 }
             </div>
@@ -43,7 +43,7 @@
                         <img src="~/Static/Icons/Group35.png" />
                     </div>
                     <div class="card-text">
-                        <h1>مساء الخير، إيمان</h1>
+                        <h1>مساء الخير، @User.Identity.Name</h1>
                         <h2>لديك منشورات جديدة</h2>
                     </div>
                 </div>
@@ -182,8 +182,6 @@
             </div>
         </div>
     </div>
-
-    <img src="~/uploads/3d85ed1c-6025-411b-a9f3-9258e9f8e4a4_380153594_177928545333252_4858068367828855053_n.jpg"/>
     
     @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data);
 </div>

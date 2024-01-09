@@ -14,7 +14,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
 {
     public class TelegramService
     {
-        public static string GetBotUrl(Guid subscriptionId)
+        public static string GetBotUrl()
         {
             try
             {
@@ -29,9 +29,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
             }
         }
 
-        public static Telegram.Bot.Types.User GetBot(Guid subscriptionId)
+        public static Telegram.Bot.Types.User GetBot()
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId.ToString()).TelegramConfigs;
+            var configs = SocialServiceHelper.GetConfigs().TelegramConfigs;
             var client = new TelegramClient(configs);
             return client.GetCurrentUser();
         }
