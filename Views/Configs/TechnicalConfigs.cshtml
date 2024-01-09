@@ -2,14 +2,13 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var configs = Model; 
+    var configs = Model;
     var fbConfigs = configs.FacebookConfigs;
     var telegramConfigs = configs.TelegramConfigs;
 }
 
 
 <div class="py-4" id="configsList">
-
 
     <div id="facebookConfigs" class="mt-3">
         <h6 class="config-title mb-5">Facebook Configs</h6>
@@ -21,7 +20,12 @@
 
             <div class="setting-instance">
                 <label for="facebook-id">App ID</label>
-                <input type="text" id="facebook-id" name="data.id"/>
+                <input type="text" id="facebook-id" name="data.id" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="facebook-id">App Secrete</label>
+                <input type="text" id="facebook-id" name="data.secret" />
             </div>
 
 
@@ -65,16 +69,17 @@
 
 
     <div id="telegramConfigs" class="mt-5">
+        <p>@fbConfigs.Application.Enabled</p>
         <h6 class="config-title mb-5">telegram Configs</h6>
         <div class="config-settings ps-md-5">
             <div class="setting-instance">
-                <label for="telegram-name">Display Name</label>
+                <label for="telegram-name">User Name</label>
                 <input type="text" id="telegram-name" name="data.name" />
             </div>
 
             <div class="setting-instance">
-                <label for="telegram-id">App ID</label>
-                <input type="text" id="telegram-id" name="data.id" />
+                <label for="telegram-id">Token</label>
+                <input type="text" id="telegram-id" name="data.token" />
             </div>
 
 
@@ -155,60 +160,97 @@
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
 
-  @*@if (configs.FacebookConfigs != null)
-  {
-      var facebookCofigs = Model.FacebookConfigs.Application;
-    
-      <script>
-          $("#details").ready(function () {
-          var facebook = {
-              name: "@facebookCofigs.DisplayName",
-              id: @facebookCofigs.AppId,
-              enabled: true, 
-          }
+@if (configs.FacebookConfigs != null)
+{
+    var facebookCofigs = Model.FacebookConfigs.Application;
 
-          $("#facebookConfigs").jsForm({
-              data: facebook,
-          });
-          });
+    <script>
+        $("#details").ready(function () {
+            var facebook = {
+                name: "@facebookCofigs.DisplayName",
+                id: @facebookCofigs.AppId,
+                enabled: @fbConfigs.Application.Enabled.ToString().ToLower(),
+                secret: "@fbConfigs.Application.AppSecret",
+            }
 
-      </script>
-  }
-  else
-  {
-      <script>
-          $("#details").ready(function () {
-              var facebook = {
-                  name:,
-                  id: 0,
-                  enabled: false,
+            $("#facebookConfigs").jsForm({
+                data: facebook,
+            });
+        });
 
-              }
-          });
-      </script>
-  }
-  *@
+    </script>
+}
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var facebook = {
+                name:,
+                id: 0,
+                enabled: false,
+                secret:,
+
+            }
+        });
+    </script>
+}
+
+
+
+@if (configs.TelegramConfigs != null)
+{
+    var telConfigs = configs.TelegramConfigs;
+    <script>
+        $("#details").ready(function () {
+            var telegram = {
+                name: "@telConfigs.Bot.Username",
+                token: "@telConfigs.Bot.Token",
+                enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
+            }
+
+            $("#telegramConfigs").jsForm({
+                data: telegram,
+            });
+        });
+
+    </script>
+}
+
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var telegram = {
+                name:,
+                token:,
+                enabled: false,
+
+            }
+        });
+    </script>
+}
+
 <script>
 
-    $("#saveData").click(function () {  
-        var configsJson = ( '"Configs" :{' + '"Facebook: "' + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " ") + "," + '"Twitter: "' + JSON.stringify($("#twitterConfigs").jsForm("get"), null, " ") + "," + '"Telegram: "' + JSON.stringify($("#telegramConfigs").jsForm("get"), null, " ") + "," + '"Instagram: "' + JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + "," + '"Whatsapp: "' + JSON.stringify($("#whatsappConfigs").jsForm("get"), null, " ") + "}");
+    $("#saveData").click(function () {
+        var configsJson = ('"Configs" :{' + '"Facebook: "' + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " ") + "," + '"Twitter: "' + JSON.stringify($("#twitterConfigs").jsForm("get"), null, " ") + "," + '"Telegram: "' + JSON.stringify($("#telegramConfigs").jsForm("get"), null, " ") + "," + '"Instagram: "' + JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + "," + '"Whatsapp: "' + JSON.stringify($("#whatsappConfigs").jsForm("get"), null, " ") + "}");
 
         console.log(configsJson);
 
         var serviceURL = "/Social/Controllers/TechnicalController"
-        $.ajax({
-            type: "GET",
-            url: serviceURL,
-            data: { json: configsJson},
+        // $.ajax({
+        //     type: "GET",
+        //     url: serviceURL,
+        //     data: { json: configsJson },
 
-            success: function (data) {
-                alert("success");
-            },
-            error: function (data) {
-                aler("error");
-            }
+        //     success: function (data) {
+        //         alert("success");
+        //     },
+        //     error: function (data) {
+        //         alert("error");
+        //     }
 
-        });
+        // });
     })
 
 </script>
@@ -226,9 +268,10 @@
         }
 
     .setting-instance label:not(.switch) {
-            width: 7rem;
-            color: var(--blue-color);
-        }
+        width: 7rem;
+        color: var(--blue-color);
+    }
+
     .config-title {
         color: var(--blue-color);
         font-weight: bold;
@@ -248,10 +291,9 @@
     .setting-instance {
         display: flex;
         column-gap: 10px;
-       
     }
-    
-    .enable-setting{
+
+    .enable-setting {
         align-items: center;
     }
 
