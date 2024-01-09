@@ -8,8 +8,12 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string PersonalShareNetworks { get; set; }
         public bool EnableShareOnAllNetworks { get; set; }
         public FacebookConfigs FacebookConfigs { get; set; }
+        public FacebookConfigs InstagramConfigs { get; set; }
 
         public TelegramConfigs TelegramConfigs { get; set; }
+
+        public WhatsappConfigs WhatsappConfigs { get; set; }
+        public TwitterConfigs TwitterConfigs { get; set; }
 
         public static SocialConfigs Construct(string subscriptionId=null)
         {
@@ -32,7 +36,17 @@ namespace FeedHiveAuth.Areas.Social.Models
                         Username = "octipulse_bot",
                         Token = "847874047:AAHOYz5UdHChoss2heeXPIcycsLwB6tNty0"
                     }
-                }
+                },
+                WhatsappConfigs = new WhatsappConfigs
+                {
+                    Application = new WhatsappApp()
+
+                },
+                TwitterConfigs = new TwitterConfigs
+                {
+                    Application = new TwitterApp()
+                },
+                InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },
             };
         }
     }
@@ -59,5 +73,45 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string Token { get; set; }
         public bool Enable { get; set; } = true;
         public bool Enabled => Enable && Token.IsNotNullOrEmpty();
+    }
+
+    public class WhatsappConfigs
+    {
+        public WhatsappApp Application { get; set; }
+    }
+
+    public class WhatsappApp
+    {
+        public string bbs { get; set; }
+        public string Nickname { get; set; }
+        public bool Enable { get; set; }
+        public bool Enabled => Enable && bbs.IsNotNullOrEmpty() && Nickname.IsNotNullOrEmpty();
+    }
+
+    public class TwitterConfigs
+    {
+        public TwitterApp Application { get; set; }
+        public int ChunkSizeMB { get; set; }
+        public TrendingTopics TrendingTopics { get; set; }
+    }
+
+    public class TwitterApp
+    {
+        public string ScreenName { get; set; }
+        public string ConsumerKey { get; set; }
+        public string ConsumerSecret { get; set; }
+        public string Token { get; set; }
+        public string TokenSecret { get; set; }
+        public bool Enable { get; set; }
+        public bool Enabled => Enable && ConsumerKey.IsNotNullOrEmpty() && ConsumerSecret.IsNotNullOrEmpty();
+    }
+
+    public class TrendingTopics
+    {
+        public bool Enable { get; set; }
+        public ulong? PlaceId { get; set; }
+        public string ExcludedTags { get; set; }
+        public int TopicsNumber { get; set; }
+        public string WoeidFile { get; set; }
     }
 }
