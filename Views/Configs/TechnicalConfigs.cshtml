@@ -52,8 +52,23 @@
             </div>
 
             <div class="setting-instance">
-                <label for="twitter-id">App ID</label>
-                <input type="text" id="twitter-id" name="data.id" />
+                <label for="twitter-id">Cosumer Key</label>
+                <input type="text" id="twitter-id" name="data.consumerkey" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="twitter-id">Cosumer Secret</label>
+                <input type="text" id="twitter-id" name="data.consumersecret" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="twitter-id">Token</label>
+                <input type="text" id="twitter-id" name="data.token" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="twitter-id">Secret Token</label>
+                <input type="text" id="twitter-id" name="data.tokensecret" />
             </div>
 
 
@@ -72,7 +87,6 @@
 
 
     <div id="telegramConfigs" class="mt-5">
-        <p>@fbConfigs.Application.Enabled</p>
         <h6 class="config-title mb-5">telegram Configs</h6>
         <div class="config-settings ps-md-5">
             <div class="setting-instance">
@@ -110,7 +124,12 @@
 
             <div class="setting-instance">
                 <label for="instagram-id">App ID</label>
-                <input type="text" id="instagram-id" name="data.id" />
+                <input type="text" id="instagram-id" name="data.appid" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="instagram-id">App Secrete</label>
+                <input type="text" id="instagram-id" name="data.appsecret" />
             </div>
 
 
@@ -137,8 +156,8 @@
             </div>
 
             <div class="setting-instance">
-                <label for="whatsapp-id">App ID</label>
-                <input type="text" id="whatsapp-id" name="data.id" />
+                <label for="whatsapp-id">Whatsapp BBS</label>
+                <input type="text" id="whatsapp-id" name="data.bbs" />
             </div>
 
 
@@ -172,8 +191,8 @@
             var facebook = {
                 name: "@fbConfigs.Application.DisplayName",
                 id: @fbConfigs.Application.AppId,
+                appsecret: "@fbConfigs.Application.AppSecret",
                 enabled: @fbConfigs.Application.Enabled.ToString().ToLower(),
-                secret: "@fbConfigs.Application.AppSecret",
             }
 
             $("#facebookConfigs").jsForm({
@@ -202,7 +221,7 @@ else
 
 @if (telegramConfigs != null)
 {
-   
+
     <script>
         $("#details").ready(function () {
             var telegram = {
@@ -228,6 +247,113 @@ else
                 token:,
                 enabled: false,
 
+            }
+        });
+    </script>
+}
+
+
+@if (twitterConfigs != null)
+{
+
+    <script>
+        $("#details").ready(function () {
+            var twitter = {
+                name: "@twitterConfigs.Application.ScreenName",
+                consumerkey: "@twitterConfigs.Application.ConsumerKey",
+                consumersecret: "@twitterConfigs.Application.ConsumerSecret",
+                token: "@twitterConfigs.Application.Token",
+                tokensecret: "@twitterConfigs.Application.TokenSecret",
+                enabled: @twitterConfigs.Application.Enabled.ToString().ToLower(),
+            }
+
+            $("#twitterConfigs").jsForm({
+                data: twitter,
+            });
+        });
+
+    </script>
+}
+
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var twitter = {
+                name:,
+                consumerkey:,
+                consumersecret:,
+                token:,
+                tokensecret:,
+                enabled: false,
+
+            }
+        });
+    </script>
+}
+
+
+@if (instagramConfigs != null)
+{
+
+    <script>
+        $("#details").ready(function () {
+            var instagram = {
+                name: "@instagramConfigs.Application.DisplayName",
+                appid: "@instagramConfigs.Application.AppId",
+                appsecret: "@instagramConfigs.Application.AppSecret",
+                enabled: @instagramConfigs.Application.Enabled.ToString().ToLower(),
+            }
+
+            $("#instagramConfigs").jsForm({
+                data: instagram,
+            });
+        });
+
+    </script>
+}
+
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var instagram = {
+                name:,
+                appsecret:,
+                enabled: false,
+
+            }
+        });
+    </script>
+}
+
+@if (wpConfigs != null)
+{
+
+    <script>
+        $("#details").ready(function () {
+            var whatsapp = {
+                name: "@wpConfigs.Application.Nickname",
+                bbs: "@wpConfigs.Application.bbs",
+                enabled: @wpConfigs.Application.Enabled.ToString().ToLower(),
+            }
+
+            $("#whatsappConfigs").jsForm({
+                data: whatsapp,
+            });
+        });
+
+    </script>
+}
+
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var whatsapp = {
+                name:,
+                appsecret:,
+                enabled: false,
             }
         });
     </script>
