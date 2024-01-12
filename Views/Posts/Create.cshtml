@@ -171,7 +171,11 @@
     .custom-file-upload {
         width: 20%;
     }
-
+    @@media(max-width: 500px){
+        .custom-file-upload {
+            width: 100%;
+        }
+    }
 
     input {
         border-radius: 5px !important;
@@ -293,7 +297,7 @@
     }
 
 
-    input {
+    input , textarea {
         width: 510px !important;
         max-width: 100%;
         border-color: #212c37 !important;

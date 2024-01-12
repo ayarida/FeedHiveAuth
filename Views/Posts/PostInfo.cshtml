@@ -14,13 +14,13 @@
 
 <main class="editor">
     <div class="container pt-4 mt-4">
-        <div class="card px-4 py-5">
+        <div class="card px-4 py-5" style="background: #8080800f;">
 
             <div class="row">
                 <div class="create-post">
                     <div class="card-head my-2">
 
-                        <form asp-route="/Posts/UpdatePostData/@post?.Id" enctype="multipart/form-data" method="post" style="max-width: 100%" dir="rtl">
+                        <form asp-route="/Posts/UpdatePostData/@post?.Id" enctype="multipart/form-data" method="post" style="max-width: 100%" dir="">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group mb-4">
                                 <label asp-for="Title" class="control-label">عنوان</label>
@@ -47,12 +47,17 @@
                                 <input asp-for="PostDate" class="form-control" />
                                 <span asp-validation-for="PostDate" class="text-danger"></span>
                             </div>
-                            <label class="custom-file-upload mb-3">
-                                تحميل
-                                <input type="file" name="File" />
-                            </label>
+                            <div style="display: flex;align-items: center;column-gap: 20px;" class="my-5">
+                                <div class="mb-3" style="width: 78px;">صورة / فيديو</div>
+                                <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
+                                    تحميل
+                                    <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
+                                    <input type="file" name="File" id="imgInput" />
+                                </label>
+                                <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
+                            </div>
                             <div class="form-group mb-4">
-                                <input type="submit" value="تحديث" class="btn btn-primary" style="max-width: 100%;width: 100%;" />
+                                <input type="submit" value="تحديث" class="btn btn-primary update" style="max-width: 50%;width: 100%; border-radius: 28px;" />
                             </div>
 
                             @* <textarea class="content-area" name="example"></textarea> *@
@@ -69,12 +74,61 @@
 </main>
 
 
+<script>
+    imgInput.onchange = evt => {
+        const [file] = imgInput.files
+        if (file) {
+            imgPreview.src = URL.createObjectURL(file)
+        }
+    }
+</script>
+
 <style>
+
+    input.update {
+        display: block;
+        margin: auto;
+    }
+
     .card-head {
         justify-content: end;
     }
-    input{
+
+    input {
         text-align: start;
+    }
+
+</style>
+
+<style>
+    .card-head {
+        justify-content: start;
+    }
+
+    .control-label {
+        margin-bottom: 10px;
+    }
+
+    .custom-file-upload {
+        width: 20%;
+    }
+
+
+    input {
+        border-radius: 5px !important;
+    }
+
+    .star:after {
+        content: " *";
+        color: red;
+    }
+
+
+    input, textarea {
+        width: 510px !important;
+        max-width: 100%;
+        border-color: #212c37 !important;
+        text-align: right;
     }
 
 </style>
