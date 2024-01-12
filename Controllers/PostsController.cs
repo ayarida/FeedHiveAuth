@@ -14,11 +14,13 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
+        private readonly ILogger<PostsController> _logger;
 
         private readonly IUserService _userServiceContext;
-        public PostsController(IUserService _userService)
+        public PostsController(IUserService _userService, ILogger<PostsController> logger)
         {
             _userServiceContext = _userService;
+            _logger = logger;
         }
 
         [Authorize(Policy = "Admin", Roles = "Admin")]
@@ -51,13 +53,11 @@ namespace FeedHiveAuth.Controllers
             Post post = new Post();
             var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
-
             post.Title = HttpContext.Request.Form["Title"];
             post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
             post.Summary = HttpContext.Request.Form["Summary"];
             post.Content = HttpContext.Request.Form["Content"];
             post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
-
             post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"]);
             if (currentUser != null)
             {
@@ -158,8 +158,19 @@ namespace FeedHiveAuth.Controllers
         }
         public void SavePostMedias(Post post)
         {
+
             if (post.PostMediaItems.Any())
             {
+                foreach(var postMediaItem in post.PostMediaItems)
+                {
+                    try
+                    {
+                        //UploadMedia();
+                            }catch(Exception ex)
+                    {
+                        _logger.LogError("------------ Exception in saving media ", ex);
+                    }
+                }
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
@@ -252,10 +263,10 @@ namespace FeedHiveAuth.Controllers
 
 
         [HttpGet]
-        public ActionResult PostInfo(string Id)
+        public ActionResult Edit(string Id)
         {
             var post = _postService.GetPostById(Id);
-            return View("~/Views/Posts/PostInfo.cshtml", post);
+            return View("~/Views/Posts/Edit.cshtml", post);
         }
 
 

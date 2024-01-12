@@ -55,7 +55,7 @@
                             var shareIcon = "< i class='bi bi-penc0il-square'></i>";
                             <tr>
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td>@Html.ActionLink(post.Title, "PostInfo", "Posts", new { @post.Id })</td>
+                                <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>@post.PostDate</td>
                                 <td>
