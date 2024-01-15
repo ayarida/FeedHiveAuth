@@ -12,6 +12,7 @@ using System.Diagnostics;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
+    [Area("Social")]
     public class AuthorizationController : Controller
     {
         protected UserRepository _userService = Instances.Repositories.UserRepository;
@@ -27,14 +28,15 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             switch (type)
             {
                 case SocialNetworkTypeEnum.Facebook:
-                    var resultreturned = FacebookOAuthFlow(account, subscription, reauthorize);
+                    /*var resultreturned = FacebookOAuthFlow(account, subscription, reauthorize);
+                    var s = "sss";
                     return FacebookSignIn("type:'Page',subscriptionCode:'SocialPublisher',reauthorize:false", "SocialPublisher");
-
-                /*var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
-                var obj = jsonRes.TryCast<JObject>();
-                var objResult = obj.ValueFromJson("Value", new JObject());
-                var redirect = objResult.ValueFromJson<string>("redirect", null);
-                return Redirect(redirect);*/
+*/
+                    var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
+                    var obj = jsonRes.TryCast<JObject>();
+                    var objResult = obj.ValueFromJson("Value", new JObject());
+                    var redirect = objResult.ValueFromJson<string>("redirect", null);
+                    return Redirect(redirect);
                 //        /*case SocialNetworkTypeEnum.Instagram:
                 //            return InstagramOAuthFlow(account, subscription, reauthorize);
                 //        case SocialNetworkTypeEnum.Twitter:
@@ -70,7 +72,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             try
             {
 
-                var result = AuthorizationManager.StartOAuthFlow("https://localhost:7055/", type, reauthorize, subscription).Decode();
+                var result = AuthorizationManager.StartOAuthFlow("https://localhost:7157/", type, reauthorize, subscription).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
@@ -100,7 +102,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             try
             {
                 var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
-                var channels = FacebookService.GetChannelsInfo("https://localhost:7055", code,
+                var channels = FacebookService.GetChannelsInfo("https://localhost:7157/Social/", code,
                                 state, subscription, out string msg);
                 if (channels.Empty())
                 {
