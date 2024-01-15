@@ -4,43 +4,39 @@ using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
+;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//if (builder.Environment.IsDevelopment())
-//{
-//    builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-//    builder.Services.AddMvc().AddRazorRuntimeCompilation();
-//}
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-/*
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();*/
-
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISubscriptionContext, SubscriptionService>();
 
-
-/*builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("Editor", policy => policy.RequireRole("Editor"));
-    options.AddPolicy("Viewer", policy => policy.RequireRole("Viewer"));
-});*/
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHostedService<TasksBgService>();
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
 builder.Services.AddSession();
+Log.Logger = new LoggerConfiguration()
+       .WriteTo.File("Logs/mylog.txt", rollingInterval: RollingInterval.Day)
+       .CreateLogger();
+builder.Services.AddLogging(builder =>
+{
+    builder.AddSerilog();
+});
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
