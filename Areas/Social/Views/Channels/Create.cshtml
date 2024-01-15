@@ -3,12 +3,16 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    //Current User
-    //Current Subscription
+    var c = Model;//Current User
+                  //Current Subscription
     //Configs
     //
 }
-
+<form action="https://localhost:7157/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false" method="POST">
+    <div>
+        <button>Authorize an fb Channel</button>
+    </div>
+</form>
 <div id="root">
     <div class="main-app" id="nw-bg-video-wrapper">
         <main id="content">
@@ -32,7 +36,6 @@
                             </div>
                             <div class="page">
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/additionalInfo.cshtml", Model)
-
                             </div>
                             <div class="page">
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/finish.cshtml")
