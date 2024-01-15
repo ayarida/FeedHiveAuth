@@ -36,7 +36,8 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             {
                 parms.Add("access_token", AccessToken);
             }
-            return base.Get<T>(endpoint, parms);
+            var request = base.Get<T>(endpoint, parms);
+            return request;
         }
 
         public IRestResponse<T> Post<T>(string endpoint = null, Dictionary<string, object> parms = null, bool multipart = false) where T : class, new()
