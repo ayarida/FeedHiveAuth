@@ -1,0 +1,26 @@
+﻿@model FeedHiveAuth.Models.User
+@{
+    var availableRoles = 
+}
+<form asp-controller="Users" asp-action="AddUser" method="POST">
+    <!-- Add your form fields -->
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+
+    <div>
+        <label asp-for="PasswordHash"></label>
+        <input asp-for="PasswordHash" type="password" />
+        <span asp-validation-for="PasswordHash"></span>
+    </div>
+    this should be drop down to choose from roles!!!!
+    <div>
+        <label asp-for="RoleId"></label>
+        <input asp-for="RoleId" type="text" />
+     
+    </div>
+
+    <button type="submit">Create User</button>
+</form>

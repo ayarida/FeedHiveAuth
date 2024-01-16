@@ -6,11 +6,10 @@
 
 }
 
-
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-            قائمة المستخدم
+            قائمة المستخدمين
         </div>
         <table id="filter" class="table" dir="rtl">
             <thead>
@@ -20,8 +19,9 @@
                     <th>دور</th>
                 </tr>
             </thead>
-            <div class="action-buttons">
+            <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="width:150px">مستخدم جديد</a>
 
+            <div class="action-buttons">
                 <button type="button" class="delete-btn my-3 me-2" onClick="deleteSelectedUsers()" style="width: 100px; height: auto">حذف</button>
             </div>
 

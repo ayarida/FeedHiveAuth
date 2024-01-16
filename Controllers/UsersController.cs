@@ -1,23 +1,59 @@
 ﻿using FeedHiveAuth.Areas.Identity.Pages.Account;
 using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Repositories;
+using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Controllers
 {
     public class UsersController : Controller
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+
+        public UserRepository _userRepository;
         private readonly SignInManager<IdentityUser> signInManager;
 
         //get current subscription value
 
-        public UsersController(UserManager<IdentityUser> userManager)
+        public UsersController(UserManager<IdentityUser> userManager,RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> AddUser(User model)
+        {
+            var customUser = new IdentityUser
+            {
+                UserName = model.Username,
+                EmailConfirmed = true,                
+            }; 
+            var result = await userManager.CreateAsync(customUser,model.PasswordHash);
+
+            if(result.Succeeded)
+            {
+                var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : null;
+                await userManager.AddToRoleAsync(customUser, getRole?.Name);
+
+                return RedirectToAction("Index", "Home");
+
+            }
+            foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
         public IActionResult Login()
         {
             return View("~/Areas/Identity/Pages/Account/Login.cshtml");
