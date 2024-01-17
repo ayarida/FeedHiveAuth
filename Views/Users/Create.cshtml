@@ -1,6 +1,6 @@
 ﻿@model FeedHiveAuth.Models.User
 @{
-    var availableRoles = 
+    var availableRoles = ViewData["availableRoles"];
 }
 <form asp-controller="Users" asp-action="AddUser" method="POST">
     <!-- Add your form fields -->

@@ -26,7 +26,9 @@ namespace FeedHiveAuth.Controllers
 
         [HttpGet]
         public IActionResult Create()
-        {
+        {            
+            var availableRoles = roleManager.Roles.ToList();
+            ViewData["availableRoles"] = availableRoles;
             return View();
         }
 
