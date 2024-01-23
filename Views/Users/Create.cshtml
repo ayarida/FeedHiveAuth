@@ -1,26 +1,108 @@
-﻿@model FeedHiveAuth.Models.User
+﻿@model List<IdentityRole>
 @{
-    var availableRoles = ViewData["availableRoles"];
+    var availableRoles = Model;
+    var roles = availableRoles;
 }
-<form asp-controller="Users" asp-action="AddUser" method="POST">
-    <!-- Add your form fields -->
-    <div>
-        <label asp-for="Username"></label>
-        <input asp-for="Username" />
-        <span asp-validation-for="Username"></span>
-    </div>
 
-    <div>
-        <label asp-for="PasswordHash"></label>
-        <input asp-for="PasswordHash" type="password" />
-        <span asp-validation-for="PasswordHash"></span>
-    </div>
-    this should be drop down to choose from roles!!!!
-    <div>
-        <label asp-for="RoleId"></label>
-        <input asp-for="RoleId" type="text" />
-     
-    </div>
 
-    <button type="submit">Create User</button>
-</form>
+<div class="card p-4 ms-auto" style="background: #8080800f; width: fit-content">
+    <div class="row justify-content-end">
+        <form asp-controller="Users" asp-action="AddUser" method="POST" dir="rtl">
+            <!-- Add your form fields -->
+            <div class="form-group mb-4">
+                <label for="Username">إسم المستخدم</label>
+                <input class="form-control" name="Username" id="Username"/>
+                @* <span asp-validation-for="Username"></span> *@
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="password">كلمة المرور</label>
+                <input type="password" class="form-control" name="PasswordHash" id="PasswordHash" />
+                @* <span asp-validation-for="PasswordHash"></span> *@
+            </div>
+
+            <label for="rolesid">إختر دور :</label>
+            <div class="custom-select">
+                <select name="RoleId" id="rolesid">
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role.Id">@role</option>
+                    }
+                    <div class="d-flex justify-content-center">
+                        <button type="submit">Create User</button>
+                    </div>
+
+                </select>
+            </div>
+
+            <input type="submit" value="Submit" class="btn btn-primary mt-4" style="max-width: 200px;" />
+
+            
+        </form>
+    </div>
+</div>
+
+<style>
+    label {
+        margin-bottom: 10px;
+    }
+
+    input:not([type=submit]) {
+        background: white !important;
+        width: 510px !important;
+        max-width: 100%;
+        border-color: #212c37 !important;
+        text-align: right;
+    }
+
+    form button {
+        width: 200px;
+        background: var(--bs-blue);
+        color: white;
+    }
+    /* sadsa */
+    .custom-select {
+        width: fit-content;
+        position: relative;
+    }
+
+    select {
+        appearance: none;
+        /*  safari  */
+        -webkit-appearance: none;
+        /*  other styles for aesthetics */
+        width: 100%;
+        font-size: 1.15rem;
+        padding: 0.675em 2em 0.675em 0.5em;
+        background-color: #fff;
+        border: 1px solid #caced1;
+        border-radius: 0.25rem;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .custom-select::before,
+    .custom-select::after {
+        --size: 0.3rem;
+        content: "";
+        position: absolute;
+        right: 1rem;
+        pointer-events: none;
+    }
+
+    .custom-select::before {
+        border-left: var(--size) solid transparent;
+        border-right: var(--size) solid transparent;
+        border-bottom: var(--size) solid black;
+        top: 40%;
+    }
+
+    .custom-select::after {
+        border-left: var(--size) solid transparent;
+        border-right: var(--size) solid transparent;
+        border-top: var(--size) solid black;
+        top: 55%;
+    }
+
+</style>
+

@@ -18,7 +18,7 @@ namespace FeedHiveAuth.Controllers
 
         //get current subscription value
 
-        public UsersController(UserManager<IdentityUser> userManager,RoleManager<IdentityRole> roleManager)
+        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -26,10 +26,10 @@ namespace FeedHiveAuth.Controllers
 
         [HttpGet]
         public IActionResult Create()
-        {            
+        {
             var availableRoles = roleManager.Roles.ToList();
-            ViewData["availableRoles"] = availableRoles;
-            return View();
+            //ViewData["availableRoles"] = availableRoles;
+            return View(availableRoles);
         }
 
         [HttpPost]
@@ -38,19 +38,22 @@ namespace FeedHiveAuth.Controllers
             var customUser = new IdentityUser
             {
                 UserName = model.Username,
-                EmailConfirmed = true,                
-            }; 
-            var result = await userManager.CreateAsync(customUser,model.PasswordHash);
+                EmailConfirmed = true,
+                PasswordHash = model.PasswordHash,
 
-            if(result.Succeeded)
+
+            };
+            var result = await userManager.CreateAsync(customUser, model.PasswordHash);
+
+            if (result.Succeeded)
             {
                 var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : null;
                 await userManager.AddToRoleAsync(customUser, getRole?.Name);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("List", "Users");
 
             }
-            foreach(var error in result.Errors)
+            foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }

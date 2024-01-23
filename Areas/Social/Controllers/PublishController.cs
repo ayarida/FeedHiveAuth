@@ -34,21 +34,19 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public async Task<IActionResult> Share(string? postid = null)
         {
             //get current subscription
-            var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+            var subscriptionId = "680d5712-636d-4dde-86b4-ed88b88fc328";
             var media = _mediaItemService.GetMediaByPostId(postid);
             PublishErrorEnum error;
             //Aya's local DB ids for API testing reasons
-         
-            var post = _postService.Get(postid);
-            var postMedia = _postService.GetPostMedia(postid, media.Id, out error);
 
+            var post = _postService.Get(postid);
             var subSocialConfigs = SocialServiceHelper.GetConfigs(subscriptionId);
             var channels = GetChannels(subscriptionId, out error);
             var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
             var model = new ShareView
             {
                 Post = post,
-                Media = postMedia,
+                Media = media != null ? _postService.GetPostMedia(postid, media.Id, out error) : null,
                 Channels = channels,
                 ActiveSocialNetworks = activeNetworkTypes
             };

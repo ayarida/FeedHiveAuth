@@ -9,7 +9,7 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-            قائمة المستخدمين
+            <h3>قائمة المستخدمين</h3>
         </div>
         <table id="filter" class="table" dir="rtl">
             <thead>
@@ -19,10 +19,14 @@
                     <th>دور</th>
                 </tr>
             </thead>
-            <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="width:150px">مستخدم جديد</a>
+            <div class="d-flex align-items-center px-3 justify-content-between">
+                <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content">+ مستخدم جديد</a>
 
-            <div class="action-buttons">
-                <button type="button" class="delete-btn my-3 me-2" onClick="deleteSelectedUsers()" style="width: 100px; height: auto">حذف</button>
+                <div class="action-buttons">
+                    <button type="button" class="delete-btn my-3" onClick="deleteSelectedUsers()" style="width: fit-content;height: fit-content;padding: 7px 20px !important;">
+                        حذف
+                    </button>
+                </div>
             </div>
 
             <tbody>
@@ -65,5 +69,10 @@
         border: none;
         border-radius: 5px;
         margin-bottom: 0px;
+    }
+
+    tr{
+        border-bottom-width: var(--bs-border-width);
+        box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state,var(--bs-table-bg-type,var(--bs-table-accent-bg)));
     }
 </style>

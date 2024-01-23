@@ -25,18 +25,18 @@
 @{
     var x = SignInManager.UserManager;
 }
-<ul class="navbar-nav d-flex flex-row nav-left greeting w-100">
+<ul class="navbar-nav d-flex flex-row nav-left greeting w-100 p-0">
     @if (SignInManager.IsSignedIn(User))
     {
 
-        <a class="nav-link text-dark " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a>
+        <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a>
 
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link text-dark log-out">تسجيل خروج</button>
+        <form class="form-inline me-auto order-3" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="nav-link btn btn-link text-dark log-out" style="height: auto">تسجيل خروج</button>
         </form>
 
 
-        <a href="/Home/Index" class="me-auto">
+        <a href="/Home/Index" class="">
             <img src="~/uploads/logo.png" style="
              width: 86px;
              max-width: 100%; border-radius: 5px;" />
@@ -61,8 +61,10 @@
     }
     else
     {
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <div class="register"><a class="nav-link text-dark register" asp-area="Identity" asp-page="/Account/Register">Register</a></div>
+        <div class="login">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </div>
     }
 </ul>
 
@@ -91,4 +93,36 @@
             display: none !important;
         }
     }
+
+    .register {
+        margin: 1em;
+        padding: 7px 20px;
+        border: 0;
+        border-radius: 25px;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 13px;
+        background: black;
+    }
+
+    .login {
+        padding: 7px 20px;
+        border: 0;
+        border-radius: 25px;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 17px;
+        margin: 0;
+    }
+
+        .navbar-nav .nav-link.register {
+            color: white !important;
+        }
+
 </style>
