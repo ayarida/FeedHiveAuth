@@ -24,7 +24,8 @@
 
             @using (Html.BeginForm("Send", "Publish", new { area = "Social" }, FormMethod.Post))
             {
-                <div>Channel List</div>
+                <h4>شبكات التواصل</h4>
+                <hr />
 
                 <div class="channel-list my-3 d-flex" style="column-gap: 20px; overflow-x: auto">
 
@@ -35,10 +36,15 @@
                     {
 
                         <div class="channel d-flex flex-column align-items-center pb-4" style="width: fit-content">
+                            <div class="d-flex flex-row-reverse">
+                                <p class="text-capitalize mb-1">@channel.Network</p>
+                                <i class="bi bi-@channel.Network social-icon ms-2"></i>
+                            </div>
                             <img src="~/uploads/test.jpg" style="max-width: 90px; max-height= 90px:" />
                             <label for="@channel.Network">
-                                @channel.Network
+                                @channel.OriginalName
                             </label>
+
                             <input type="checkbox" id="Channels[@index]" name="Channels[@index]" value="@channel.Network" style="width: fit-content !important; height: auto" />
                         </div>
 
@@ -52,39 +58,39 @@
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">عنوان المنشور</label>
                         <br />
-                        <input class="form-control" value="@post.Title" readonly />
+                        <input class="form-control" value="@post.Title" name="@post.Title" readonly />
                     </div>
 
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">عنوان قصير</label>
                         <br />
-                        <input value="@post.ShortTitle" readonly />
+                        <input value="@post.ShortTitle" name="@post.ShortTitle" readonly />
                     </div>
 
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">ملخص</label>
                         <br />
-                        <input value="@post.Summary" readonly />
+                        <input value="@post.Summary" name="@post.Summary" readonly />
                     </div>
 
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">محتوى</label>
                         <br />
-                        <input value="@post.Content" readonly />
+                        <input value="@post.Content" name="@post.Content" readonly />
                     </div>
 
 
                     <div class="form-group mb-4">
                         @if (media != null)
                         {
-                            <lable for="MediaId">Media </lable>
+                            <label for="MediaId" class="mb-2 control-label">ميديا </label>
                             <br />
                             <img name="MediaId" class="mt-3" id="MediaId" src="@media.Path" />
                         }
                     </div>
                 </div>
 
-                <input type="submit" value="Submit" class="btn btn-primary mt-3" style="max-width: 200px;" />
+                <input type="submit" value="أرسل" class="btn btn-primary mt-3" style="max-width: 200px;" />
             }
 
         </div>
@@ -105,11 +111,18 @@
         text-align: right;
     }
 
+    form input {
+        padding-right: 10px !important;
+    }
+
     form img {
         width: 400px;
         max-width: 100%;
     }
 
+    .social-icon::before {
+        font-size: 20px;
+    }
 
     .channel-list {
         -webkit-overflow-scrolling: touch;
