@@ -15,6 +15,8 @@ namespace FeedHiveAuth.Areas.Social.Models
         public WhatsappConfigs WhatsappConfigs { get; set; }
         public TwitterConfigs TwitterConfigs { get; set; }
 
+        public DailymotionConfigs DailymotionConfigs { get; set; }
+
         public static SocialConfigs Construct(string subscriptionId=null)
         {
             return new SocialConfigs
@@ -47,6 +49,20 @@ namespace FeedHiveAuth.Areas.Social.Models
                     Application = new TwitterApp()
                 },
                 InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },
+                DailymotionConfigs = new DailymotionConfigs
+                {
+                    Application = new DailymotionApp
+                    {
+                        APIKey = "b886992e2d793e4d9ebe", 
+                        APISecret = "ec51475bcbb2235b9bfb465677699793817db1d2",
+                        ChannelName = "dmoctipulsetesting",
+                        Username = "rouba.87@hotmail.com",
+                        Password = "0Ctip@lse",
+                        CallBackUrl = "https://www.dailymotion.com/lb", 
+                        LocalPath = "C:\\media\\", 
+                        Enable = true
+                    }
+                }
             };
         }
     }
@@ -113,5 +129,23 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string ExcludedTags { get; set; }
         public int TopicsNumber { get; set; }
         public string WoeidFile { get; set; }
+    }
+
+    public class DailymotionConfigs
+    {
+        public DailymotionApp Application { get; set; }
+    }
+
+    public class DailymotionApp
+    {
+        public string ChannelName { get; set; }
+        public string APIKey { get; set; }
+        public string APISecret { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string CallBackUrl { get; set; }
+        public string LocalPath { get; set; }
+        public bool Enable { get; set; }
+        public bool Enabled => Enable;
     }
 }
