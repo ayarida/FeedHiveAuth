@@ -1,7 +1,6 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
     var x = Model;
     var subId = HttpContext.Session.GetString("subscriptionId");
     Layout = null;
@@ -9,94 +8,82 @@
 
 <h1>@ViewData["Title"]</h1>
 
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" dir="rtl">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class ="sign-up-card">
-                <div class="sign-up-header">
-            <h2 class="sign-up-title">ابدأ دون أي تكلفة</h2>
-                    <div class="sign-up-title2">SIGN UP WITH</div>
-                    <button class="sign-up-google">
-                        Google
-                        <i class="bi bi-google"></i>
-                    </button>
-                </div>
-                <div class="sign-up-name">
-            <p>اسم المستخدم</p>
-            <input asp-for="Input.Username"  class="" autocomplete="username" aria-required="true" type="text" id="field"  />
-            <span asp-validation-for="Input.Username"  class="text-danger"></span>
-                </div>
-            <div class="sign-up-email">
-            <p>بريد إلكتروني</p>
-                <input asp-for="Input.Email" class="" autocomplete="username" aria-required="true" type="text" id="field"  />
-@*                 <label asp-for="Input.Email"></label>
- *@                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
+<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" dir="rtl">
+    <h2 style="text-align : right">أنشئ حسابًا جديدًا</h2>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="sign-up-card">
+        <div class="sign-up-header">
+            @* <h2 class="sign-up-title">ابدأ دون أي تكلفة</h2> *@
+            <h3 class="sign-up-title2">أنشئ حسابًا جديدًا</h3>
+            <button class="sign-up-google">
+                Google
+                <i class="bi bi-google"></i>
+            </button>
+        </div>
+        <div class="sign-up-name">
+            <input asp-for="Input.Username" class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="اسم المستخدم" />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+        <div class="sign-up-email">
+            <input asp-for="Input.Email" class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="بريد إلكتروني" />
+            @*                 <label asp-for="Input.Email"></label>
+            *@                <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
 
-            <div class="password">
-            <p>كلمة المرور</p>
+        <div class="password">
+            <input asp-for="Input.Password" class="" autocomplete="new-password" aria-required="true" placeholder="كلمة المرور" />
+            @*                 <label asp-for="Input.Password"></label>
+            *@                <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <div class="confirm-password">
 
-            <input asp-for="Input.Password" class="" autocomplete="new-password" aria-required="true" />
-@*                 <label asp-for="Input.Password"></label>
- *@                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="confirm-password">
-            <p>تأكيد كلمة المرور</p>
+            <input id="field-2" asp-for="Input.ConfirmPassword" class="" autocomplete="new-password" aria-required="true" type="password" placeholder="تأكيد كلمة المرور" />
+            @*                 <label asp-for="Input.ConfirmPassword"></label>
+            *@                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
 
-                <input id="field-2" asp-for="Input.ConfirmPassword" class="" autocomplete="new-password" aria-required="true" type="password" />
-@*                 <label asp-for="Input.ConfirmPassword"></label>
- *@                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div>
-@*             <input type="hidden" id="userSubId" asp-for="Input.SubscriptionId" value="@subId.ToString()" />
- *@
-            </div>
-
-        <div class="sign-up-control">
-                <button id="registerSubmit" type="submit" class="control">
-                    <span><i class="bi bi-arrow-right-short"></i></span>
-                    Sign up
-                </button>
-                <h4>
-                    By signing up, you agree to our
-                    <a href="">Terms of Service </a>
-                    and acknowledge our
-                    <a href="">Privacy Policy</a>
-                </h4>
-            </div>
-            </div>
-        </form>
-
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-        @* <h3>Use another service to register.</h3>*@
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    // <div>
-                    //     <p>
-                    //         There are no external authentication services configured. See this <a href="https:go.microsoft.com/fwlink/?LinkID=532715">article
-                    //         about setting up this ASP.NET application to support logging in via external services</a>.
-                    //     </p>
-                    // </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="تسجيل الدخول مع @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+        <div class="sign-up-control d-flex flex-column align-items-center">
+            <button id="registerSubmit" type="submit" class="control">
+                أنشئ حسابًا جديدًا
+                <span><i class="bi bi-arrow-left-short"></i></span>
+            </button>
+            <h4 class="privacy-policy">
+                من خلال التسجيل، فإنك توافق على شروطنا وخدماتنا وتقر بسياسة الخصوصية الخاصة بنا
+            </h4>
+        </div>
     </div>
+</form>
+
+<div class="col-md-6 col-md-offset-2">
+    <section>
+        @* <h3>Use another service to register.</h3>*@
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                // <div>
+                //     <p>
+                //         There are no external authentication services configured. See this <a href="https:go.microsoft.com/fwlink/?LinkID=532715">article
+                //         about setting up this ASP.NET application to support logging in via external services</a>.
+                //     </p>
+                // </div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div>
+                        <p>
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="تسجيل الدخول مع @provider.DisplayName account">@provider.DisplayName</button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        }
+    </section>
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
@@ -108,9 +95,24 @@
         margin-top: 20px;
     }
 
-    form{
+    form {
         text-align: end;
     }
+
+        form input {
+            width: 400px;
+            height: 60px;
+            border-radius: 0px;
+            background: white;
+            font-size: 1.1rem;
+            border-style: none;
+            box-shadow: none;
+            text-align: left;
+            padding-left: 20px;
+            border-bottom: 1px solid;
+            text-align: right;
+            padding-right: 10px;
+        }
 
     .sign-up-card > div:not(.sign-up-control) {
         display: flex;
@@ -119,6 +121,47 @@
         margin: auto;
     }
 
+    form input::placeholder {
+        font-weight: bold;
+        opacity: 0.7;
+        text-align: right;
+    }
+
+        form input:focus{
+            border: none !important;
+            border-bottom: 1px solid !important;
+        }
+
+    textarea:focus, form input:focus {
+        outline: none !important;
+    }
+
+    .sign-up-google {
+        box-shadow: 0px 0px 2px 2px #00000029;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: 5px;
+    }
+
+    .bi-google {
+        background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .privacy-policy {
+        text-align: right;
+        margin: auto;
+        margin: auto;
+        width: 400px;
+    }
+
+    .privacy-policy {
+        line-height: 1.5;
+    }
 </style>
 
 

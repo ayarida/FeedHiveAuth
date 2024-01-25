@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+
     Layout = null;
 }
 
@@ -10,42 +10,42 @@
 <div class="row gy-5 justify-content-center">
     <div class="col-md-6 login-section p-5">
         <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+            <form id="account" method="post" dir="rtl">
+                <h2>تسجيل الدخول</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <label for="username">Username</label>
                 <div class="form-floating">
-                    <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" />
-                    <label asp-for="Input.Username" class="form-label"></label>
+                    <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" placeholder="اسم المستخدم" />
+                    @* <label asp-for="Input.Username" class="form-label"></label> *@
                     <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
-                <label for="password" class="mt-4">Password</label>
+
                 <div class="form-floating">
-                    <input asp-for="Input.Password" id="password" class="form-control" autocomplete="current-password" aria-required="true" />
-                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" id="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="كلمة المرور" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="mt-3">
                     <div class="checkbox" style="display: flex;justify-content: flex-start;" dir="auto">
                         <label asp-for="Input.RememberMe" class="form-label">
-                            <input class="form-check-input" asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            حفظ المعلومات
                         </label>
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+
+
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">تسجيل الدخول</button>
                 </div>
                 <div class="mt-4 account-options">
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword" dir="auto">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword">نسيت كلمة السر ؟</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto">Register as a new user</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto">تسجيل مستخدم جديد</a>
                     </p>
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto">Resend email confirmation</a>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto">إعادة إرسال تأكيد البريد الإلكتروني</a>
                     </p>
                 </div>
             </form>
@@ -90,30 +90,31 @@
     main {
         direction: ltr;
         text-align: left;
-      
-      p{
-          direction: ltr;
-      }
+    }
+
+    p {
+        direction: ltr;
+    }
 
     a {
         text-decoration: none;
         color: inherit;
     }
 
-    }
+
 
     .login-section {
-        border: 8px solid #707efd;
-        border-radius: 20px;
+        box-shadow: 0px 3px 7px 2px #00000029;
     }
 
     #account {
         row-gap: 5px;
         display: flex;
         flex-direction: column;
+        width: fit-content;
     }
 
-    .account-options p{
+    .account-options p {
         text-align: end;
     }
 
@@ -122,6 +123,48 @@
         text-decoration: none;
     }
 
+    form input:not(#Input_RememberMe) {
+        width: 400px;
+        height: 60px;
+        background: white !important;
+        font-size: 1.1rem;
+        border-style: none;
+        box-shadow: none;
+        text-align: right;
+        padding-left: 20px;
+        border: none !important;
+        border-bottom: 1px solid !important;
+        text-align: right;
+        padding-right: 10px;
+        border-radius: 0 !important;
+        margin-top: 30px;
+    }
+
+    textarea:focus, form input:focus {
+        outline: none !important;
+    }
+
+    form input::placeholder {
+        opacity: 0.5 !important;
+        color: black !important
+    }
+
+    form * {
+        text-align: right;
+    }
+
+    .account-options p {
+        text-align: right !important;
+    }
+
+    .login-section {
+        background: white;
+        width: fit-content !important;
+    }
+
+    .checkbox{
+        column-gap: 10px;
+    }
 </style>
 
 
