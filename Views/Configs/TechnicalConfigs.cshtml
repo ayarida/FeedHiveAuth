@@ -9,6 +9,7 @@
     var instagramConfigs = configs.InstagramConfigs;
     var wpConfigs = configs.WhatsappConfigs;
     var dailymotionConfigs = configs.DailymotionConfigs;
+
 }
 
 
@@ -175,6 +176,64 @@
         </div>
     </div>
 
+
+    @* DailyConfigs *@
+
+    <div id="dailyMotionConfigs" class="mt-5">
+        <h6 class="config-title mb-5">dailymotion Configs</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="dailymotion-name">Channel Name</label>
+                <input type="text" id="dailymotion-name" name="data.name" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="dailymotion-username">UserName</label>
+                <input type="text" id="dailymotion-username" name="data.username" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="dailymotion-apisecrete">API Secrete</label>
+                <input type="text" id="dailymotion-apisecrete" name="data.apisecrete" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="dailymotion-apikey">API Key</label>
+                <input type="text" id="dailymotion-apikey" name="data.apikey" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="dailymotion-callbackurl">Callback Url</label>
+                <input type="text" id="dailymotion-callbackurl" name="data.callbackurl" />
+            </div>
+
+
+            <div class="setting-instance">
+                <label for="dailymotion-localpath">Local Path</label>
+                <input type="text" id="dailymotion-localpath" name="data.localpath" />
+            </div>
+
+            <div class="setting-instance">
+                <label for="dailymotion-password">Password</label>
+                <input type="text" id="dailymotion-password" name="data.password" />
+            </div>
+
+
+
+            <div class="setting-instance enable-setting">
+                <label for="dailymotion-status">Enabled</label>
+                <label class="switch">
+                    <input type="checkbox" id="dailymotion-status" name="data.enabled">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
     <button id="saveData" class="mt-5">Save Changes</button>
 
 </div>
@@ -225,6 +284,7 @@ else
             var telegram = {
                 name: "@telegramConfigs.Bot.Username",
                 token: "@telegramConfigs.Bot.Token",
+                @* toStringTolower is required since javascript differenciate bewtween True and true *@
                 enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
             }
 
@@ -347,8 +407,8 @@ else
 else
 {
     <script>
-        $("#details").ready(function () {
-            var whatsapp = {
+        $("#dailyMotionConfigs").ready(function () {
+            var dail = {
                 name:,
                 appsecret:,
                 enabled: false,
@@ -356,6 +416,52 @@ else
         });
     </script>
 }
+
+
+
+@if (dailymotionConfigs != null)
+{
+
+
+    <script>
+        $("#details").ready(function () {
+            var dailyMotionConfigs = {
+                name: "@dailymotionConfigs.Application.ChannelName",
+                username: "@dailymotionConfigs.Application.Username",
+                apisecrete: "@dailymotionConfigs.Application.APISecret",
+                callbackurl: "@dailymotionConfigs.Application.CallBackUrl",
+                enabled: "@dailymotionConfigs.Application.Enabled.ToString().ToLower()",
+                localpath: "@dailymotionConfigs.Application.LocalPath",
+                password: "@dailymotionConfigs.Application.Password",
+
+            }
+
+            $("#dailyMotionConfigs").jsForm({
+                data: dailyMotionConfigs,
+            });
+        });
+
+    </script>
+}
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var dailymotion = {
+                name: ,
+                username: ,
+                apisecrete:,
+                callbackurl: ,
+                enabled: false ,
+                localpath:,
+                password:,
+
+            }
+        });
+    </script>
+}
+
+
 
 <script>
 

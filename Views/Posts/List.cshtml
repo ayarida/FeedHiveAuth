@@ -6,7 +6,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model;
     var _mediaService = Instances.Repositories.MediaItemRepository;
-
 }
 
 
@@ -34,6 +33,7 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> اختر الكل</lablel></th>
+                        <th>ميديا</th>
                         <th>عنوان</th>
                         <th>عنوان قصير</th>
                         <th>التاريخ</th>
@@ -54,7 +54,9 @@
                             //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
                             var shareIcon = "< i class='bi bi-penc0il-square'></i>";
                             <tr>
+                                
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
+                                <td><img src="@post.PostMediaItems?.FirstOrDefault().Path" /></td>
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>@post.PostDate</td>

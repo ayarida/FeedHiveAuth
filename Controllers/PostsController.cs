@@ -1,7 +1,6 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
-using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -64,7 +63,6 @@ namespace FeedHiveAuth.Controllers
                 post.ModifiedBy = currentUser.Id;
                 post.CreatedBy = currentUser.Id;
             }
-            _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
@@ -74,6 +72,8 @@ namespace FeedHiveAuth.Controllers
                 SavePostMedias(post);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
+            _postService.Save(post);
+
             return View("~/Views/Posts/Create.cshtml");
         }
 
@@ -90,10 +90,10 @@ namespace FeedHiveAuth.Controllers
 
         public string UploadMedia(IFormFile file)
         {
-            if (file!=null)
+            if (file != null)
             {
                 //var wwwPath = this.Environment.WebRootPath;
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","uploads", file.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
@@ -161,12 +161,13 @@ namespace FeedHiveAuth.Controllers
 
             if (post.PostMediaItems.Any())
             {
-                foreach(var postMediaItem in post.PostMediaItems)
+                foreach (var postMediaItem in post.PostMediaItems)
                 {
                     try
                     {
                         //UploadMedia();
-                            }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         _logger.LogError("------------ Exception in saving media ", ex);
                     }

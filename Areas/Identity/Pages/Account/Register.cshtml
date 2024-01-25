@@ -9,13 +9,13 @@
 
 <h1>@ViewData["Title"]</h1>
 
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" dir="rtl">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class ="sign-up-card">
                 <div class="sign-up-header">
-                    <h2 class="sign-up-title">Get started for free</h2>
+            <h2 class="sign-up-title">ابدأ دون أي تكلفة</h2>
                     <div class="sign-up-title2">SIGN UP WITH</div>
                     <button class="sign-up-google">
                         Google
@@ -23,28 +23,28 @@
                     </button>
                 </div>
                 <div class="sign-up-name">
-                    <p>Username</p>
-            <input asp-for="Input.Username"  class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="Username" />
+            <p>اسم المستخدم</p>
+            <input asp-for="Input.Username"  class="" autocomplete="username" aria-required="true" type="text" id="field"  />
             <span asp-validation-for="Input.Username"  class="text-danger"></span>
                 </div>
             <div class="sign-up-email">
-                <p>Email</p>
-                <input asp-for="Input.Email" class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="Email" />
+            <p>بريد إلكتروني</p>
+                <input asp-for="Input.Email" class="" autocomplete="username" aria-required="true" type="text" id="field"  />
 @*                 <label asp-for="Input.Email"></label>
  *@                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
             <div class="password">
-            <p>Password</p>
+            <p>كلمة المرور</p>
 
-            <input asp-for="Input.Password" class="" autocomplete="new-password" aria-required="true" placeholder="Password" />
+            <input asp-for="Input.Password" class="" autocomplete="new-password" aria-required="true" />
 @*                 <label asp-for="Input.Password"></label>
  *@                <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="confirm-password">
-            <p>Confirm Password</p>
+            <p>تأكيد كلمة المرور</p>
 
-                <input id="field-2" asp-for="Input.ConfirmPassword" class="" autocomplete="new-password" aria-required="true" type="password" placeholder="Confirm Password" />
+                <input id="field-2" asp-for="Input.ConfirmPassword" class="" autocomplete="new-password" aria-required="true" type="password" />
 @*                 <label asp-for="Input.ConfirmPassword"></label>
  *@                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
@@ -88,7 +88,7 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="تسجيل الدخول مع @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>
@@ -107,6 +107,18 @@
         font-size: 20px;
         margin-top: 20px;
     }
+
+    form{
+        text-align: end;
+    }
+
+    .sign-up-card > div:not(.sign-up-control) {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin: auto;
+    }
+
 </style>
 
 

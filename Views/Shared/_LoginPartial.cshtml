@@ -32,7 +32,7 @@
         <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a>
 
         <form class="form-inline me-auto order-3" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link text-dark log-out" style="height: auto">تسجيل خروج</button>
+            <button type="submit" class="nav-link btn btn-link log-out" style="height: auto">تسجيل خروج</button>
         </form>
 
 
@@ -70,9 +70,9 @@
 
 <style>
     .log-out {
-        background-color: #ba0517;
+        background-color: #ba0517 !important;
         color: white !important;
-        width: fit-content;
+        width: fit-content !important;
     }
 
         .log-out:hover {

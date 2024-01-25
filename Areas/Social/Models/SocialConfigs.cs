@@ -17,7 +17,7 @@ namespace FeedHiveAuth.Areas.Social.Models
 
         public DailymotionConfigs DailymotionConfigs { get; set; }
 
-        public static SocialConfigs Construct(string subscriptionId=null)
+        public static SocialConfigs Construct(string subscriptionId = null)
         {
             return new SocialConfigs
             {
@@ -53,13 +53,13 @@ namespace FeedHiveAuth.Areas.Social.Models
                 {
                     Application = new DailymotionApp
                     {
-                        APIKey = "b886992e2d793e4d9ebe", 
+                        APIKey = "b886992e2d793e4d9ebe",
                         APISecret = "ec51475bcbb2235b9bfb465677699793817db1d2",
                         ChannelName = "dmoctipulsetesting",
                         Username = "rouba.87@hotmail.com",
                         Password = "0Ctip@lse",
-                        CallBackUrl = "https://www.dailymotion.com/lb", 
-                        LocalPath = "C:\\media\\", 
+                        CallBackUrl = "https://www.dailymotion.com/lb",
+                        LocalPath = "C:/media/",
                         Enable = true
                     }
                 }
