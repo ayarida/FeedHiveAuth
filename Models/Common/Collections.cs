@@ -31,10 +31,11 @@ namespace FeedHiveAuth.Models.Common
 */
             return _channels;
         }
-       /* public static void RefreshChannels()
+        public static List<Channel> Channels()
         {
-            _channels = (List<Channel>)Instances.Repositories.ChannelRepository.GlobalGetAll();
-        }*/
+            var _channels = _subscriptionService.GetAllChannels();            
+            return _channels;
+        }
 
     }
 }

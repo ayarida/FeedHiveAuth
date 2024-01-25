@@ -51,6 +51,14 @@ namespace FeedHiveAuth.Data.Repositories
         {
             
         }
+        public List<Channel> GetAllChannels()
+        {
+            using (connection)
+            {
+                var channels = connection.Query<Channel>("SELECT * FROM Channel").ToList();
+                return channels;
+            }
+        }
 
     }
 }
