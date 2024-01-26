@@ -13,8 +13,9 @@
         public string ChannelId { get; set; }
         public string Text { get; set; }
         public string Link { get; set; }
-        public IEnumerable<Guid> MediaItemIds { get; set; }
+        public IEnumerable<string> MediaItemIds { get; set; }
         public DateTime? ScheduleTime { get; set; }
+        public string Title { get; set; }
 
         //for whatsapp only
         public bool SendToContacts { get; set; }
