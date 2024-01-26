@@ -136,6 +136,52 @@ function publishSelected() {
     console.log(publishArr);
 }
 
+
+function deleteMedia(event) {
+
+    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
+    var mediaId = event;
+
+    $.ajax({
+        type: "DELETE",
+        url: serviceURL,
+        data: mediaId,
+        success: function (data) {
+            /*alert("success");*/
+            window.location.reload()
+        },
+        error: function (data) {
+            alert("error");
+        },
+    })
+
+}
+
+
+
+function submitShareForm() {
+
+    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
+    var shareForm = $('form').serializeArray();
+    var imgSrc = $('.shareImage').attr('src');
+    shareForm.push(({ name: 'src', value: imgSrc }));
+
+    $.ajax({
+        type: "POST",
+        url: serviceURL,
+        data: mediaId,
+        success: function (data) {
+            window.location.reload()
+        },
+        error: function (data) {
+            alert("error");
+        },
+    })
+
+}
+
+
+
 try {
     var calendarInstance = new calendarJs("myCalendar", {
         exportEventsEnabled: true,
