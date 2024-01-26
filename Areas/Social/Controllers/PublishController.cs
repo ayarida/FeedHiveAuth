@@ -34,7 +34,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public async Task<IActionResult> Share(string? postid = null)
         {
             //get current subscription
-            var subscriptionId = "680d5712-636d-4dde-86b4-ed88b88fc328";
+            var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
             var media = _mediaItemService.GetMediaByPostId(postid);
             PublishErrorEnum error;
             //Aya's local DB ids for API testing reasons
@@ -65,18 +65,22 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             if (socialConfigs.TelegramConfigs?.Bot?.Enabled ?? false)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.Telegram);
 
+            if (socialConfigs.DailymotionConfigs.Application?.Enabled ?? false)
+                activeNetworkTypes.Add(SocialNetworkTypeEnum.DailyMotion);
+
             return activeNetworkTypes;
         }
 
         [HttpPost]
         public async void Send(ShareForm form)
-
         {
             try
             {
+                
                 var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
+                    form.Channels = new List<string> { "97918de3-bb62-11ee-9421-d027889076a7" };
                     Console.WriteLine("NoChannelsSelected");
                     //create an Error Page to redirect 
                     //return View();

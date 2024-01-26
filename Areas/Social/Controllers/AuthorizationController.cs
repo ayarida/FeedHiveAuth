@@ -9,6 +9,9 @@ using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Models.Common;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using Microsoft.AspNetCore.HttpOverrides;
+using FeedHiveAuth.Areas.Social.Models;
+using Newtonsoft.Json;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -37,25 +40,25 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     var objResult = obj.ValueFromJson("Value", new JObject());
                     var redirect = objResult.ValueFromJson<string>("redirect", null);
                     return Redirect(redirect);
-                //        /*case SocialNetworkTypeEnum.Instagram:
-                //            return InstagramOAuthFlow(account, subscription, reauthorize);
-                //        case SocialNetworkTypeEnum.Twitter:
-                //            return TwitterOAuthFlow(account, subscription, reauthorize);
-                //        case SocialNetworkTypeEnum.Youtube:
-                //            return GoogleOAuthFlow(network, subscription, reauthorize);
-                //        case SocialNetworkTypeEnum.Firebase:
-                //            return FirebaseSignIn(credentials, subscription, reauthorize);
-                //        case SocialNetworkTypeEnum.Soundcloud:
-                //            return SoundcloudOAuthFlow(subscription, reauthorize);
-                //        case SocialNetworkTypeEnum.Odnoklassniki:
-                //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
-                case SocialNetworkTypeEnum.Telegram:
-                    return TelegramSignIn(id, subscription, currentUser, reauthorize);
-                    //        case SocialNetworkTypeEnum.Mangomolo:
-                    //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
-                    //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
-                    //            ViewBag.Reauthorize = reauthorize;
-                    //            return Json(new { success = true, redirect = url });*/
+                 case SocialNetworkTypeEnum.DailyMotion:
+                    return DailymotionSignIn(network,id);
+            //        case SocialNetworkTypeEnum.Twitter:
+            //            return TwitterOAuthFlow(account, subscription, reauthorize);
+            //        case SocialNetworkTypeEnum.Youtube:
+            //            return GoogleOAuthFlow(network, subscription, reauthorize);
+            //        case SocialNetworkTypeEnum.Firebase:
+            //            return FirebaseSignIn(credentials, subscription, reauthorize);
+            //        case SocialNetworkTypeEnum.Soundcloud:
+            //            return SoundcloudOAuthFlow(subscription, reauthorize);
+            //        case SocialNetworkTypeEnum.Odnoklassniki:
+            //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
+            case SocialNetworkTypeEnum.Telegram:
+                return TelegramSignIn(id, subscription, currentUser, reauthorize);
+                //        case SocialNetworkTypeEnum.Mangomolo:
+                //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
+                //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
+                //            ViewBag.Reauthorize = reauthorize;
+                //            return Json(new { success = true, redirect = url });*/
                     //        //case SocialNetworkTypeEnum.Shutterstock:
                     //        //    return ShutterstockOAuthFlow(reauthorize);
             }
@@ -64,14 +67,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         #region facebook
         public IActionResult FacebookOAuthFlow(string type, Subscription subscription, bool reauthorize = false)
         {
-
             var success = false;
             var redirect = "";
             var message = "";
-            //var fbAuthorizationManager = AuthorizationManager; 
             try
             {
-
                 var result = AuthorizationManager.StartOAuthFlow("https://localhost:7157/", type, reauthorize, subscription).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
@@ -117,6 +117,30 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 Debug.WriteLine("Couldn't authorize the selected Facebook account: " + ex.FullMessage());
                 return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
             }
+        }
+
+        public IActionResult DailymotionSignIn(string network , string id)
+        {
+            var dailymotionConfigs = SocialConfigs.Construct().DailymotionConfigs;
+            var jsonDmConfigs = JsonConvert.SerializeObject(dailymotionConfigs);
+            ChannelErrorEnum error;
+            var channel = _channelService.GetById(id,out error);
+            switch(error)
+            {
+                case ChannelErrorEnum.NOT_FOUND:
+                    channel = _channelService.Create(network, out error);
+                    channel.Status = StatusEnum.Active.Value();
+                    channel.SubscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+                    channel.Id = GuidExtension.GenerateGuid().ToString();
+                    channel.Credentials = jsonDmConfigs;
+                    channel.OriginalName = dailymotionConfigs.Application.ChannelName;
+                    channel.NetworkId = "baaedba16b73e73577d7cd12e07158bd";
+                    _channelService.Insert(channel);
+                    break;
+                case ChannelErrorEnum.NO_ERROR:
+                    return View(channel);
+            }
+            return View(channel);
         }
 
         private IActionResult SaveChannels(IEnumerable<Channel> channels, string subscriptionId, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
@@ -193,7 +217,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return Json(new { success, redirect, message });
         }
 
-        private ActionResult GetAdminUrl(string subscriptionCode)
+        private ActionResult GetAdminUrl()
         {
             var redirectUrl = "https://localhost:7157/Home/RedirectSocial";
             return Redirect(redirectUrl);

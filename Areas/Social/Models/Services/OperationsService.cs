@@ -1,4 +1,5 @@
 ﻿using FeedHiveAuth.Areas.Social.Models.Helpers;
+using FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
@@ -48,7 +49,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
         {
             //OperationHelper.StartShareOperation(operation);
             var operationData = operation.Parameters.FromJson<SendOperationData>();
-            var channel = Collections.ChannelsOf("1f59028d-15d0-4bf6-a61b-28f33b895310").FirstOrDefault(x => x.NetworkId.Equals(operationData.NetworkId));
+            var channel = Collections.ChannelsOf("1f59028d-15d0-4bf6-a61b-28f33b895310").FirstOrDefault(x => x.Id.Equals("ad23186b-bb6a-11ee-9421-d027889076a7"));
             if(channel == null)
             {
                 OperationHelper.EndShareOperation(operation, StatusEnum.Failed, "No channel");
@@ -62,6 +63,18 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                     {
                         var result = TelegramService.Send(operation, channel);
                     });
+                    break;
+                case SocialNetworkTypeEnum.DailyMotion:
+                    Task.Run(() =>
+                    {
+                        DailymotionService.Send(operation, channel).ContinueWith((result) =>
+                        {
+                            OperationHelper.EndShareOperation(operation,result.Result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Result.Message, result.Result.Result);
+                        });
+                    });
+                    break;
+                default:
+                    OperationHelper.EndShareOperation(operation,StatusEnum.Failed, "Channel type doesn't support sharing");
                     break;
             }
         }

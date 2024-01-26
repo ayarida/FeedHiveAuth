@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RestSharp.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Mdels;
+using FeedHiveAuth.Areas.Social.SocialDailymotion.Models;
 
 namespace FeedHiveAuth.Areas.Social.Models.Services
 {
@@ -56,13 +57,20 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                         Link = data.Link
                     };
                     break;
+                case SocialNetworkTypeEnum.DailyMotion:
+                    sendData = new DailymotionSendOperationData
+                    {
+                        Title = data.Title,
+                        Text = data.Text,
+                    };
+                    break;
                 default:
                     sendData.Text = data.Text;
                     break;
             }
 
             sendData.NetworkId = channel.NetworkId;
-            //sendData.MediaItemIds = data.MediaItemIds;
+            sendData.MediaItemIds = data.MediaItemIds;
             sendData.ScheduleTime = data.ScheduleTime;
             return sendData;
         }

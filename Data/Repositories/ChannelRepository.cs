@@ -28,6 +28,37 @@ namespace FeedHiveAuth.Data.Repositories
             }
         }
 
+        public Channel GetById(string Id, out ChannelErrorEnum error)
+        {
+            var channel = Collections.Channels().FirstOrDefault(x => x.Id.ToString().EqualsIgnoreCase(Id));
+
+            if (channel == null)
+            {
+                error = ChannelErrorEnum.NOT_FOUND;
+                return channel;
+            }
+            error = ChannelErrorEnum.NO_ERROR;
+            return channel;
+        }
+
+        public string GetNetworkUrl(string networkType, string networkId)
+        {
+            var network = EnumExtension.FromKey<SocialNetworkTypeEnum>(networkType);
+            switch (network)
+            {
+                case SocialNetworkTypeEnum.Facebook:
+                    return "https://facebook.com/" + networkId;
+                case SocialNetworkTypeEnum.Twitter:
+                    return "https://twitter.com/" + networkId;
+                case SocialNetworkTypeEnum.Telegram:
+                    return "https://t.me/" + networkId;
+                case SocialNetworkTypeEnum.Youtube:
+                    return "https://www.youtube.com/channel/" + networkId;
+                default:
+                    return "";
+            }
+        }
+
         public Channel GetByNetwork(string subscriptionId, string network, string networkId, out ChannelErrorEnum error)
         {
             var oldChannel = Collections.ChannelsOf(subscriptionId).FirstOrDefault(c => c.NetworkId.EqualsIgnoreCase(networkId) && c.Network.EqualsIgnoreCase(network));
@@ -61,10 +92,18 @@ namespace FeedHiveAuth.Data.Repositories
             return channels;
         }
 
-        /*public void RefreshChannels()
+        public Channel Create(string network, out ChannelErrorEnum error)
         {
-            Collections.RefreshChannels();
-        }*/
+            //dailymotion network create
+            var type = EnumExtension.FromKey<SocialNetworkTypeEnum>(network);
+            var channel = new Channel()
+            {
+                Network = type.Key(),
+                Account = SocialAccountTypeEnum.Profile.Key(),
+            };
+            error = ChannelErrorEnum.NO_ERROR;
+            return channel;
+        }
 
     }
 }
