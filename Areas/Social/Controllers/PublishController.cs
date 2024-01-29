@@ -18,9 +18,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         PostRepository _postService = Instances.Repositories.PostRepository;
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
 
-        public IEnumerable<Channel> GetChannels(string subscriptionId, out PublishErrorEnum error)
+        public IEnumerable<Channel> GetChannels(out PublishErrorEnum error)
         {
-            var channels = Collections.ChannelsOf(subscriptionId).Where(channel => channel.Status.In(new List<int> { StatusEnum.Active.Value(), StatusEnum.Expired.Value() }));
+            var channels = Collections.Channels().Where(channel => channel.Status.In(new List<int> { StatusEnum.Active.Value(), StatusEnum.Expired.Value() }));
 
             if (!channels.Any())
             {
@@ -34,14 +34,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public async Task<IActionResult> Share(string? postid = null)
         {
             //get current subscription
-            var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+            //var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
             var media = _mediaItemService.GetMediaByPostId(postid);
             PublishErrorEnum error;
             //Aya's local DB ids for API testing reasons
 
             var post = _postService.Get(postid);
-            var subSocialConfigs = SocialServiceHelper.GetConfigs(subscriptionId);
-            var channels = GetChannels(subscriptionId, out error);
+            var subSocialConfigs = SocialServiceHelper.GetConfigs();
+            var channels = GetChannels(out error);
             var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
             var model = new ShareView
             {
