@@ -63,6 +63,7 @@ namespace FeedHiveAuth.Controllers
                 post.ModifiedBy = currentUser.Id;
                 post.CreatedBy = currentUser.Id;
             }
+            _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
@@ -72,7 +73,6 @@ namespace FeedHiveAuth.Controllers
                 SavePostMedias(post);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
-            _postService.Save(post);
 
             return View("~/Views/Posts/Create.cshtml");
         }
@@ -180,6 +180,8 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public void DeletePost(Post post)
         {
+            var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
+            _mediaItemService.Delete(postMedia.Id);
             _postService.Delete(post.Id);
         }
 
@@ -240,7 +242,6 @@ namespace FeedHiveAuth.Controllers
                     Console.WriteLine("Error while deleting this post", post);
                 }
             }
-
         }
 
         [HttpGet]
