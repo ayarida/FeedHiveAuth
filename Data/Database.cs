@@ -36,7 +36,7 @@ namespace FeedHiveAuth.Data
             /*            public static string MediaItem = "Id,Caption,Description,Tags,Path,Extension,Type,ThumbnailUrl,CreationDate,Version,CreatedBy,Duration,Info,PostId";
             */
             public static string Post = "Id,Title,ShortTitle,Summary,Content,PublicLink,PostDate";
-            public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy";
+            public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy,Extension,Type";
             public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,SubscriptionId,Settings,Order,Configs";
 
         }
