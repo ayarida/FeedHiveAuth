@@ -161,14 +161,14 @@ function deleteMedia(event) {
 
 function submitShareForm() {
 
-    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
-    var shareForm = $('form').serializeArray();
+    var serviceURL = "/Social/Publish/Send" + event;
+    var shareForm = $(':input').serializeArray();
     var imgSrc = $('.shareImage').attr('src');
     shareForm.push(({ name: 'src', value: imgSrc }));
 
     $.ajax({
         type: "POST",
-        url: serviceURL,
+        url: shareForm,
         data: mediaId,
         success: function (data) {
             window.location.reload()

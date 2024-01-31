@@ -46,11 +46,29 @@
                             </label>
 
                             <input type="checkbox" id="Channels[@index]" name="Channels[@index]" value="@channel.Network" style="width: fit-content !important; height: auto" />
-                            <input type="hidden" name="Channels[@index]" value="Channels[@index].Id" />
+
                         </div>
 
+                        <input type="checkbox" name="Data[@index].ChannelId" id="Data[@index].ChannelId" style="opacity: 0 ; position: absolute" />
+                        <script>
 
-                        <input type="hidden" name="Data[@index].ChannelId" id="Data[@index].ChannelId" value="@channel.Id" />
+                            document.getElementById("Channels[0]").addEventListener("change", (e) => {
+
+                                if (e.target.checked) {
+                                    document.getElementById("Data[@index].ChannelId").checked = true
+
+                                    document.getElementById("Data[@index].ChannelId").value = "@channel.Id"
+                                } else {
+                                    document.getElementById("Data[@index].ChannelId").value = ''
+                                    document.getElementById("Data[@index].ChannelId").checked = false
+
+                                }
+
+                            })
+
+
+                        </script>
+                        index++;
                     }
                 </div>
 
@@ -65,7 +83,7 @@
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">عنوان قصير</label>
                         <br />
-                        <input value="ShortTitle" name="ShortTitle" readonly type="text" />
+                        <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" />
                     </div>
 
                     <div class="form-group mb-4">
@@ -86,13 +104,13 @@
                         {
                             <label for="MediaId" class="mb-2 control-label">ميديا </label>
                             <br />
-                            <input type="image" name="MediaId" src="@media.Path" alt="Submit" class="shareImage">
+                            <input type="image" name="Data[0].MediaId" src="@media.Path" alt="Submit" class="shareImage" value="@media.Id">
                         }
                     </div>
                 </div>
                 <input type="hidden" value="@post.Id" name="PostId" />
-                
-                <input type="submit" value="أرسل" class="btn btn-primary mt-3" style="max-width: 200px;" readonly onclick="submitShareForm()"/>
+
+                <input type="submit" value="أرسل" class="btn btn-primary mt-3" style="max-width: 200px;" readonly onclick="submitShareForm()" />
             }
 
         </div>
@@ -162,11 +180,3 @@
 
 </style>
 
-
-<script>
-    var shareForm =$('form').serializeArray();
-    // var imgSrc = $('.shareImage').attr('src');
-    // shareForm.push(({ name: 'src', value: imgSrc }));
-    console.log(shareForm);
-    
-</script>
