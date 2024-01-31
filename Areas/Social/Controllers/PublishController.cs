@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.Models.Services;
+using FeedHiveAuth.Controllers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
@@ -17,6 +18,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+        ILogger<PostsController> _logger; 
+
+        public PublishController(ILogger<PostsController> logger)
+        {
+            _logger = logger;
+        }
 
         public IEnumerable<Channel> GetChannels(out PublishErrorEnum error)
         {
@@ -80,14 +87,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
-                    form.Channels = new List<string> { "97918de3-bb62-11ee-9421-d027889076a7" };
-                    Console.WriteLine("NoChannelsSelected");
+                    form.Channels =  Instances.Repositories.ChannelRepository.GlobalGetAll().Select(ch => ch.Id).ToList();
+                    _logger.LogError("********************* No Channels Selected! ********************");
                     //create an Error Page to redirect 
                     //return View();
                 }
                 if (form.Data.Empty())
                 {
-                    Console.WriteLine("NoData");
+                    _logger.LogError("********************* No Data Passed! ********************");
                     //create an Error Page to redirect 
                     //return View();
                 }
