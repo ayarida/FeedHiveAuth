@@ -1,12 +1,9 @@
-﻿using FeedHiveAuth.Data.Extensions;
-using FeedHiveAuth.Data;
-using FeedHiveAuth.Models.Enums;
-using FeedHiveAuth.Models;
-using Microsoft.AspNetCore.Mvc;
-using RestSharp.Extensions;
-using FeedHiveAuth.Models;
+﻿using FeedHiveAuth.Areas.Social.SocialDailymotion.Models;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Mdels;
-using FeedHiveAuth.Areas.Social.SocialDailymotion.Models;
+using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.Enums;
+using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Areas.Social.Models.Services
 {
@@ -26,9 +23,10 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 LastModified = creationDate,
                 Service = channel.Network,
                 Action = "send",
+                ChannelId = channel.Id,
                 PostId = postId,
                 MediaId = mediaId,
-                Parameters = sendData.Serialize()
+                Parameters = sendData.Serialize(),
             };
             //Instances.Repositories.OperationRepository.Insert(operation);
             OperationsService.ProcessOperation(operation);

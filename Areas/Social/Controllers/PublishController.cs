@@ -76,7 +76,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             try
             {
-                
+
                 var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
@@ -92,6 +92,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     //return View();
                 }
                 var channels = Instances.Repositories.ChannelRepository.GlobalGetAll();
+                form.Channels = channels.Select(X => X.Id).ToList();
                 var creationDate = DomainTime.Now();
                 foreach (var data in form.Data.Where(formData => formData.ChannelId.In(form.Channels)))
                 {

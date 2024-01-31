@@ -46,7 +46,7 @@
                             </label>
 
                             <input type="checkbox" id="Channels[@index]" name="Channels[@index]" value="@channel.Network" style="width: fit-content !important; height: auto" />
-                            <input type="hidden" name="Channels[@index]" value="no" />
+                            <input type="hidden" name="Channels[@index]" value="Channels[@index].Id" />
                         </div>
 
 
@@ -59,13 +59,13 @@
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">عنوان المنشور</label>
                         <br />
-                        <input class="form-control" value="@post.Title" name="Title" readonly />
+                        <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" />
                     </div>
 
                     <div class="form-group mb-4">
                         <label class="mb-2 control-label">عنوان قصير</label>
                         <br />
-                        <input value="ShortTitle" name="ShortTitle" readonly />
+                        <input value="ShortTitle" name="ShortTitle" readonly type="text" />
                     </div>
 
                     <div class="form-group mb-4">
@@ -90,7 +90,8 @@
                         }
                     </div>
                 </div>
-
+                <input type="hidden" value="@post.Id" name="PostId" />
+                
                 <input type="submit" value="أرسل" class="btn btn-primary mt-3" style="max-width: 200px;" readonly onclick="submitShareForm()"/>
             }
 
@@ -162,9 +163,10 @@
 </style>
 
 
-@* <script>
+<script>
     var shareForm =$('form').serializeArray();
-    var imgSrc = $('.shareImage').attr('src');
-    shareForm.push(({ name: 'src', value: imgSrc }));
+    // var imgSrc = $('.shareImage').attr('src');
+    // shareForm.push(({ name: 'src', value: imgSrc }));
+    console.log(shareForm);
     
-</script> *@
+</script>
