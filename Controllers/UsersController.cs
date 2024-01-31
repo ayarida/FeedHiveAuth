@@ -57,7 +57,7 @@ namespace FeedHiveAuth.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return View(model);
+            return RedirectToAction("List", "Users");
         }
         public IActionResult Login()
         {
