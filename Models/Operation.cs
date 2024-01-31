@@ -27,6 +27,7 @@ namespace FeedHiveAuth.Models
         public string? Result { get; set; }
         public string? Messages { get; set; }
         public string? Info { get; set; }
+        public string? ChannelId { get; set; }
 
         public Post _post { get; set; }
         public MediaItem _mediaItem { get; set; }
