@@ -22,8 +22,7 @@
     <div class="container pt-4 mt-4">
         <div class="form-items">
 
-            @using (Html.BeginForm("Send", "Publish", new { area = "Social" }, FormMethod.Post))
-            {
+            <form id="form-share" method="post" action="send">
                 <h4>شبكات التواصل</h4>
                 <hr />
 
@@ -110,12 +109,78 @@
                 </div>
                 <input type="hidden" value="@post.Id" name="PostId" />
 
-                <input type="submit" value="أرسل" class="btn btn-primary mt-3" style="max-width: 200px;" readonly onclick="submitShareForm()" />
-            }
+                <button type="submit" class="btn btn-primary mt-3" style="max-width: 200px;color:white;">ارسل</button>
+
+                </form>
+                <script>
+                document.getElementById('form-share').addEventListener('submit',
+                    function (event) {
+
+                        if ($("input[type=checkbox]:checked").length == 0) {
+                            event.preventDefault();
+                            alert("select at least one channel")
+                        }
+
+                        else {
+
+                            var serviceURL = "/Social/Publish/Send" + event;
+                            var shareForm = $(':input').serializeArray();
+                            var imgSrc = $('.shareImage').attr('src');
+                            shareForm.push(({ name: 'src', value: imgSrc }));
+
+                            $.ajax({
+                                type: "POST",
+                                url: shareForm,
+                                data: mediaId,
+                                success: function (data) {
+                                    window.location.reload()
+                                },
+                                error: function (data) {
+                                    alert("error");
+                                },
+                            })
+                        }
+                    });
+                </script>
+
+           
 
         </div>
     </div>
 </div>
+
+
+
+@* <script>
+
+    $("#form-share").on("submit", function (event) {
+
+        if ($("input[type=checkbox]:checked").length == 0) {
+            event.preventDefault();
+            alert("select at least one channel")
+        }
+
+        else {
+
+            var serviceURL = "/Social/Publish/Send" + e;
+            var shareForm = $(':input').serializeArray();
+            var imgSrc = $('.shareImage').attr('src');
+            shareForm.push(({ name: 'src', value: imgSrc }));
+
+            $.ajax({
+                type: "POST",
+                url: shareForm,
+                data: mediaId,
+                success: function (data) {
+                    window.location.reload()
+                },
+                error: function (data) {
+                    alert("error");
+                },
+            })
+        }
+    }
+</script> *@
 
 <style>
 
