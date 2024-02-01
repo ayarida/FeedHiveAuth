@@ -72,10 +72,10 @@ function deleteSelectedUsers() {
             windows.reload();
         },
         error: function (data) {
-           alert("asdas")
+            alert("asdas")
         },
     });
-    
+
 };
 function deleteMedia(event) {
 
@@ -159,26 +159,36 @@ function deleteMedia(event) {
 
 
 
-function submitShareForm() {
+/*function submitShareForm() {
 
-    var serviceURL = "/Social/Publish/Send" + event;
-    var shareForm = $(':input').serializeArray();
-    var imgSrc = $('.shareImage').attr('src');
-    shareForm.push(({ name: 'src', value: imgSrc }));
+    if ($("input[type=checkbox]:checked").length == 0) {
 
-    $.ajax({
-        type: "POST",
-        url: shareForm,
-        data: mediaId,
-        success: function (data) {
-            window.location.reload()
-        },
-        error: function (data) {
-            alert("error");
-        },
-    })
 
-}
+        e.preventDefault();
+        alert("select at least one channel")
+    }
+
+    else {
+
+        var serviceURL = "/Social/Publish/Send" + e;
+        var shareForm = $(':input').serializeArray();
+        var imgSrc = $('.shareImage').attr('src');
+        shareForm.push(({ name: 'src', value: imgSrc }));
+
+        $.ajax({
+            type: "POST",
+            url: shareForm,
+            data: mediaId,
+            success: function (data) {
+                window.location.reload()
+            },
+            error: function (data) {
+                alert("error");
+            },
+        })
+    }
+
+}*/
 
 
 
