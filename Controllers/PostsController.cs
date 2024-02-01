@@ -49,15 +49,17 @@ namespace FeedHiveAuth.Controllers
         public ActionResult CreatePost()
         {
 
-            Post post = new Post();
+            Post post = new Post
+            {
+                Title = HttpContext.Request.Form["Title"],
+                ShortTitle = HttpContext.Request.Form["ShortTitle"],
+                Summary = HttpContext.Request.Form["Summary"],
+                Content = HttpContext.Request.Form["Content"],
+                PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
+                PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
+            };     
             var currentUser = GetCurrentUser();
             MediaItem postmedia = new MediaItem();
-            post.Title = HttpContext.Request.Form["Title"];
-            post.ShortTitle = HttpContext.Request.Form["ShortTitle"];
-            post.Summary = HttpContext.Request.Form["Summary"];
-            post.Content = HttpContext.Request.Form["Content"];
-            post.PublicLink = "/Posts/" + GeneratePostLink(post.Title);
-            post.PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"]);
             if (currentUser != null)
             {
                 post.ModifiedBy = currentUser.Id;
@@ -181,7 +183,7 @@ namespace FeedHiveAuth.Controllers
         public void DeletePost(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
-            _mediaItemService.Delete(postMedia.Id);
+            if(postMedia!=null) _mediaItemService.Delete(postMedia.Id);
             _postService.Delete(post.Id);
         }
 
