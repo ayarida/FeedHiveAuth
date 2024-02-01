@@ -14,7 +14,7 @@
 
 @font-face {
     font-family: "Arabic";
-    /*src: url("fonts/alfont_com_Abeer_2711-يوم-الجمعة.otf") format("truetype");*/
+    src: url("Fonts/Dubai Regular/DubaiRegular.ttf") format("truetype");
 }
 
 *,
@@ -50,10 +50,9 @@ h4 {
 h1,
 h2,
 h3,
-h4, p, a, label, input{
+h4, p, a, label, input, span, div {
     font-family: Arabic;
     direction: rtl;
-   
 }
 
 
@@ -459,4 +458,9 @@ div[class^="ripple"] {
 
 #error-message .modal-body {
     background: #dd7a01;
+}
+
+/*sada*/
+.container * {
+    max-width: 100%;
 }
