@@ -3,6 +3,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -59,7 +60,6 @@ namespace FeedHiveAuth.Controllers
                 PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
             };     
             var currentUser = GetCurrentUser();
-            MediaItem postmedia = new MediaItem();
             if (currentUser != null)
             {
                 post.ModifiedBy = currentUser.Id;
@@ -71,15 +71,28 @@ namespace FeedHiveAuth.Controllers
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
-                post.PostMediaItems = postMedias;
-                SavePostMedias(post);
+                
+                //SavePostMedias(post);
+                var result = SaveMedia(postMedias,post.Id);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
-
+            post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
             return View("~/Views/Posts/Create.cshtml");
         }
 
-
+        public int SaveMedia(List<MediaItem> mediaItems, string postId)
+        {             
+            try
+            {
+                _mediaItemService.InsertPostMedia(mediaItems, postId);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("------------ Exception in saving media ", ex);
+                return 0;
+            } 
+        }
         [HttpPost]
         public ActionResult UpdatePost(string Id)
         {
@@ -87,8 +100,6 @@ namespace FeedHiveAuth.Controllers
             _postService.UpdatePostData(post);
             return View("~/Views/Home/Index.cshtml");
         }
-
-
 
         public string UploadMedia(IFormFile file)
         {
