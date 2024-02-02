@@ -97,9 +97,11 @@ namespace FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers
                 }
                 var post = Instances.Repositories.PostRepository.GetPostById(operation.PostId);
                 var subscriptionId = operation.SubscriptionId;
-                var media = Instances.Repositories.MediaItemRepository.Get("a2516884-fb37-4604-bf08-6daa69945638");
+                var media = Instances.Repositories.MediaItemRepository.GetMediaByPostId(operation.PostId);
                 //var media = !operation.PostId.HasValue && operation.MediaId.HasValue ? Instances.Repositories.MediaRepository.Get(operation.MediaId.Value) : null;
                 var postMediaIds = post != null && post.PostMediaItems.NotEmpty() ? post.PostMediaItems.Select(m => m.Id).ToList() : null;
+
+                
                 //var postMIds = post.PostMediaItems.Select(m=>m.Id).ToList();
                 //var medias = postMediaIds != null ? Instances.Repositories.MediaItemRepository.Get(postMediaIds).ToList() : null;
 
