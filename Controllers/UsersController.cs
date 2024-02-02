@@ -135,7 +135,7 @@ namespace FeedHiveAuth.Controllers
             Instances.Repositories.UserRepository.Delete(id);
         }
 
-        public void MultipleDelete([FromForm] string userList)
+        public void MultipleDelete([FromQuery] string userList)
         {
 
 

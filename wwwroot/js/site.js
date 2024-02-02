@@ -55,27 +55,35 @@ function deleteSelected() {
 }
 
 function deleteSelectedUsers() {
-    selected = $("tbody input:checkbox:checked");
-    var deleteArr = [];
-    selected.each(function (index, value) {
-        deleteArr.push($(value).val());
-    });
-    console.log(deleteArr.join(","));
-    var idsString = deleteArr.join(",");
-    var serviceURL = "/Users/MultipleDelete";
-    $.ajax({
-        type: "POST",
-        url: serviceURL,
-        contentType: "application; charset=utf-8",
-        data: { userList: idsString },
-        success: function (data) {
-            windows.reload();
-        },
-        error: function (data) {
-            alert("asdas")
-        },
-    });
 
+    if ($("input[type=checkbox]:checked").length == 0) {
+        event.preventDefault();
+        alert("select at least one user")
+    }
+
+    else {
+
+        selected = $("tbody input:checkbox:checked");
+        var deleteArr = [];
+        selected.each(function (index, value) {
+            deleteArr.push($(value).val());
+        });
+        console.log(deleteArr.join(","));
+        var idsString = deleteArr.join(",");
+        var serviceURL = "/Users/MultipleDelete";
+        $.ajax({
+            type: "GET",
+            url: serviceURL,
+            /*        contentType: "application; charset=utf-8",*/
+            data: { userList: idsString },
+            success: function (data) {
+                location.reload();
+            },
+            error: function (data) {
+                alert("asdas")
+            },
+        });
+    }
 };
 function deleteMedia(event) {
 

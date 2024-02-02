@@ -37,10 +37,10 @@
                     @foreach (var user in users)
                     {
                         var userRole = await UserManager.GetRolesAsync(user);
-                        var check = user == users.FirstOrDefault() ? "disabled" : "";
+                        var check = User.Identity?.Name;
 
                         <tr>
-                            <td> <input type="checkbox" class="check" @check value="@(check == "disabled" ? "" : user.Id)"></td>
+                            <td> <input type="checkbox" class="check" value="@(check == user.UserName ? "e" : user.Id)" @(check == user.UserName ? "disabled" : "")></td>
                             <td>@user.UserName</td>
                             @if (userRole.Any())
                             {
@@ -71,7 +71,7 @@
         margin-bottom: 0px;
     }
 
-    tr{
+    tr {
         border-bottom-width: var(--bs-border-width);
         box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state,var(--bs-table-bg-type,var(--bs-table-accent-bg)));
     }
