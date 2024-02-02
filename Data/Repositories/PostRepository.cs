@@ -111,7 +111,7 @@ namespace FeedHiveAuth.Data.Repositories
         {
             post.Id = Guid.NewGuid().ToString();
             string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8})",
+                                    "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},{6},{7},{8})",
                                     TableName,
                                     Columns.AddBraces(),
                                     post.Id.EscapeForSql(),
