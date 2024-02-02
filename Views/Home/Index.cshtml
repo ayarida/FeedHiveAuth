@@ -7,11 +7,11 @@
 @{
     ViewData["Title"] = "Home Page";
     var data = Model;
-    var currUser = GlobalContext.UserConfigs?.UserData;
+    // var currUser = GlobalContext.UserConfigs?.UserData;
     var signedIn = SignInManager.IsSignedIn(User);
-    IWebHostEnvironment _hostingEnvironment;
-    var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
-    var photoStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+    // IWebHostEnvironment _hostingEnvironment;
+    // var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
+    // var photoStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
 }
 
 
