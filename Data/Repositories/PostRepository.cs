@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp.Extensions;
 
@@ -111,7 +112,7 @@ namespace FeedHiveAuth.Data.Repositories
         {
             post.Id = Guid.NewGuid().ToString();
             string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},{6},{7},{8})",
+                                    "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},{6},{7},{8},{9},{10})",
                                     TableName,
                                     Columns.AddBraces(),
                                     post.Id.EscapeForSql(),
@@ -120,7 +121,9 @@ namespace FeedHiveAuth.Data.Repositories
                                     post.Summary.EscapeForSql(),
                                     post.Content.EscapeForSql(),
                                     post.PublicLink.EscapeForSql(),
-                                    post.PostDate.EscapeForSql(true)
+                                    post.PostDate.EscapeForSql(true), 
+                                    post.CreatedBy.EscapeForSql(), 
+                                    post.ModifiedBy.EscapeForSql()
                                     );
             ExecuteQuery(query);
         }
@@ -135,9 +138,9 @@ namespace FeedHiveAuth.Data.Repositories
             return media;
         }
 
-        public List<Post> GetUserPosts(string userId)
+        public List<Post> GetCurrentUserPosts(string userId)
         {
-            var query = SqlSelect + $" WHERE PublishedBy='{userId}'";
+            var query = SqlSelect + $" WHERE CreatedBy='{userId}'";
             List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
 
             return scheduledPosts;
