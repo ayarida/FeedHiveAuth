@@ -3,7 +3,6 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -63,7 +62,7 @@ namespace FeedHiveAuth.Controllers
                 Content = HttpContext.Request.Form["Content"],
                 PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
                 PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
-            };     
+            };
             var currentUser = GetCurrentUser();
             if (currentUser != null)
             {
@@ -75,9 +74,9 @@ namespace FeedHiveAuth.Controllers
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
-                
+
                 //SavePostMedias(post);
-                var result = SaveMedia(postMedias,post.Id);
+                var result = SaveMedia(postMedias, post.Id);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
@@ -85,7 +84,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         public int SaveMedia(List<MediaItem> mediaItems, string postId)
-        {             
+        {
             try
             {
                 _mediaItemService.InsertPostMedia(mediaItems, postId);
@@ -95,7 +94,7 @@ namespace FeedHiveAuth.Controllers
             {
                 _logger.LogError("------------ Exception in saving media ", ex);
                 return 0;
-            } 
+            }
         }
         [HttpPost]
         public ActionResult UpdatePost(string Id)
@@ -198,7 +197,7 @@ namespace FeedHiveAuth.Controllers
         public void DeletePost(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
-            if(postMedia!=null) _mediaItemService.Delete(postMedia.Id);
+            if (postMedia != null) _mediaItemService.Delete(postMedia.Id);
             _postService.Delete(post.Id);
         }
 

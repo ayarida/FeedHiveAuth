@@ -54,6 +54,19 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return View();
         }
 
+
+        private IActionResult HtmxView(object model)
+        {
+            if (Request.Headers.ContainsKey("HX-Request"))
+            {
+                Response.Headers.Add("HX-Push", Request.Path.ToString());
+                return PartialView(model);
+            }
+
+            return View(model);
+
+        }
+
         // POST: Social/Channels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

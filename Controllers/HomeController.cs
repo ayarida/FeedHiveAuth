@@ -1,11 +1,10 @@
-﻿using FeedHiveAuth.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Microsoft.Extensions.Configuration;
+﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
+using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using FeedHiveAuth.Data;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -42,8 +41,8 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         public IActionResult Index()
         {
-
-            return View();
+            var posts = _postRepository.GetPosts();
+            return View(posts);
         }
 
         public IActionResult Welcome()

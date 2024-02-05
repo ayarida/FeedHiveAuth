@@ -12,6 +12,11 @@
     // IWebHostEnvironment _hostingEnvironment;
     // var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
     // var photoStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+    IWebHostEnvironment _hostingEnvironment;
+    var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
+    var photoStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+    List<Post> posts = Model;
+
 }
 
 
@@ -26,17 +31,17 @@
                 }
             </div>
             <a href="/Posts/Create">
-            <button class="btn purple-btn">
-                أنشر المنشور الحالي
-                <i class="bi bi-plus-lg"></i>
-            </button>
+                <button class="btn purple-btn">
+                    أنشر المنشور الحالي
+                    <i class="bi bi-plus-lg"></i>
+                </button>
             </a>
         </div>
     </div>
 
     <div class="row p-2 row row-cols-1 row-cols-md-2 g-4 mb-3">
         <!-- Normal Card -->
-        <div class="col-lg-6 no-slide"dir="rtl">
+        <div class="col-lg-6 no-slide" dir="rtl">
             <div class="card p-4">
                 <div class="card-head">
                     <div class="card-icon">
@@ -49,14 +54,26 @@
                 </div>
                 <div class="card-body">
                     <h1>0 أيام</h1>
+                    <div class="container">
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                @*               <div ">
+                                <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
+                                </div> *@
+                                @foreach (var post in posts)
+                                {
 
-                     @* //TODO: Should be ahrefs instead of buttons*@
-                     <a href="/Posts/Create"><button type="button"
-                        class="btn green-btn">
-                        أنشئ منشور
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
-                    </a>
+
+                                    <div class="swiper-slide">
+                                        @post.Title;
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,11 +91,11 @@
                 <div class="card-body">
                     <h1>0 أيام</h1>
                     <a href="/Posts/Create">
-                    <button type="button" class="btn green-btn">
-                        أنشئ منشور
+                        <button type="button" class="btn green-btn">
+                            أنشئ منشور
 
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
                     </a>
                 </div>
             </div>
@@ -182,12 +199,12 @@
             </div>
         </div>
     </div>
-    
+
     @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data);
 </div>
 
 <style>
-    a{
+    a {
         text-decoration: none;
     }
 </style>
