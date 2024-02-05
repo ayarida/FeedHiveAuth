@@ -8,6 +8,10 @@
     //Configs
     //
 }
+
+
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
 <form action="https://localhost:7157/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false" method="POST">
     <div>
         <button>Authorize an fb Channel</button>
@@ -32,12 +36,21 @@
                         <form id="assessment-form">
 
 
-                            <div class="page active">
-                                @*                       <span class="step">1</span>
-                                <span class="title">Networks</span> *@
+                @*             <div class="page active">
+                                                     <span class="step">1</span>
+                                <span class="title">Networks</span> 
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/networks.cshtml")
+                            </div> *@
+
+                            <button asp-action="HtmxView" hx-get="/Social/Channels/HtmxView/netwroks" hx-target="placeholder" hx-push-url="true">
+                                Get networks    
+                            </button>
+
+                            <div id="placeholder">
+
                             </div>
-                            <div class="page">
+
+   @*                          <div class="page">
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/accounts.cshtml")
                             </div>
                             <div class="page">
@@ -45,7 +58,7 @@
                             </div>
                             <div class="page">
                                 @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/finish.cshtml")
-                            </div>
+                            </div> *@
                             <div class="row d-flex nav-buttons justify-content-center ">
                                 <div class="">
                                     <button type="button" id="next">
@@ -72,202 +85,16 @@
 </div>
 
 
+
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script>
-    const nextButton = document.getElementById("next");
-    const backButton = document.getElementById("back");
 
-    // get all of the pages
-    const pages = $("#assessment-form .page");
-    const firstPage = $(pages).first()[0];
-    const lastPage = $(pages).last()[0];
-    const activeClass = "active";
-    const nextButtonContent = "التالي <i class='fa fa-arrow-right'></i>";
-
-    // if ($(".page.active").prev().length) {
-    //     console.log("firs page")
-    // }
-
-    $(".back-button").hide();
-
-
-    nextButton.addEventListener("click", function () {
-        const activePage = $("#assessment-form .page.active");
-        // validate before going to the next page.
-        const isValid = true;
-        if (isValid) {
-            $(".back-button").show();
-            nextPage(activePage);
-        } else {
-            alert(
-                "There are inputs that are not valid. Please fill out all fields and check to make sure your email is valid."
-            );
-        }
-    });
-
-
-    $(".next-page").click(function () {
-        const activePage = $("#assessment-form .page.active");
-        // validate before going to the next page.
-        const isValid = true;
-        if (isValid) {
-            nextPage(activePage);
-        } else {
-            alert(
-                "There are inputs that are not valid. Please fill out all fields and check to make sure your email is valid."
-            );
-        }
-    })
-
-
-    backButton.addEventListener("click", function () {
-        const activePage = $("#assessment-form .page.active");
-        previousPage(activePage);
-    });
-
-    /**
-     * Navigate to the next form page.
-     */
-    function nextPage(element) {
-        const onLastPage = $(lastPage).hasClass(activeClass);
-        if (onLastPage) {
-            submitForm();
-            return;
-        }
-        $(element).removeClass(activeClass);
-        const nextElement = $(element).next();
-        if (nextElement[0] === lastPage) {
-            nextButton.innerHTML = "FINISH";
-        }
-        nextElement.addClass(activeClass);
-        if (!$(firstPage).hasClass(activeClass)) {
-            $(backButton).css("display", "unset");
-        }
-    }
-
-    /**
-     * Submitting the website assessment form to firebase real-time database.
-     */
-    function submitForm() {
-        const form = $("#assessment-form");
-        const submittedValues = $(form).serializeArray();
-        const formValues = {};
-        for (submittedValue of submittedValues) {
-            formValues[submittedValue.name] = submittedValue.value;
-        }
-        window.submitAssessment(formValues);
-        alert(
-            "Thank you for submitting an inquiry. You will be contacted by email or your preferred contact method shortly."
-        );
-        //   clear the form fields
-        $(form)[0].reset();
-        //   go back to the first page.
-        $(lastPage).removeClass("active");
-        $(firstPage).addClass("active");
-    }
-
-    /**
-     * Navigate to the previus form page.
-     */
-    function previousPage(element) {
-        $(element).removeClass(activeClass);
-        const previousElement = $(element).prev();
-        if (previousElement[0] === firstPage) {
-            // no backbutton on the first page.
-            $(backButton).css("display", "none");
-            $(".back-button").hide();
-        }
-        // change from "submit" text
-        nextButton.innerHTML = nextButtonContent;
-        $(previousElement).addClass(activeClass);
-    }
-
-    /**
-     * Validates a form page.
-     */
-    // validate elements before proceeding to the nxt page
-</script>
 <style>
-    /* website assessment form */
-
-    .website-assessment-desc {
-        font-style: italic;
-    }
-
-
-    .back-button {
-        display: b
-    }
-
-    /* initially hide all of the pages that are not active */
-    #assessment-form .page:not(.active) {
-        display: none;
-    }
-
-    #assessment-form .page.active {
-        display: block;
-    }
-
-
-    .nw-button {
-        background-color: #9e78fb;
-        border: none;
-        border-radius: 9px;
-        /*  box-shadow: 2px 3px 2px #000; */
-        color: #fff;
-        cursor: pointer;
-        font-weight: 700;
-        height: 8vh;
-        text-transform: capitalize;
-        transition: 0.3s ease-in-out;
-    }
-
-        .nw-button:hover {
-            ` background-color: rgb(241, 175, 12);
-        }
-
-    .contact-me-header {
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #9e78fb;
-        text-shadow: 2px 3px 3px black;
-        font-size: 7vmin;
-    }
-
-    .contact-wrapper {
-        display: flex;
-        justify-content: center;
-    }
-
-        .contact-wrapper .card {
-            width: 70%;
-            border-radius: 15px;
-        }
-
-            .contact-wrapper .card .card-body {
-                padding: 2rem;
-            }
-
-    /* form */
-    .nw-form-control {
-        outline: none;
-        border: none;
-        background-color: rgb(226, 234, 236);
-        border-radius: 5px;
-        height: 50px;
-        color: grey;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        font-weight: 700;
-        transition: 0.2s ease-in-out;
-        width: 100%;
-    }
-
         .nw-form-control::placeholder {
             color: grey;
         }

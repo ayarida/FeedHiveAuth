@@ -284,14 +284,14 @@ else
             var telegram = {
                 name: "@telegramConfigs.Bot.Username",
                 token: "@telegramConfigs.Bot.Token",
-                @* toStringTolower is required since javascript differenciate bewtween True and true *@
+        @* toStringTolower is required since javascript differenciate bewtween True and true *@
                 enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
-            }
+                    }
 
-            $("#telegramConfigs").jsForm({
-                data: telegram,
-            });
-        });
+                    $("#telegramConfigs").jsForm({
+                    data: telegram,
+                });
+                });
 
     </script>
 }
@@ -452,7 +452,7 @@ else
                 username: ,
                 apisecrete:,
                 callbackurl: ,
-                enabled: false ,
+                enabled: false,
                 localpath:,
                 password:,
 
@@ -508,6 +508,7 @@ else
     .config-title {
         color: var(--blue-color);
         font-weight: bold;
+        text-align: left;
     }
 
     .config-settings {
@@ -515,6 +516,8 @@ else
         display: flex;
         flex-direction: column;
         row-gap: 20px;
+        justify-content: flex-end;
+        align-items: self-end;
     }
 
         .config-settings input {
@@ -524,6 +527,7 @@ else
     .setting-instance {
         display: flex;
         column-gap: 10px;
+        flex-direction: row-reverse;
     }
 
     .enable-setting {
