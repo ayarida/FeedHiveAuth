@@ -5,6 +5,7 @@ using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp.Extensions;
+using System.Security.Claims;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -13,10 +14,7 @@ namespace FeedHiveAuth.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserRepository _userRepository;
-        private readonly SignInManager<IdentityUser> signInManager;
-
-        //get current subscription value
+        public UserRepository _userService = Instances.Repositories.UserRepository;
 
         public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -160,16 +158,12 @@ namespace FeedHiveAuth.Controllers
             }
 
         }
-
-
-
-        /* public async Task<List<User>> GetUsersAsync()
-         {
-             using (var context = new ApplicationDbContext())
-             {
-                 return await context.Users.ToList();
-             }
-         }*/
+        public User GetCurrentUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User currentUser = _userService.Get(userId);
+            return currentUser;
+        }
 
 
 

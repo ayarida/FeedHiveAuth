@@ -61,8 +61,7 @@ namespace FeedHiveAuth.Controllers
             var currentUser = GetCurrentUser();
             if (currentUser != null)
             {
-                post.ModifiedBy = currentUser.Id;
-                post.CreatedBy = currentUser.Id;
+                post.ModifiedBy = post.CreatedBy = currentUser.Id;
             }
             _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
@@ -265,11 +264,7 @@ namespace FeedHiveAuth.Controllers
 
         public User GetCurrentUser()
         {
-            /*            string email = System.Security.Claims.ClaimsPrincipal.Current.FindFirst(ClaimTypes.Email);
-                        System.Security.Claims.ClaimsPrincipal currentUser = this.User;*/
-            //Console.WriteLine("Role: " + User.FindFirstValue(ClaimTypes.Role));
-            //Console.WriteLine("First name: " + User.FindFirstValue("firstname"));
-            //Console.WriteLine("Last name: " + User.FindFirstValue("lastname"));
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User currentUser = _userService.Get(userId);
             return currentUser;
@@ -293,9 +288,16 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public List<Post> GetCurrUserPosts()
         {
-            var currUser = _userServiceContext?.GetCurrentUserId();
-            var userPosts = _postService.GetUserPosts(currUser);
-            return userPosts;
+            try
+            {
+                var userPosts = _postService.GetCurrentUserPosts(GetCurrentUser()?.Id);
+                return userPosts;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("********************* NULL USER EXCEPTION: *********************",ex);
+            }
+            return new List<Post>();
         }
     }
 }
