@@ -62,9 +62,8 @@ namespace FeedHiveAuth.Data.Repositories
 
         public List<Post> GetPosts()
         {
-            List<Post> posts = new List<Post>();
             var query = SqlSelectWhole;
-            posts = connection.Query<Post>(query).ToList();
+            List<Post> posts = connection.Query<Post>(query).ToList();
             return posts;
         }
 

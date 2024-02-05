@@ -42,6 +42,11 @@ namespace FeedHiveAuth.Controllers
         public ActionResult List()
         {
             var posts = _postService.GetPosts();
+            foreach(var post in posts)
+            {
+                var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
+                if(postMedia!=null) post.PostMediaItems = postMedia;
+            }
             return View("~/Views/Posts/List.cshtml", posts);
         }
 
