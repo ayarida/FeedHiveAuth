@@ -33,7 +33,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View("~/Views/Posts/Create.cshtml");
+            return View();
         }
 
 
@@ -41,7 +41,12 @@ namespace FeedHiveAuth.Controllers
         public ActionResult List()
         {
             var posts = _postService.GetPosts();
-            return View("~/Views/Posts/List.cshtml", posts);
+            foreach(var post in posts)
+            {
+                var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
+                if(postMedia!=null) post.PostMediaItems = postMedia;
+            }
+            return View(posts);
         }
 
 
@@ -92,11 +97,23 @@ namespace FeedHiveAuth.Controllers
             }
         }
         [HttpPost]
-        public ActionResult UpdatePost(string Id)
+        public ActionResult Update(Post updatedPost)
         {
-            Post post = _postService.GetPostById(Id);
-            _postService.UpdatePostData(post);
-            return View("~/Views/Home/Index.cshtml");
+            var oldPost = _postService.GetPostById(updatedPost.Id);
+            oldPost.Title = updatedPost.Title;
+            oldPost.ShortTitle = updatedPost.ShortTitle;
+            oldPost.Content = updatedPost.Content;
+            oldPost.PublicLink = GeneratePostLink(updatedPost.Title);
+            oldPost.ModifiedBy = GetCurrentUser()?.Id;
+            try
+            {
+                var result = _postService.Update(oldPost);
+            }catch(Exception ex)
+            {
+                _logger.LogError("********************* Can't Update Post, EXCEPTION: \r\n" + ex + "\r\n*********************");
+            }
+
+            return RedirectToAction("List","Posts");
         }
 
         public string UploadMedia(IFormFile file)
@@ -272,17 +289,17 @@ namespace FeedHiveAuth.Controllers
 
 
         [HttpGet]
-        public ActionResult Edit(string Id)
+        public ActionResult Edit(string id)
         {
-            var post = _postService.GetPostById(Id);
-            return View("~/Views/Posts/Edit.cshtml", post);
+            var post = _postService.GetPostById(id);
+            return View(post);
         }
 
 
         [HttpGet]
         public ActionResult Calendar()
         {
-            return View("~/Views/Posts/Calendar.cshtml");
+            return View();
         }
 
         [HttpGet]

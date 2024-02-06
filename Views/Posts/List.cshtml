@@ -56,12 +56,12 @@
                             <tr>
                                 
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td><img src="@post.PostMediaItems?.FirstOrDefault().Path" /></td>
+                                <td><img src="" /></td>
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>@post.PostDate</td>
                                 <td>
-                                    <a href="/Posts/PostInfo/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
                                     <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
                                 </td>
                                 @* <td></td> *@

@@ -4,6 +4,7 @@ using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp.Extensions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -62,9 +63,8 @@ namespace FeedHiveAuth.Data.Repositories
 
         public List<Post> GetPosts()
         {
-            List<Post> posts = new List<Post>();
             var query = SqlSelectWhole;
-            posts = connection.Query<Post>(query).ToList();
+            List<Post> posts = connection.Query<Post>(query).ToList();
             return posts;
         }
 
@@ -84,11 +84,19 @@ namespace FeedHiveAuth.Data.Repositories
             return posts;
         }
 
-        public Post UpdatePostData(Post post)
+        public int Update(Post post)
         {
-            var updatedPost = UpdatePostInfo(post);
-            return updatedPost;
+            try
+            {
+                connection.Query<Post>(SqlUpdate, post);
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return 0;
+            }
+            return 1;
         }
+
 
         public List<Post> GetPostsByIds(List<string> idsArray)
         {
