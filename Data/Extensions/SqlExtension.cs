@@ -242,9 +242,8 @@ namespace FeedHiveAuth.Data.Extensions
         public static string GenerateUpdateQuery(this string columns, string table, string key, string excludedColumns = "Id,CreationDate")
         {
             var columnsArr = columns.Replace(" ", "").Split(',').Where(x => !excludedColumns.Split(',').Contains(x));
-            bool notSubscription = false;// removed by zahraa. columns.Contains("SubscriptionId");
-            return string.Format("UPDATE {0} SET {1} WHERE {2}=@{2}" +
-                 (notSubscription ? " AND SubscriptionId=@SubscriptionId;" : ";"), table, string.Join(", ", columnsArr.Select(col => string.Format("[{0}]=@{0}", col))), key);
+            return string.Format("UPDATE {0} SET {1} WHERE {2}=@{2}"
+               , table, string.Join(", ", columnsArr.Select(col => string.Format("[{0}]=@{0}", col))), key);
         }
         public static string GenerateInsertQuery(this string columns, string table, string excludedColumns = "PublicId")
         {
