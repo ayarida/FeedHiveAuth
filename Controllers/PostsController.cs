@@ -33,7 +33,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View("~/Views/Posts/Create.cshtml");
+            return View();
         }
 
 
@@ -46,7 +46,7 @@ namespace FeedHiveAuth.Controllers
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 if(postMedia!=null) post.PostMediaItems = postMedia;
             }
-            return View("~/Views/Posts/List.cshtml", posts);
+            return View(posts);
         }
 
 
@@ -280,14 +280,14 @@ namespace FeedHiveAuth.Controllers
         public ActionResult Edit(string Id)
         {
             var post = _postService.GetPostById(Id);
-            return View("~/Views/Posts/Edit.cshtml", post);
+            return View(post);
         }
 
 
         [HttpGet]
         public ActionResult Calendar()
         {
-            return View("~/Views/Posts/Calendar.cshtml");
+            return View();
         }
 
         [HttpGet]
