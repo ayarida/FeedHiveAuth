@@ -389,15 +389,6 @@ div[class^="ripple"] {
     margin: auto;
 }
 
-@media only screen and (max-width: 992px) {
-    .swiper-button-next::after, .swiper-rtl .swiper-button-prev::after {
-        color: white;
-    }
-
-    .swiper-button-prev::after, .swiper-rtl .swiper-button-next::after {
-        color: white;
-    }
-}
 
 .stroke-div .stroke-text p {
     text-align: initial;
@@ -461,6 +452,7 @@ div[class^="ripple"] {
 }
 
 /*sada*/
-.container * {
+/*.container * {
     max-width: 100%;
 }
+*/

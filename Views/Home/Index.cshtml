@@ -30,50 +30,37 @@
                     <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
                 }
             </div>
-            <a href="/Posts/Create">
-                <button class="btn purple-btn">
-                    أنشر المنشور الحالي
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-            </a>
+            @*             <a href="/Posts/Create">
+            <button class="btn purple-btn">
+            أنشر المنشور الحالي
+            <i class="bi bi-plus-lg"></i>
+            </button>
+            </a> *@
         </div>
     </div>
 
     <div class="row p-2 row row-cols-1 row-cols-md-2 g-4 mb-3">
         <!-- Normal Card -->
-        <div class="col-lg-6 no-slide" dir="rtl">
+        <div class="col-lg-6 no-slide">
             <div class="card p-4">
                 <div class="card-head">
                     <div class="card-icon">
                         <img src="~/Static/Icons/Group35.png" />
                     </div>
                     <div class="card-text">
-                        <h1>مساء الخير، @User.Identity.Name</h1>
+                        <h1>جدول المنشورات</h1>
                         <h2>لديك منشورات جديدة</h2>
                     </div>
                 </div>
                 <div class="card-body">
                     <h1>0 أيام</h1>
-                    <div class="container">
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                @*               <div ">
-                                <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div> *@
-                                @foreach (var post in posts)
-                                {
+                    <a href="/Posts/Create">
+                        <button type="button" class="btn green-btn">
+                            أنشئ منشور
 
-
-                                    <div class="swiper-slide">
-                                        @post.Title;
-                                    </div>
-                                }
-
-                            </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                        </div>
-                    </div>
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -114,6 +101,7 @@
                         </h2>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="stroke-div mb-0">
                         <button type="button" class="btn grey-btn p-2 my-3">
@@ -124,25 +112,22 @@
                             يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
                         </p>
                     </div>
-                    <div class="container">
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div>
-                                <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div> <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div>
+                </div>
+                <div class="swiper2">
+                    <div class="swiper-wrapper">
+                        @foreach (var post in posts.Take(10))
+                        {
+                            <div class="swiper-slide">
+                                placeholder
                             </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                        </div>
+                        }
                     </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-6">
             <div class="card p-4">
                 <div class="card-head">
@@ -156,6 +141,7 @@
                         </h2>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="stroke-div mb-0">
                         <button type="button" class="btn grey-btn p-2 my-3">
@@ -166,53 +152,81 @@
                             يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
                         </p>
                     </div>
-                    <div class="container">
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div>
-                                <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div> <div class="swiper-slide ">
-                                    <button class="swiper-slide slider-btn btn btn-primary">Create post</button>
-                                </div>
+                </div>
+                <div class="swiper2">
+                    <div class="swiper-wrapper">
+                        @foreach (var post in posts.Take(10))
+                        {
+                            <div class="swiper-slide">
+                                placeholder
                             </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                        </div>
+                        }
                     </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="card-banner my-4">
-            <div class="title">لا توجد منشورات قادمة هذا الاسبوع</div>
-            <div class="body">
-                <button type="button" class="btn">
-                    منشور جديد
 
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-            </div>
+    <div class="swiper p-4" style="background-color: white; height: 200px;box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            @foreach (var post in posts.Take(10))
+            {
+                <div class="swiper-slide post-list">
+                    <p><span>العنوان : </span> @post.Title</p>
+                    <p><span>التاريخ : </span> @post.PostDate</p>
+                    <a href="/Posts/Edit/@post.Id">رابط الخبر</a>
+                </div>
+            }
+
         </div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
     </div>
 
-    @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data);
+
+
+    @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data)
 </div>
 
 <style>
     a {
         text-decoration: none;
     }
+
+    .swiper-slide {
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        padding: 15px;
+    }
+
+    .post-list span {
+        font-weight: bold;
+    }
+
+    .post-list a {
+        font-weight: bold;
+    }
+
+    .swiper2 {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+    
+
+    @@media(max-width: 480px){
+        .swiper-slide {
+            padding: 25px;
+        }
+    }
 </style>
 
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-
-

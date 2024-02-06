@@ -8,13 +8,32 @@ try {
     const swiper = new Swiper(".swiper", {
         loop: true,
         centeredSlides: true,
-        slidesPerView: "1",
+        direction: 'horizontal',
+        spaceBetween: 100,
+        slidersPerView: 1,
+        breakpoints: {
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 50,
+            }
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        }
+    });
+
+    const swiper2 = new Swiper(".swiper2", {
+        loop: true,
+        slidersPerView: 1,
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
         },
     });
-} catch (error) {
+
+}
+catch (error) {
     console.log("no swiper found");
 }
 
