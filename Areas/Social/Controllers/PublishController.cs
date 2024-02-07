@@ -79,7 +79,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         [HttpPost]
-        public async void Send(ShareForm form)
+        public IActionResult Send(ShareForm form)
         {
             try
             {
@@ -108,10 +108,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     var operationId = SocialPublishService.Send(form.PostId, form.MediaId, data, channel, creationDate);
 
                 }
+                return Ok();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                return BadRequest(e.Message);
             }
         }
     }
