@@ -31,9 +31,7 @@
                 <hr />
                 <div class="channel-list my-3 d-flex" style="column-gap: 20px; overflow-x: auto">
 
-                    @{
-                        var index = 0;
-                    }
+                 
                     @foreach (var channel in allChannels)
                     {
 
@@ -47,12 +45,12 @@
                                 @channel.OriginalName
                             </label>
 
-                            <input type="checkbox" id="Channels[@index]" name="Channels[@index]" value="@channel.Network" style="width: fit-content !important; height: auto" />
+                            <input type="radio" id="Channels[0]" name="Channels[0]" value="@channel.Network" style="width: fit-content !important; height: auto" />
 
                         </div>
 
-                        <input type="checkbox" name="Data[@index].ChannelId" id="Data[@index].ChannelId" style="opacity: 0 ; position: absolute; width: 0px !important" />
-                        <script>
+                        <input type="checkbox" name="Data[0].ChannelId" id="Data[0].ChannelId" style="opacity: 0 ; position: absolute; width: 0px !important" />
+@*                         <script>
 
                             document.getElementById("Channels[0]").addEventListener("change", (e) => {
 
@@ -69,8 +67,8 @@
                             })
 
 
-                        </script>
-                        index++;
+                        </script> *@
+                       
                     }
                 </div>
 

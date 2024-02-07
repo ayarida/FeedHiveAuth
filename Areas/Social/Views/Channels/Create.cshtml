@@ -5,14 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var c = Model;//Current User
                   //Current Subscription
-    //Configs
+                  //Configs
     //
 }
 
 
-<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-
-<form action="https://localhost:7157/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false" method="POST">
+@* <form action="https://localhost:7157/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false" method="POST">
     <div>
         <button>Authorize an fb Channel</button>
     </div>
@@ -21,7 +19,7 @@
     <div>
         <button>Authorize DM Channel</button>
     </div>
-</form>
+</form> *@
 
 <div id="root">
     <div class="main-app" id="nw-bg-video-wrapper">
@@ -35,30 +33,14 @@
                     <div class="card-body">
                         <form id="assessment-form">
 
-
-                @*             <div class="page active">
-                                                     <span class="step">1</span>
-                                <span class="title">Networks</span> 
-                                @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/networks.cshtml")
-                            </div> *@
-
-                            <button asp-action="HtmxView" hx-get="/Social/Channels/HtmxView/netwroks" hx-target="placeholder" hx-push-url="true">
-                                Get networks    
+                            <button id="loadNetworks">
+                                Get networks
                             </button>
 
                             <div id="placeholder">
-
+                                Replace here
                             </div>
 
-   @*                          <div class="page">
-                                @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/accounts.cshtml")
-                            </div>
-                            <div class="page">
-                                @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/additionalInfo.cshtml", Model)
-                            </div>
-                            <div class="page">
-                                @await Html.PartialAsync("~/Areas/Social/Views/Channels/Create/finish.cshtml")
-                            </div> *@
                             <div class="row d-flex nav-buttons justify-content-center ">
                                 <div class="">
                                     <button type="button" id="next">
@@ -85,6 +67,16 @@
 </div>
 
 
+<script>
+
+    $("#loadNetworks").on("click", function (event) {
+        $("#placeholder").load("/Social/Channels/GetNetworks");
+        event.preventDefault();
+
+        console.log("clicked");
+    });
+</script>
+
 
 
 
@@ -95,23 +87,23 @@
 }
 
 <style>
-        .nw-form-control::placeholder {
-            color: grey;
-        }
+    .nw-form-control::placeholder {
+        color: grey;
+    }
 
 
-        .nw-form-control:focus {
-            outline: none;
-            border: none;
-            background-color: rgb(158, 120, 251);
+    .nw-form-control:focus {
+        outline: none;
+        border: none;
+        background-color: rgb(158, 120, 251);
+        color: white;
+        font-weight: bold;
+        box-shadow: 3px 3px 2px black;
+    }
+
+        .nw-form-control:focus::placeholder {
             color: white;
-            font-weight: bold;
-            box-shadow: 3px 3px 2px black;
         }
-
-            .nw-form-control:focus::placeholder {
-                color: white;
-            }
 
     textarea.nw-form-control {
         height: 21vh;
