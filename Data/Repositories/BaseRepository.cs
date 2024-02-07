@@ -59,11 +59,12 @@ namespace FeedHiveAuth.Data.Repositories
                 return default(IEnumerable<T>);
             return Query<T>(SqlSelect + " WHERE Id IN @Ids", new { Ids = ids });
         }
-        public void Delete(string id)
+        public IEnumerable<T>? Delete(string id)
         {
             using (connection)
             {
                 var resultQuery = connection.Query<T>(SqlDelete, new { Id = new[] { id } });
+                return resultQuery;
             }
         }
 
@@ -87,7 +88,7 @@ namespace FeedHiveAuth.Data.Repositories
             //Execute("UPDATE " + TableName + " SET " + column + "=@value WHERE Id=@id", new { value, id });
         }
 
-        public Post UpdatePostInfo(Post post)
+       /* public Post UpdatePostInfo(Post post)
         {
             using (connection)
             {
@@ -95,7 +96,7 @@ namespace FeedHiveAuth.Data.Repositories
                 var result = (Post)connection.Query<T>("UPDATE " + TableName + " SET " + "Title = " + post.Title + "=@value WHERE Id=" + new { Id = new[] { post.Id } });
                 return result;
             }
-        }
+        }*/
 
         public int Execute(string sql, dynamic param = null)
         {

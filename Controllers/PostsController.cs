@@ -3,6 +3,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -182,17 +183,14 @@ namespace FeedHiveAuth.Controllers
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
-
-
-        [HttpGet]
-        public void DeletePost(Post post)
+        
+        public void Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
             if (postMedia != null) _mediaItemService.Delete(postMedia.Id);
             _postService.Delete(post.Id);
         }
 
-        [HttpGet]
         public void Publish(string Id)
         {
             var currUser = GetCurrentUser();
@@ -225,7 +223,7 @@ namespace FeedHiveAuth.Controllers
         }
 
 
-        public void MultipleDelete([FromQuery] string idsStr)
+        public IActionResult MultipleDelete([FromQuery] string idsStr)
         {
 
 
@@ -241,13 +239,15 @@ namespace FeedHiveAuth.Controllers
             {
                 try
                 {
-                    DeletePost(post);
+                    Delete(post);
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
+                    return BadRequest(ex.Message);
                 }
             }
+            return Ok();
         }
 
         [HttpGet]
