@@ -3,6 +3,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -22,21 +23,13 @@ namespace FeedHiveAuth.Controllers
             _logger = logger;
         }
 
-        [Authorize(Policy = "Admin", Roles = "Admin")]
-        [HttpGet]
-        public string RegisterUserstoSubscription()
-        {
-            return "You are admin and have access";
-        }
-
-        /*[Authorize(Policy = "Admin",Roles = "Admin")]*/
         [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
-
+        [Authorize]
         [HttpGet]
         public ActionResult List()
         {
@@ -49,7 +42,7 @@ namespace FeedHiveAuth.Controllers
             return View(posts);
         }
 
-
+        [Authorize]
         [HttpPost]
         public ActionResult CreatePost()
         {
@@ -92,7 +85,7 @@ namespace FeedHiveAuth.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("------------ Exception in saving media ", ex);
+                _logger.LogError("********************* Error in saving media, EXCEPTION \r\n " + ex + "\r\n*********************");
                 return 0;
             }
         }
@@ -120,32 +113,23 @@ namespace FeedHiveAuth.Controllers
         {
             if (file != null)
             {
-                //var wwwPath = this.Environment.WebRootPath;
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
                 }
-
-                //Uploaded Successfully
-                return "File Uploaded Successfully";
+                return "File uploaded successfully!";
             }
 
-            return "File Failed to upload!";
+            return "File failed to upload!";
         }
 
         public void MultiUpload(IFormFileCollection Files)
-        {
-            /* if (ModelState.IsValid)
-             {
-                 if (model.Files.Count > 0)
-                 {*/
+        { 
             foreach (var file in Files)
             {
 
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files");
-
-                //create folder if not exist
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
@@ -157,10 +141,6 @@ namespace FeedHiveAuth.Controllers
                     file.CopyTo(stream);
                 }
             }
-
-            /*}
-
-        }*/
         }
         public static string GeneratePostLink(string input)
         {
@@ -197,26 +177,22 @@ namespace FeedHiveAuth.Controllers
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError("------------ Exception in saving media ", ex);
+                        _logger.LogError("********************* Error in saving media, EXCEPTION \r\n " + ex + "\r\n*********************");
                     }
                 }
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
-
-
-        [HttpGet]
-        public void DeletePost(Post post)
+        
+        public void Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
             if (postMedia != null) _mediaItemService.Delete(postMedia.Id);
             _postService.Delete(post.Id);
         }
 
-        [HttpGet]
         public void Publish(string Id)
         {
-            //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var currUser = GetCurrentUser();
             _postService.Publish(Id, currUser.Id);
 
@@ -241,13 +217,13 @@ namespace FeedHiveAuth.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error while publishing this post", post);
+                    _logger.LogError("********************* Error in publishing this post, EXCEPTION \r\n" + ex + "\r\n*********************");
                 }
             }
         }
 
 
-        public void MultipleDelete([FromQuery] string idsStr)
+        public IActionResult MultipleDelete([FromQuery] string idsStr)
         {
 
 
@@ -263,13 +239,15 @@ namespace FeedHiveAuth.Controllers
             {
                 try
                 {
-                    DeletePost(post);
+                    Delete(post);
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
-                    Console.WriteLine("Error while deleting this post", post);
+                    _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
+                    return BadRequest(ex.Message);
                 }
             }
+            return Ok();
         }
 
         [HttpGet]
