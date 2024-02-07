@@ -33,6 +33,7 @@
 
                     @{
                         var index = 0;
+
                     }
                     @foreach (var channel in allChannels)
                     {
@@ -47,30 +48,12 @@
                                 @channel.OriginalName
                             </label>
 
-                            <input type="checkbox" id="Channels[@index]" name="Channels[@index]" value="@channel.Network" style="width: fit-content !important; height: auto" />
+                            <input type="radio" name="Data[0].ChannelId" value="@channel.Id" style="width: fit-content !important; height: auto" />
+                            <input type="hidden" name="Channels" value="@allChannels" style="width: fit-content !important; height: auto" />
 
                         </div>
 
-                        <input type="checkbox" name="Data[@index].ChannelId" id="Data[@index].ChannelId" style="opacity: 0 ; position: absolute; width: 0px !important" />
-                        <script>
 
-                            document.getElementById("Channels[0]").addEventListener("change", (e) => {
-
-                                if (e.target.checked) {
-                                    document.getElementById("Data[@index].ChannelId").checked = true
-
-                                    document.getElementById("Data[@index].ChannelId").value = "@channel.Id"
-                                } else {
-                                    document.getElementById("Data[@index].ChannelId").value = ''
-                                    document.getElementById("Data[@index].ChannelId").checked = false
-
-                                }
-
-                            })
-
-
-                        </script>
-                        index++;
                     }
                 </div>
 
@@ -117,7 +100,7 @@
                 document.getElementById('form-share').addEventListener('submit',
                     function (event) {
 
-                        if ($("input[type=checkbox]:checked").length == 0) {
+                        if ($("input[type=radio]:checked").length == 0) {
                             event.preventDefault();
                             alert("select at least one channel")
                         }
@@ -127,18 +110,19 @@
                             var serviceURL = "/Social/Publish/Send" + event;
                             var shareForm = $(':input').serializeArray();
                             var imgSrc = $('.shareImage').attr('src');
-                            shareForm.push(({ name: 'src', value: imgSrc }));
-
+                            var channelId = $("input[name='Channels[0]']:checked").val();
                             $.ajax({
                                 type: "POST",
-                                url: shareForm,
-                                data: mediaId,
-                                success: function (data) {
+                                url: serviceURL,
+                                data: shareForm,
+                                success: function () {
                                     // location.href = "/Posts/List"
+                                    //customized alert for success
                                     alert("success");
                                 },
-                                error: function (data) {
-                                    alert("error");
+                                error: function (xhr, status, error) {
+                                    var err = eval("(" + xhr.responseText + ")");
+                                    alert(err.Message);
                                 },
                             })
                         }
