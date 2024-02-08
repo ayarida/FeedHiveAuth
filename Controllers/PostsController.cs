@@ -96,6 +96,7 @@ namespace FeedHiveAuth.Controllers
             oldPost.Title = updatedPost.Title;
             oldPost.ShortTitle = updatedPost.ShortTitle;
             oldPost.Content = updatedPost.Content;
+            oldPost.Summary = updatedPost.Summary;
             oldPost.PublicLink = GeneratePostLink(updatedPost.Title);
             oldPost.ModifiedBy = GetCurrentUser()?.Id;
             try
