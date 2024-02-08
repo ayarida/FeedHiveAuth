@@ -55,16 +55,10 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
 
-        private IActionResult HtmxView(object model)
+        [HttpGet]
+        public ActionResult GetNetworks()
         {
-            if (Request.Headers.ContainsKey("HX-Request"))
-            {
-                Response.Headers.Add("HX-Push", Request.Path.ToString());
-                return PartialView(model);
-            }
-
-            return View(model);
-
+            return View("~/Social/Shared/_networks.cshtml");
         }
 
         // POST: Social/Channels/Create

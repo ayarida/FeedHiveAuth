@@ -111,20 +111,25 @@
                             var shareForm = $(':input').serializeArray();
                             var imgSrc = $('.shareImage').attr('src');
                             var channelId = $("input[name='Channels[0]']:checked").val();
-                            $.ajax({
-                                type: "POST",
-                                url: serviceURL,
-                                data: shareForm,
-                                success: function () {
-                                    // location.href = "/Posts/List"
-                                    //customized alert for success
-                                    alert("success");
-                                },
-                                error: function (xhr, status, error) {
-                                    var err = eval("(" + xhr.responseText + ")");
-                                    alert(err.Message);
-                                },
-                            })
+
+                            if (confirm("Are you sure you want to delete the selected users ?")) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: serviceURL,
+                                    data: shareForm,
+                                    success: function () {
+                                        // location.href = "/Posts/List"
+                                        //customized alert for success
+                                        alert("success");
+                                    },
+                                    error: function (xhr, status, error) {
+                                        var err = eval("(" + xhr.responseText + ")");
+                                        alert(err.Message);
+                                    },
+                                })
+                            }
+
+
                         }
                     });
             </script>
@@ -203,7 +208,7 @@
 
     .form-control:disabled, .form-control[readonly] {
         /*       background-color: #e9ecef;
-                            opacity: 1; */
+                                opacity: 1; */
 
         padding: 10px;
         border-radius: 5px !important;
