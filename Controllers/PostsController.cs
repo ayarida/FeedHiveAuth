@@ -270,7 +270,9 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            var post = _postService.GetPostById(id);
+            var post = _postService.GetPostById(id);    
+            var postMedia = _mediaItemService.GetMediasByPostId(id);
+            post.PostMediaItems = postMedia;
             return View(post);
         }
 

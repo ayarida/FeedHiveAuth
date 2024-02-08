@@ -43,10 +43,13 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             //get current subscription
             //var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
             var media = _mediaItemService.GetMediaByPostId(postid);
+            var medias = _mediaItemService.GetMediasByPostId(postid);
             PublishErrorEnum error;
             //Aya's local DB ids for API testing reasons
 
             var post = _postService.Get(postid);
+            if (medias != null) 
+                post.PostMediaItems = medias;
             var subSocialConfigs = SocialServiceHelper.GetConfigs();
             var channels = GetChannels(out error);
             var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
