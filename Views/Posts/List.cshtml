@@ -32,10 +32,12 @@
             <table id="posts-id" class="table" dir="rtl">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> اختر الكل</lablel></th>
+                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
                         <th>ميديا</th>
                         <th>عنوان</th>
                         <th>عنوان قصير</th>
+                        <th>الحالة</th>
+                        <th>سوشال ميديا</th>
                         <th>التاريخ</th>
                         <th>عمليات</th>
                     </tr>
@@ -59,6 +61,16 @@
                                 <td><img src="" /></td>
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
+                                <td>
+                                    <button class="button">
+                                        @{
+                                            var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
+                                        }
+                                        @postStatus
+                                    </button>
+                                </td>
+                                <td><i class="bi bi-facebook"></i><i class="bi bi-twitter-x"></i></td>
+
                                 <td>@post.PostDate</td>
                                 <td>
                                     <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
@@ -67,7 +79,6 @@
                                 @* <td></td> *@
 
                             </tr>
-
                         }
                     }
                 </tbody>
