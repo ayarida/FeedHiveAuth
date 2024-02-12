@@ -5,7 +5,7 @@ namespace FeedHiveAuth.Areas.Social.Models
 {
     public class SocialConfigs
     {
-        public TechnicalConfigs TechnicalConfigs { get; set; }
+        public TechnicalConfigs TechnicalConfigs { get; set; } 
         public string PersonalShareNetworks { get; set; }
         public bool EnableShareOnAllNetworks { get; set; }
         public FacebookConfigs FacebookConfigs { get; set; }
@@ -63,6 +63,12 @@ namespace FeedHiveAuth.Areas.Social.Models
                         LocalPath = "C:/media/",
                         Enable = true
                     }
+                }, 
+                TechnicalConfigs = new TechnicalConfigs
+                {
+                    PublicUrl = "https://socialpublisher.net/",
+                    LocalUrl = "https://localhost:7157/"
+
                 }
             };
         }
