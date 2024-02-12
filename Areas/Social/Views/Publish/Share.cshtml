@@ -89,7 +89,9 @@
                         @if (media != null)
                         {
                             <label for="MediaId" class="mb-2 control-label">ميديا </label>
+                            <img src="@media.Path"/>
                             <br />
+                            <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
                             <input type="text" name="MediaId" value="@media.Id" class="form-control">
                         }
                     </div>
@@ -109,10 +111,18 @@
                         else {
                             var serviceURL = "/Social/Publish/Send" + event;
                             var shareForm = $(':input').serializeArray();
-                            var imgSrc = $('.shareImage').attr('src');
+
+                            if ($('.shareImage')) {
+                                var imgName = $('.shareImage').attr('name');
+                                var imgId = $('.shareImage').attr('value');
+                                shareForm.push({ name: imgName, value: imgId })
+                            }
+
                             var channelId = $("input[name='Channels[0]']:checked").val();
 
                             if (confirm("Are you sure you want to delete the selected users ?")) {
+                                console.log(shareForm);
+
                                 $.ajax({
                                     type: "POST",
                                     url: serviceURL,
@@ -208,7 +218,7 @@
 
     .form-control:disabled, .form-control[readonly] {
         /*       background-color: #e9ecef;
-                                opacity: 1; */
+                                            opacity: 1; */
 
         padding: 10px;
         border-radius: 5px !important;
