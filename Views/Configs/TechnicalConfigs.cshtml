@@ -9,11 +9,40 @@
     var instagramConfigs = configs.InstagramConfigs;
     var wpConfigs = configs.WhatsappConfigs;
     var dailymotionConfigs = configs.DailymotionConfigs;
+    var technicalConfigs = configs.TechnicalConfigs;
 
 }
 
 
 <div class="py-4" id="configsList">
+
+
+    <div id="localUrlConfigs">
+        <h6 class="config-title">Local Base Url</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="local-localUrl">Url</label>
+                <input type="text" id="local-localUrl" name="data.localurl" />
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div id="publicUrlConfigs">
+        <h6 class="config-title">Local Base Url</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label for="public-publicUrl">Url</label>
+                <input type="text" id="public-publicUrl" name="data.publicurl" />
+            </div>
+
+        </div>
+    </div>
+
+
+
 
     <div id="facebookConfigs" class="mt-3">
         <h6 class="config-title mb-5">Facebook Configs</h6>
@@ -286,12 +315,12 @@ else
                 token: "@telegramConfigs.Bot.Token",
         @* toStringTolower is required since javascript differenciate bewtween True and true *@
                 enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
-                    }
+                                                                    }
 
-                    $("#telegramConfigs").jsForm({
+                                                                    $("#telegramConfigs").jsForm({
                     data: telegram,
                 });
-                });
+                                                                });
 
     </script>
 }
@@ -408,7 +437,7 @@ else
 {
     <script>
         $("#dailyMotionConfigs").ready(function () {
-            var dail = {
+            var dailymotion = {
                 name:,
                 appsecret:,
                 enabled: false,
@@ -463,10 +492,22 @@ else
 
 
 
+else
+{
+    <script>
+        $("#details").ready(function () {
+            var publicUrlDataConfigs = {
+                publicurl: ,
+
+            }
+        });
+    </script>
+}
+
 <script>
 
     $("#saveData").click(function () {
-        var configsJson = ('"Configs" :{' + '"Facebook: "' + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " ") + "," + '"Twitter: "' + JSON.stringify($("#twitterConfigs").jsForm("get"), null, " ") + "," + '"Telegram: "' + JSON.stringify($("#telegramConfigs").jsForm("get"), null, " ") + "," + '"Instagram: "' + JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + "," + '"Whatsapp: "' + JSON.stringify($("#whatsappConfigs").jsForm("get"), null, " ") + "}");
+        var configsJson = ('"Configs" :{' + '"Facebook: "' + JSON.stringify($("#facebookConfigs").jsForm("get"), null, " ") + "," + '"Twitter: "' + JSON.stringify($("#twitterConfigs").jsForm("get"), null, " ") + "," + '"Telegram: "' + JSON.stringify($("#telegramConfigs").jsForm("get"), null, " ") + "," + '"Instagram: "' + JSON.stringify($("#instagramConfigs").jsForm("get"), null, " ") + "," + '"Whatsapp: "' + JSON.stringify($("#whatsappConfigs").jsForm("get"), null, " ") + '"LocalUrl: "' + JSON.stringify($("#localUrlConfigs").jsForm("get"), null, " ") + "}");
 
         console.log(configsJson);
 
@@ -594,4 +635,10 @@ else
         .slider.round:before {
             border-radius: 50%;
         }
+
+    /*     div#inputConfigs\ urls {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: flex-end;
+                            } */
 </style>
