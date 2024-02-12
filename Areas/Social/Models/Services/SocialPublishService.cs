@@ -30,6 +30,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 Parameters = sendData.Serialize(),
             };
             Instances.Repositories.OperationRepository.Insert(operation);
+
             OperationsService.ProcessOperation(operation);
             return operation.Id;
         }
