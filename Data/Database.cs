@@ -29,7 +29,7 @@ namespace FeedHiveAuth.Data
             public static string Roles = "Id,Name,NormalizedName,ConcurrencyStamp";
 
             public static string Operation =
-                "Id,Status,CurrentState,Service,Action,Callback,PostId,MediaId,CreationDate,StartTime,EndTime,Progress,Parameters,Result,Messages,Info,PostId";
+                "Id,Status,CurrentState,Service,Action,Callback,PostId,MediaId,CreationDate,StartTime,EndTime,Progress,Parameters,Result,Messages,Info";
             public static string Post = "Id,Title,ShortTitle,Summary,Content,PublicLink,PostDate,CreatedBy,ModifiedBy";
             public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy,Extension,Type";
             public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,SubscriptionId,Settings,Order,Configs";

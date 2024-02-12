@@ -165,7 +165,8 @@ namespace FeedHiveAuth.Data.Repositories
         {
             model.LastModified = DomainTime.Now();
             model.CreationDate = creationDate.HasValue ? creationDate.Value : DomainTime.Now();
-            var sql = SqlInsert;
+/*            var gen = Columns.GenerateInsertQuery(TableName, ExcludedColumns);
+*/            var sql = SqlInsert;
             Execute(sql, model);
         }
         public void Insert(IEnumerable<T> models, DateTime? creationDate = null)

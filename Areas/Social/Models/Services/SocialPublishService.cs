@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Social.SocialDailymotion.Models;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Mdels;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
@@ -28,7 +29,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 MediaId = mediaId,
                 Parameters = sendData.Serialize(),
             };
-            //Instances.Repositories.OperationRepository.Insert(operation);
+            Instances.Repositories.OperationRepository.Insert(operation);
             OperationsService.ProcessOperation(operation);
             return operation.Id;
         }

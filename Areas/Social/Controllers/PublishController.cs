@@ -116,7 +116,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                _logger.LogError("********************* " + e.Message + "*********************");
                 return BadRequest(e.Message);
             }
         }
