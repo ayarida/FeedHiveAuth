@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
 using FeedHiveAuth.Areas.Social.Models;
 using Newtonsoft.Json;
+using FeedHiveAuth.Controllers;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -21,6 +22,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
         protected ChannelRepository _channelService = Instances.Repositories.ChannelRepository;
+        private readonly ILogger<AuthorizationController> _logger;
+
+        public AuthorizationController(ILogger<AuthorizationController> logger)
+        {
+            _logger = logger;
+        }
         [HttpPost]
         public async Task<IActionResult> OAuthFlow(string network, string account, bool reauthorize = false, string credentials = null, string id = null)
         {
@@ -53,7 +60,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             //        case SocialNetworkTypeEnum.Odnoklassniki:
             //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
             case SocialNetworkTypeEnum.Telegram:
-                return TelegramSignIn(id, subscription, currentUser, reauthorize);
+                return TelegramSignIn(id, currentUser, reauthorize);
                 //        case SocialNetworkTypeEnum.Mangomolo:
                 //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
                 //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
@@ -152,7 +159,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 channels = channels.Where(channel => existingChannelsIds.ContainsIgnoreCase(channel.NetworkId));
                 if (channels.Empty())
                 {
-                    Debug.WriteLine($"The reauthorized {networkTypeEnum} channel doesn't exist");
+                    _logger.LogError("********************* The reauthorized channel doesn't exist *********************");
                     return RedirectToAction("Create", "Channels", new { area = "social", type = networkType });
                 }
             }
@@ -163,7 +170,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 Debug.WriteLine("NICE TO REACH HERE");
             return RedirectToAction(reauthorize ? "Save" : "Create", "Channel", new { area = "social" });
         }
-        public IActionResult TelegramSignIn(string username, Subscription subscription, User currentUser, bool reauthorize = false)
+        public IActionResult TelegramSignIn(string username, User currentUser, bool reauthorize = false)
         {
             var success = false;
             var redirect = "";
@@ -171,7 +178,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var channels = new List<Channel> { };
             try
             {
-                var channel = TelegramService.GetChannelInfo(username, Guid.Parse(subscription.Id));
+                var channel = TelegramService.GetChannelInfo(username);
                 if (channel == null)
                 {
                     message = "Couldn't authorize the selected Telegram account";
@@ -179,7 +186,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 else
                 {
                     var networkType = SocialNetworkTypeEnum.Telegram.Key();
-                    var existingChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(oldChannel => oldChannel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() }) && oldChannel.NetworkId.EqualsIgnoreCase(channel.NetworkId));
+                    var existingChannel = Collections.Channels().FirstOrDefault(oldChannel => oldChannel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() }) && oldChannel.NetworkId.EqualsIgnoreCase(channel.NetworkId));
                     if (reauthorize && existingChannel == null)
                     {
                         Console.WriteLine($"The reauthorized Telegram channel doesn't exist");
@@ -189,9 +196,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     channels.Add(channel);
                     foreach(var ch in channels)
                     {
-                        ch.SubscriptionId = subscription.Id;
+                        //ch.SubscriptionId = subscription.Id;
                         ChannelErrorEnum error;
-                        var oldChannel = _channelService.GetByNetwork(ch.SubscriptionId, ch.Network, ch.NetworkId, out error);
+                        var oldChannel = _channelService.GetByNetwork(ch.Network, ch.NetworkId, out error);
                         switch (error)
                         {
                             case ChannelErrorEnum.NOT_FOUND:
@@ -205,22 +212,15 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                                 _channelService.Update(oldChannel);
                                 break;
                         }
-
-
                     }
                 }
             }
             catch (Exception ex)
             {
                 message = "Couldn't authorize the selected Telegram account: " + ex.FullMessage();
+                _logger.LogError(message);
             }
             return Json(new { success, redirect, message });
-        }
-
-        private ActionResult GetAdminUrl()
-        {
-            var redirectUrl = "https://localhost:7157/Home/RedirectSocial";
-            return Redirect(redirectUrl);
         }
     }
 }

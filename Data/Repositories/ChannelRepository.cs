@@ -59,9 +59,9 @@ namespace FeedHiveAuth.Data.Repositories
             }
         }
 
-        public Channel GetByNetwork(string subscriptionId, string network, string networkId, out ChannelErrorEnum error)
+        public Channel GetByNetwork(string network, string networkId, out ChannelErrorEnum error)
         {
-            var oldChannel = Collections.ChannelsOf(subscriptionId).FirstOrDefault(c => c.NetworkId.EqualsIgnoreCase(networkId) && c.Network.EqualsIgnoreCase(network));
+            var oldChannel = Collections.Channels().FirstOrDefault(c => c.NetworkId.EqualsIgnoreCase(networkId) && c.Network.EqualsIgnoreCase(network));
             if (oldChannel == null)
                 error = ChannelErrorEnum.NOT_FOUND;
             else
