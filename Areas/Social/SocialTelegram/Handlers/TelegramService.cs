@@ -36,9 +36,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
             return client.GetCurrentUser();
         }
 
-        public static Channel GetChannelInfo(string username, Guid subscriptionId)
+        public static Channel GetChannelInfo(string username)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId.ToString()).TelegramConfigs;
+            var configs = SocialServiceHelper.GetConfigs().TelegramConfigs;
             var client = new TelegramClient(configs, username);
             var result = client.GetCurrentChat();
             if (!result.IsSuccessful)
