@@ -7,6 +7,7 @@
 @{
     var post = Model.Post;
     var media = Model.Media;
+    var medias = Model.Medias;
     var socialConfigs = new SocialConfigs();
     var activeNetworkTypes = Model.ActiveSocialNetworks;
 
@@ -89,7 +90,7 @@
                         {
                             <label for="MediaId" class="mb-2 control-label">ميديا </label>
                             <br />
-                            <input type="image" name="Data[0].MediaId" src="@media.Path" alt="Submit" class="shareImage" value="@media.Id" class="form-control">
+                            <input type="text" name="MediaId" value="@media.Id" class="form-control">
                         }
                     </div>
                 </div>
@@ -106,7 +107,6 @@
                         }
 
                         else {
-
                             var serviceURL = "/Social/Publish/Send" + event;
                             var shareForm = $(':input').serializeArray();
                             var imgSrc = $('.shareImage').attr('src');

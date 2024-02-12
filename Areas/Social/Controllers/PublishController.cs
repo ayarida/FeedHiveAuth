@@ -56,7 +56,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var model = new ShareView
             {
                 Post = post,
-                Media = media != null ? _postService.GetPostMedia(postid, media.Id, out error) : null,
+                Media = media,
+                Medias = medias,
                 Channels = channels,
                 ActiveSocialNetworks = activeNetworkTypes
             };
