@@ -5,6 +5,7 @@ namespace FeedHiveAuth.Areas.Social.Models
 {
     public class SocialConfigs
     {
+        public TechnicalConfigs TechnicalConfigs { get; set; }
         public string PersonalShareNetworks { get; set; }
         public bool EnableShareOnAllNetworks { get; set; }
         public FacebookConfigs FacebookConfigs { get; set; }
@@ -66,6 +67,13 @@ namespace FeedHiveAuth.Areas.Social.Models
             };
         }
     }
+
+    public class TechnicalConfigs
+    {
+        public string? PublicUrl { get; set; }
+        public string? LocalUrl { get; set; }
+    }
+
     public class FacebookConfigs
     {
         public FacebookApp Application { get; set; }
