@@ -44,7 +44,7 @@
                                 <p class="text-capitalize mb-1">@channel.Network</p>
                                 <i class="bi bi-@(channel.Network == "dailymotion" ? "play-circle" : channel.Network) social-icon ms-2"></i>
                             </div>
-                            <img src="~/uploads/test.jpg" style="max-width: 90px; max-height= 90px:" />
+                            <img src="@channel.ProfileImageUrl" style="max-width: 90px; max-height= 90px:" />
                             <label for="@channel.Network">
                                 @channel.OriginalName
                             </label>
