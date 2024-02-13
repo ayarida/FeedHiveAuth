@@ -58,8 +58,16 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [HttpGet]
         public ActionResult GetNetworks()
         {
-            return View("~/Social/Shared/_networks.cshtml");
+            return PartialView("~/Areas/Social/Views/Shared/_networks.cshtml");
         }
+
+
+        [HttpGet]
+        public ActionResult GetTelegram()
+        {
+            return PartialView("~/Areas/Social/Views/Shared/_telegram.cshtml");
+        }
+
 
         // POST: Social/Channels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

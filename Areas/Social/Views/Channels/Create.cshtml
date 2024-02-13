@@ -1,10 +1,13 @@
-﻿@model FeedHiveAuth.Models.Channel
+﻿@using FeedHiveAuth.Areas.Social.Models
+@model FeedHiveAuth.Models.Channel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var c = Model;//Current User
-                  //Current Subscription
+
+    var c = Model;
+    //Current User
+                                                   //Current Subscription
                   //Configs
     //
 }
@@ -32,31 +35,35 @@
                     </div>
                     <div class="card-body">
                         <form id="assessment-form">
-
+                            @*
                             <button id="loadNetworks">
-                                Get networks
+                            Get networks
                             </button>
 
                             <div id="placeholder">
-                                Replace here
+                            Replace here
                             </div>
 
                             <div class="row d-flex nav-buttons justify-content-center ">
-                                <div class="">
-                                    <button type="button" id="next">
-                                        التالي <i class="fa fa-arrow-right"></i>
-                                    </button>
-                                </div>
-
-                                <div class="back-button">
-                                    <button type="button" id="back">
-                                        <i class="fa fa-arrow-left"></i>السابق
-
-                                    </button>
-                                </div>
-
-
+                            <div class="">
+                            <button type="button" id="next">
+                            التالي <i class="fa fa-arrow-right"></i>
+                            </button>
                             </div>
+
+                            <div class="back-button">
+                            <button type="button" id="back">
+                            <i class="fa fa-arrow-left"></i>السابق
+
+                            </button>
+                            </div>
+
+
+                            </div> *@
+
+                            @Html.Partial("~/Areas/Social/Views/Shared/_networks.cshtml")
+
+
                         </form>
                     </div>
                 </div>
@@ -67,7 +74,7 @@
 </div>
 
 
-<script>
+@* <script>
 
     $("#loadNetworks").on("click", function (event) {
         $("#placeholder").load("/Social/Channels/GetNetworks");
@@ -75,7 +82,7 @@
 
         console.log("clicked");
     });
-</script>
+</script> *@
 
 
 
@@ -174,4 +181,8 @@
         .radio.selected {
             border-color: blue;
         }
+
+    #assessment-form{
+        width: 100%;
+    }
 </style>

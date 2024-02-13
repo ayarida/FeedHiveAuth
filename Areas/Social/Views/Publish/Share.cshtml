@@ -89,7 +89,7 @@
                         @if (media != null)
                         {
                             <label for="MediaId" class="mb-2 control-label">ميديا </label>
-                            <img src="@media.Path"/>
+                            <img src="@media.Path" />
                             <br />
                             <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
                             <input type="text" name="MediaId" value="@media.Id" class="form-control">
@@ -105,7 +105,13 @@
 
                         if ($("input[type=radio]:checked").length == 0) {
                             event.preventDefault();
-                            alert("select at least one channel")
+                            swal.fire({
+                                customClass: {
+                                    confirmButton: "btn btn-primary",
+                                },
+                                title: "الرجاء تحديد قناة",
+                                confirmButtonText: "موافق"
+                            });
                         }
 
                         else {
@@ -120,26 +126,21 @@
 
                             var channelId = $("input[name='Channels[0]']:checked").val();
 
-                            if (confirm("Are you sure you want to delete the selected users ?")) {
-                                console.log(shareForm);
 
-                                $.ajax({
-                                    type: "POST",
-                                    url: serviceURL,
-                                    data: shareForm,
-                                    success: function () {
-                                        // location.href = "/Posts/List"
-                                        //customized alert for success
-                                        alert("success");
-                                    },
-                                    error: function (xhr, status, error) {
-                                        var err = eval("(" + xhr.responseText + ")");
-                                        alert(err.Message);
-                                    },
-                                })
-                            }
-
-
+                            $.ajax({
+                                type: "POST",
+                                url: serviceURL,
+                                data: shareForm,
+                                success: function () {
+                                    // location.href = "/Posts/List"
+                                    //customized alert for success
+                                    window.location.reload();
+                                },
+                                error: function (xhr, status, error) {
+                                    var err = eval("(" + xhr.responseText + ")");
+                                    alert(err.Message);
+                                },
+                            })
                         }
                     });
             </script>
@@ -218,7 +219,7 @@
 
     .form-control:disabled, .form-control[readonly] {
         /*       background-color: #e9ecef;
-                                            opacity: 1; */
+                                                opacity: 1; */
 
         padding: 10px;
         border-radius: 5px !important;
@@ -233,3 +234,4 @@
     }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
