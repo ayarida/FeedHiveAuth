@@ -1,18 +1,16 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
+using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
-using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
-using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
-using FeedHiveAuth.Models.Common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using Microsoft.AspNetCore.HttpOverrides;
-using FeedHiveAuth.Areas.Social.Models;
-using Newtonsoft.Json;
-using FeedHiveAuth.Controllers;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -47,25 +45,25 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     var objResult = obj.ValueFromJson("Value", new JObject());
                     var redirect = objResult.ValueFromJson<string>("redirect", null);
                     return Redirect(redirect);
-                 case SocialNetworkTypeEnum.DailyMotion:
-                    return DailymotionSignIn(network,id);
-            //        case SocialNetworkTypeEnum.Twitter:
-            //            return TwitterOAuthFlow(account, subscription, reauthorize);
-            //        case SocialNetworkTypeEnum.Youtube:
-            //            return GoogleOAuthFlow(network, subscription, reauthorize);
-            //        case SocialNetworkTypeEnum.Firebase:
-            //            return FirebaseSignIn(credentials, subscription, reauthorize);
-            //        case SocialNetworkTypeEnum.Soundcloud:
-            //            return SoundcloudOAuthFlow(subscription, reauthorize);
-            //        case SocialNetworkTypeEnum.Odnoklassniki:
-            //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
-            case SocialNetworkTypeEnum.Telegram:
-                return TelegramSignIn(id, currentUser, reauthorize);
-                //        case SocialNetworkTypeEnum.Mangomolo:
-                //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
-                //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
-                //            ViewBag.Reauthorize = reauthorize;
-                //            return Json(new { success = true, redirect = url });*/
+                case SocialNetworkTypeEnum.DailyMotion:
+                    return DailymotionSignIn(network, id);
+                //        case SocialNetworkTypeEnum.Twitter:
+                //            return TwitterOAuthFlow(account, subscription, reauthorize);
+                //        case SocialNetworkTypeEnum.Youtube:
+                //            return GoogleOAuthFlow(network, subscription, reauthorize);
+                //        case SocialNetworkTypeEnum.Firebase:
+                //            return FirebaseSignIn(credentials, subscription, reauthorize);
+                //        case SocialNetworkTypeEnum.Soundcloud:
+                //            return SoundcloudOAuthFlow(subscription, reauthorize);
+                //        case SocialNetworkTypeEnum.Odnoklassniki:
+                //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
+                case SocialNetworkTypeEnum.Telegram:
+                    return TelegramSignIn(id, currentUser, reauthorize);
+                    //        case SocialNetworkTypeEnum.Mangomolo:
+                    //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
+                    //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
+                    //            ViewBag.Reauthorize = reauthorize;
+                    //            return Json(new { success = true, redirect = url });*/
                     //        //case SocialNetworkTypeEnum.Shutterstock:
                     //        //    return ShutterstockOAuthFlow(reauthorize);
             }
@@ -104,7 +102,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
 
-        public IActionResult FacebookSignIn(string state,string code)
+        public IActionResult FacebookSignIn(string state, string code)
         {
             try
             {
@@ -126,13 +124,13 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
         }
 
-        public IActionResult DailymotionSignIn(string network , string id)
+        public IActionResult DailymotionSignIn(string network, string id)
         {
             var dailymotionConfigs = SocialConfigs.Construct().DailymotionConfigs;
             var jsonDmConfigs = JsonConvert.SerializeObject(dailymotionConfigs);
             ChannelErrorEnum error;
-            var channel = _channelService.GetById(id,out error);
-            switch(error)
+            var channel = _channelService.GetById(id, out error);
+            switch (error)
             {
                 case ChannelErrorEnum.NOT_FOUND:
                     channel = _channelService.Create(network, out error);
@@ -194,7 +192,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     }
                     success = true;
                     channels.Add(channel);
-                    foreach(var ch in channels)
+                    foreach (var ch in channels)
                     {
                         //ch.SubscriptionId = subscription.Id;
                         ChannelErrorEnum error;
@@ -205,7 +203,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                                 var newChannel = _channelService.AddChannel(ch);
                                 break;
                             case ChannelErrorEnum.NO_ERROR:
-                                oldChannel.OriginalName = ch.OriginalName; 
+                                oldChannel.OriginalName = ch.OriginalName;
                                 oldChannel.NetworkUrl = ch.NetworkUrl;
                                 oldChannel.Status = StatusEnum.Active.Value();
                                 oldChannel.Credentials = ch.Credentials;

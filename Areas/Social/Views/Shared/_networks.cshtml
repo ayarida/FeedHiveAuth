@@ -86,7 +86,7 @@
                     <span class="infobox-text">Whatsapp</span>
                 </div>
             </div>
-            <div class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.DailyMotion.Key()', @(DailymotionEnabled ? "true" : "false"))" @(DailymotionEnabled ? "" : "disabled")>
+            <div class="infobox next-page" id="callDailyMotion">
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-camera-video"></i>
                 </div>
@@ -104,9 +104,17 @@
         $("#callTelegram").on("click", function (event) {
             $("#channelHolder").load("/Social/Channels/GetTelegram");
             event.preventDefault();
-            
+
+        })
+
+        $("#callDailyMotion").on("click", function (event) {
+            $("#channelHolder").load("/Social/Channels/GetDailyMotion");
+            event.preventDefault();
+
         })
     })
+
+
 </script>
 
 <style>
