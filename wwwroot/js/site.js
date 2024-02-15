@@ -46,31 +46,42 @@ function toggle(source) {
     }
 }
 
-function deleteSelected() {
+function deleteSelected(event) {
     selected = $("tbody input:checkbox:checked");
-    var deleteArr = [];
-    selected.each(function (index, value) {
-        deleteArr.push($(value).val());
-    });
-    console.log(deleteArr.join(","));
-    var idsString = deleteArr.join(",");
-    var serviceURL = "/Posts/MultipleDelete";
-    $.ajax({
-        type: "GET",
-        url: serviceURL,
-        data: { idsStr: idsString },
-        success: function (data) {
-            $("#success-message").modal("show");
-            $(".close-popup").click(function () {
-                $("#success-message").modal("hide");
-                location.reload();
-            });
-        },
-        error: function (data) {
-            errorFunc();
-        },
-    });
-    console.log(deleteArr);
+    if (selected.length == 0) {
+
+        $("#empty-delete-error").modal("show");
+
+        $(".close-popup").click(function () {
+            $("#empty-delete-error").modal("hide");
+            location.reload();
+        });
+    }
+    else {
+        var deleteArr = [];
+        selected.each(function (index, value) {
+            deleteArr.push($(value).val());
+        });
+        console.log(deleteArr.join(","));
+        var idsString = deleteArr.join(",");
+        var serviceURL = "/Posts/MultipleDelete";
+        $.ajax({
+            type: "GET",
+            url: serviceURL,
+            data: { idsStr: idsString },
+            success: function (data) {
+                $("#success-message").modal("show");
+                $(".close-popup").click(function () {
+                    $("#success-message").modal("hide");
+                    location.reload();
+                });
+            },
+            error: function (data) {
+                errorFunc();
+            },
+        });
+    }
+
 }
 function deleteMedia(event) {
 

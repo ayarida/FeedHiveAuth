@@ -15,8 +15,8 @@
 <div class="col-md-12">
     <div class="card">
 
-   @*      <div class="card-header">
-            منشورات
+        @*      <div class="card-header">
+        منشورات
         </div> *@
 
         <div class="card-body filterable" style="max-width: 100%;overflow: auto;">
@@ -113,7 +113,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Selected Messages Deleted
+                تم إلغاء المنشورات المحددة
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
@@ -123,25 +123,13 @@
 </div>
 
 
-<div class="modal fade" id="success-message-published" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                Selected Messages Published
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="modal fade" id="error-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                !An error occured please try again
+                حدث خطأ يرجى المحاولة مرة أخرى!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
@@ -150,6 +138,19 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="empty-delete-error" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                إختر منشورا على الأقل !
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -218,9 +219,15 @@
             background-color: #31bd36;
         }
 
-        .status.status_new {
-            background-color: var(--bs-blue);
-        }
+
+    #empty-delete-error .modal-body {
+        background-color: var(--delete-color);
+    }
+
+
+    .status.status_new {
+        background-color: var(--bs-blue);
+    }
 
     .card-body.filterable input {
         text-align: right;
