@@ -1,189 +1,46 @@
-﻿@model FeedHiveAuth.Models.Channel
+﻿@model List<FeedHiveAuth.Models.Channel>
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
 @using FeedHiveAuth.Services
 
 @{
     ViewData["Title"] = "Index";
+    var channels = Model;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var channelStatuses = new List<StatusEnum>{ StatusEnum.Active, StatusEnum.InActive, StatusEnum.Deleted, StatusEnum.Expired };
+    var channelStatuses = new List<StatusEnum> { StatusEnum.Active, StatusEnum.InActive, StatusEnum.Deleted, StatusEnum.Expired };
     var networks = EnumExtension.GetAllList<SocialNetworkTypeEnum>();
     var accounts = EnumExtension.GetAllList<SocialAccountTypeEnum>();
     var curr = GlobalContext.UserConfigs?.UserData;
     // var subscription = GlobalContext.Application["currentSubscription"];
 }
 
-@* <h1>Index @curr</h1>
- *@@* <h1>Index @curr</h1>
- *@
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@* <table class="table">
-    <thead>
+<table>
+    <tr>Channel</tr>
+    <tr>Status</tr>
+    <tr>Authorization</tr>
+    @foreach (var channel in channels)
+    {
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Network)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Account)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetworkId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NetworkUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OriginalName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfileImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Credentials)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Settings)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Order)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Configs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastModified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubscriptionId)
-            </th>
-            <th></th>
+            <td>@(channel.Network == null ? "N/A" : channel.Network)</td>
+       @*      <td>@(channel.Status.ToString() == null ? "Uknown" : channel<StatusEnum> { StatusEnum.Active ,  StatusEnum.InActive, StatusEnum.Deleted, StatusEnum.Expired})</td> *@
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Network)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetworkId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetworkUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OriginalName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfileImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credentials)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Settings)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Order)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Configs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubscriptionId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+    }
 </table>
- *@<div class="row">
-    <div class="col-12">
-        <div class="data-table">
-            <table class="table sortable-table" v-bind:class="{ active: active }" data-submit-action="@Url.Action("Reorder", "Channel", new { area = "social" })">
-                <thead>
-                    <tr>
-                        <th>Channel</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in sortableItems" v-bind:index="index" v-bind:key="item.Id">
-                        <td class="cell-main">
-                            <a v-if="item.ProfileImageUrl" v-bind:href="item.EditUrl" v-bind:title="item.OriginalName">
-                                <img v-bind:src="item.ProfileImageUrl" class="placeholder" />
-                            </a>
-                            <div class="cell-data">
-                                <a v-bind:href="item.EditUrl" target="_blank" class="cell-title" v-text="item.Name + ' (' + item.OriginalName + ')'"></a>
-                            </div>
-                        </td>
-                        <td>
-                            <i class="ace-icon bigger-110" v-bind:class="item.Network"></i>
-                            <i class="ace-icon bigger-110" v-bind:class="item.Account"></i>
-                            <a v-bind:href="item.NetworkUrl"><i class="fa fa-external-link-alt"></i></a>
-                        </td>
-                        <td class="cell-status" v-html="item.Status.Value"></td>
-                        <td class="cell-actions">
-                            <div class="action-buttons">
-                                <a v-if="item.EditUrl" v-bind:href="item.EditUrl" class="btn btn-new info"><i class="fa fa-edit"></i> Edit</a>
-                                <a v-if="item.EditSettingsUrl" v-bind:href="item.EditSettingsUrl" class="btn btn-new warning"><i class="fa fa-cogs"></i>Settings</a>
-                                <div class="btn-group">
-                                    <button data-toggle="dropdown" class="btn btn-new dropdown-toggle" aria-expanded="false">
-                                        <span class="ace-icon fa fa-ellipsis-h icon-only"></span>
-                                    </button>
-                                    <ul class="dropdown-menu-left dropdown-menu">
-                                        <li><a v-bind:href="'/Social/Channel/Reauthorize/' + item.Id" class="btn btn-new pink"><i class="fa fa-refresh"></i>Reauthorize</a> </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>

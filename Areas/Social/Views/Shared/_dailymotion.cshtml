@@ -1,0 +1,59 @@
+﻿@using FeedHiveAuth.Areas.Social.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using FeedHiveAuth.Data.Helpers
+@{
+    var socialConfigs = SocialServiceHelper.GetConfigs();
+}
+
+
+<h1>DailyMotion Channel</h1>
+
+<form asp-area="Social" asp-controller="Authorization" asp-action="OAuthFlow" method="post">
+    <div class="d-flex mb-3 align-items-start flex-column" style="column-gap: 20px">
+
+        <input type="hidden" value="Dailymotion" name="network" />
+
+        <lable for="channelUsername">Channel Name</lable>
+        <input name="id" type="text" class="form-control" id="channelUsername">
+
+        <lable for="username">User name</lable>
+        <input name="username" type="text" class="form-control" id="username">
+
+        <lable for="apisecrete">Api Secrete</lable>
+        <input name="apisecrete" type="text" class="form-control" id="apisecrete">
+
+
+        <lable for="apikey">Api key</lable>
+        <input name="apikey" type="text" class="form-control" id="apikey">
+
+        <lable for="callbackurl">CallBack Url</lable>
+        <input name="callbackurl" type="text" class="form-control" id="callbackurl">
+
+
+        <lable for="localpath">Local Path</lable>
+        <input name="localpath" type="text" class="form-control" id="localpath">
+
+        <lable for="password">Password</lable>
+        <input name="password" type="text" class="form-control" id="password">
+
+    </div>
+    <input type="submit" value="Authorize" class="btn btn-primary submit-button" style="margin-left: 31px ; width: 200px" />
+    @Html.AntiForgeryToken()
+</form>
+
+<style>
+    form input {
+        box-shadow: 0px 0px 6px #00000029;
+        width: 500px !important;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    form label {
+        font-size: 20px;
+    }
+
+    div#channelContainer{
+        width: 100%;
+    }
+</style>
