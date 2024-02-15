@@ -49,7 +49,7 @@
                         تصفية الخيارات
                         <i class="bi bi-filter"></i>
                     </button>
-                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">مسح<i class="bi bi-trash me-2"></i> </button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
                     @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
                 </div>
 
@@ -184,6 +184,8 @@
 
         .action-buttons button {
             width: 200px;
+            height: fit-content;
+            padding: 7px 20px !important;
         }
 
 
@@ -221,7 +223,7 @@
 
 
     #empty-delete-error .modal-body {
-        background-color: var(--delete-color);
+        background-color: #dfaa0f;
     }
 
 
@@ -244,6 +246,11 @@
         border-bottom: 1px solid;
         box-shadow: none;
     }
+
+    button.btn.btn-secondary.close-popup{
+        width: 140px;
+    }
+
 </style>
 
 @* <script>
