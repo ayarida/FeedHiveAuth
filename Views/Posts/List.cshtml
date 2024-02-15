@@ -23,7 +23,7 @@
 
                 <input type="text" id="posts-id1" placeholder="التصفية حسب العنوان">
                 <input type="text" id="posts-id0" placeholder="التصفية حسب العنوان القصير">
-                <input type="text" id="posts-id2" placeholder="التصفية حسب التاريخ">
+                <input type="text" id="posts-id3" placeholder="التصفية حسب التاريخ">
 
 
 
@@ -33,7 +33,7 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
-                        <th>ميديا</th>
+                        @* <th>ميديا</th> *@
                         <th>عنوان</th>
                         <th>عنوان قصير</th>
                         <th>الحالة</th>
@@ -44,7 +44,7 @@
                 </thead>
                 <div class="action-buttons">
                     <button type="button" class="delete-btn" onClick="deleteSelected()">مسح</button>
-                    <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button>
+                  @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
                 </div>
 
                 <tbody>
@@ -56,18 +56,30 @@
                             //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
                             var shareIcon = "< i class='bi bi-penc0il-square'></i>";
                             <tr>
-                                
+
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td><img src="" /></td>
+                                @* <td><img src="" /></td> *@
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>
-                                    <button class="button">
-                                        @{
-                                            var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
-                                        }
-                                        @postStatus
-                                    </button>
+
+                                    @{
+                                        var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
+                                    }
+
+                                    @if (postStatus.ToString() == "New")
+                                    {
+                                        <div class="status status_new">
+                                            @postStatus
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="status status_published">
+                                            @postStatus
+                                        </div>
+                                    }
+
                                 </td>
                                 <td><i class="bi bi-facebook"></i><i class="bi bi-twitter-x"></i></td>
 
@@ -132,14 +144,6 @@
 </div>
 
 
-@* <script>
-    $(".close").click(function () {
-        $('#success-message').modal('hide');
-        location.reload();
-    })
-
-
-</script> *@
 
 
 <style>
@@ -189,6 +193,23 @@
         padding-right: 10px;
         width: 310px;
     }
+
+    .status {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        color: white;
+        padding: 2px;
+        border-radius: 4px;
+    }
+
+        .status.status_published {
+            background-color: #31bd36;
+        }
+
+        .status.status_new {
+            background-color: var(--bs-blue);
+        }
 
 </style>
 
