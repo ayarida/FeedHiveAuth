@@ -9,11 +9,15 @@ namespace FeedHiveAuth.Data.Repositories
     {
         public static string _connectionString = DatabaseConnection.GetConnectionStrings();
         public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
+        protected string SqlUpdate => Columns.GenerateUpdateQuery(TableName, "Id", "Id,Name,NetworkId,PublicId,CreationDate");
+
+
         public ChannelRepository()
         {
             TableName = Database.Tables.Channel;
             Columns = Database.Columns.Channel;
         }
+
         public new IEnumerable<Channel> GlobalGetAll(string o = "")
         {
             var query =
@@ -103,6 +107,12 @@ namespace FeedHiveAuth.Data.Repositories
             };
             error = ChannelErrorEnum.NO_ERROR;
             return channel;
+        }
+        public new void Update(Channel channel)
+        {
+            channel.LastModified = DomainTime.Now();
+            var sql = SqlUpdate;
+            Execute(sql, channel);
         }
 
     }
