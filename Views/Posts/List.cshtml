@@ -11,40 +11,46 @@
 
 
 
+
 <div class="col-md-12">
     <div class="card">
 
-        <div class="card-header">
+   @*      <div class="card-header">
             منشورات
-        </div>
-        <div class="card-body" style="max-width: 100%;overflow: auto;">
+        </div> *@
 
-            <div style="margin-bottom: 20px;max-width: 100%; display: flex;flex-wrap: wrap;column-gap: 10px; row-gap: 10px" class="filter" dir="rtl">
+        <div class="card-body filterable" style="max-width: 100%;overflow: auto;">
 
-                <input type="text" id="posts-id1" placeholder="التصفية حسب العنوان">
-                <input type="text" id="posts-id0" placeholder="التصفية حسب العنوان القصير">
-                <input type="text" id="posts-id3" placeholder="التصفية حسب التاريخ">
+            @*         <div style="margin-bottom: 20px;max-width: 100%; display: flex;flex-wrap: wrap;column-gap: 10px; row-gap: 10px" class="filter" dir="rtl">
+
+            <input type="text" id="filter0" placeholder="التصفية حسب العنوان">
+            <input type="text" id="filter1" placeholder="التصفية حسب العنوان القصير">
+            <input type="text" id="filter3" placeholder="التصفية حسب التاريخ">
 
 
 
-            </div>
+            </div> *@
 
-            <table id="posts-id" class="table" dir="rtl">
+            <table id="filter" class="table" dir="rtl">
                 <thead>
-                    <tr>
+                    <tr class="filters">
                         <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
                         @* <th>ميديا</th> *@
-                        <th>عنوان</th>
-                        <th>عنوان قصير</th>
+                        <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
+                        <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
                         <th>الحالة</th>
                         <th>سوشال ميديا</th>
-                        <th>التاريخ</th>
+                        <th><input type="text" class="form-control" placeholder="التاريخ" disabled /></th>
                         <th>عمليات</th>
                     </tr>
                 </thead>
                 <div class="action-buttons">
-                    <button type="button" class="delete-btn" onClick="deleteSelected()">مسح</button>
-                  @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
+                    <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
+                        تصفية الخيارات
+                        <i class="bi bi-filter"></i>
+                    </button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">مسح<i class="bi bi-trash me-2"></i> </button>
+                    @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
                 </div>
 
                 <tbody>
@@ -88,6 +94,7 @@
                                     <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
                                     <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
                                 </td>
+
                                 @* <td></td> *@
 
                             </tr>
@@ -170,10 +177,14 @@
 
     .action-buttons {
         display: flex;
-        justify-content: space-around;
-        max-width: 200px;
-        column-gap: 10px;
+        justify-content: space-between;
+        width: 100%;
     }
+
+        .action-buttons button {
+            width: 200px;
+        }
+
 
     a {
         color: initial;
@@ -211,6 +222,21 @@
             background-color: var(--bs-blue);
         }
 
+    .card-body.filterable input {
+        text-align: right;
+    }
+
+    .filterable .filters input[disabled] {
+        font-weight: bold;
+    }
+
+    .filterable .filters input {
+        height: fit-content;
+        border-radius: 0;
+        border: 0;
+        border-bottom: 1px solid;
+        box-shadow: none;
+    }
 </style>
 
 @* <script>
@@ -220,5 +246,7 @@
             checkbox.checked = source.checked;
     }
 </script> *@
-<script type="text/javascript" src="~/js/TableFilter/tableFilter.js"></script>
+
+<link rel="stylesheet" href="~/css/Filter.css" />
+<script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
 
