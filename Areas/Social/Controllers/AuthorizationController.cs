@@ -75,9 +75,16 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var success = false;
             var redirect = "";
             var message = "";
+            var baseUrl = "";
             try
             {
-                var result = AuthorizationManager.StartOAuthFlow("https://localhost:7157/", type, reauthorize, subscription).Decode();
+#if DEBUG 
+
+            baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+#else
+            baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+#endif
+                var result = AuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize, subscription).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
@@ -95,7 +102,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
             return Json(new { success, redirect, message });
         }
-        #endregion
+#endregion
         public IActionResult Index()
         {
             return View();
