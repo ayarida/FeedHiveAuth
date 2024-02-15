@@ -222,7 +222,7 @@ namespace FeedHiveAuth.Controllers
                 }
             }
         }
-
+         
 
         public IActionResult MultipleDelete([FromQuery] string idsStr)
         {
@@ -296,6 +296,13 @@ namespace FeedHiveAuth.Controllers
                 _logger.LogError("********************* NULL USER EXCEPTION: *********************",ex);
             }
             return new List<Post>();
+        }
+
+        [HttpGet]
+        public List<Operation> GetPostOperations(string postId)
+        {
+            var ops = Instances.Repositories.OperationRepository.getPostOperationsById(postId);
+            return ops;
         }
     }
 }
