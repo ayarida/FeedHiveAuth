@@ -152,7 +152,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 case ChannelErrorEnum.NO_ERROR:
                     return View(channel);
             }
-            return View(channel);
+            var allChannels = Collections.Channels();
+            return View("~/Areas/Social/Views/Channels/Index.cshtml", allChannels);
         }
 
         private IActionResult SaveChannels(IEnumerable<Channel> channels, string subscriptionId, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
