@@ -33,33 +33,11 @@
                         <h1 class="text-center p-3 font-weight-bold">إنشاء قناة جديدة</h1>
 
                     </div>
+                    <a href="/Social/Channels/Index" class="channel_list"> عرض جميع القنوات <i class="bi bi-box-arrow-in-left"></i></a>
+
                     <div class="card-body">
                         <form id="assessment-form">
-                            @*
-                            <button id="loadNetworks">
-                            Get networks
-                            </button>
-
-                            <div id="placeholder">
-                            Replace here
-                            </div>
-
-                            <div class="row d-flex nav-buttons justify-content-center ">
-                            <div class="">
-                            <button type="button" id="next">
-                            التالي <i class="fa fa-arrow-right"></i>
-                            </button>
-                            </div>
-
-                            <div class="back-button">
-                            <button type="button" id="back">
-                            <i class="fa fa-arrow-left"></i>السابق
-
-                            </button>
-                            </div>
-
-
-                            </div> *@
+    
 
                             @Html.Partial("~/Areas/Social/Views/Shared/_networks.cshtml")
 
@@ -184,5 +162,20 @@
 
     #assessment-form{
         width: 100%;
+    }
+    
+    .channel_list{
+        text-align: left;
+        margin-left: 70px !important;
+        text-decoration: underline;
+        color: black;
+        text-underline-offset: 5px;
+        margin-top: 20px;
+        width: fit-content;
+        margin-right: auto;
+        padding: 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 20px;
     }
 </style>
