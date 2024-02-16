@@ -3,6 +3,9 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var model = Model;
+    string[] imgExtenstions = { "png", "jpg", "jpeg" };
+    var mediaItems = model.PostMediaItems;
 }
 
 <div dir="rtl">
@@ -55,9 +58,18 @@
                             <br />
                         </div>
                         <input type="hidden" asp-for="Id" class="form-control" value="@Model.Id" />
-                        <div>
-                            <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
-                        </div>
+                        @*         <div>
+                        <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
+                        </div> *@
+                        @if (model.PostMediaItems != null)
+                        {
+                            @foreach (var media in mediaItems)
+                            {
+                                @* if (media.ToString().Contains()) *@
+                                bool isImg = new String[] { "png", "jpg", "jpeg" }.Any(s => media.Path.ToString().Contains(s));
+                                <span>@isImg</span>
+                            }
+                        }
                         <div class="form-group my-4">
                             <input type="submit" value="تحديث" class="btn btn-primary update" style="max-width: 50%;width: 100%; border-radius: 28px;" />
                         </div>
