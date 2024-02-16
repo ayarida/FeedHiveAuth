@@ -21,25 +21,16 @@
 
         <div class="card-body filterable" style="max-width: 100%;overflow: auto;">
 
-            @*         <div style="margin-bottom: 20px;max-width: 100%; display: flex;flex-wrap: wrap;column-gap: 10px; row-gap: 10px" class="filter" dir="rtl">
 
-            <input type="text" id="filter0" placeholder="التصفية حسب العنوان">
-            <input type="text" id="filter1" placeholder="التصفية حسب العنوان القصير">
-            <input type="text" id="filter3" placeholder="التصفية حسب التاريخ">
-
-
-
-            </div> *@
 
             <table id="filter" class="table" dir="rtl">
                 <thead>
                     <tr class="filters">
                         <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
-                        @* <th>ميديا</th> *@
+                        <th>ميديا</th>
                         <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
                         <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
                         <th>الحالة</th>
-                        <th>سوشال ميديا</th>
                         <th><input type="text" class="form-control" placeholder="التاريخ" disabled /></th>
                         <th>عمليات</th>
                     </tr>
@@ -64,7 +55,7 @@
                             <tr>
 
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                @* <td><img src="" /></td> *@
+                                <td><img src="" /></td>
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>
@@ -87,7 +78,6 @@
                                     }
 
                                 </td>
-                                <td><i class="bi bi-facebook"></i><i class="bi bi-twitter-x"></i></td>
 
                                 <td>@post.PostDate</td>
                                 <td>
@@ -109,7 +99,7 @@
 </div>
 
 
-<div class="modal fade" id="success-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@* <div class="modal fade" id="success-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -120,12 +110,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
 
 
 
 
-<div class="modal fade" id="error-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@* <div class="modal fade" id="error-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -136,21 +126,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
 
 
-<div class="modal fade" id="empty-delete-error" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                إختر منشورا على الأقل !
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -247,10 +225,17 @@
         box-shadow: none;
     }
 
-    button.btn.btn-secondary.close-popup{
+    button.btn.btn-secondary.close-popup {
         width: 140px;
     }
 
+    .warning {
+        background-color: #dfaa0f !important;
+    }
+
+    .error {
+        background-color: var(--delete-color) !important;
+    }
 </style>
 
 @* <script>
@@ -260,7 +245,62 @@
             checkbox.checked = source.checked;
     }
 </script> *@
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="~/css/Filter.css" />
 <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
 
+<script>
+    function deleteSelected(event) {
+        selected = $("tbody input:checkbox:checked");
+        if (selected.length == 0) {
+
+            swal.fire({
+                customClass: {
+                    confirmButton: "btn btn-primary  warning",
+                },
+                title: "إختر منشورا على الأقل !",
+                confirmButtonText: "موافق",
+            });
+        }
+        else {
+            var deleteArr = [];
+            selected.each(function (index, value) {
+                deleteArr.push($(value).val());
+            });
+            if (deleteArr.length > 1) {
+                var idsString = deleteArr.join(",");
+            }
+            console.log(deleteArr.join(","));
+
+            var serviceURL = "/Posts/MultipleDelete";
+            $.ajax({
+                type: "GET",
+                url: serviceURL,
+                data: { idsStr: idsString },
+                success: function (data) {
+                    swal.fire({
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                        },
+                        title: "تم إلغاء المنشورات المحددة",
+                        confirmButtonText: "موافق"
+                    }).then(function () {
+                        window.location.reload();
+                    }
+                    );
+                },
+                error: function (data) {
+                    errorFunc();
+                    swal.fire({
+                        customClass: {
+                            confirmButton: "error",
+                        },
+                        title: "حدث خطأ يرجى المحاولة مرة أخرى!",
+                        confirmButtonText: "موافق"
+                    });
+                },
+            });
+        }
+
+    }
+</script>
