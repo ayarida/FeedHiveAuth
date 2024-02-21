@@ -46,7 +46,7 @@ function toggle(source) {
     }
 }
 
-function deleteMedia(event) {
+/*function deleteMedia(event) {
 
     var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
     var mediaId = event;
@@ -56,7 +56,7 @@ function deleteMedia(event) {
         url: serviceURL,
         data: mediaId,
         success: function (data) {
-            /*alert("success");*/
+            *//*alert("success");*//*
             window.location.reload()
         },
         error: function (data) {
@@ -65,7 +65,7 @@ function deleteMedia(event) {
     })
 
 }
-
+*/
 function successFunc(data, status) {
     alert(data);
 }
@@ -106,7 +106,7 @@ function publishSelected() {
 }
 
 
-function deleteMedia(event) {
+/*function deleteMedia(event) {
 
     var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
     var mediaId = event;
@@ -116,7 +116,7 @@ function deleteMedia(event) {
         url: serviceURL,
         data: mediaId,
         success: function (data) {
-            /*alert("success");*/
+            *//*alert("success");*//*
             window.location.reload()
         },
         error: function (data) {
@@ -125,7 +125,7 @@ function deleteMedia(event) {
     })
 
 }
-
+*/
 
 
 /*function submitShareForm() {

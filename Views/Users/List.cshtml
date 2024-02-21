@@ -129,7 +129,7 @@
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
 
-                        selected = $("tbody input:checkbox:checked");
+                        selected = $("tbody input:checkbox:checked:not(:disabled)");
                         var deleteArr = [];
                         selected.each(function (index, value) {
                             deleteArr.push($(value).val());

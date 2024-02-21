@@ -19,14 +19,34 @@
 
     <div id="PublicUrl">
         <h6 class="config-title">Public Url</h6>
-        <input type="text" name="PublicUrl" value="@technicalConfigs.PublicUrl" />
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label></label>
+                <input type="text" name="PublicUrl" value="@technicalConfigs.PublicUrl" class="form-control" />
+            </div>
+        </div>
     </div>
 
 
 
-    <div id="PrivateUrl">
+    <div id="PrivateUrl" class="my-5">
         <h6 class="config-title">Local Url</h6>
-        <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" />
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label></label>
+                <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div  class="my-5">
+        <h6 class="config-title">Default Image Url</h6>
+        <div class="config-settings ps-md-5">
+            <div class="setting-instance">
+                <label></label>
+                <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+            </div>
+        </div>
     </div>
 
 
@@ -251,7 +271,7 @@
 
 
 
-    <button id="saveData" class="mt-5">Save Changes</button>
+    <button id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
 
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
@@ -303,12 +323,12 @@ else
                 token: "@telegramConfigs.Bot.Token",
         @* toStringTolower is required since javascript differenciate bewtween True and true *@
                 enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
-                                                                    }
+                                                                                                    }
 
-                                                                    $("#telegramConfigs").jsForm({
+                                                                                                    $("#telegramConfigs").jsForm({
                     data: telegram,
                 });
-                                                                });
+                                                                                                });
 
     </script>
 }
@@ -480,17 +500,17 @@ else
 
 
 
-else
+@* else
 {
-    <script>
-        $("#details").ready(function () {
-            var publicUrlDataConfigs = {
-                publicurl: ,
+<script>
+    $("#details").ready(function () {
+        var publicUrlDataConfigs = {
+            publicurl: ,
 
-            }
-        });
-    </script>
-}
+        }
+    });
+</script>
+} *@
 
 <script>
 
@@ -625,8 +645,8 @@ else
         }
 
     /*     div#inputConfigs\ urls {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: flex-end;
-                            } */
+                                                display: flex;
+                                                flex-direction: column;
+                                                align-items: flex-end;
+                                            } */
 </style>

@@ -1,0 +1,139 @@
+﻿
+
+
+
+
+<div class="infobox-container mb-5 social">
+
+    <div class="infobox next-page" ">
+        <div class="infobox-icon">
+            <i class="bi bi-file-earmark-fill"></i>
+        </div>
+        <div class="infobox-data">
+            <span class="infobox-text">Page</span>
+        </div>
+    </div>
+
+    <div class="infobox next-page" ">
+        <div class="infobox-icon">
+            <i class="bi bi-badge-ad-fill"></i>
+        </div>
+        <div class="infobox-data">
+            <span class="infobox-text">Ads</span>
+        </div>
+    </div>
+
+
+    <div class="infobox next-page" ">
+        <div class="infobox-icon">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="infobox-data">
+            <span class="infobox-text">Profile</span>
+        </div>
+    </div>
+
+
+    <div class="infobox next-page" ">
+        <div class="infobox-icon">
+            <i class="bi bi-collection-fill"></i>
+        </div>
+        <div class="infobox-data">
+            <span class="infobox-text">Group</span>
+        </div>
+
+    </div>
+</div>
+<style>
+    .infobox-icon {
+        background-color: transparent;
+        text-shadow: none;
+        width: 100%;
+        font-size: 45px;
+        padding: 15px 0 0;
+    }
+
+    .infobox-container {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 2rem;
+        row-gap: 2rem;
+        justify-content: center;
+    }
+
+    .social .infobox-container h1 {
+        margin: 2rem auto 3rem;
+    }
+
+    .social .infobox-container h2 {
+        margin: 0 auto 3rem;
+    }
+
+    .social .infobox[disabled="disabled"] {
+        background-color: rgba(0, 0, 0, .1);
+        opacity: 0.8;
+        cursor: not-allowed;
+    }
+
+    .social .infobox {
+        cursor: pointer;
+        text-align: center !important;
+        border: 1px solid transparent;
+        background: #2e88e1;
+        color: white;
+        border-radius: 5px;
+        padding: 20px;
+        width: 200px;
+    }
+
+        .social .infobox > .infobox-icon {
+            display: block;
+            width: 100%;
+            /*      margin: 0 0 10px 10px; */
+        }
+
+            .social .infobox > .infobox-icon > .ace-icon {
+                background-color: var(--hilight-color);
+                box-shadow: none;
+                height: 75px;
+                width: 75px;
+                padding: 0;
+            }
+
+                .social .infobox > .infobox-icon > .ace-icon:before {
+                    background-color: transparent;
+                    text-shadow: none;
+                    width: 100%;
+                    font-size: 45px;
+                    padding: 15px 0 0;
+                }
+
+                .social .infobox > .infobox-icon > .ace-icon.fa-nabad:before {
+                    height: 100%;
+                }
+
+
+
+        .social .infobox > .infobox-data {
+            display: block;
+        }
+
+    .social .info .channels-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+        .social .info .channels-header .channel-search-wrapper input {
+            min-width: 115px;
+            height: 24px;
+            border-right-width: 0;
+            border-radius: 5px 0 0 5px !important;
+            background-color: #e9ecef;
+        }
+
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+</style>

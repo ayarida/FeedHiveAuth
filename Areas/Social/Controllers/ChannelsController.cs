@@ -56,24 +56,13 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
 
         [HttpGet]
-        public ActionResult GetNetworks()
+        public ActionResult GetNetworks(string networkName)
         {
-            return PartialView("~/Areas/Social/Views/Shared/_networks.cshtml");
+            var channelName = networkName;
+            return PartialView("~/Areas/Social/Views/Shared/_" + channelName + ".cshtml");
         }
 
 
-        [HttpGet]
-        public ActionResult GetTelegram()
-        {
-            return PartialView("~/Areas/Social/Views/Shared/_telegram.cshtml");
-        }
-
-        [HttpGet]
-
-        public ActionResult GetDailyMotion()
-        {
-            return PartialView("~/Areas/Social/Views/Shared/_dailymotion.cshtml");
-        }
 
         /*        [HttpGet]
                 public ActionResult GetNetworkView(string partialName)

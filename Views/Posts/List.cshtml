@@ -50,12 +50,20 @@
                     {
                         @foreach (var post in posts)
                         {
-                            //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
-                            var shareIcon = "< i class='bi bi-penc0il-square'></i>";
+                        //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
+                            @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
                             <tr>
 
+
                                 <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                <td><img src="" /></td>
+                                @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
+                                {
+                                    <td><img src="@post.PostMediaItems?.FirstOrDefault()?.Path" /></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
                                 <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>
@@ -83,6 +91,7 @@
                                 <td>
                                     <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
                                     <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
+                                    <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill"></i></div>
                                 </td>
 
                                 @* <td></td> *@
@@ -99,42 +108,14 @@
 </div>
 
 
-@* <div class="modal fade" id="success-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                تم إلغاء المنشورات المحددة
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div> *@
-
-
-
-
-@* <div class="modal fade" id="error-message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                حدث خطأ يرجى المحاولة مرة أخرى!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-popup" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div> *@
-
-
 
 
 
 <style>
 
-
+    i.bi.bi-trash3-fill {
+        color: #d6081ca1;
+    }
 
     main input {
         max-width: 100%;
@@ -196,7 +177,8 @@
     }
 
         .status.status_published {
-            background-color: #31bd36;
+            background-color: #baffc9;
+            color: #136825;
         }
 
 
@@ -206,7 +188,8 @@
 
 
     .status.status_new {
-        background-color: var(--bs-blue);
+        background-color: #bae1ff;
+        color: #294c66;
     }
 
     .card-body.filterable input {
@@ -236,6 +219,12 @@
     .error {
         background-color: var(--delete-color) !important;
     }
+
+    td img{
+        width: 78px;
+        height: 50px;
+    }
+
 </style>
 
 @* <script>
@@ -302,5 +291,57 @@
             });
         }
 
+    }
+
+    function deletePost(event) {
+        swal.fire({
+            customClass: {
+                confirmButton: "btn btn-success",
+            },
+            title: "هل أنت متأكد من رغبتك في حذف الوسائط؟ ",
+            text: "لا يمكن التراجع عن هذا الإجراء",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            // buttons: ["كلّا", "نعم"],
+            confirmButtonText: "نعم",
+            cancelButtonText: "لا",
+            showCancelButton: true,
+            showConfirmButton: true,
+            className: {
+                text: 'pleaseWork',
+            },
+        })
+            .then((willDeletePost) => {
+                if (willDeletePost.isConfirmed) {
+
+                    var serviceURL = "/Posts/Delete/" + event;
+                    var postId = event;
+                    $.ajax({
+                        type: "DELETE",
+                        url: serviceURL,
+                        data: postId,
+                        success: function (data) {
+                            swal.fire({
+                                title: "تم الحذف",
+                                text: "تم حذف الميديا",
+                                icon: "success"
+                            }).then(function () {
+                                window.location.reload();
+                            }
+                            )
+                        },
+                        error: function (data) {
+                            swal.fire("خطأ في الحذف!", "الرجاء المحاولة مرة أخرى", "error");
+                        },
+                    })
+
+                } else {
+                    swal.fire({
+                        title: "تم إلغاء محاولة الحذف",
+                        confirmButtonText: "موافق"
+                    });
+                }
+            });
     }
 </script>

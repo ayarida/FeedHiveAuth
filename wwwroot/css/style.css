@@ -419,7 +419,7 @@ div[class^="ripple"] {
 }
 
 .delete-btn {
-    background-color: var(--delete-color);
+    background-color: #d6081c;
     color: white;
     border-radius: 5px;
 }

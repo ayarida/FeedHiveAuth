@@ -34,10 +34,10 @@ namespace FeedHiveAuth.Controllers
         public ActionResult List()
         {
             var posts = _postService.GetPosts();
-            foreach(var post in posts)
+            foreach (var post in posts)
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
-                if(postMedia!=null) post.PostMediaItems = postMedia;
+                if (postMedia != null) post.PostMediaItems = postMedia;
             }
             return View(posts);
         }
@@ -102,12 +102,13 @@ namespace FeedHiveAuth.Controllers
             try
             {
                 var result = _postService.Update(oldPost);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError("********************* Can't Update Post, EXCEPTION: \r\n" + ex + "\r\n*********************");
             }
 
-            return RedirectToAction("List","Posts");
+            return RedirectToAction("List", "Posts");
         }
 
         public string UploadMedia(IFormFile file)
@@ -126,7 +127,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         public void MultiUpload(IFormFileCollection Files)
-        { 
+        {
             foreach (var file in Files)
             {
 
@@ -184,7 +185,7 @@ namespace FeedHiveAuth.Controllers
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
-        
+
         public void Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
@@ -222,7 +223,7 @@ namespace FeedHiveAuth.Controllers
                 }
             }
         }
-         
+
 
         public IActionResult MultipleDelete([FromQuery] string idsStr)
         {
@@ -270,7 +271,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            var post = _postService.GetPostById(id);    
+            var post = _postService.GetPostById(id);
             var postMedia = _mediaItemService.GetMediasByPostId(id);
             post.PostMediaItems = postMedia;
             return View(post);
@@ -293,7 +294,7 @@ namespace FeedHiveAuth.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("********************* NULL USER EXCEPTION: *********************",ex);
+                _logger.LogError("********************* NULL USER EXCEPTION: *********************", ex);
             }
             return new List<Post>();
         }

@@ -1,93 +1,126 @@
 ﻿@model FeedHiveAuth.Models.Post
+@using FeedHiveAuth.Data
 @using Microsoft.AspNetCore.Identity
+@using FeedHiveAuth.Data.Repositories;
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
+
+
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
     // var posts = Model.Title. ;
 
+    var posts = Instances.Repositories.PostRepository.GetPosts();
 }
 
+@*
 <div>
-</div>
-
-
-
-
-<div class="card p-4" style="width: fit-content">
-    <h1>أنشئ المحتوى</h1>
-
-    <br />
-    @*  <h4>Post</h4> *@
-    <H4>@User.Identity?.Name </H4>
-    @*             @if (User.IsInRole("Admin"))
+    @foreach (var post in posts.Take(5))
     {
-    <p>this is an Admin User</p>
+        <p>@post.Title</p>
     }
-    else
-    {
-    <p dir="auto" style="text-align: match-parent;">this is a normal role and user @User.Identity. </p>
-    } *@
-    <hr />
-    <div class="row">
-        <div class="create-post">
-            <div class="card-head my-2">
-
-                <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form" dir="rtl">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group mb-4">
-                        <label asp-for="Title" class="control-label">عنوان</label>
-                        <input asp-for="Title" class="form-control req" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
-                        <input asp-for="ShortTitle" class="form-control" />
-                        <span asp-validation-for="ShortTitle" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label asp-for="Summary" class="control-label">ملخص</label>
-                        <input asp-for="Summary" class="form-control" />
-                        <span asp-validation-for="Summary" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label asp-for="Content" class="control-label">محتوى</label>
-                        <textarea asp-for="Content" class="form-control"></textarea>
-                        <span asp-validation-for="Content" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
-                        <input asp-for="PostDate" class="form-control req" />
-                        <span asp-validation-for="PostDate" class="text-danger"></span>
-                    </div>
-                    <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column" class="my-5">
-                        <div class="mb-3">صورة / فيديو</div>
-                        <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
-                            تحميل
-                            <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
-                            <input type="file" name="File" id="mediaInput" />
-                        </label>
-                        <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
-                        <video style="width: 400px; max-width: 100%" controls class="video">
-                            <source src="" type="video/mp4" id="videoPreview">
-                        </video>
-                    </div>
-
-                    <div class="form-group mb-4 d-flex justify-content-center">
-                        <input type="submit" value="أنشئ المحتوى" class="btn btn-primary submit-button" style="max-width: 50%;width: 100%; border-radius: 28px;" />
-                    </div>
+</div> *@
 
 
-                </form>
+<div class="d-flex flex-wrap create">
+
+    <div class="" style="width: fit-content">
+        <div class="card  p-3">
+            <h1>أنشئ المحتوى</h1>
+
+            <br />
+            @*  <h4>Post</h4> *@
+            <H4>@User.Identity?.Name </H4>
+            <hr />
+            <div class="row">
+                <div class="create-post">
+                    <div class="card-head my-2">
+
+                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form" dir="rtl">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Title" class="control-label">عنوان</label>
+                                <input asp-for="Title" class="form-control req" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
+                                <input asp-for="ShortTitle" class="form-control" />
+                                <span asp-validation-for="ShortTitle" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Summary" class="control-label">ملخص</label>
+                                <input asp-for="Summary" class="form-control" />
+                                <span asp-validation-for="Summary" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="Content" class="control-label">محتوى</label>
+                                <textarea asp-for="Content" class="form-control"></textarea>
+                                <span asp-validation-for="Content" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
+                                <input asp-for="PostDate" class="form-control req" />
+                                <span asp-validation-for="PostDate" class="text-danger"></span>
+                            </div>
+                            <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column" class="my-5">
+                                <div class="mb-3">صورة / فيديو</div>
+                                <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
+                                    تحميل
+                                    <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
+                                    <input type="file" name="File" id="mediaInput" />
+                                </label>
+                                <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
+                                <video style="width: 400px; max-width: 100%" controls class="video">
+                                    <source src="" type="video/mp4" id="videoPreview">
+                                </video>
+                            </div>
+
+                            <div class="form-group mb-4 d-flex justify-content-center">
+                                <input type="submit" value="أنشئ المحتوى" class="btn btn-primary submit-button" style="max-width: 50%;width: 100%; border-radius: 28px;" />
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+                </div>
 
 
             </div>
+
         </div>
+
+
     </div>
+
+    <div class="card recents">
+        <h5 style=" padding: 15px 15px 0 0;">أحدث المنشورات</h5>
+        <div class="card-body">
+
+            <table class="" dir="rtl">
+                <tr>
+                    <th>عنوان</th>
+                    <th>عنوان قصير</th>
+                    <th>التاريخ</th>
+                </tr>
+                @foreach (var post in posts.Take(5))
+                {
+                    <tr>
+                        <td>@post.Title</td>
+                        <td>@post.ShortTitle</td>
+                        <td>@post.CreationDate</td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+    </div>
+
 </div>
-
-
 
 <div id="snackbar" style="background-color:var(--delete-color);border-radius:10px" dir="auto">Please fill the missing fields !</div>
 
@@ -168,8 +201,9 @@
     }
 
     .custom-file-upload {
-        width: 20%;
+        width: 22%;
     }
+
 
     @@media(max-width: 500px) {
         .custom-file-upload {
@@ -312,6 +346,36 @@
 
         to {
             width: 164px;
+        }
+    }
+
+    main.pb-3 * {
+        max-width: 100%;
+    }
+
+    .create {
+        column-gap: 20px;
+        row-gap: 20px;
+    }
+
+    th {
+        margim-bottom: 10px;
+        padding: 0 15px;
+    }
+
+    td {
+        padding: 18px 15px;
+    }
+
+    td{
+        border-bottom: 1px solid #dddddd;
+  
+    }
+
+    @@media (max-width: 1400px) {
+        .create {
+            align-content: center;
+            justify-content: center;
         }
     }
 </style>
