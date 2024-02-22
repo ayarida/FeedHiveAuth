@@ -91,7 +91,14 @@
                                 <td>
                                     <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
                                     <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
-                                    <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill"></i></div>
+                                    @if (postStatus.ToString() == "New")
+                                    {
+                                        <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
+                                    }
+                                    else
+                                    {
+                                        <div id="@post.Id" style="pointer-events: none"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
+                                    }
                                 </td>
 
                                 @* <td></td> *@
@@ -220,7 +227,7 @@
         background-color: var(--delete-color) !important;
     }
 
-    td img{
+    td img {
         width: 78px;
         height: 50px;
     }

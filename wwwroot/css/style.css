@@ -456,3 +456,21 @@ div[class^="ripple"] {
     max-width: 100%;
 }
 */
+
+.bg-white {
+    box-shadow: -5px 6px 0px 0 rgb(219 214 245 / 5%), -2px 7px 10px 0 rgb(219 214 245/ 5%) !important;
+}
+
+.list-group.list-group-flush a{
+    background: transparent;
+    color: white !important
+}
+
+.sidebar .active {
+    border-radius: 5px;
+    box-shadow: 0 1px 0px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.list-group-item + .list-group-item.active {
+    border: 1px solid black;
+}
