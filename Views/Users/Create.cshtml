@@ -5,7 +5,7 @@
 }
 
 
-<div class="card p-4 ms-auto" style="background: #8080800f; width: fit-content">
+<div class="card p-4 ms-auto" style="background: white !important; width: fit-content">
     <div class="row justify-content-end create-user">
         <form asp-controller="Users" asp-action="AddUser" method="POST" dir="rtl">
             <!-- Add your form fields -->
@@ -62,9 +62,9 @@
                 event.preventDefault();
                 swal.fire({
                     customClass: {
-                        confirmButton: "btn btn-primary",
+                        confirmButton: "btn btn-primary warning",
                     },
-                    title: "يرجى ملء جميع الخانات",
+                    title: "يرجى ملء جميع الخانات!",
                     confirmButtonText: "موافق"
                 });
             }
