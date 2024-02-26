@@ -6,8 +6,8 @@
     <title>@ViewData["Title"] - FeedHiveAuth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-@*     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&display=swap"
-          rel="stylesheet" /> *@
+    @*     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&display=swap"
+    rel="stylesheet" /> *@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
     <link rel="stylesheet" href="~/css/Editor/richtext.min.css" />
     <script type="text/javascript" src="~/js/TableFilter/Filter.js"></script>
-    <link rel="stylesheet" href="~/css/Filter.css"/>
+    <link rel="stylesheet" href="~/css/Filter.css" />
     <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
 
 
@@ -46,7 +46,7 @@
 
             @*Calling Sidebar*@
             <nav dir="auto" id="sidebarMenu"
-                 class="collapse d-lg-block sidebar collapse bg-white" style="background: #4634a773 !important">
+                 class="collapse d-lg-block sidebar collapse bg-white" style="background: #0a2c3f !important; filter: drop-shadow(0 10px #2585CA);">
                 <div class="position-sticky">
                     <div class="list-group list-group-flush mx-3 mt-4">
 
@@ -58,8 +58,8 @@
                            aria-current="true">
                             <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
                         </a>
-               @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
+                        @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
                         </a> *@
                         <a href="/Posts/List"
                            class="list-group-item list-group-item-action py-2 "><i class="bi bi-grid"></i><span>المنشورات</span></a>
@@ -96,7 +96,7 @@
             </nav>
 
             <nav id="main-navbar"
-                 class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="background: #dbd6f5 !important;">
+                 class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 8px 0px !important;">
                 <!-- Container wrapper -->
                 <div class="container-fluid">
                     <!-- Toggle button -->

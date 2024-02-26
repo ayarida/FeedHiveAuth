@@ -461,9 +461,9 @@ div[class^="ripple"] {
     box-shadow: -5px 6px 0px 0 rgb(219 214 245 / 5%), -2px 7px 10px 0 rgb(219 214 245/ 5%) !important;
 }
 
-.list-group.list-group-flush a{
+.list-group.list-group-flush a {
     background: transparent;
-    color: white !important
+    color: #a3acb2 !important;
 }
 
 .sidebar .active {

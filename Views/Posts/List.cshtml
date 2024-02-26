@@ -24,9 +24,10 @@
 
 
             <table id="filter" class="table" dir="rtl">
+            <table id="filter" class="table" dir="rtl">
                 <thead>
                     <tr class="filters">
-                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
+                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"></th>
                         <th>ميديا</th>
                         <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
                         <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
@@ -62,9 +63,9 @@
                                 }
                                 else
                                 {
-                                    <td></td>
+                                    <td><img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" /></td>
                                 }
-                                <td>@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
+                                <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
                                 <td>@post.ShortTitle</td>
                                 <td>
 
@@ -90,7 +91,7 @@
                                 <td dir="ltr" style="text-align: right">@post.PostDate</td>
                                 <td class="operations">
                                     <div>
-                                        <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                        <div><a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil" style="color: #1B5EE1"></i></a></div>
                                         <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
                                         @if (postStatus.ToString() == "New")
                                         {
@@ -123,7 +124,7 @@
 <style>
 
     i.bi.bi-trash3-fill {
-        color: #d6081ca1;
+        color: #e11b1b;
     }
 
     main input {
@@ -241,6 +242,13 @@
         justify-content: center;
         align-items: center;
     }
+
+    td.post-title a {
+        text-underline-offset: 5px;
+        text-decoration-color: #0a2c3f;
+        text-decoration-thickness: 1px;
+    }
+
 </style>
 
 @* <script>

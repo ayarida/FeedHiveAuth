@@ -91,7 +91,12 @@ i.bi.bi-bell.bell-icon {
 .list-group.list-group-flush a {
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 15px;
+  border: none !important;
+}
+
+.list-group.list-group-flush.mx-3.mt-4 {
+    row-gap: 4px;
 }
 
 @media (min-width: 992px) {
