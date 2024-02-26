@@ -87,18 +87,20 @@
 
                                 </td>
 
-                                <td>@post.PostDate</td>
-                                <td>
-                                    <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
-                                    <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
-                                    @if (postStatus.ToString() == "New")
-                                    {
-                                        <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
-                                    }
-                                    else
-                                    {
-                                        <div id="@post.Id" style="pointer-events: none"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
-                                    }
+                                <td dir="ltr" style="text-align: right">@post.PostDate</td>
+                                <td class="operations">
+                                    <div>
+                                        <a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
+                                        @if (postStatus.ToString() == "New")
+                                        {
+                                            <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
+                                        }
+                                        else
+                                        {
+                                            <div id="@post.Id" style="pointer-events: none; width: fit-content"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
+                                        }
+                                    </div>
                                 </td>
 
                                 @* <td></td> *@
@@ -232,6 +234,13 @@
         height: 50px;
     }
 
+    td.operations > div {
+        display: flex;
+        column-gap: 10px;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
 
 @* <script>
