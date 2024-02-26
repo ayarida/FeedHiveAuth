@@ -1,6 +1,9 @@
 ﻿@model string
+@using FeedHiveAuth.Data.Helpers
 @{
     ViewData["Title"] = "CREATE ROLE";
+    var controllers = PermissionHelper.Controllers();
+    //var actions = PermissionHelper.Actions(controllers.FirstOrDefault());
 }
 
 <div class="create-role">
@@ -15,6 +18,17 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
+</div>
+<div class="form-group mb-4">
+    <h4>Permissions</h4>
+    @foreach(var controller in controllers.OrderBy(x=>x.Value.Item2))
+    {
+        <h2>@controller.Key</h2>
+        @foreach(var action in controller.Value.Item1)
+        {
+            <span>@action</span>
+        }
+    }
 </div>
 
 <style>
