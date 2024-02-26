@@ -36,6 +36,7 @@ namespace FeedHiveAuth.Controllers
             var customUser = new IdentityUser
             {
                 UserName = model.Username,
+                Email = model.Email,
                 EmailConfirmed = true,
                 PasswordHash = model.PasswordHash,
 
