@@ -10,6 +10,10 @@
     --delete-color: #ba0517;
     --orange-color: #dd7a01;
     --blue-color: #008CBA;
+    --green-status-back: #baffc9;
+    --green-status-color: #136825;
+    --blue-status-color: #294c66;
+    --blue-status-back: #bae1ff;
 }
 
 @font-face {
@@ -483,4 +487,20 @@ a.list-group-item.list-group-item-action.py-2.active {
     background: #325467;
     border-radius: 5px;
     color: white !important;
+}
+
+
+.status.status_published, .status.status_active {
+    background-color: var(--green-status-back);
+    color: var(--green-status-color);
+}
+
+.status.status_new {
+    background-color: var(--blue-status-back);
+    color: var(--blue-color);
+}
+
+.current-user {
+    background: #314956 !important;
+    border-radius: 4px;
 }
