@@ -139,32 +139,15 @@
 
 
     <script>
-        if (window.location.href.indexOf("Posts/List") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(4)").addClass("active");
-        }
+        
+        //Highlight current sidebar menu link
 
-        if (window.location.href.indexOf("Posts/Create") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(3)").addClass("active");
-        }
+        $("#sidebarMenu a").each(function (i) {
+            if (window.location.href.indexOf($(this).attr('href')) > -1) {
+            $(this).addClass("active")
+            }
+        })
 
-        if (window.location.href.indexOf("Social/Channels/Create") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(5)").addClass("active");
-        }
-        if (window.location.href.indexOf("MediaItem") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(6)").addClass("active");
-        }
-
-        if (window.location.href.indexOf("Users") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(7)").addClass("active");
-        }
-
-        if (window.location.href.indexOf("Account/Manage") > -1) {
-            $(".list-group.list-group-flush.mx-3.mt-4 a:nth-child(8)").addClass("active");
-        }
-
-        if (window.location.href.indexOf("TechnicalConfigs") > -1) {
-            $(".list-group.list-group-flush.mx-3.bottom-list a:nth-child(1)").addClass("active");
-        }
     </script>
 
 </body>
