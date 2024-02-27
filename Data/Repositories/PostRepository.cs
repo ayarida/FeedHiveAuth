@@ -14,6 +14,7 @@ namespace FeedHiveAuth.Data.Repositories
         {
             TableName = Database.Tables.Post;
             Columns = Database.Columns.Post;
+            ExcludedColumns = Database.ExcludedColumns.Post;
         }
 
         public int Publish(string postId, string userId = null)
@@ -122,7 +123,7 @@ namespace FeedHiveAuth.Data.Repositories
             string query = string.Format(
                                     "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},N{6},N{7},{8},{9},{10})",
                                     TableName,
-                                    Columns.AddBraces(),
+                                    Columns.AddBraces(ExcludedColumns),
                                     post.Id.EscapeForSql(),
                                     post.Title.EscapeForSql(),
                                     post.ShortTitle.EscapeForSql(),
