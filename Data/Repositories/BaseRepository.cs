@@ -25,7 +25,7 @@ namespace FeedHiveAuth.Data.Repositories
         protected string SqlCount => "SELECT COUNT(*) FROM " + TableName;
         protected string TableName;
         protected string Columns;
-        protected string ExcludedColumns = "PublicId";
+        protected string ExcludedColumns;
 
         public static string _connectionString = DatabaseConnection.GetConnectionStrings();
 
