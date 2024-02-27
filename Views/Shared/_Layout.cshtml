@@ -79,6 +79,10 @@
                            class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-person-circle"></i><span>الحساب</span>
                         </a>
+
+                        <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
+                            <i class="bi bi-tv"></i><span>القنوات</span>
+                        </a>
                     </div>
 
                     <div class="list-group list-group-flush mx-3 bottom-list">
@@ -139,14 +143,19 @@
 
 
     <script>
-        
+
         //Highlight current sidebar menu link
 
         $("#sidebarMenu a").each(function (i) {
             if (window.location.href.indexOf($(this).attr('href')) > -1) {
-            $(this).addClass("active")
+                $(this).addClass("active")
             }
         })
+
+        if (window.location.pathname != '/') {
+            $("body").css("background-color", "#64599e9c")
+
+        }
 
     </script>
 

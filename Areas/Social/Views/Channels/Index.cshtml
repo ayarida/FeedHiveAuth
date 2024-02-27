@@ -25,7 +25,18 @@
     {
         <tr>
 
-            <td><img src="@channel.ProfileImageUrl" /> <span>@channel.OriginalName</span></td>
+            <td>
+                @if (channel.ProfileImageUrl != null)
+                {
+                    <img src="@channel.ProfileImageUrl" /> <span>@channel.OriginalName</span>
+                }
+                else
+                {
+                    <img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" />
+
+                    <span>@channel.OriginalName</span>
+                }
+            </td>
             <td style="column-gap: 4px" class="channel-icon">
                 <div class="d-flex align-items-center" style="column-gap: 10px">
                     <i class="bi bi-@(channel.Network == "dailymotion" ? "camera-video" : channel.Network) social-icon"></i>
@@ -61,8 +72,8 @@
     }
 
         table img {
-            border-radius:5px;
-            width: 115px;
+            border-radius: 5px;
+            width: 85px;
             height: auto;
         }
 
@@ -98,10 +109,10 @@
         background-color: white !important;
     }
 
-    .status_active {
-        background-color: #31bd36;
-    }
-
+    /*   .status_active {
+                    background-color: #31bd36;
+                }
+             */
 
     .status_inactive {
         background-color: #dfaa0f;
@@ -124,4 +135,20 @@
     i.bi.bi-box-arrow-up-right {
         color: black !important;
     }
+
+    tbody tr:not(:last-child) {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+
+    i.bi.bi-box-arrow-up-right {
+        font-size: 18px;
+        height: fit-content;
+        display: block;
+    }
+
+    .social-icon {
+        font-size: 18px;
+    }
+
 </style>
