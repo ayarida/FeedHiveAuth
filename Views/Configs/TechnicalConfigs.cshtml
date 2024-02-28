@@ -14,265 +14,267 @@
 }
 
 
-<div class="py-4" id="configsList">
+<div class="card">
+    <div class="py-4" id="configsList">
 
 
-    <div id="PublicUrl">
-        <h6 class="config-title">Public Url</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label></label>
-                <input type="text" name="PublicUrl" value="@technicalConfigs.PublicUrl" class="form-control" />
+        <div id="PublicUrl">
+            <h6 class="config-title">Public Url</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label></label>
+                    <input type="text" name="PublicUrl" value="@technicalConfigs.PublicUrl" class="form-control" />
+                </div>
             </div>
         </div>
-    </div>
 
 
 
-    <div id="PrivateUrl" class="my-5">
-        <h6 class="config-title">Local Url</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label></label>
-                <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+        <div id="PrivateUrl" class="my-5">
+            <h6 class="config-title">Local Url</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label></label>
+                    <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+                </div>
             </div>
         </div>
-    </div>
 
-    <div  class="my-5">
-        <h6 class="config-title">Default Image Url</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label></label>
-                <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+        <div class="my-5">
+            <h6 class="config-title">Default Image Url</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label></label>
+                    <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
+                </div>
             </div>
         </div>
-    </div>
 
 
 
 
-    <div id="facebookConfigs" class="mt-3">
-        <h6 class="config-title mb-5">Facebook Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="facebook-name">Display Name</label>
-                <input type="text" id="facebook-name" name="data.name">
+        <div id="facebookConfigs" class="mt-3">
+            <h6 class="config-title mb-5">Facebook Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="facebook-name">Display Name</label>
+                    <input type="text" id="facebook-name" name="data.name">
+                </div>
+
+                <div class="setting-instance">
+                    <label for="facebook-id">App ID</label>
+                    <input type="text" id="facebook-id" name="data.id" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="facebook-id">App Secrete</label>
+                    <input type="text" id="facebook-id" name="data.secret" />
+                </div>
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="facebook-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="facebook-status" name="data.status">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
             </div>
-
-            <div class="setting-instance">
-                <label for="facebook-id">App ID</label>
-                <input type="text" id="facebook-id" name="data.id" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="facebook-id">App Secrete</label>
-                <input type="text" id="facebook-id" name="data.secret" />
-            </div>
-
-
-            <div class="setting-instance enable-setting">
-                <label for="facebook-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="facebook-status" name="data.status">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
         </div>
-    </div>
 
-    <div id="twitterConfigs" class="mt-5">
-        <h6 class="config-title mb-5">twitter Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="twitter-name">Display Name</label>
-                <input type="text" id="twitter-name" name="data.name" />
+        <div id="twitterConfigs" class="mt-5">
+            <h6 class="config-title mb-5">twitter Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="twitter-name">Display Name</label>
+                    <input type="text" id="twitter-name" name="data.name" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="twitter-id">Cosumer Key</label>
+                    <input type="text" id="twitter-id" name="data.consumerkey" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="twitter-id">Cosumer Secret</label>
+                    <input type="text" id="twitter-id" name="data.consumersecret" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="twitter-id">Token</label>
+                    <input type="text" id="twitter-id" name="data.token" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="twitter-id">Secret Token</label>
+                    <input type="text" id="twitter-id" name="data.tokensecret" />
+                </div>
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="twitter-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="twitter-status" name="data.enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+
             </div>
-
-            <div class="setting-instance">
-                <label for="twitter-id">Cosumer Key</label>
-                <input type="text" id="twitter-id" name="data.consumerkey" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="twitter-id">Cosumer Secret</label>
-                <input type="text" id="twitter-id" name="data.consumersecret" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="twitter-id">Token</label>
-                <input type="text" id="twitter-id" name="data.token" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="twitter-id">Secret Token</label>
-                <input type="text" id="twitter-id" name="data.tokensecret" />
-            </div>
-
-
-            <div class="setting-instance enable-setting">
-                <label for="twitter-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="twitter-status" name="data.enabled">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
-
-
         </div>
-    </div>
 
 
-    <div id="telegramConfigs" class="mt-5">
-        <h6 class="config-title mb-5">telegram Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="telegram-name">User Name</label>
-                <input type="text" id="telegram-name" name="data.name" />
+        <div id="telegramConfigs" class="mt-5">
+            <h6 class="config-title mb-5">telegram Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="telegram-name">User Name</label>
+                    <input type="text" id="telegram-name" name="data.name" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="telegram-id">Token</label>
+                    <input type="text" id="telegram-id" name="data.token" />
+                </div>
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="telegram-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="telegram-status" name="data.enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+
             </div>
-
-            <div class="setting-instance">
-                <label for="telegram-id">Token</label>
-                <input type="text" id="telegram-id" name="data.token" />
-            </div>
-
-
-            <div class="setting-instance enable-setting">
-                <label for="telegram-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="telegram-status" name="data.enabled">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
-
-
         </div>
-    </div>
 
 
-    <div id="instagramConfigs" class="mt-5">
-        <h6 class="config-title mb-5">instagram Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="instagram-name">Display Name</label>
-                <input type="text" id="instagram-name" name="data.name" />
+        <div id="instagramConfigs" class="mt-5">
+            <h6 class="config-title mb-5">instagram Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="instagram-name">Display Name</label>
+                    <input type="text" id="instagram-name" name="data.name" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="instagram-id">App ID</label>
+                    <input type="text" id="instagram-id" name="data.appid" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="instagram-id">App Secrete</label>
+                    <input type="text" id="instagram-id" name="data.appsecret" />
+                </div>
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="instagram-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="instagram-status" name="data.enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+
             </div>
-
-            <div class="setting-instance">
-                <label for="instagram-id">App ID</label>
-                <input type="text" id="instagram-id" name="data.appid" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="instagram-id">App Secrete</label>
-                <input type="text" id="instagram-id" name="data.appsecret" />
-            </div>
-
-
-            <div class="setting-instance enable-setting">
-                <label for="instagram-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="instagram-status" name="data.enabled">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
-
-
         </div>
-    </div>
 
 
-    <div id="whatsappConfigs" class="mt-5">
-        <h6 class="config-title mb-5">whatsapp Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="whatsapp-name">Display Name</label>
-                <input type="text" id="whatsapp-name" name="data.name" />
+        <div id="whatsappConfigs" class="mt-5">
+            <h6 class="config-title mb-5">whatsapp Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="whatsapp-name">Display Name</label>
+                    <input type="text" id="whatsapp-name" name="data.name" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="whatsapp-id">Whatsapp BBS</label>
+                    <input type="text" id="whatsapp-id" name="data.bbs" />
+                </div>
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="whatsapp-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="whatsapp-status" name="data.enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+
             </div>
-
-            <div class="setting-instance">
-                <label for="whatsapp-id">Whatsapp BBS</label>
-                <input type="text" id="whatsapp-id" name="data.bbs" />
-            </div>
-
-
-            <div class="setting-instance enable-setting">
-                <label for="whatsapp-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="whatsapp-status" name="data.enabled">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
-
-
         </div>
-    </div>
 
 
-    @* DailyConfigs *@
+        @* DailyConfigs *@
 
-    <div id="dailyMotionConfigs" class="mt-5">
-        <h6 class="config-title mb-5">dailymotion Configs</h6>
-        <div class="config-settings ps-md-5">
-            <div class="setting-instance">
-                <label for="dailymotion-name">Channel Name</label>
-                <input type="text" id="dailymotion-name" name="data.name" />
+        <div id="dailyMotionConfigs" class="mt-5">
+            <h6 class="config-title mb-5">dailymotion Configs</h6>
+            <div class="config-settings ps-md-5">
+                <div class="setting-instance">
+                    <label for="dailymotion-name">Channel Name</label>
+                    <input type="text" id="dailymotion-name" name="data.name" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="dailymotion-username">UserName</label>
+                    <input type="text" id="dailymotion-username" name="data.username" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="dailymotion-apisecrete">API Secrete</label>
+                    <input type="text" id="dailymotion-apisecrete" name="data.apisecrete" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="dailymotion-apikey">API Key</label>
+                    <input type="text" id="dailymotion-apikey" name="data.apikey" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="dailymotion-callbackurl">Callback Url</label>
+                    <input type="text" id="dailymotion-callbackurl" name="data.callbackurl" />
+                </div>
+
+
+                <div class="setting-instance">
+                    <label for="dailymotion-localpath">Local Path</label>
+                    <input type="text" id="dailymotion-localpath" name="data.localpath" />
+                </div>
+
+                <div class="setting-instance">
+                    <label for="dailymotion-password">Password</label>
+                    <input type="text" id="dailymotion-password" name="data.password" />
+                </div>
+
+
+
+                <div class="setting-instance enable-setting">
+                    <label for="dailymotion-status">Enabled</label>
+                    <label class="switch">
+                        <input type="checkbox" id="dailymotion-status" name="data.enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
             </div>
-
-            <div class="setting-instance">
-                <label for="dailymotion-username">UserName</label>
-                <input type="text" id="dailymotion-username" name="data.username" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="dailymotion-apisecrete">API Secrete</label>
-                <input type="text" id="dailymotion-apisecrete" name="data.apisecrete" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="dailymotion-apikey">API Key</label>
-                <input type="text" id="dailymotion-apikey" name="data.apikey" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="dailymotion-callbackurl">Callback Url</label>
-                <input type="text" id="dailymotion-callbackurl" name="data.callbackurl" />
-            </div>
-
-
-            <div class="setting-instance">
-                <label for="dailymotion-localpath">Local Path</label>
-                <input type="text" id="dailymotion-localpath" name="data.localpath" />
-            </div>
-
-            <div class="setting-instance">
-                <label for="dailymotion-password">Password</label>
-                <input type="text" id="dailymotion-password" name="data.password" />
-            </div>
-
-
-
-            <div class="setting-instance enable-setting">
-                <label for="dailymotion-status">Enabled</label>
-                <label class="switch">
-                    <input type="checkbox" id="dailymotion-status" name="data.enabled">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-
-
         </div>
+
+
+
+        <button id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
+
     </div>
-
-
-
-    <button id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
-
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
 

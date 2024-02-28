@@ -14,12 +14,21 @@
     // var subscription = GlobalContext.Application["currentSubscription"];
 }
 
+
+<div style=" width: 100%; text-align: left" class="pb-2">
+    <a style="background: #0d6efd;height: fit-content;" class="btn btn-secondary" href="/Social/Channels/Create">إنشاء قناة جديدة</a>
+</div>
+
 <table dir="rtl">
-    <tr style="background-color: #edecf3 !important">
+    <tr style="background-color: #edecf3 !important; border: 1px solid #dbdae1">
         <th>القناة</th>
         <th>النوع</th>
         <th>الحالة</th>
     </tr>
+
+    @*  <tr>
+    <td style="width: 100%"><a>Create Channel</a></td>
+    </tr> *@
 
     @foreach (var channel in channels)
     {
@@ -110,9 +119,9 @@
     }
 
     /*   .status_active {
-                    background-color: #31bd36;
-                }
-             */
+                            background-color: #31bd36;
+                        }
+                     */
 
     .status_inactive {
         background-color: #dfaa0f;

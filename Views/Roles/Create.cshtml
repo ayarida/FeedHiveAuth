@@ -6,34 +6,205 @@
     //var actions = PermissionHelper.Actions(controllers.FirstOrDefault());
 }
 
-<div class="create-role">
-    <h1 class="text-black">Create a Role</h1>
-    <a asp-action="Index" class="btn btn-secondary" style="width: 125px;max-width: 100%;">Back</a>
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <form asp-action="Create" class="create-form" method="post">
-        <div class="form-group mb-2">
-            <label for="name">Name:</label>
-            <input name="name" class="form-control" />
+<div class="card p-3" dir="ltr" style="text-align: left">
+    <div class="create-role">
+        <div class="d-flex justify-content-between align-items-end flex-row-reverse" style="margin-bottom: 80px;">
+            <h3 class="text-black">Create a Role</h3>
+            <a class="btn btn-secondary" style="width: 125px;max-width: 100%;" href="/Roles/Index">
+                Back
+                <i class="bi bi-box-arrow-in-left"></i>
+            </a>
         </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-    </form>
+        @* <div asp-validation-summary="All" class="text-danger"></div> *@
+
+        <form class="create-form" method="post" dir="ltr" method="post" id="role-form">
+            <div class="form-group d-flex align-items-end justify-content-between mb-3" style="direction: ltr; column-gap: 10px">
+                <div>
+                    <label for="name" class="mb-3">Name :</label>
+                    <input name="name" class="form-control" type="text" id="role-name" />
+                </div>
+            </div>
+
+            <div class="form-group d-flex align-items-end justify-content-between" style="direction: ltr; column-gap: 10px">
+                <div>
+                    <label for="description" class="mb-3">Description :</label>
+                    <input name="description" class="form-control" type="text" id="role-description" />
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: fit-content">Create</button>
+            </div>
+
+            <h3 class="mt-5">Permissions</h3>
+
+            <div class="form-group my-4 card p-3">
+
+                <table dir="ltr">
+
+                    @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
+                    {
+                        <tr>
+                            <td id="@controller.Key.ToLower()"><h5>@controller.Key</h5></td>
+                            <td>
+                                <ul class="ks-cboxtags @(controller.Key.ToLower() + "data")">
+                                    @foreach (var action in controller.Value.Item1)
+                                    {
+                                        @* <span>@action</span> *@
+                                        <li>
+                                            <input type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="@action.ToString()" />
+                                            <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </form>
+    </div>
+
 </div>
-<div class="form-group mb-4">
-    <h4>Permissions</h4>
-    @foreach(var controller in controllers.OrderBy(x=>x.Value.Item2))
-    {
-        <h2>@controller.Key</h2>
-        @foreach(var action in controller.Value.Item1)
-        {
-            <span>@action</span>
-        }
-    }
-</div>
+
+<script>
+    document.getElementById('role-form').addEventListener('submit',
+        function (event) {
+
+            if (!$("input.form-control").val()) {
+                event.preventDefault();
+                swal.fire({
+                    customClass: {
+                        confirmButton: "btn btn-primary warning ",
+                    },
+                    title: "Enter a role name !",
+                    confirmButtonText: "Ok"
+                });
+            }
+
+            // else {
+            //     var serviceURL = "/Social/Publish/Send" + event;
+            //     var shareForm = $(':input').serializeArray();
+
+            //     if ($('.shareImage')) {
+            //         var imgName = $('.shareImage').attr('name');
+            //         var imgId = $('.shareImage').attr('value');
+            //         shareForm.push({ name: imgName, value: imgId })
+            //     }
+
+            //     var channelId = $("input[name='Channels[0]']:checked").val();
+
+
+            //     $.ajax({
+            //         type: "POST",
+            //         url: serviceURL,
+            //         data: shareForm,
+            //         success: function () {
+            //             // location.href = "/Posts/List"
+            //             //customized alert for success
+            //             window.location.reload();
+            //         },
+            //         error: function (xhr, status, error) {
+            //             var err = eval("(" + xhr.responseText + ")");
+            //             alert(err.Message);
+            //         },
+            //     })
+            // }
+
+
+
+            //DO NOT DELETE !
+            // $("#role-form tbody tr td:first-of-type  ").each(function (i) {
+            //     if ($(this).siblings().find("input[type='checkbox']:checked").length > 0) {
+            //         console.log($(this).text());
+            //         console.log($(this).siblings().find("input").serializeArray());
+            //     }
+            // })
+
+        });
+</script>
 
 <style>
-    .create-form * {
-        width: 325px;
-        max-width: 100%;
+    h2#swal2-title {
+        direction: ltr;
     }
+
+
+    tbody tr:not(:last-child) {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    ul.ks-cboxtags {
+        list-style: none;
+        padding: 20px;
+    }
+
+        ul.ks-cboxtags li {
+            display: inline;
+        }
+
+            ul.ks-cboxtags li label {
+                display: inline-block;
+                background-color: rgba(255, 255, 255, .9);
+                border: 2px solid rgba(139, 139, 139, .3);
+                color: #adadad;
+                border-radius: 25px;
+                white-space: nowrap;
+                margin: 3px 0px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                transition: all .2s;
+            }
+
+            ul.ks-cboxtags li label {
+                padding: 8px 12px;
+                cursor: pointer;
+            }
+
+                ul.ks-cboxtags li label::before {
+                    display: inline-block;
+                    font-style: normal;
+                    font-variant: normal;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    font-family: bootstrap-icons !important;
+                    font-weight: 900;
+                    font-size: 12px;
+                    padding: 2px 6px 2px 2px;
+                    content: "\F63B";
+                    transition: transform .3s ease-in-out;
+                }
+
+            ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
+                content: "\F633";
+                transform: rotate(-360deg);
+                transition: transform .3s ease-in-out;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+                /*  border: 2px solid #1bdbf8; */
+                background-color: var(--green-status-back);
+                color: var(--green-status-color);
+                transition: all .2s;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"] {
+                display: absolute;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"] {
+                position: absolute;
+                opacity: 0;
+            }
+
+    table h5 {
+        margin-bottom: 100%;
+        margin-top: 7px;
+    }
+
+    label {
+        direction: ltr;
+    }
+
 </style>
