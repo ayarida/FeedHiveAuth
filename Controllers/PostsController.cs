@@ -209,11 +209,19 @@ namespace FeedHiveAuth.Controllers
             }
         }
 
-        public void Delete(Post post)
+        public IActionResult Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
             if (postMedia != null) _mediaItemService.Delete(postMedia.Id);
-            _postService.Delete(post.Id);
+            try
+            {
+                _postService.Delete(post.Id);
+            }catch(Exception ex)
+            {
+                _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         public void Publish(string Id)
