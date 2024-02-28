@@ -2,6 +2,7 @@
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Security.Claims;
@@ -16,10 +17,12 @@ namespace FeedHiveAuth.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
 
-        private readonly IUserService _userServiceContext;
-        public PostsController(IUserService _userService, ILogger<PostsController> logger)
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        public PostsController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<PostsController> logger)
         {
-            _userServiceContext = _userService;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
             _logger = logger;
         }
 
@@ -31,15 +34,35 @@ namespace FeedHiveAuth.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult List()
+        public async Task<ActionResult> List() 
         {
-            var posts = _postService.GetPosts();
+            var user = await userManager.GetUserAsync(User);
+            var isAdminTask = userManager.IsInRoleAsync(user, "Admin");
+            var isAdmin = await isAdminTask;
+            List<Post> posts;
+            //Admin: return all
+            if (isAdmin)
+            {
+                posts = _postService.GetPosts();
+            }
+            //Else: return curr user posts
+            else
+            {
+                posts = _postService.GetCurrentUserPosts(user.Id);
+            }
             foreach (var post in posts)
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 if (postMedia != null) post.PostMediaItems = postMedia;
             }
             return View(posts);
+        }
+
+        public async Task<bool> isAdmin()
+        {
+            var currUser = await userManager.GetUserAsync(User);
+            var isAdmin = await userManager.IsInRoleAsync(currUser, "Admin");
+            return isAdmin;
         }
 
         [Authorize]
@@ -266,7 +289,12 @@ namespace FeedHiveAuth.Controllers
             User currentUser = _userService.Get(userId);
             return currentUser;
         }
-
+        public async void GetUserRole(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) { }
+            var roles = userManager.GetRolesAsync(user);
+        }
 
         [HttpGet]
         public ActionResult Edit(string id)
