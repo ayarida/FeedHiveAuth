@@ -24,93 +24,96 @@
 
 
             <table id="filter" class="table" dir="rtl">
-            <table id="filter" class="table" dir="rtl">
-                <thead>
-                    <tr class="filters">
-                        <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"></th>
-                        <th>ميديا</th>
-                        <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
-                        <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
-                        <th>الحالة</th>
-                        <th><input type="text" class="form-control" placeholder="التاريخ" disabled /></th>
-                        <th>عمليات</th>
-                    </tr>
-                </thead>
-                <div class="action-buttons">
-                    <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
-                        تصفية الخيارات
-                        <i class="bi bi-filter"></i>
-                    </button>
-                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
-                    @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
-                </div>
+                <table id="filter" class="table" dir="rtl">
+                    <thead>
+                        <tr class="filters">
+                            <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"></th>
+                            <th>ميديا</th>
+                            <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
+                            <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
+                            <th>الحالة</th>
+                            <th><input type="text" class="form-control" placeholder="التاريخ" disabled /></th>
+                            <th>عمليات</th>
+                        </tr>
+                    </thead>
+                    <div class="action-buttons">
+                        <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
+                            تصفية الخيارات
+                            <i class="bi bi-filter"></i>
+                        </button>
+                        <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
+                        @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
+                    </div>
 
-                <tbody>
+                    <tbody>
 
-                    @if (posts.Any())
-                    {
-                        @foreach (var post in posts)
+                        @if (posts.Any())
                         {
-                        //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
-                            @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
-                            <tr>
+                            @foreach (var post in posts)
+                            {
+                            //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
+                                @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
 
 
-                                <td> <input type="checkbox" class="check" value="@post.Id"></td>
-                                @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
-                                {
-                                    <td><img src="@post.PostMediaItems?.FirstOrDefault()?.Path" /></td>
-                                }
-                                else
-                                {
-                                    <td><img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" /></td>
-                                }
-                                <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
-                                <td>@post.ShortTitle</td>
-                                <td>
+                                var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
 
-                                    @{
-                                        var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
-                                    }
 
-                                    @if (postStatus.ToString() == "New")
+                                <tr>
+
+
+                                    <td> <input type="checkbox" class="check" value="@post.Id" @(postStatus.ToString() == "New" ? "" : "disabled")></td>
+                                    @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
                                     {
-                                        <div class="status status_new">
-                                            @postStatus
-                                        </div>
+                                        <td><img src="@post.PostMediaItems?.FirstOrDefault()?.Path" /></td>
                                     }
                                     else
                                     {
-                                        <div class="status status_published">
-                                            @postStatus
-                                        </div>
+                                        <td><img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" /></td>
                                     }
+                                    <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
+                                    <td>@post.ShortTitle</td>
+                                    <td>
 
-                                </td>
 
-                                <td dir="ltr" style="text-align: right">@post.PostDate</td>
-                                <td class="operations">
-                                    <div>
-                                        <div><a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil" style="color: #1B5EE1"></i></a></div>
-                                        <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
+
                                         @if (postStatus.ToString() == "New")
                                         {
-                                            <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
+                                            <div class="status status_new">
+                                                @postStatus
+                                            </div>
                                         }
                                         else
                                         {
-                                            <div id="@post.Id" style="pointer-events: none; width: fit-content"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
+                                            <div class="status status_published">
+                                                @postStatus
+                                            </div>
                                         }
-                                    </div>
-                                </td>
 
-                                @* <td></td> *@
+                                    </td>
 
-                            </tr>
+                                    <td dir="ltr" style="text-align: right">@post.PostDate</td>
+                                    <td class="operations">
+                                        <div>
+                                            <div><a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil" style="color: #1B5EE1"></i></a></div>
+                                            <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
+                                            @if (postStatus.ToString() == "New")
+                                            {
+                                                <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
+                                            }
+                                            else
+                                            {
+                                                <div id="@post.Id" style="pointer-events: none; width: fit-content"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
+                                            }
+                                        </div>
+                                    </td>
+
+                                    @* <td></td> *@
+
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
         </div>
 
@@ -186,10 +189,10 @@
         border-radius: 4px;
     }
 
-/*         .status.status_published {
-            background-color: #baffc9;
-            color: #136825;
-        } */
+    /*         .status.status_published {
+                                    background-color: #baffc9;
+                                    color: #136825;
+                                } */
 
 
     #empty-delete-error .modal-body {
@@ -197,10 +200,10 @@
     }
 
 
-  /*   .status.status_new {
-        background-color: #bae1ff;
-        color: #294c66;
-    } */
+    /*   .status.status_new {
+                                background-color: #bae1ff;
+                                color: #294c66;
+                            } */
 
     .card-body.filterable input {
         text-align: right;
@@ -277,19 +280,31 @@
         }
         else {
             var deleteArr = [];
+
+            var idsString = [];
+
             selected.each(function (index, value) {
                 deleteArr.push($(value).val());
             });
+
             if (deleteArr.length > 1) {
-                var idsString = deleteArr.join(",");
+                idsString = deleteArr.join(",");
             }
-            console.log(deleteArr.join(","));
+            else {
+
+                selected.each(function (index, value) {
+                    idsString.push($(value).val());
+                })
+
+            }
+
+            // console.log(deleteArr.join(","));
 
             var serviceURL = "/Posts/MultipleDelete";
             $.ajax({
                 type: "GET",
                 url: serviceURL,
-                data: { idsStr: idsString },
+                data: { idsStr: idsString.toString() },
                 success: function (data) {
                     swal.fire({
                         customClass: {
