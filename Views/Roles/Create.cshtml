@@ -17,18 +17,18 @@
         </div>
         @* <div asp-validation-summary="All" class="text-danger"></div> *@
 
-        <form class="create-form" method="post" dir="ltr" method="post" id="role-form">
+        <form class="create-form" dir="ltr" id="role-form">
             <div class="form-group d-flex align-items-end justify-content-between mb-3" style="direction: ltr; column-gap: 10px">
                 <div>
                     <label for="name" class="mb-3">Name :</label>
-                    <input name="name" class="form-control" type="text" id="role-name" />
+                    <input name="name" class="form-control" type="text" id="role-name"/>
                 </div>
             </div>
 
             <div class="form-group d-flex align-items-end justify-content-between" style="direction: ltr; column-gap: 10px">
                 <div>
                     <label for="description" class="mb-3">Description :</label>
-                    <input name="description" class="form-control" type="text" id="role-description" />
+                    <input name="description" class="form-control" type="text" id="role-description"/>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: fit-content">Create</button>
             </div>
@@ -42,14 +42,16 @@
                     @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
                     {
                         <tr>
-                            <td id="@controller.Key.ToLower()"><h5>@controller.Key</h5></td>
+                            <td id="@controller.Key.ToLower()">
+                                <h5>@controller.Key</h5>
+                            </td>
                             <td>
                                 <ul class="ks-cboxtags @(controller.Key.ToLower() + "data")">
                                     @foreach (var action in controller.Value.Item1)
                                     {
                                         @* <span>@action</span> *@
                                         <li>
-                                            <input type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="@action.ToString()" />
+                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="@(controller.Key.ToLower())"/>
                                             <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
                                         </li>
                                     }
@@ -67,57 +69,45 @@
 <script>
     document.getElementById('role-form').addEventListener('submit',
         function (event) {
-
-            if (!$("input.form-control").val()) {
-                event.preventDefault();
-                swal.fire({
-                    customClass: {
-                        confirmButton: "btn btn-primary warning ",
-                    },
-                    title: "Enter a role name !",
-                    confirmButtonText: "Ok"
-                });
-            }
-
-            // else {
-            //     var serviceURL = "/Social/Publish/Send" + event;
-            //     var shareForm = $(':input').serializeArray();
-
-            //     if ($('.shareImage')) {
-            //         var imgName = $('.shareImage').attr('name');
-            //         var imgId = $('.shareImage').attr('value');
-            //         shareForm.push({ name: imgName, value: imgId })
-            //     }
-
-            //     var channelId = $("input[name='Channels[0]']:checked").val();
-
-
-            //     $.ajax({
-            //         type: "POST",
-            //         url: serviceURL,
-            //         data: shareForm,
-            //         success: function () {
-            //             // location.href = "/Posts/List"
-            //             //customized alert for success
-            //             window.location.reload();
-            //         },
-            //         error: function (xhr, status, error) {
-            //             var err = eval("(" + xhr.responseText + ")");
-            //             alert(err.Message);
-            //         },
-            //     })
-            // }
-
-
-
-            //DO NOT DELETE !
-            // $("#role-form tbody tr td:first-of-type  ").each(function (i) {
-            //     if ($(this).siblings().find("input[type='checkbox']:checked").length > 0) {
-            //         console.log($(this).text());
-            //         console.log($(this).siblings().find("input").serializeArray());
-            //     }
-            // })
-
+        
+            if (!$("#role-name").val()){
+                event.preventDefault()
+                   swal.fire({
+                                customClass: {
+                                    confirmButton: "btn btn-primary  warning",
+                                },
+                                title: "enter name role",
+                                confirmButtonText: "ok",
+                            });
+                }
+            
+           else {
+                        const formData = new FormData(event.target)
+                        const authorizationJson = {
+                           name:formData.get("name"),
+                           description:formData.get("description"),
+                           authorization:formData.getAll("authorization"),
+                           channels:formData.getAll("channels"),
+                           configs:formData.getAll("configs"),
+                           home:formData.getAll("home"),
+                           mediaitem:formData.getAll("mediaitem"),
+                           oauthorization:formData.getAll("oauthorization"),
+                           posts:formData.getAll("posts"),
+                           publish:formData.getAll("publish"),
+                           roles:formData.getAll("roles"),
+                           socialhome:formData.getAll("socialhome"),
+                           subscriptions:formData.getAll("subscriptions"),
+                           users:formData.getAll("users")
+                       }
+                       console.log(authorizationJson);    
+                       axios.post('/roles/create', { authorizationJson })
+                       .then(function (response){
+                        console.log(response);
+                       })
+                       .catch(function (error){
+                             console.log(error);
+                       });
+           }
         });
 </script>
 
