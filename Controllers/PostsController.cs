@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.Models.Services;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
+        protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
         private readonly ILogger<PostsController> _logger;
 
         private readonly UserManager<IdentityUser> userManager;
@@ -212,12 +214,22 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
-            if (postMedia != null) _mediaItemService.Delete(postMedia.Id);
+            var postOps = _postService.GetPostOperations(post.Id);
+            if (postMedia != null) {
+                _mediaItemService.Delete(postMedia.Id);
+            }
+            if (postOps != null)
+            {
+                foreach(var op in postOps)
+                {
+                    _operationService.Delete(op.Id);
+                }
+            }
             try
             {
                 _postService.Delete(post.Id);
             }catch(Exception ex)
-            {
+             {
                 _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
                 return BadRequest(ex.Message);
             }
@@ -272,7 +284,7 @@ namespace FeedHiveAuth.Controllers
             {
                 try
                 {
-                    Delete(post);
+                    return Delete(post);
                 }
                 catch (SqlException ex)
                 {

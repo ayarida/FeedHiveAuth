@@ -1,8 +1,9 @@
-﻿@using FeedHiveAuth.Services;
+﻿@using FeedHiveAuth.Models.ViewModels;
+@using FeedHiveAuth.Services;
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@model List<FeedHiveAuth.Models.Post>
+@model UserDataViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -15,7 +16,7 @@
     IWebHostEnvironment _hostingEnvironment;
     var filePath = System.IO.Path.Combine("wwwroot", "uploads", "test.jpg");
     var photoStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-    List<Post> posts = Model;
+    List<Post> posts = Model.allPosts;
 
 }
 
@@ -53,7 +54,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h1>0 أيام</h1>
+@*                     <h1>0 أيام</h1>
+ *@                    <h1>@Model.userPostsCount منشورات</h1>
                     <a href="/Posts/Create">
                         <button type="button" class="btn green-btn">
                             أنشئ منشور

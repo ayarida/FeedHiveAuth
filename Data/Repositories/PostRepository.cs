@@ -119,7 +119,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public void SavePost(Post post)
         {
-            post.Id = Guid.NewGuid().ToString();
+            post.Id = Guid.NewGuid().ToString();                                                                                                                                                              
             string query = string.Format(
                                     "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},N{6},N{7},{8},{9},{10})",
                                     TableName,
@@ -145,6 +145,12 @@ namespace FeedHiveAuth.Data.Repositories
             else
                 error = PublishErrorEnum.NO_ERROR;
             return media;
+        }
+
+        public List<Operation> GetPostOperations(string postId)
+        {
+            var operations = postId.HasValue() ? Instances.Repositories.OperationRepository.getPostOperationsById(postId) : null;
+            return operations;
         }
 
         public List<Post> GetCurrentUserPosts(string userId)
