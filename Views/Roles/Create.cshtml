@@ -8,29 +8,33 @@
 
 <div class="card p-3" dir="ltr" style="text-align: left">
     <div class="create-role">
-        <div class="d-flex justify-content-between align-items-end flex-row-reverse" style="margin-bottom: 80px;">
-            <h3 class="text-black">Create a Role</h3>
-            <a class="btn btn-secondary" style="width: 125px;max-width: 100%;" href="/Roles/Index">
-                Back
-                <i class="bi bi-box-arrow-in-left"></i>
-            </a>
-        </div>
+
         @* <div asp-validation-summary="All" class="text-danger"></div> *@
 
         <form class="create-form" dir="ltr" id="role-form">
-            <div class="form-group d-flex align-items-end justify-content-between mb-3" style="direction: ltr; column-gap: 10px">
-                <div>
-                    <label for="name" class="mb-3">Name :</label>
-                    <input name="name" class="form-control" type="text" id="role-name"/>
-                </div>
+            <div class="d-flex align-items-end flex-row" style="margin-bottom: 80px;">
+                <h3 class="text-black">أنشئ دور</h3>
+                <button type="submit" class="btn btn-primary me-auto ms-2" style="width: 161px;height: fit-content;padding: 6px !important;" id="role-for">أنشئ</button>
+                <a class="btn btn-secondary" style="width: fit-content;max-width: 100%;" href="/Roles/Index">
+                    العودة إلى قائمة الأدوار
+                    <i class="bi bi-box-arrow-in-left"></i>
+                </a>
             </div>
-
-            <div class="form-group d-flex align-items-end justify-content-between" style="direction: ltr; column-gap: 10px">
-                <div>
-                    <label for="description" class="mb-3">Description :</label>
-                    <input name="description" class="form-control" type="text" id="role-description"/>
+            <div style="text-align: right">
+                <div class="form-group ">
+                    <div>
+                        <label for="name" class="mb-4">الاسم :</label>
+                        <input name="name" class="form-control" type="text" id="role-name" style="text-align: right"/>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: fit-content">Create</button>
+
+                <div class="form-group mt-3">
+                    <div>
+                        <label for="description" class="">الوصف :</label>
+                        <input name="description" class="form-control" type="text" id="role-description" style="text-align: right"/>
+                    </div>
+
+                </div>
             </div>
 
             <h3 class="mt-5">Permissions</h3>
@@ -86,28 +90,36 @@
                         const authorizationJson = {
                            name:formData.get("name"),
                            description:formData.get("description"),
-                           authorization:formData.getAll("authorization"),
-                           channels:formData.getAll("channels"),
-                           configs:formData.getAll("configs"),
-                           home:formData.getAll("home"),
-                           mediaitem:formData.getAll("mediaitem"),
-                           oauthorization:formData.getAll("oauthorization"),
-                           posts:formData.getAll("posts"),
-                           publish:formData.getAll("publish"),
-                           roles:formData.getAll("roles"),
-                           socialhome:formData.getAll("socialhome"),
-                           subscriptions:formData.getAll("subscriptions"),
-                           users:formData.getAll("users")
-                       }
-                       console.log(authorizationJson);    
-                       axios.post('/roles/create', { authorizationJson })
-                       .then(function (response){
-                        console.log(response);
-                       })
-                       .catch(function (error){
+                           // authorization:formData.getAll("authorization"),
+                           // channels:formData.getAll("channels"),
+                           // configs:formData.getAll("configs"),
+                           // home:formData.getAll("home"),
+                           // mediaitem:formData.getAll("mediaitem"),
+                           // oauthorization:formData.getAll("oauthorization"),
+                           // posts:formData.getAll("posts"),
+                           // publish:formData.getAll("publish"),
+                           // roles:formData.getAll("roles"),
+                           // socialhome:formData.getAll("socialhome"),
+                           // subscriptions:formData.getAll("subscriptions"),
+                           // users:formData.getAll("users")
+                           
+                           @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
+                           {
+                               @: '@controller.Key.ToLower()': formData.getAll('@controller.Key.ToLower()');
+                           }
+                       
+                         event.preventDefault();
+                         console.log(authorizationJson);    
+                         axios.post('/roles/create', {
+                           authorizationJson})
+                           .then(function (response) {
+                             console.log(response);
+                           })
+                           .catch(function (error) {
                              console.log(error);
-                       });
-           }
+                           });
+                }
+         
         });
 </script>
 
