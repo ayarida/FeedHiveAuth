@@ -1,10 +1,12 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -13,8 +15,9 @@ namespace FeedHiveAuth.Controllers
         private readonly ILogger<HomeController> _logger;
         public SignInManager<IdentityUser> SignInManager;
         public UserManager<IdentityUser> UserManager;
-        protected PostRepository _postRepository = Instances.Repositories.PostRepository;
 
+        protected PostRepository _postRepository = Instances.Repositories.PostRepository;
+        protected UserRepository _userRepository =  Instances.Repositories.UserRepository;
         //private readonly IConfiguration configuration;
 
 
@@ -42,9 +45,21 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Index()
         {
             var posts = _postRepository.GetPosts();
-            return View(posts);
+            var userPostsCount = _postRepository.GetCurrentUserPosts(GetCurrentUser().Id).Count();
+            UserDataViewModel uvm = new UserDataViewModel
+            {
+                allPosts = posts,
+                userPostsCount = userPostsCount
+            };
+            return View(uvm);
         }
+        public User GetCurrentUser()
+        {
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User currentUser = _userRepository.Get(userId);
+            return currentUser;
+        }
         public IActionResult Welcome()
         {
             return View();

@@ -1,9 +1,10 @@
-﻿@model List<FeedHiveAuth.Models.Post>
+﻿@model UserDataViewModel
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
+@using FeedHiveAuth.Models.ViewModels;
 @{
     var EmptyList = new List<Post>();
-    List<Post> posts = Model== null ? EmptyList : Model;
+    List<Post> posts = Model.allPosts == null ? EmptyList : Model.allPosts;
 
 }
 
