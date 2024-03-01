@@ -1,155 +1,153 @@
 ﻿<!DOCTYPE html>
 <html lang="en" dir="auto">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - FeedHiveAuth</title>
 
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     @*     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&display=swap"
     rel="stylesheet" /> *@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FeedHiveAuth.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/FeedHiveAuth.styles.css" asp-append-version="true"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous" />
+          crossorigin="anonymous"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"/>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/css/Sidebar/core.css" />
-    <link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
-    <link rel="stylesheet" href="~/css/Editor/richtext.min.css" />
+    <link rel="stylesheet" href="~/css/Sidebar/core.css"/>
+    <link rel="stylesheet" href="~/css/Sidebar/navbar.css"/>
+    <link rel="stylesheet" href="~/css/Editor/richtext.min.css"/>
     <script type="text/javascript" src="~/js/TableFilter/Filter.js"></script>
-    <link rel="stylesheet" href="~/css/Filter.css" />
+    <link rel="stylesheet" href="~/css/Filter.css"/>
     <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script  src="/js/Lib/axios.js"></script>
+    <script src="/js/Lib/axios.js"></script>
 
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
 </head>
 <body>
 
-    <div class="container">
-        <header>
+<div class="container">
+    <header>
 
-            @*Calling Sidebar*@
-            <nav dir="auto" id="sidebarMenu"
-                 class="collapse d-lg-block sidebar collapse bg-white" style="background: #0a2c3f !important; filter: drop-shadow(0 10px #2585CA);">
-                <div class="position-sticky">
-                    <div class="list-group list-group-flush mx-3 mt-4">
+        @*Calling Sidebar*@
+        <nav dir="auto" id="sidebarMenu"
+             class="collapse d-lg-block sidebar collapse bg-white" style="background: #0a2c3f !important; filter: drop-shadow(0 10px #2585CA);">
+            <div class="position-sticky">
+                <div class="list-group list-group-flush mx-3 mt-4">
 
-                        <partial name="_accountDisplay" />
+                    <partial name="_accountDisplay"/>
 
 
-                        <a href="/Posts/Create"
-                           class="list-group-item list-group-item-action py-2"
-                           aria-current="true">
-                            <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
-                        </a>
-                        @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
+                    <a href="/Posts/Create"
+                       class="list-group-item list-group-item-action py-2"
+                       aria-current="true">
+                        <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
+                    </a>
+                    @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
                         <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
                         </a> *@
-                        <a href="/Posts/List"
-                           class="list-group-item list-group-item-action py-2 "><i class="bi bi-grid"></i><span>المنشورات</span></a>
-                        <a href="/Social/Channels/Create"
-                           class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-building-gear"></i><span>التواصل الاجتماعي</span>
-                        </a>
-                        <a href="/MediaItem/List"
-                           class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-collection-fill"></i><span>الميديا</span>
-                        </a>
-                        <a href="/Users/List"
-                           class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-microsoft-teams"></i><span>الفريق</span>
-                        </a>
-                        <a href="/Identity/Account/Manage"
-                           class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-person-circle"></i><span>الحساب</span>
-                        </a>
+                    <a href="/Posts/List"
+                       class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-grid"></i><span>المنشورات</span>
+                    </a>
+                    <a href="/Social/Channels/Create"
+                       class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-building-gear"></i><span>التواصل الاجتماعي</span>
+                    </a>
+                    <a href="/MediaItem/List"
+                       class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-collection-fill"></i><span>الميديا</span>
+                    </a>
+                    <a href="/Users/List"
+                       class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-microsoft-teams"></i><span>الفريق</span>
+                    </a>
 
-                        <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-tv"></i><span>القنوات</span>
-                        </a>
+                    <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-tv"></i><span>القنوات</span>
+                    </a>
 
-                        <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-briefcase-fill"></i><span>الأدوار</span>
-                        </a>
-                    </div>
-
-                    <div class="list-group list-group-flush mx-3 bottom-list">
-                        <a href="/Configs/TechnicalConfigs"
-                           class="list-group-item list-group-item-action py-2 "
-                           aria-current="true">
-                            <i class="bi bi-gear"></i><span>الاعدادات</span>
-                        </a>
-                        <a href="#"
-                           class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-person-raised-hand"></i><span>دعم</span>
-                        </a>
-                    </div>
+                    <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-briefcase-fill"></i><span>الأدوار</span>
+                    </a>
                 </div>
-            </nav>
 
-            <nav id="main-navbar"
-                 class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 8px 0px !important;">
-                <!-- Container wrapper -->
-                <div class="container-fluid">
-                    <!-- Toggle button -->
-                    <button class="navbar-toggler"
-                            type="button"
-                            data-mdb-toggle="collapse"
-                            data-mdb-target="#sidebarMenu"
-                            aria-controls="sidebarMenu"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <partial name="_LoginPartial" />
+                <div class="list-group list-group-flush mx-3 bottom-list">
+                    <a href="/Configs/TechnicalConfigs"
+                       class="list-group-item list-group-item-action py-2 "
+                       aria-current="true">
+                        <i class="bi bi-gear"></i><span>الاعدادات</span>
+                    </a>
+                    <a href="/Identity/Account/Manage"
+                       class="list-group-item list-group-item-action py-2 ">
+                        <i class="bi bi-person-circle"></i><span>الحساب</span>
+                    </a>
                 </div>
-            </nav>
+            </div>
+        </nav>
 
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FeedHiveAuth</a>
-            @*   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav id="main-navbar"
+             class="navbar navbar-expand-lg navbar-light bg-white fixed-top" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 8px 0px !important;">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#sidebarMenu"
+                        aria-controls="sidebarMenu"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                <partial name="_LoginPartial"/>
+            </div>
+        </nav>
+
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FeedHiveAuth</a>
+        @*   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button> *@
 
-            @*Calling navbar*@
+        @*Calling navbar*@
 
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3" dir="auto">
-                @RenderBody()
-            </main>
-        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3" dir="auto">
+            @RenderBody()
+        </main>
     </div>
+</div>
 
 
-    @*     <script type="text/javascript" src="~/js/site.js"></script> *@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="/_framework/aspnetcore-browser-refresh.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+@*     <script type="text/javascript" src="~/js/site.js"></script> *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="/_framework/aspnetcore-browser-refresh.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
 
 
-    <script>
+<script>
 
         //Highlight current sidebar menu link
 

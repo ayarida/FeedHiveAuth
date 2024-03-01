@@ -9,9 +9,6 @@
 }
 
 
-
-
-
 <div class="col-md-12">
     <div class="card">
 
@@ -22,106 +19,124 @@
         <div class="card-body filterable" style="max-width: 100%;overflow: auto;">
 
 
-
             <table id="filter" class="table" dir="rtl">
-                <table id="filter" class="table" dir="rtl">
-                    <thead>
-                        <tr class="filters">
-                            <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"></th>
-                            <th>ميديا</th>
-                            <th><input type="text" class="form-control" placeholder="عنوان" disabled /></th>
-                            <th><input type="text" class="form-control" placeholder="عنوان قصير" disabled /></th>
-                            <th>الحالة</th>
-                            <th><input type="text" class="form-control" placeholder="التاريخ" disabled /></th>
-                            <th>عمليات</th>
-                        </tr>
-                    </thead>
-                    <div class="action-buttons">
-                        <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
-                            تصفية الخيارات
-                            <i class="bi bi-filter"></i>
-                        </button>
-                        <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
-                        @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
-                    </div>
+                <thead>
+                <tr class="filters">
+                    <th>
+                        <input type="checkbox" name="selectAll" class="check" onClick="toggle(this)">
+                    </th>
+                    <th>ميديا</th>
+                    <th>
+                        <input type="text" class="form-control" placeholder="عنوان" disabled/>
+                    </th>
+                    <th>
+                        <input type="text" class="form-control" placeholder="عنوان قصير" disabled/>
+                    </th>
+                    <th>الحالة</th>
+                    <th>
+                        <input type="text" class="form-control" placeholder="التاريخ" disabled/>
+                    </th>
+                    <th>عمليات</th>
+                </tr>
+                </thead>
+                <div class="action-buttons">
+                    <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
+                        تصفية الخيارات
+                        <i class="bi bi-filter"></i>
+                    </button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
+                    @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
+                </div>
 
-                    <tbody>
+                <tbody>
 
-                        @if (posts.Any())
-                        {
-                            @foreach (var post in posts)
-                            {
-                            //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
+                @if (posts.Any())
+                {
+                    @foreach (var post in posts)
+                    {
+                        //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
                                 @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
 
 
-                                var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
+                        var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
 
 
-                                <tr>
+                        <tr>
 
 
-                                    <td> <input type="checkbox" class="check" value="@post.Id" @(postStatus.ToString() == "New" ? "" : "disabled")></td>
-                                    @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
+                            <td>
+                                <input type="checkbox" class="check" value="@post.Id" @(postStatus.ToString() == "New" ? "" : "disabled")>
+                            </td>
+                            @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
+                            {
+                                <td>
+                                    <img src="@post.PostMediaItems?.FirstOrDefault()?.Path"/>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <img src="~/uploads/no-img.jpg" style="border: 1px solid grey;"/>
+                                </td>
+                            }
+                            <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
+                            <td>@post.ShortTitle</td>
+                            <td>
+
+
+
+                                @if (postStatus.ToString() == "New")
+                                {
+                                    <div class="status status_new">
+                                        @postStatus
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="status status_published">
+                                        @postStatus
+                                    </div>
+                                }
+
+                            </td>
+
+                            <td dir="ltr" style="text-align: right">@post.PostDate</td>
+                            <td class="operations">
+                                <div>
+                                    <div>
+                                        <a href="/Posts/Edit/@post.Id">
+                                            <i class="bi bi-pencil" style="color: #1B5EE1"></i>
+                                        </a>
+                                    </div>
+                                    <a href="/Social/Publish/Share?postid=@post.Id">
+                                        <i class="bi bi-share-fill"></i>
+                                    </a>
+                                    @if (postStatus.ToString() == "New")
                                     {
-                                        <td><img src="@post.PostMediaItems?.FirstOrDefault()?.Path" /></td>
+                                        <div onclick="deletePost(this.id)" id="@post.Id">
+                                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                        </div>
                                     }
                                     else
                                     {
-                                        <td><img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" /></td>
-                                    }
-                                    <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
-                                    <td>@post.ShortTitle</td>
-                                    <td>
-
-
-
-                                        @if (postStatus.ToString() == "New")
-                                        {
-                                            <div class="status status_new">
-                                                @postStatus
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="status status_published">
-                                                @postStatus
-                                            </div>
-                                        }
-
-                                    </td>
-
-                                    <td dir="ltr" style="text-align: right">@post.PostDate</td>
-                                    <td class="operations">
-                                        <div>
-                                            <div><a href="/Posts/Edit/@post.Id"><i class="bi bi-pencil" style="color: #1B5EE1"></i></a></div>
-                                            <a href="/Social/Publish/Share?postid=@post.Id"><i class="bi bi-share-fill"></i></a>
-                                            @if (postStatus.ToString() == "New")
-                                            {
-                                                <div onclick="deletePost(this.id)" id="@post.Id"><i class="bi bi-trash3-fill" style="cursor: pointer"></i></div>
-                                            }
-                                            else
-                                            {
-                                                <div id="@post.Id" style="pointer-events: none; width: fit-content"><i class="bi bi-trash3-fill" style="color: grey"></i></div>
-                                            }
+                                        <div id="@post.Id" style="pointer-events: none; width: fit-content">
+                                            <i class="bi bi-trash3-fill" style="color: grey"></i>
                                         </div>
-                                    </td>
+                                    }
+                                </div>
+                            </td>
 
-                                    @* <td></td> *@
+                            @* <td></td> *@
 
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
 
         </div>
-
     </div>
 </div>
-
-
-
 
 
 <style>
@@ -262,7 +277,7 @@
     }
 </script> *@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="~/css/Filter.css" />
+<link rel="stylesheet" href="~/css/Filter.css"/>
 <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
 
 <script>
