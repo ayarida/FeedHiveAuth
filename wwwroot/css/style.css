@@ -127,8 +127,6 @@ button {
     font-weight: bold;
 }
 
-}
-
 @media (max-width: 992px) {
     .row {
         justify-content: center;
@@ -501,4 +499,27 @@ a.list-group-item.list-group-item-action.py-2.active {
 .current-user {
     background: #314956 !important;
     border-radius: 4px;
+}
+
+
+/*Scroll bar design*/
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #918b92 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 15px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #918b92;
+    border-radius: 10px;
+    border: 4px solid #ffffff;
 }

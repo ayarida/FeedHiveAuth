@@ -65,135 +65,60 @@
                                 <input asp-for="PostDate" class="form-control req" />
                                 <span asp-validation-for="PostDate" class="text-danger"></span>
                             </div>
-                            <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column" class="my-5">
-                                <div class="mb-3">صورة / فيديو</div>
-                                <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
-                                    تحميل
-                                    <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
-                                    <input type="file" name="File" id="mediaInput" />
-                                </label>
-                                <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
-                                <video style="width: 400px; max-width: 100%" controls class="video">
-                                    <source src="" type="video/mp4" id="videoPreview">
-                                </video>
-                            </div>
-
-                            <div class="form-group mb-4 d-flex justify-content-center">
-                                <input type="submit" value="أنشئ المحتوى" class="btn btn-primary submit-button" style="max-width: 50%;width: 100%; border-radius: 28px;" />
-                            </div>
-
-
+                            @* PreviewIamge and handle exceptions *@
+                            <partial name="_imagePreview" />
                         </form>
-
-
                     </div>
                 </div>
-
-
             </div>
-
         </div>
-
-
     </div>
-
-    @* <div class="card recents">
-        <h5 style=" padding: 15px 15px 0 0;">أحدث المنشورات</h5>
-        <div class="card-body">
-
-            <table class="" dir="rtl">
-                <tr>
-                    <th>عنوان</th>
-                    <th>عنوان قصير</th>
-                    <th>التاريخ</th>
-                </tr>
-                @foreach (var post in posts.Take(5))
-                {
-                    <tr>
-                        <td>@post.Title</td>
-                        <td>@post.ShortTitle</td>
-                        <td>@post.CreationDate</td>
-                    </tr>
-                }
-            </table>
-        </div> *@
-
-    </div>
-
 </div>
 
-<div id="snackbar" style="background-color:var(--delete-color);border-radius:10px" dir="auto">Please fill the missing fields !</div>
 
 
-
-
-<script>
-
-
-
-
-    // check media type and preview it
-
-
-    mediaInput.onchange = evt => {
-        const [file] = mediaInput.files
-        const fileType = file['type']
-        const videoType = ['mp4']
-        const validImageTypes = ['image/webp', 'image/jpeg', 'image/png'];
-
-        if (file) {
-
-            if (fileType.includes(videoType)) {
-
-                videoPreview.src = URL.createObjectURL(file)
-                $("#videoPreview").parent()[0].load();
-                $(".video").show();
-            }
-
-            else {
-                imgPreview.src = URL.createObjectURL(file)
-                $("#imgPreview").show();
-
-            }
-        }
-    }
-
-
-    //check for missing fields
-
-    $(".create-post").ready(function () {
-
-        $(".submit-button").on("click", function () {
-
-            $("input.form-control.req").each(function (index, element) {
-                if ($(element).val() === 0 || $(element).val() === '') {
-                    $(this).prev().addClass("star");
-                    var x = document.getElementById("snackbar");
-                    x.className = "show";
-                    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-                    event.preventDefault();
-                }
-
-            })
-
-        })
-    });
-
-
-</script>
 
 
 <style>
+    .uploaded-img {
+        position: relative;
+    }
+
+    .deleteIcon {
+        width: fit-content;
+        position: absolute;
+        left: 0;
+        right: auto;
+        top: 0;
+        padding: 3px 10px;
+        background: rgb(10 44 63 / 60%);
+        border-radius: 3px;
+    }
+
+        .deleteIcon i.bi.bi-trash3-fill {
+            cursor: pointer;
+            color: white;
+            opacity: 0.6;
+        }
+
+            .deleteIcon i.bi.bi-trash3-fill:hover {
+                opacity: 1;
+            }
+
     .card-head {
         justify-content: start;
     }
 
-    video {
-        display: none;
+    .video-holder{
+        position: relative;
     }
 
-    #imgPreview {
-        display: none;
+    form video {
+        width: 300px;
+    }
+
+    form img {
+        width: 300px;
     }
 
     .control-label {
@@ -220,78 +145,7 @@
         color: red;
     }
 
-    /*Toast animation*/
-    #snackbar {
-        visibility: hidden;
-        min-width: 250px;
-        margin-left: -125px;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 2px;
-        padding: 16px;
-        position: fixed;
-        z-index: 1;
-        left: 50%;
-        top: 100px;
-        font-size: 17px;
-        height: fit-content !important;
-    }
 
-        #snackbar.show {
-            visibility: visible;
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-
-    @@-webkit-keyframes fadein {
-        from {
-            top: 0;
-            opacity: 0;
-        }
-
-        to {
-            top: 30px;
-            opacity: 1;
-        }
-    }
-
-    @@keyframes fadein {
-        from {
-            top: 0;
-            top: 0;
-        }
-
-        re
-        to {
-            bottom: 30px;
-            opacity: 1;
-        }
-    }
-
-    @@-webkit-keyframes fadeout {
-        from {
-            top: 30px;
-            opacity: 1;
-        }
-
-        to {
-            top: 0;
-            opacity: 0;
-        }
-    }
-
-    @@keyframes fadeout {
-        from {
-            top: 30px;
-            opacity: 1;
-        }
-
-        to {
-            top: 0;
-            opacity: 0;
-        }
-    }
     /*Back button */
     .back-btn:hover i {
         display: none;
@@ -367,9 +221,8 @@
         padding: 18px 15px;
     }
 
-    td{
+    td {
         border-bottom: 1px solid #dddddd;
-  
     }
 
     @@media (max-width: 1400px) {
@@ -386,3 +239,24 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+@* <div class="card recents">
+        <h5 style=" padding: 15px 15px 0 0;">أحدث المنشورات</h5>
+        <div class="card-body">
+
+            <table class="" dir="rtl">
+                <tr>
+                    <th>عنوان</th>
+                    <th>عنوان قصير</th>
+                    <th>التاريخ</th>
+                </tr>
+                @foreach (var post in posts.Take(5))
+                {
+                    <tr>
+                        <td>@post.Title</td>
+                        <td>@post.ShortTitle</td>
+                        <td>@post.CreationDate</td>
+                    </tr>
+                }
+            </table>
+        </div> *@
