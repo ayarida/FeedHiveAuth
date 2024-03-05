@@ -1,0 +1,45 @@
+﻿input.update {
+    display: block;
+    margin: auto;
+}
+
+.card-head {
+    justify-content: end;
+}
+
+input {
+    text-align: start;
+}
+
+.card-head {
+    justify-content: start;
+}
+
+.control-label {
+    margin-bottom: 10px;
+}
+
+
+
+input {
+    border-radius: 5px !important;
+}
+
+.star:after {
+    content: " *";
+    color: red;
+}
+
+
+input, textarea {
+    width: 510px !important;
+    max-width: 100%;
+    border-color: #212c37 !important;
+    text-align: right;
+}
+
+
+form > div {
+    width: fit-content;
+    margin: auto;
+}

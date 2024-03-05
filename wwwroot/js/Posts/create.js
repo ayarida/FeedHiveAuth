@@ -1,10 +1,10 @@
 ﻿// check media type and preview it
 
 var fileTypes = ['jpg', 'jpeg', 'png', 'webp', 'mp4'];
-$(".custom-file-upload").click(function () {
+$(".custom-file-upload").on("click", function () {
     $("#mediaInput").trigger("click");
 })
-$("#mediaInput").change(e => {
+$("#mediaInput").on("change", e => {
 
     let reader = new FileReader();
     var extension = e.target.files[0].name.split('.').pop().toLowerCase();
@@ -61,7 +61,7 @@ $("#mediaInput").change(e => {
 
 
 //check for missing fields
-$(".create-post").ready(function (e) {
+$(function (e) {
 
     $(".submit-button").on("click", function () {
 
