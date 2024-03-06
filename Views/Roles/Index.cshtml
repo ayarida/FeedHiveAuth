@@ -19,77 +19,15 @@
                     <a class="btn btn-sm btn-primary update-link" asp-action="Update" asp-route-id="@role.Id">
                         <i class="bi bi-pencil-square"></i>
                     </a>
-                    @* <form asp-action="Delete" asp-route-id="@role.Id" method="post"> *@
                     <a type="submit" onclick="deleteRole(this.id)" id="@role.Id" class="btn btn-sm btn-danger delete-role">
                         <i class="bi bi-trash3-fill"></i>
                     </a>
-                    @* </form> *@
                 </td>
             </tr>
         }
     </table>
 </div>
 
-<script>
+<script src="~/js/Roles/Roles.js"></script>
 
-
-// Delete user
-function deleteRole(eventId){
-    
-           swal.fire({
-                      customClass: {
-                          confirmButton: "btn btn-success",
-                      },
-                      title: "هل أنت متأكد من رغبتك في حذف الدور؟ ",
-                      text: "لا يمكن التراجع عن هذا الإجراء",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
-                      confirmButtonText: "نعم",
-                      cancelButtonText: "لا",
-                      showCancelButton: true,
-                      showConfirmButton: true,
-              }) .then((willDeletePost) => {
-                      if (willDeletePost.isConfirmed) {
-                       axios.post(`Delete/${eventId}`)
-                       .then(function(){
-                            swal.fire({
-                              title: "تم حذف الدور",
-                               icon: "success"
-                               }).then(function () {
-                                window.location.reload();
-                               }
-                             )
-                       }).catch(function (error) {
-                               swal.fire("خطأ في الحذف!", "الرجاء المحاولة مرة أخرى", "error");
-                       });
-                   } 
-          })
-    }
-   
-</script>
-
-<style>
-    .table.table-sm.table-bordered tr {
-        text-align: center;
-    }
-
-    .table.table-sm.table-bordered td {
-        vertical-align: middle;
-    }
-
-    .delete-role {
-        width: fit-content;
-        max-width: 100%;
-        height: fit-content;
-    }
-
-    .update-link {
-        background-color: var(--blue-color);
-    }
-
-    th {
-        background: #F6F9FC !important;
-    }
-
-</style>
+<link rel="stylesheet" href="~/css/Roles/listt.css"/>

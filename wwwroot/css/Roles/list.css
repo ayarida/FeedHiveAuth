@@ -1,0 +1,21 @@
+﻿.table.table-sm.table-bordered tr {
+    text-align: center;
+}
+
+.table.table-sm.table-bordered td {
+    vertical-align: middle;
+}
+
+.delete-role {
+    width: fit-content;
+    max-width: 100%;
+    height: fit-content;
+}
+
+.update-link {
+    background-color: var(--blue-color);
+}
+
+th {
+    background: #F6F9FC !important;
+}
