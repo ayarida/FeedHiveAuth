@@ -1,13 +1,23 @@
 ﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
+using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace FeedHiveAuth.Controllers
 {
+    public class Permission
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
@@ -20,9 +30,47 @@ namespace FeedHiveAuth.Controllers
             this.userManager = userManager;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SavePermissions([FromBody] Role roleData)
+        {
+            var curr = await userManager.GetUserAsync(User);
+            if (ModelState.IsValid)
+            {
+                var role = new Role
+                {
+                    Name = roleData.Name,
+                    Description = roleData.Description,
+                };
+                var result = await roleManager.CreateAsync(role);
+                if (result.Succeeded)
+                {
+                    // Associate permissions with the created role
+                    var permissions = roleData.Permissions
+                        .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
+                        .ToList();
+
+                    foreach (var permission in permissions)
+                    {
+                        await roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", permission.Name));
+                        await userManager.AddClaimAsync(curr, new System.Security.Claims.Claim("Permission", permission.Name));
+                    }
+
+                    return Ok(); // or return a specific result based on your needs
+                }
+                else
+                {
+                    // Handle role creation failure
+                    return BadRequest(result.Errors);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
         public async Task<IActionResult> Update(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            Role role = (Role)await roleManager.FindByIdAsync(id);
             List<IdentityUser> members = new List<IdentityUser>();
             List<IdentityUser> nonMembers = new List<IdentityUser>();
             foreach (IdentityUser user in userManager.Users)
@@ -87,18 +135,17 @@ namespace FeedHiveAuth.Controllers
 
         public IActionResult Create() => View();
 
-        [HttpPost]
-        public async Task<IActionResult> Create([Required] string name)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IdentityRole>> GetIdentityRole(string id)
         {
-            if (ModelState.IsValid)
+            var identityRole = await roleManager.FindByIdAsync(id);
+
+            if (identityRole == null)
             {
-                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(name));
-                if (result.Succeeded)
-                    return RedirectToAction("Index");
-                else
-                    Errors(result);
+                return NotFound();
             }
-            return View(name);
+
+            return identityRole;
         }
 
         [HttpPost]
@@ -131,7 +178,7 @@ namespace FeedHiveAuth.Controllers
             Role role = new Role();
             role.Name = HttpContext.Request.Form["Name"];
             role.NormalizedName = HttpContext.Request.Form["NormalizedName"];
-            Instances.Repositories.RoleRepository.CreateRole(role);
+            //Instances.Repositories.RoleRepository.CreateRole(role);
         }
 
 

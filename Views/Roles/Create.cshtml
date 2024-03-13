@@ -3,18 +3,14 @@
 @{
     ViewData["Title"] = "CREATE ROLE";
     var controllers = PermissionHelper.Controllers();
-    //var actions = PermissionHelper.Actions(controllers.FirstOrDefault());
 }
 
 <div class="card p-3" dir="ltr" style="text-align: left">
     <div class="create-role">
-
-        @* <div asp-validation-summary="All" class="text-danger"></div> *@
-
-        <form class="create-form" dir="ltr" id="role-form">
+        <form class="create-form" dir="ltr" id="permissionsForm">
             <div class="d-flex align-items-end flex-row" style="margin-bottom: 80px;">
                 <h3 class="text-black">أنشئ دور</h3>
-                <button type="submit" class="btn btn-primary me-auto ms-2" style="width: 161px;height: fit-content;padding: 6px !important;" id="role-for">أنشئ</button>
+                <button type="button" onclick="submitPermissions()" class="btn btn-primary me-auto ms-2" style="width: 161px;height: fit-content;padding: 6px !important;" id="role-for">أنشئ</button>
                 <a class="btn btn-secondary" style="width: fit-content;max-width: 100%;" href="/Roles/Index">
                     العودة إلى قائمة الأدوار
                     <i class="bi bi-box-arrow-in-left"></i>
@@ -24,14 +20,14 @@
                 <div class="form-group ">
                     <div>
                         <label for="name" class="mb-4">الاسم :</label>
-                        <input name="name" class="form-control" type="text" id="role-name" style="text-align: right"/>
+                        <input name="name" class="form-control" type="text" id="role-name" style="text-align: right" />
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
                     <div>
-                        <label for="description" class="">الوصف :</label>
-                        <input name="description" class="form-control" type="text" id="role-description" style="text-align: right"/>
+                        <label for="roleDescription" class="">الوصف :</label>
+                        <input name="roleDescription" class="form-control" type="text" id="role-description" style="text-align: right" />
                     </div>
 
                 </div>
@@ -55,7 +51,7 @@
                                     {
                                         @* <span>@action</span> *@
                                         <li>
-                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="@(controller.Key.ToLower())"/>
+                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="permissions" data-controller="@(controller.Key)" />
                                             <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
                                         </li>
                                     }
@@ -69,55 +65,44 @@
     </div>
 
 </div>
-
 <script>
-    document.getElementById('role-form').addEventListener('submit',
-        function (event) {
+    function submitPermissions() {
+        var roleName = $('#role-name').val();
+        var roleDescription = $('#role-description').val();
+        var permissions = [];
 
-            if (!$("#role-name").val()) {
-                event.preventDefault()
+        // Get all checked checkboxes
+        $('input[name="permissions"]:checked').each(function () {
+            var controllerName = $(this).data('controller');
+            var actionName = $(this).val();
+            permissions.push({ controller: controllerName, action: actionName });
+        });
+        var roleData = {
+            Name: roleName,
+            Description: roleDescription,
+            permissions: permissions
+        };
+        //Send permissions to the server using AJAX
+        $.ajax({
+            type: 'POST',
+            url: '/Roles/SavePermissions',
+            contentType: 'application/json',
+            data: JSON.stringify(roleData),
+            success: function (data) {
                 swal.fire({
-                    customClass: {
-                        confirmButton: "btn btn-primary  warning",
-                    },
-                    title: "enter name role",
-                    
-                    confirmButtonText: "ok",
+                    title: "Role Added Successfully!",
+                }).then(function() { 
+                    window.location.replace("/Roles/Index");
+
                 });
+            },
+            error: function (error) {
+                swal.fire("Error occured!" + error, "error");
+
             }
-
-            else {
-
-
-                const formData = new FormData(event.target)
-                const authorizationJson = {
-                    name: formData.get("name"),
-                    description: formData.get("description"),
-
-    @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
-    {
-        @: '@controller.Key.ToLower()': formData.getAll('@controller.Key.ToLower()'),
+        });
     }
-                       }
-
-            axios.post('/Roles/Create', {
-                authorizationJson
-            })
-
-            // serviceUrl = "/Roles/Create"
-
-            // $.ajax({
-            //     type: "POST",
-            //     url: serviceUrl,
-            //     data: { idStr: authorizationJson }
-            // })
-
-        }
-
-
- })
 </script>
-
 <style>
     h2#swal2-title {
         direction: ltr;
