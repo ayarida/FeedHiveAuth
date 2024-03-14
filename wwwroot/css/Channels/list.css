@@ -83,3 +83,7 @@ i.bi.bi-box-arrow-up-right {
 .social-icon {
     font-size: 18px;
 }
+
+th {
+    background: #F6F9FC !important;
+}
