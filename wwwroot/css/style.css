@@ -18,7 +18,7 @@
 
 @font-face {
     font-family: "Arabic";
-    src: url("Fonts/Dubai Regular/DubaiRegular.ttf") format("truetype");
+    src: url("Fonts/HelveticaArabic/HelveticaArabic.ttf") format("truetype");
 }
 
 *,
@@ -204,7 +204,7 @@ button {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: space-between;
 }
 
@@ -447,7 +447,7 @@ div[class^="ripple"] {
 
 .list-group.list-group-flush a {
     background: transparent;
-    color: #a3acb2 !important;
+    color: black !important;
 }
 
 .sidebar .active {
@@ -464,9 +464,10 @@ div[class^="ripple"] {
 }
 
 a.list-group-item.list-group-item-action.py-2.active {
-    background: #325467;
+    background: #dce7fc;
     border-radius: 5px;
-    color: white !important;
+    color: #5f93ef !important;
+    font-weight: bold;
 }
 
 
@@ -481,8 +482,8 @@ a.list-group-item.list-group-item-action.py-2.active {
 }
 
 .current-user {
-    background: #314956 !important;
-    border-radius: 4px;
+  /*  background: #314956 !important;
+    border-radius: 4px;*/
 }
 
 

@@ -5,22 +5,18 @@
 
 //Swiper
 try {
-    const swiper = new Swiper(".swiper", {
-        loop: true,
-        centeredSlides: true,
-        direction: 'horizontal',
-        spaceBetween: 100,
-        slidersPerView: 1,
-        breakpoints: {
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 50,
-            }
+    const swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
         },
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
-        }
+        },
+       /* autoHeight: true,*/
     });
 
     const swiper2 = new Swiper(".swiper2", {
@@ -34,7 +30,7 @@ try {
 
 }
 catch (error) {
-    console.log("no swiper found");
+
 }
 
 //Table List
@@ -46,26 +42,7 @@ function toggle(source) {
     }
 }
 
-/*function deleteMedia(event) {
 
-    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
-    var mediaId = event;
-
-    $.ajax({
-        type: "DELETE",
-        url: serviceURL,
-        data: mediaId,
-        success: function (data) {
-            *//*alert("success");*//*
-            window.location.reload()
-        },
-        error: function (data) {
-            alert("error");
-        },
-    })
-
-}
-*/
 function successFunc(data, status) {
     alert(data);
 }
@@ -104,61 +81,6 @@ function publishSelected() {
     });
     console.log(publishArr);
 }
-
-
-/*function deleteMedia(event) {
-
-    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
-    var mediaId = event;
-
-    $.ajax({
-        type: "DELETE",
-        url: serviceURL,
-        data: mediaId,
-        success: function (data) {
-            *//*alert("success");*//*
-            window.location.reload()
-        },
-        error: function (data) {
-            alert("error");
-        },
-    })
-
-}
-*/
-
-
-/*function submitShareForm() {
-
-    if ($("input[type=checkbox]:checked").length == 0) {
-
-
-        e.preventDefault();
-        alert("select at least one channel")
-    }
-
-    else {
-
-        var serviceURL = "/Social/Publish/Send" + e;
-        var shareForm = $(':input').serializeArray();
-        var imgSrc = $('.shareImage').attr('src');
-        shareForm.push(({ name: 'src', value: imgSrc }));
-
-        $.ajax({
-            type: "POST",
-            url: shareForm,
-            data: mediaId,
-            success: function (data) {
-                window.location.reload()
-            },
-            error: function (data) {
-                alert("error");
-            },
-        })
-    }
-
-}*/
-
 
 
 try {
@@ -565,7 +487,7 @@ try {
         calendarInstance.removeHolidays(["Google Day", "Calendar.js Day"]);
     }
 } catch {
-    console.log("no calendar");
+
 }
 
 $("#details").ready(function () {
@@ -598,7 +520,6 @@ $("#details").ready(function () {
 
             $("#whatsappConfigs").jsForm({});
         } catch {
-            console.log("no formjs");
         }
 
         /*        $("#show").click(function () {
