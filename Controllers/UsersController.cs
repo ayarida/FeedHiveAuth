@@ -31,7 +31,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(User model)
+        public async Task<IActionResult> RegisterNewUser(User model)
         {
             var customUser = new IdentityUser
             {
@@ -39,18 +39,16 @@ namespace FeedHiveAuth.Controllers
                 Email = model.Email,
                 EmailConfirmed = true,
                 PasswordHash = model.PasswordHash,
-
-
             };
             var result = await userManager.CreateAsync(customUser, model.PasswordHash);
-
-            if (result.Succeeded)
+            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
+            if (result.Succeeded && result.Errors == null && getRole!=null)
             {
-                var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : null;
-                await userManager.AddToRoleAsync(customUser, getRole?.Name);
-
-                return RedirectToAction("List", "Users");
-
+                
+                var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
+                if (assignRole.Succeeded) {
+                    return RedirectToAction("List", "Users");
+                }               
             }
             foreach (var error in result.Errors)
             {
