@@ -28,7 +28,7 @@ $("#mediaInput").on("change", e => {
             reader.readAsDataURL(e.target.files[0]);
             reader.onload = function (e) {
                 let html = `
-                                 <div class = "uploaded-img">
+                                 <div class = "uploaded-img mt-3">
                                      <img src = "${e.target.result}" alt="placeholder" class="mb-3" />
                                      <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
                                      </div>
