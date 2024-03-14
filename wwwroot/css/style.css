@@ -18,7 +18,7 @@
 
 @font-face {
     font-family: "Arabic";
-    src: url("Fonts/Dubai Regular/DubaiRegular.ttf") format("truetype");
+    src: url("Fonts/HelveticaArabic/HelveticaArabic.ttf") format("truetype");
 }
 
 *,
@@ -204,7 +204,7 @@ button {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: space-between;
 }
 
@@ -288,17 +288,6 @@ button {
     box-shadow: 0px 3px 6px #00000029;
 }
 
-/*input {*/
-/*    width: 400px;*/
-/*    height: 60px;*/
-/*    border-radius: 40px;*/
-/*    background: white;*/
-/*    font-size: 1.1rem;*/
-/*    border-style: none;*/
-/*    box-shadow: 0px 3px 6px #00000029;*/
-/*    text-align: left;*/
-/*    padding-left: 20px;*/
-/*}*/
 
 .sign-up-control button {
     background: #3477F5;
@@ -451,11 +440,6 @@ div[class^="ripple"] {
     background: #dd7a01;
 }
 
-/*sada*/
-/*.container * {
-    max-width: 100%;
-}
-*/
 
 .bg-white {
     box-shadow: -5px 6px 0px 0 rgb(219 214 245 / 5%), -2px 7px 10px 0 rgb(219 214 245/ 5%) !important;
@@ -463,7 +447,7 @@ div[class^="ripple"] {
 
 .list-group.list-group-flush a {
     background: transparent;
-    color: #a3acb2 !important;
+    color: black !important;
 }
 
 .sidebar .active {
@@ -480,9 +464,10 @@ div[class^="ripple"] {
 }
 
 a.list-group-item.list-group-item-action.py-2.active {
-    background: #325467;
+    background: #dce7fc;
     border-radius: 5px;
-    color: white !important;
+    color: #5f93ef !important;
+    font-weight: bold;
 }
 
 
@@ -497,29 +482,13 @@ a.list-group-item.list-group-item-action.py-2.active {
 }
 
 .current-user {
-    background: #314956 !important;
-    border-radius: 4px;
+  /*  background: #314956 !important;
+    border-radius: 4px;*/
 }
 
 
-/*Scroll bar design*/
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #918b92 #ffffff;
-}
-
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 5px;
-    height: 15px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #ffffff;
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: #918b92;
-    border-radius: 10px;
-    border: 4px solid #ffffff;
+input.submit-button {
+    width: 300px;
+    margin: auto;
+    height: 60px;
 }

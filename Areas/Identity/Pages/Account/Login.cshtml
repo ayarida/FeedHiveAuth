@@ -7,12 +7,12 @@
 }
 
 <h1 class="mt-5">@ViewData["Title"]</h1>
-<div class="row gy-5 justify-content-center">
-    <div class="col-md-6 login-section p-5">
+<div class="row gy-5 justify-content-center mt-auto">
+    <div class="col-md-6 login-section p-5 rounded-1">
         <section>
             <form id="account" method="post" dir="rtl">
                 <h2>تسجيل الدخول</h2>
-                <hr />
+               @*  <hr /> *@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
                     <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" placeholder="اسم المستخدم" />
@@ -26,63 +26,66 @@
                 </div>
                 <div class="mt-3">
                     <div class="checkbox" style="display: flex;justify-content: flex-start;" dir="auto">
+      
                         <label asp-for="Input.RememberMe" class="form-label">
                             حفظ المعلومات
                         </label>
                         <input class="form-check-input" asp-for="Input.RememberMe" />
-
+                      
 
                     </div>
                 </div>
-                <div class="mt-3">
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">تسجيل الدخول</button>
+                <div class="mt-3" style="text-align: center">
+                    <button id="login-submit" type="submit" class=" btn btn-lg btn-primary p-3" style="width: 100%; font-size: 17px">تسجيل الدخول</button>
                 </div>
                 <div class="mt-4 account-options">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">نسيت كلمة السر ؟</a>
+                    <p style="text-align: left !important; font-size: 17px">
+                        <a id="forgot-password" asp-page="./ForgotPassword" style=" font-weight: bold">نسيت كلمة السر ؟</a>
                     </p>
+                    <hr>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto">تسجيل مستخدم جديد</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto" style="font-size: 18px;">تسجيل مستخدم جديد</a>
                     </p>
+          
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto">إعادة إرسال تأكيد البريد الإلكتروني</a>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto" style="font-size: 18px;">إعادة إرسال تأكيد البريد الإلكتروني</a>
                     </p>
                 </div>
             </form>
         </section>
     </div>
-    <div class="col-md-12 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+    @* <div class="col-md-12 col-md-offset-2">
+    <section>
+    <h3>Use another service to log in.</h3>
+    <hr />
+    @{
+    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+    {
+    <div>
+    <p>
+    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+    article
+    about setting up this ASP.NET application to support logging in via external services
+    </a>.
+    </p>
     </div>
+    }
+    else
+    {
+    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+    <div>
+    <p>
+    @foreach (var provider in Model.ExternalLogins!)
+    {
+    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+    }
+    </p>
+    </div>
+    </form>
+    }
+    }
+    </section>
+    </div> *@
 </div>
 
 
@@ -103,10 +106,10 @@
 
 
 
-    .login-section {
+/*     .login-section {
         box-shadow: 0px 3px 7px 2px #00000029;
     }
-
+ */
     #account {
         row-gap: 5px;
         display: flex;
@@ -128,25 +131,24 @@
         height: 60px;
         background: white !important;
         font-size: 1.1rem;
-        border-style: none;
-        box-shadow: none;
+        /* box-shadow: none; */
         text-align: right;
         padding-left: 20px;
-        border: none !important;
-        border-bottom: 1px solid !important;
         text-align: right;
         padding-right: 10px;
-        border-radius: 0 !important;
         margin-top: 30px;
+        border: 2px solid #E0E2E9;
+        border-radius: 7px;
     }
 
-    textarea:focus, form input:focus {
-        outline: none !important;
+    form input:not([type='checkbox']):focus {
+        padding-bottom: 1.625rem !important;
+        padding-top: 1.625rem !important;
     }
 
-    form input::placeholder {
-        opacity: 0.5 !important;
-        color: black !important
+    .form-floating > .form-control:-webkit-autofill {
+        padding-bottom: 1.625rem !important;
+        padding-top: 1.625rem !important;
     }
 
     form * {
@@ -160,11 +162,23 @@
     .login-section {
         background: white;
         width: fit-content !important;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
     }
 
-    .checkbox{
+    .checkbox {
         column-gap: 10px;
     }
+     
+    form input::placeholder {
+        color: #969AB8 !important;
+        padding-bottom: 1.625rem !important;
+        padding-top: 1.625rem !important;
+    }
+
+    h1, h2, h3, h4, p, a, label, input, span, div {
+        font-family: sans-serif !important;
+    }
+
 </style>
 
 

@@ -26,13 +26,13 @@
 
 <div class="d-flex flex-wrap create">
 
-    <div class="" style="width: fit-content">
+    <div class="" style="width: 100% ">
         <div class="card  p-3">
             <h1>أنشئ المحتوى</h1>
 
             <br />
             @*  <h4>Post</h4> *@
-            <H4>@User.Identity?.Name </H4>
+           @*  <h4>@User.Identity?.Name </h4> *@
             <hr />
             <div class="row">
                 <div class="create-post">
@@ -67,6 +67,13 @@
                             </div>
                             @* PreviewIamge and handle exceptions *@
                             <partial name="_imagePreview" />
+                            <div class="form-group mb-4 d-flex justify-content-center">
+                                <div class="btn btn-primary  submit-div">
+                                    <input type="submit" value="أنشئ المحتوى" class="submit-button" />
+                                    <i class="bi bi-floppy"></i>
+                                </div>
+
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -76,31 +83,10 @@
 </div>
 
 
-<link rel="stylesheet" href="~/css/Posts/create.css"/>
+<link rel="stylesheet" href="~/css/Posts/create.css" />
 <script src="~/js/Posts/create.js"></script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-@* <div class="card recents">
-        <h5 style=" padding: 15px 15px 0 0;">أحدث المنشورات</h5>
-        <div class="card-body">
-
-            <table class="" dir="rtl">
-                <tr>
-                    <th>عنوان</th>
-                    <th>عنوان قصير</th>
-                    <th>التاريخ</th>
-                </tr>
-                @foreach (var post in posts.Take(5))
-                {
-                    <tr>
-                        <td>@post.Title</td>
-                        <td>@post.ShortTitle</td>
-                        <td>@post.CreationDate</td>
-                    </tr>
-                }
-            </table>
-        </div> *@
