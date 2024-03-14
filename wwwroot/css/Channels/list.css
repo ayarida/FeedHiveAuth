@@ -1,5 +1,4 @@
 ﻿table {
-    font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
@@ -86,4 +85,9 @@ i.bi.bi-box-arrow-up-right {
 
 th {
     background: #F6F9FC !important;
+    text-align: center !important;
+}
+
+.table.table-sm.table-bordered td {
+    vertical-align: middle;
 }
