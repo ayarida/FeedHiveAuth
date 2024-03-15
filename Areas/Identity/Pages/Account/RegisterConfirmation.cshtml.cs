@@ -3,7 +3,9 @@
 #nullable disable
 
 using System;
+using System.Net.Mail;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +21,14 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _sender;
+        private readonly SmtpClient _smtpClient;
 
-        public RegisterConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender sender)
+
+        public RegisterConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender sender, SmtpClient smtpClient)
         {
             _userManager = userManager;
             _sender = sender;
+            _smtpClient = smtpClient;
         }
 
         /// <summary>
@@ -71,6 +76,14 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
+                var message = new MailMessage();
+                message.From = new MailAddress("socialpub365@outlook.com");
+                message.To.Add(new MailAddress(email));
+                message.Subject = "Reset Password";
+                message.Body = $" <a href='{HtmlEncoder.Default.Encode(EmailConfirmationUrl)}'>Click here to confirm your account</a>.";
+                message.IsBodyHtml = true;
+
+                await _smtpClient.SendMailAsync(message);
             }
 
             return Page();
