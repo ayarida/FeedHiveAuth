@@ -5,11 +5,16 @@ using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 ;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var smtpSettings = builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -37,6 +42,16 @@ builder.Services.AddLogging(builder =>
 {
     builder.AddSerilog();
 });
+
+builder.Services.AddSingleton(
+    new SmtpClient
+    {
+        Host = smtpSettings.Server,
+        Port = smtpSettings.Port,
+        Credentials = new NetworkCredential(smtpSettings.Username, smtpSettings.Password),
+        EnableSsl = true
+    }
+    );
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
