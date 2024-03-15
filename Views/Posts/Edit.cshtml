@@ -15,17 +15,17 @@
 <hr />
 
 <div class="container pt-4 mt-4 editor">
-    <div class="card px-4 py-5" style="width: fit-content">
+    <div class="card px-4 py-5">
 
         <div class="row">
             <div class="create-post">
                 <div class="card-head my-2">
 
-                    <form asp-controller="Posts" asp-action="Update" senctype="multipart/form-data" method="post" style="max-width: 100%">
+                    <form asp-controller="Posts" asp-action="Update" senctype="multipart/form-data" method="post" style="max-width: 100%; width: 100%">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-4">
                             <label asp-for="Title" class="control-label">عنوان</label>
-                            <input asp-for="Title" class="form-control" />
+                            <input asp-for="Title" class="form-control req" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
@@ -45,33 +45,18 @@
                         </div>
                         <div class="form-group mb-4">
                             <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
-                            <input asp-for="PostDate" class="form-control" />
+                            <input asp-for="PostDate" class="form-control req" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
-                        <div style="display: flex;align-items: center;column-gap: 20px;" class="my-5">
-                            <div class="mb-3" style="width: 78px;">صورة / فيديو</div>
-                            <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
-                                تحميل
-                                <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
-                                <input type="file" name="File" id="imgInput" />
-                            </label>
-                            <br />
-                        </div>
-                        <input type="hidden" asp-for="Id" class="form-control" value="@Model.Id" />
-                        @*         <div>
-                        <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
-                        </div> *@
-                        @if (model.PostMediaItems != null)
-                        {
-                            @foreach (var media in mediaItems)
-                            {
-                                @* if (media.ToString().Contains()) *@
-                                bool isImg = new String[] { "png", "jpg", "jpeg" }.Any(s => media.Path.ToString().Contains(s));
-                                <span>@isImg</span>
-                            }
-                        }
-                        <div class="form-group my-4">
-                            <input type="submit" value="تحديث" class="btn btn-primary update" style="max-width: 50%;width: 100%; border-radius: 28px;" />
+
+                        <partial name="_imagePreviewEdit" />
+                        <input type="hidden" asp-for="Id" class="form-control" value="@Model?.Id" />
+
+                        <div class="form-group mb-4 d-flex justify-content-center">
+                            <div class="btn btn-primary my-4 submit-div">
+                                <input type="submit" value="تحديث" class="update submit-button" />
+                                <i class="bi bi-floppy"></i>
+                            </div>
                         </div>
                     </form>
 
@@ -84,15 +69,4 @@
 </div>
 
 
-
-
-<script>
-    imgInput.onchange = evt => {
-        const [file] = imgInput.files
-        if (file) {
-            imgPreview.src = URL.createObjectURL(file)
-        }
-    }
-</script>
-
-<link rel="stylesheet" href="~/css/Posts/edit.css"/>
+<link rel="stylesheet" href="~/css/Posts/edit.css" />

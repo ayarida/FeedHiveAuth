@@ -53,7 +53,7 @@ h4 {
 h1,
 h2,
 h3,
-h4, p, a, label, input, span, div , tr ,th, td {
+h4, p, a, label, input, span, div, tr, th, td {
     font-family: Arabic;
     direction: rtl;
 }
@@ -149,9 +149,9 @@ button {
     margin: 20px 0;
 }
 
-.stroke-div .stroke-text {
-    font-size: var(--card-head);
-}
+    .stroke-div .stroke-text {
+        font-size: var(--card-head);
+    }
 
 .btn {
     font-size: var(--card-head);
@@ -167,10 +167,10 @@ button {
     justify-content: center;
 }
 
-.img-gallery img {
-    max-width: 100%;
-    width: 180px;
-}
+    .img-gallery img {
+        max-width: 100%;
+        width: 180px;
+    }
 
 /* Archive Card */
 
@@ -208,14 +208,14 @@ button {
     justify-content: space-between;
 }
 
-.greeting .btn.purple-btn {
-    background-color: var(--purple-color);
-    display: flex;
-    column-gap: 10px;
-    align-items: center;
-    color: white;
-    width: fit-content;
-}
+    .greeting .btn.purple-btn {
+        background-color: var(--purple-color);
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+        color: white;
+        width: fit-content;
+    }
 
 @media (max-width: 480px) {
     .greeting {
@@ -241,9 +241,9 @@ button {
     align-items: center;
 }
 
-.post-stats i {
-    color: #707a82;
-}
+    .post-stats i {
+        color: #707a82;
+    }
 
 
 /*SIGN-up-CARD STYLE  */
@@ -259,9 +259,9 @@ button {
     box-shadow: 0px 3px 7px 2px #00000029;
 }
 
-.sign-up-card p {
-    font-weight: bold;
-}
+    .sign-up-card p {
+        font-weight: bold;
+    }
 
 
 .sign-up-title {
@@ -365,9 +365,9 @@ div[class^="ripple"] {
     max-width: 100%;
 }
 
-.stroke-div button {
-    max-width: 100%;
-}
+    .stroke-div button {
+        max-width: 100%;
+    }
 
 .body, .body * {
     max-width: 100%;
@@ -378,6 +378,15 @@ div[class^="ripple"] {
     margin: auto;
 }
 
+.swiper-slide {
+    display: flex !important;
+    flex-direction: column;
+}
+
+
+.swiper.mySwiper a {
+    margin-top: auto;
+}
 
 .stroke-div .stroke-text p {
     text-align: initial;
@@ -392,9 +401,9 @@ div[class^="ripple"] {
     color: inherit !important;
 }
 
-.list-group-item.active {
-    color: white !important;
-}
+    .list-group-item.active {
+        color: white !important;
+    }
 
 
 .navbar > .container, .navbar > .container-fluid, .navbar > .container-lg, .navbar > .container-md, .navbar > .container-sm, .navbar > .container-xl, .navbar > .container-xxl {
@@ -482,7 +491,7 @@ a.list-group-item.list-group-item-action.py-2.active {
 }
 
 .current-user {
-  /*  background: #314956 !important;
+    /*  background: #314956 !important;
     border-radius: 4px;*/
 }
 

@@ -45,7 +45,7 @@ form img {
 
 
 
-@@media(max-width: 500px) {
+@media(max-width: 500px) {
     .custom-file-upload {
         width: 100%;
     }

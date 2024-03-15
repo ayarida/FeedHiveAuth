@@ -39,7 +39,77 @@ input, textarea {
 }
 
 
-form > div {
+    input.form-control {
+        height: 60px;
+        width: 100% !important;
+    }
+
+textarea {
+    height: 90px;
+    width: 100% !important;
+}
+
+.uploaded-img {
+    position: relative;
+}
+
+.deleteIcon {
     width: fit-content;
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 0;
+    padding: 3px 10px;
+    background: rgb(10 44 63 / 60%);
+    border-radius: 3px;
+}
+
+    .deleteIcon i.bi.bi-trash3-fill {
+        cursor: pointer;
+        color: white;
+        opacity: 0.6;
+    }
+
+        .deleteIcon i.bi.bi-trash3-fill:hover {
+            opacity: 1;
+        }
+
+.card-head {
+    justify-content: start;
+}
+
+.video-holder {
+    position: relative;
+}
+
+form video {
+    width: 300px;
+}
+
+form img {
+    width: 300px;
+}
+
+.control-label {
+    margin-bottom: 10px;
+}
+
+input.submit-button {
+    width: auto !important;
+    background: transparent;
+    border: none;
+    color: white;
+    margin: 0;
+}
+
+.submit-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 25px;
     margin: auto;
+    width: 326px;
+    max-width: 100%;
+    font-size: 19px;
+    height: 64px;
 }

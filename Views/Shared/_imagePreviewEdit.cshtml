@@ -1,0 +1,51 @@
+﻿@model FeedHiveAuth.Models.Post
+@{
+    var model = Model;
+    var mediaItems = model.PostMediaItems;
+}
+
+
+<div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column" class="my-5" id="media-section">
+
+    <div class="mb-3" style="font-size: 20px; font-weight: bold">صورة / فيديو</div>
+    <div style="width: fit-content;background: #c8dadf; padding: 10px; width: 200px; border-radius: 3px;">
+        <label class="custom-file-upload" style="border: 1px dashed black; ;">
+            تحميل
+            <i class="bi bi-upload" style="color: #54696b;margin-right: 12px;"></i>
+        </label>
+        <input type="file" name="File" id="mediaInput" multiple />
+    </div>
+
+
+    @if (model.PostMediaItems != null)
+    {
+        @foreach (var media in mediaItems)
+        {
+            @if (!media.Path.ToString().Contains(".mp4"))
+            {
+                <div class="d-flex flex-column justify-content-center uploaded-img mt-3">
+                    <img src="@media.Path" />
+                    <div onclick="deleteMedia(this)" class="deleteIcon">
+                        <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="video-holder mt-3">
+                    <video controls class="uploaded-img">
+                        <source src="@media.Path" alt="placeholder" class="mb-3" type="video/mp4" />
+
+                    </video>
+                    <div onclick="deleteMedia(this)" class="deleteIcon">
+                        <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                    </div>
+                </div>
+            }
+
+        }
+    }
+
+</div>
+
+<script src="~/js/Posts/edit.js"></script>
