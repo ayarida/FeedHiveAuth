@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<IdentityRole>
 @{
-    ViewData["Title"] = "ROLES";
+    ViewData["Title"] = "Roles";
 }
 
 <a asp-action="Create" class="btn btn-primary mt-2 mb-4 create-role" style="border: none">أنشئ دور +</a>
@@ -15,7 +15,7 @@
                 <td>@role.Name</td>
                 <td>placeholder</td>
                 <td>
-                    <a class="btn btn-sm btn-primary update-link" asp-action="Update" asp-route-id="@role.Id">
+                    <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@role.Id">
                         <i class="bi bi-pencil-square"></i>
                     </a>
                     <a type="submit" onclick="deleteRole(this.id)" id="@role.Id" class="btn btn-sm btn-danger delete-role">

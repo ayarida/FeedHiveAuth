@@ -12,6 +12,7 @@ using System.Text.Json;
 
 namespace FeedHiveAuth.Controllers
 {
+
     public class Permission
     {
         public int Id { get; set; }
@@ -24,10 +25,24 @@ namespace FeedHiveAuth.Controllers
         private UserManager<IdentityUser> userManager;
 
 
-        public RolesController(RoleManager<IdentityRole> roleMgr, UserManager<IdentityUser> userManager)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
-            this.roleManager = roleMgr;
+            this.roleManager = roleManager;
             this.userManager = userManager;
+        }
+
+        public async Task<Role> GetRoleById(string roleId)
+        {
+            var role = await roleManager.FindByIdAsync(roleId);
+            if (role == null)
+            {
+                return null;
+            }
+            return new Role
+            {
+                Id = roleId,
+                Name = role.Name,
+            };
         }
 
         [HttpPost]
@@ -70,18 +85,39 @@ namespace FeedHiveAuth.Controllers
         }
         public async Task<IActionResult> Update(string id)
         {
-            Role role = (Role)await roleManager.FindByIdAsync(id);
+            Role role = await GetRoleById(id);
             List<IdentityUser> members = new List<IdentityUser>();
             List<IdentityUser> nonMembers = new List<IdentityUser>();
             foreach (IdentityUser user in userManager.Users)
             {
                 var checkIfHasRole = await userManager.GetRolesAsync(user);
-                if (!checkIfHasRole.Any())
+                if (checkIfHasRole.Any())
+                {
+                    var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                    list.Add(user);
+                }        
+            }
+            return View(new RoleEdit
+            {
+                Role = role,
+                Members = members,
+                NonMembers = nonMembers
+            });
+        }
+        public async Task<IActionResult> Edit(string id)
+        {
+            Role role = await GetRoleById(id);
+            List<IdentityUser> members = new List<IdentityUser>();
+            List<IdentityUser> nonMembers = new List<IdentityUser>();
+            foreach (IdentityUser user in userManager.Users)
+            {
+                var checkIfHasRole = await userManager.GetRolesAsync(user);
+                if (checkIfHasRole.Any())
                 {
                     var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                     list.Add(user);
                 }
-                
+
             }
             return View(new RoleEdit
             {
@@ -151,7 +187,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            Role role = await GetRoleById(id);
             if (role != null)
             {
                 IdentityResult result = await roleManager.DeleteAsync(role);
