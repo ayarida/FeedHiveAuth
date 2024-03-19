@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Controllers
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
-
+        [PermissionFilter("Users_Create")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -29,7 +29,7 @@ namespace FeedHiveAuth.Controllers
             //ViewData["availableRoles"] = availableRoles;
             return View(availableRoles);
         }
-
+        [PermissionFilter("Users_RegisterNewUser")]
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser(User model)
         {
@@ -56,11 +56,12 @@ namespace FeedHiveAuth.Controllers
             }
             return RedirectToAction("List", "Users");
         }
+        [PermissionFilter("Users_Login")]
         public IActionResult Login()
         {
             return View("~/Areas/Identity/Pages/Account/Login.cshtml");
         }
-
+        [PermissionFilter("Users_Register")]
         [HttpGet]
         public async Task<IActionResult> Register()
         {
@@ -76,7 +77,7 @@ namespace FeedHiveAuth.Controllers
 
              return RedirectToAction("Index", "Home");
          }*/
-
+        [PermissionFilter("Users_RegisterNewUser")]
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser(RegisterModel model)
         {
@@ -103,7 +104,7 @@ namespace FeedHiveAuth.Controllers
             // If registration fails, redisplay the form
             return View("Register", model);
         }
-
+        [PermissionFilter("Users_List")]
         [HttpGet]
         public IActionResult List()
         {
@@ -111,19 +112,19 @@ namespace FeedHiveAuth.Controllers
             List<IdentityUser> users = userManager.Users.ToList();
             return View(users);
         }
-
+        [PermissionFilter("Users_GetById")]
         public IdentityUser GetById(string id)
         {
             IdentityUser identityUser = userManager.Users.FirstOrDefault(x => x.Id == id);
             return identityUser;
         }
-
+        [PermissionFilter("Users_GetByName")]
         public IdentityUser GetByName(string userName)
         {
             IdentityUser identityUser = userManager.Users.FirstOrDefault(x => x.UserName.Equals(userName));
             return identityUser;
         }
-
+        [PermissionFilter("Users_Delete")]
         [HttpPost]
         public void Delete(string id)
         {
@@ -131,7 +132,7 @@ namespace FeedHiveAuth.Controllers
                 var currentUser = await _adminWorkContext.GetCurrentUserAsync();*/
             Instances.Repositories.UserRepository.Delete(id);
         }
-
+        [PermissionFilter("Users_MultipleDelete")]
         public void MultipleDelete([FromQuery] string userList)
         {
 
@@ -157,6 +158,7 @@ namespace FeedHiveAuth.Controllers
             }
 
         }
+        [PermissionFilter("Users_GetCurrentUser")]
         public User GetCurrentUser()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -24,7 +24,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             _logger = logger;
         }
-
+        [PermissionFilter("Publish_GetChannels")]
         public IEnumerable<Channel> GetChannels(out PublishErrorEnum error)
         {
             var channels = Collections.Channels().Where(channel => channel.Status.In(new List<int> { StatusEnum.Active.Value(), StatusEnum.Expired.Value() }));
@@ -38,6 +38,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
+        [PermissionFilter("Publish_Share")]
         public async Task<IActionResult> Share(string? postid = null)
         {
             //get current subscription
@@ -63,7 +64,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             };
             return View(model);
         }
-
+        [PermissionFilter("Publish_GetActiveNetworkTypes")]
         public List<SocialNetworkTypeEnum> GetActiveNetworkTypes(SocialConfigs socialConfigs)
         {
             var activeNetworkTypes = new List<SocialNetworkTypeEnum>();
@@ -81,7 +82,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
             return activeNetworkTypes;
         }
-
+        [PermissionFilter("Publish_Send")]
         [HttpPost]
         public IActionResult Send(ShareForm form)
         {

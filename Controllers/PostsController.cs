@@ -5,6 +5,7 @@ using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 using System.Text;
@@ -27,14 +28,16 @@ namespace FeedHiveAuth.Controllers
             this.roleManager = roleManager;
             _logger = logger;
         }
-
+        
+        
         [HttpGet]
+        [PermissionFilter("Posts_Create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        [Authorize]
+        [PermissionFilter("Posts_List")]
         [HttpGet]
         public async Task<ActionResult> List() 
         {
@@ -68,6 +71,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         [Authorize]
+        [PermissionFilter("Posts_Create")]
         [HttpPost]
         public ActionResult CreatePost()
         {
@@ -114,6 +118,7 @@ namespace FeedHiveAuth.Controllers
                 return 0;
             }
         }
+        [PermissionFilter("Posts_Update")]
         [HttpPost]
         public ActionResult Update(Post updatedPost)
         {
@@ -135,7 +140,7 @@ namespace FeedHiveAuth.Controllers
 
             return RedirectToAction("List", "Posts");
         }
-
+        [PermissionFilter("Posts_UploadMedia")]
         public string UploadMedia(IFormFile file)
         {
             if (file != null)
@@ -150,7 +155,7 @@ namespace FeedHiveAuth.Controllers
 
             return "File failed to upload!";
         }
-
+        [PermissionFilter("Posts_MultiUpload")]
         public void MultiUpload(IFormFileCollection Files)
         {
             foreach (var file in Files)
@@ -169,6 +174,7 @@ namespace FeedHiveAuth.Controllers
                 }
             }
         }
+        [PermissionFilter("Posts_GeneratePostLink")]
         public static string GeneratePostLink(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -191,6 +197,7 @@ namespace FeedHiveAuth.Controllers
 
             return stringBuilder.ToString().ToLower();
         }
+        [PermissionFilter("Posts_SavePostMedia")]
         public void SavePostMedias(Post post)
         {
 
@@ -210,7 +217,7 @@ namespace FeedHiveAuth.Controllers
                 _mediaItemService.InsertPostMedia(post.PostMediaItems, post.Id);
             }
         }
-
+        [PermissionFilter("Posts_Delete")]
         public IActionResult Delete(Post post)
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
@@ -235,14 +242,14 @@ namespace FeedHiveAuth.Controllers
             }
             return Ok();
         }
-
+        [PermissionFilter("Posts_Publish")]
         public void Publish(string Id)
         {
             var currUser = GetCurrentUser();
             _postService.Publish(Id, currUser.Id);
 
         }
-
+        [PermissionFilter("Posts_MultiplePublish")]
         public void MultiplePublish([FromQuery] string idsStr)
         {
             Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
@@ -267,7 +274,7 @@ namespace FeedHiveAuth.Controllers
             }
         }
 
-
+        [PermissionFilter("Posts_MultipleDelete")]
         public IActionResult MultipleDelete([FromQuery] string idsStr)
         {
 
@@ -294,14 +301,14 @@ namespace FeedHiveAuth.Controllers
             }
             return Ok();
         }
-
+        [PermissionFilter("Posts_PublishedPosts")]
         [HttpGet]
         public List<Post> PublishedPosts()
         {
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
         }
-
+        [PermissionFilter("Posts_GetCurrentUser")]
         public User GetCurrentUser()
         {
 
@@ -309,13 +316,14 @@ namespace FeedHiveAuth.Controllers
             User currentUser = _userService.Get(userId);
             return currentUser;
         }
+        [PermissionFilter("Posts_GetUserRole")]
         public async void GetUserRole(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
             if (user == null) { }
             var roles = userManager.GetRolesAsync(user);
         }
-
+        [PermissionFilter("Posts_Edit")]
         [HttpGet]
         public ActionResult Edit(string id)
         {
@@ -325,13 +333,13 @@ namespace FeedHiveAuth.Controllers
             return View(post);
         }
 
-
+        [PermissionFilter("Posts_Calender")]
         [HttpGet]
         public ActionResult Calendar()
         {
             return View();
         }
-
+        [PermissionFilter("Posts_GetCurrUserPosts")]
         [HttpGet]
         public List<Post> GetCurrUserPosts()
         {
@@ -346,7 +354,7 @@ namespace FeedHiveAuth.Controllers
             }
             return new List<Post>();
         }
-
+        [PermissionFilter("Posts_GetPostOperations")]
         [HttpGet]
         public List<Operation> GetPostOperations(string postId)
         {

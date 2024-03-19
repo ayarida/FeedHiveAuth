@@ -27,6 +27,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             _logger = logger;
         }
         [HttpPost]
+        [PermissionFilter("Authorization_OAuthFlow")]
         public async Task<IActionResult> OAuthFlow(string network, string account, bool reauthorize = false, string credentials = null, string id = null)
         {
             //var subscription = await _adminWorkContext.GetCurrentSubscriptionAsync();
@@ -70,6 +71,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return NotFound();
         }
         #region facebook
+        [PermissionFilter("Authorization_FacebookOAuthFlow")]
         public IActionResult FacebookOAuthFlow(string type, Subscription subscription, bool reauthorize = false)
         {
             var success = false;
@@ -102,13 +104,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
             return Json(new { success, redirect, message });
         }
-#endregion
+        #endregion
+        [PermissionFilter("Authorization_Index")]
         public IActionResult Index()
         {
             return View();
         }
 
-
+        [PermissionFilter("Authorization_FacebookSignIn")]
         public IActionResult FacebookSignIn(string state, string code)
         {
             try
@@ -130,7 +133,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
             }
         }
-
+        [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
         {
             var dailymotionConfigs = SocialConfigs.Construct().DailymotionConfigs;
@@ -176,6 +179,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 Debug.WriteLine("NICE TO REACH HERE");
             return RedirectToAction(reauthorize ? "Save" : "Create", "Channel", new { area = "social" });
         }
+        [PermissionFilter("Authorization_TelegramSignIn")]
         public IActionResult TelegramSignIn(string username, User currentUser, bool reauthorize = false)
         {
             var success = false;

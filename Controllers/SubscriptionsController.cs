@@ -23,6 +23,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         // GET: Subscriptions
+        [PermissionFilter("Subscriptions_Index")]
         public async Task<IActionResult> Index()
         {
               return _context.Subscription != null ? 
@@ -31,6 +32,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         // GET: Subscriptions/Details/5
+        [PermissionFilter("Subscriptions_Details")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null || _context.Subscription == null)
@@ -49,6 +51,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         // GET: Subscriptions/Create
+        [PermissionFilter("Subscriptions_Create")]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +61,7 @@ namespace FeedHiveAuth.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [PermissionFilter("Subscriptions_Create")]
         public async Task<IActionResult> Create([Bind("Code,Name,Hosts,Master,Id,Status,CreationDate")] Subscription subscription)
         {
             var ms = ModelState;
@@ -73,6 +77,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         // GET: Subscriptions/Edit/5
+        [PermissionFilter("Subscriptions_Edit")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Subscription == null)
@@ -93,6 +98,7 @@ namespace FeedHiveAuth.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [PermissionFilter("Subscriptions_Edit")]
         public async Task<IActionResult> Edit(string id, [Bind("Code,Name,Description,Hosts,Master,ParentId,Id,Status,CreationDate,LastModified,SubscriptionId")] Subscription subscription)
         {
             if (id != subscription.Id)
@@ -122,7 +128,7 @@ namespace FeedHiveAuth.Controllers
             }
             return View(subscription);
         }
-
+        [PermissionFilter("Subscriptions_Delete")]
         // GET: Subscriptions/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -142,6 +148,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         // POST: Subscriptions/Delete/5
+        [PermissionFilter("Subscriptions_DeleteConfirmed")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -164,7 +171,7 @@ namespace FeedHiveAuth.Controllers
         {
           return (_context.Subscription?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
+        [PermissionFilter("Subscriptions_RegisterSubscriptionUser")]
         [HttpGet]
         public async Task<IActionResult> RegisterSubscriptionUser(string id)
         {
@@ -180,6 +187,7 @@ var subscription = await _context.Subscription
     }
 
     [HttpGet]
+        [PermissionFilter("Subscriptions_GetById")]
         public Subscription GetById(string id)
         {
             return _subscriptionService.Get(id);
