@@ -21,6 +21,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         // GET: Social/Channels
         [HttpGet]
+        [PermissionFilter("Channels_Index")]
         public IActionResult Index()
         {
             var channels = _channelRepository.GlobalGetAll();
@@ -31,6 +32,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // GET: Social/Channels/Details/5
+        [PermissionFilter("Channels_Details")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null || _context.Channel == null)
@@ -49,6 +51,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // GET: Social/Channels/Create
+        [PermissionFilter("Channels_Create")]
         public IActionResult Create()
         {
             return View();
@@ -56,6 +59,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
 
         [HttpGet]
+        [PermissionFilter("Channels_GetNetworks")]
         public ActionResult GetNetworks(string networkName)
         {
             var channelName = networkName;
@@ -77,6 +81,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [PermissionFilter("Channels_Create")]
         public async Task<IActionResult> Create([Bind("Name,Description,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs,Id,Status,CreationDate,LastModified,SubscriptionId")] Channel channel)
         {
             if (ModelState.IsValid)
@@ -89,6 +94,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // GET: Social/Channels/Edit/5
+        [PermissionFilter("Channels_Edit")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Channel == null)
@@ -109,6 +115,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [PermissionFilter("Channels_Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Name,Description,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs,Id,Status,CreationDate,LastModified,SubscriptionId")] Channel channel)
         {
@@ -141,6 +148,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // GET: Social/Channels/Delete/5
+        [PermissionFilter("Channels_Delete")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null || _context.Channel == null)
@@ -159,7 +167,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // POST: Social/Channels/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {

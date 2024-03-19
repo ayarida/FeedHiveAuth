@@ -13,14 +13,16 @@ namespace FeedHiveAuth.Controllers
         {
 
         }
-
+        [PermissionFilter("MediaItem_Upload")]
         public ActionResult Upload()
         {
 
             return View("~/Views/MediaItem/Upload.cshtml");
         }
+        
 
         [HttpPost]
+        [PermissionFilter("MediaItem_UploadFile")]
         public IActionResult UploadFile(MediaItem model)
         {
             if (model.File != null && model.File.Length > 0)
@@ -43,18 +45,20 @@ namespace FeedHiveAuth.Controllers
         }
 
         //MediaUpload based on coming media type 
+        [PermissionFilter("MediaItem_MediaUpload")]
         public ActionResult MediaUpload(string type)
         {
             return View("Upload/_mediaUploadWizard", type);
         }
 
         [HttpGet]
+        [PermissionFilter("MediaItem_List")]
         public IActionResult List()
         {
             var mediaItemsList = _mediaItemService.GetMediaList();
             return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
         }
-
+        [PermissionFilter("MediaItem_DeleteMediaItem")]
         [HttpDelete]
         public void DeleteMediaItem(MediaItem mediaItem)
         {

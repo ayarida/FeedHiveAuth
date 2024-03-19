@@ -10,19 +10,29 @@ using Microsoft.Extensions.Logging;
 
 namespace FeedHiveAuth.Data.Repositories
 {
-    public class RoleRepository
+
+    public class RoleRepository 
     {
+        public static string _connectionString = DatabaseConnection.GetConnectionStrings();
+        public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
         public RoleRepository()
         {
-           /* TableName = Database.Tables.Roles;
-            Columns = Database.Columns.Roles;      */     
-        }
-        /*public new void CreateRole(Role role)
-        {
-            connection.OpenWithRetry();
             
-            string query = "INSERT INTO AspNetRoles(Id,Name,NormalizedName) values ('1234','" + role.Name + "','" + role.NormalizedName + "')";
-            ExecuteQuery(query);
-        } */
+        }
+        public string GetUserRole(string userid)
+        {
+            using (connection)
+            {
+                return connection.Query<string>("select RoleId from AspNetUserRoles" + " WHERE UserId=@userid", new { UserId = userid }).FirstOrDefault();
+
+            }
+        }
+        public IEnumerable<string> GetUserClaims(string roleid)
+        {
+            using (connection)
+            {
+                return connection.Query<string>("select ClaimValue from AspNetRoleClaims" + " WHERE RoleId=@roleid", new { RoleId = roleid });
+            }
+        }
     }
 }

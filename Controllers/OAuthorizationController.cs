@@ -10,10 +10,11 @@ namespace FeedHiveAuth.Controllers
     public class OAuthorizationController : Controller
     {
 
-/*        public void FacebookSignIn(string code)
-        {
-            var credentials = AuthorizationManager.ExchangeCode(baseCallbackUrl, code, subscriptionId, out msg);
-        }*/
+        /*        public void FacebookSignIn(string code)
+                {
+                    var credentials = AuthorizationManager.ExchangeCode(baseCallbackUrl, code, subscriptionId, out msg);
+                }*/
+        [PermissionFilter("OAuthorization_FacebookSignIn")]
         public IEnumerable<Channel> FacebookSignIn(string state, string code)
         {
             try

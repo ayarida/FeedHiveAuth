@@ -29,7 +29,7 @@ namespace FeedHiveAuth.Controllers
             this.roleManager = roleMgr;
             this.userManager = userManager;
         }
-
+        [PermissionFilter("Roles_SavePermissions")]
         [HttpPost]
         public async Task<IActionResult> SavePermissions([FromBody] Role roleData)
         {
@@ -68,9 +68,10 @@ namespace FeedHiveAuth.Controllers
                 return BadRequest(ModelState);
             }
         }
+        [PermissionFilter("Roles_Update")]
         public async Task<IActionResult> Update(string id)
         {
-            Role role = (Role)await roleManager.FindByIdAsync(id);
+            var role = await roleManager.FindByIdAsync(id);
             List<IdentityUser> members = new List<IdentityUser>();
             List<IdentityUser> nonMembers = new List<IdentityUser>();
             foreach (IdentityUser user in userManager.Users)
@@ -90,6 +91,7 @@ namespace FeedHiveAuth.Controllers
                 NonMembers = nonMembers
             });
         }
+        [PermissionFilter("Roles_Update")]
         [HttpPost]
         public async Task<IActionResult> Update(RoleModification model)
         {
@@ -124,7 +126,7 @@ namespace FeedHiveAuth.Controllers
                 return await Update(model.RoleId);
         }
 
-
+        [PermissionFilter("Roles_Index")]
         public ViewResult Index() => View(roleManager.Roles);
 
         private void Errors(IdentityResult result)
@@ -132,9 +134,11 @@ namespace FeedHiveAuth.Controllers
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
-
+        [PermissionFilter("Roles_Create")]
         public IActionResult Create() => View();
 
+
+        [PermissionFilter("Roles_GetIdentityRole")]
         [HttpGet("{id}")]
         public async Task<ActionResult<IdentityRole>> GetIdentityRole(string id)
         {
@@ -147,7 +151,7 @@ namespace FeedHiveAuth.Controllers
 
             return identityRole;
         }
-
+        [PermissionFilter("Roles_Delete")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
@@ -165,13 +169,13 @@ namespace FeedHiveAuth.Controllers
             return View("Index", roleManager.Roles);
         }
 
-
+        [PermissionFilter("Roles_ReadRoles")]
         [HttpGet]
         public void ReadRoles()
         {
              
         }
-
+        [PermissionFilter("Roles_CreateRole")]
         [HttpPost]
         public void CreateRole()
         {
