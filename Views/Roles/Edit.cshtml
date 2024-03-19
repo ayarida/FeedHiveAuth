@@ -1,0 +1,202 @@
+﻿@model RoleEdit
+@using FeedHiveAuth.Data.Helpers
+@{
+    ViewData["Title"] = "CREATE ROLE";
+    var controllers = PermissionHelper.Controllers();
+}
+
+<div class="card p-3" dir="ltr" style="text-align: left">
+    <div class="create-role">
+        <form class="create-form" dir="ltr" id="permissionsForm">
+            <div class="d-flex align-items-end flex-row" style="margin-bottom: 80px;">
+                <h3 class="text-black">أنشئ دور</h3>
+                <button type="button" onclick="submitPermissions()" class="btn btn-primary me-auto ms-2" style="width: 161px;height: fit-content;padding: 6px !important;" id="role-for">حفظ</button>
+                <a class="btn btn-secondary" style="width: fit-content;max-width: 100%;" href="/Roles/Index">
+                    العودة إلى قائمة الأدوار
+                    <i class="bi bi-box-arrow-in-left"></i>
+                </a>
+            </div>
+            <div style="text-align: right">
+                <div class="form-group ">
+                    <div>
+                        <label for="name" class="mb-4">: الاسم</label>
+                        <input name="name" class="form-control" type="text" id="role-name" style="text-align: right" value="@Model.Role.Name"/>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <div>
+                        <label for="roleDescription" class="mb-3"> : الوصف</label>
+                        <input name="roleDescription" class="form-control" type="text" id="role-description" style="text-align: right"/>
+                    </div>
+
+                </div>
+            </div>
+
+            <h3 class="mt-5">Permissions</h3>
+
+            <div class="form-group my-4 card p-3">
+
+                <table dir="ltr">
+
+                    @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
+                    {
+                        <tr>
+                            <td id="@controller.Key.ToLower()">
+                                <h5>@controller.Key</h5>
+                            </td>
+                            <td>
+                                <ul class="ks-cboxtags @(controller.Key.ToLower() + "data")">
+                                    @foreach (var action in controller.Value.Item1)
+                                    {
+                                        @* <span>@action</span> *@
+                                        <li>
+                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="permissions" data-controller="@(controller.Key)" />
+                                            <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </form>
+        <h2>Members</h2>
+        @foreach (var userMember in Model.Members)
+        {
+            <span>@userMember.UserName</span>
+        }
+        <h2>Non-members</h2>
+        @foreach (var userNotMember in Model.NonMembers)
+        {
+            <span>@userNotMember.UserName</span>
+        }
+    </div>
+
+</div>
+<script>
+    function submitPermissions() {
+        var roleName = $('#role-name').val();
+        var roleDescription = $('#role-description').val();
+        var permissions = [];
+
+        // Get all checked checkboxes
+        $('input[name="permissions"]:checked').each(function () {
+            var controllerName = $(this).data('controller');
+            var actionName = $(this).val();
+            permissions.push({ controller: controllerName, action: actionName });
+        });
+        var roleData = {
+            Name: roleName,
+            Description: roleDescription,
+            permissions: permissions
+        };
+        //Send permissions to the server using AJAX
+        $.ajax({
+            type: 'POST',
+            url: '/Roles/SavePermissions',
+            contentType: 'application/json',
+            data: JSON.stringify(roleData),
+            success: function (data) {
+                swal.fire({
+                    title: "Role Added Successfully!",
+                }).then(function () {
+                    window.location.replace("/Roles/Index");
+
+                });
+            },
+            error: function (error) {
+                swal.fire("Error occured!" + error, "error");
+
+            }
+        });
+    }
+</script>
+<style>
+    h2#swal2-title {
+        direction: ltr;
+    }
+
+
+    tbody tr:not(:last-child) {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    ul.ks-cboxtags {
+        list-style: none;
+        padding: 20px;
+    }
+
+        ul.ks-cboxtags li {
+            display: inline;
+        }
+
+            ul.ks-cboxtags li label {
+                display: inline-block;
+                background-color: rgba(255, 255, 255, .9);
+                border: 2px solid rgba(139, 139, 139, .3);
+                color: #adadad;
+                border-radius: 25px;
+                white-space: nowrap;
+                margin: 3px 0px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                transition: all .2s;
+            }
+
+            ul.ks-cboxtags li label {
+                padding: 8px 12px;
+                cursor: pointer;
+            }
+
+                ul.ks-cboxtags li label::before {
+                    display: inline-block;
+                    font-style: normal;
+                    font-variant: normal;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    font-family: bootstrap-icons !important;
+                    font-weight: 900;
+                    font-size: 12px;
+                    padding: 2px 6px 2px 2px;
+                    content: "\F63B";
+                    transition: transform .3s ease-in-out;
+                }
+
+            ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
+                content: "\F633";
+                transform: rotate(-360deg);
+                transition: transform .3s ease-in-out;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+                /*  border: 2px solid #1bdbf8; */
+                background-color: var(--green-status-back);
+                color: var(--green-status-color);
+                transition: all .2s;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"] {
+                display: absolute;
+            }
+
+            ul.ks-cboxtags li input[type="checkbox"] {
+                position: absolute;
+                opacity: 0;
+            }
+
+    table h5 {
+        margin-bottom: 100%;
+        margin-top: 7px;
+    }
+
+    label {
+        direction: ltr;
+    }
+
+</style>

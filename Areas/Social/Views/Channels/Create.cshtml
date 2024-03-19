@@ -1,15 +1,13 @@
 ﻿@using FeedHiveAuth.Areas.Social.Models
-@model FeedHiveAuth.Models.Channel
+@using FeedHiveAuth.Models;
+@model FeedHiveAuth.Areas.Social.Models.SocialConfigs;
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var c = Model;
-    //Current User
-                                                   //Current Subscription
-                  //Configs
-    //
+    var configs = SocialConfigs.Construct().TechnicalConfigs;
+
 }
 
 
@@ -39,7 +37,7 @@
                         <form id="assessment-form">
     
 
-                            @Html.Partial("~/Areas/Social/Views/Shared/_networks.cshtml")
+                            @Html.Partial("~/Areas/Social/Views/Shared/_networks.cshtml", configs)
 
 
                         </form>

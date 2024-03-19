@@ -1,11 +1,16 @@
-﻿
+﻿@using FeedHiveAuth.Areas.Social.Models
+@using FeedHiveAuth.Models;
+@model FeedHiveAuth.Areas.Social.Models.SocialConfigs;
 
 
+@{
+    var publicUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 
+}
 
 <div class="infobox-container mb-5 social">
 
-    <div class="infobox next-page" ">
+    <div class="infobox next-page post-to-facebook">
         <div class="infobox-icon">
             <i class="bi bi-file-earmark-fill"></i>
         </div>
@@ -34,7 +39,7 @@
     </div>
 
 
-    <div class="infobox next-page" ">
+    <div class="infobox next-page ">
         <div class="infobox-icon">
             <i class="bi bi-collection-fill"></i>
         </div>
@@ -44,6 +49,22 @@
 
     </div>
 </div>
+
+
+<script>
+
+
+    $(".post-to-facebook").on("click", function () {
+        console.log("reached");
+        var url = @publicUrl;
+        $.ajax({
+
+        });
+    })
+</script>
+
+<script src="~/js/Channels/facebook.js"></script>
+
 <style>
     .infobox-icon {
         background-color: transparent;
