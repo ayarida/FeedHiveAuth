@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.Controllers;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
@@ -23,12 +24,14 @@ namespace FeedHiveAuth.Controllers
     {
         private RoleManager<IdentityRole> roleManager;
         private UserManager<IdentityUser> userManager;
+        private readonly ILogger<RolesController> _logger;
 
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ILogger<RolesController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this._logger = logger;
         }
 
         public async Task<Role> GetRoleById(string roleId)
@@ -191,14 +194,20 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            Role role = await GetRoleById(id);
+            IdentityRole role = await roleManager.FindByIdAsync(id);
             if (role != null)
             {
+                try { 
                 IdentityResult result = await roleManager.DeleteAsync(role);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
                     Errors(result);
+                }catch(Exception ex)
+                {
+                    _logger.LogError(ex, "********************* Error occurred while deleting role. *********************");
+                    ModelState.AddModelError("", "An error occurred while deleting the role.");
+                }
             }
             else
                 ModelState.AddModelError("", "No role found");
