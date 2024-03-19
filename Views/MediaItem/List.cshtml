@@ -10,15 +10,16 @@
     var _mediaService = Instances.Repositories.MediaItemRepository;
 }
 
-<div class="card p-3">
-    <h1>قائمة الميديا</h1>
-    <p class="mt-3 mb-4">
+<div class="card">
+
+    <div class="card-header" style="background: #F6F9FC !important">
+        <h3>قائمة الميديا</h3>
+    </div>
+    <p class="mt-4 mb-4 pe-3">
         <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
 padding: 6px;">إضافة ميديا +</a>
     </p>
-
-
-    <div class="d-flex flex-row flex-wrap media-list">
+    <div class="d-flex flex-row flex-wrap media-list p-3">
 
         @foreach (var item in Model)
         {
@@ -52,70 +53,6 @@ padding: 6px;">إضافة ميديا +</a>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<style>
-    .media-list {
-        column-gap: 10px;
-        row-gap: 20px;
-    }
-
-    @@media (max-width: 452px) {
-        .media-list {
-            justify-content: center;
-        }
-    }
-
-    .media-list img {
-        border-top-right-radius: 5px;
-        border-top-left-radius: 5px;
-    }
-
-    .media-details {
-        border: 1px solid black;
-        width: 200px;
-        max-width: 100%;
-        border-bottom-right-radius: 5px;
-        border-bottom-left-radius: 5px;
-        overflow: auto;
-    }
-
-    button {
-        width: 100%;
-        background-color: #a5a5a5;
-    }
-
-    .delete {
-        background-color: #f8f7fd;
-        border-top: 1px solid #d0d0d5;
-    }
-
-        .delete button {
-            color: red;
-            width: fit-content;
-            background: transparent;
-            height: fit-content;
-            border: none;
-            box-shadow: none;
-            padding: 0 !important;
-        }
-
-
-
-        .delete i::before {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-    a {
-        text-decoration: none;
-    }
-
-    .caption {
-        background-color: white;
-    }
-</style>
-
 <script>
     function deleteMedia(event) {
 
@@ -171,3 +108,5 @@ padding: 6px;">إضافة ميديا +</a>
 
     }
 </script>
+
+<link rel="stylesheet" href="~/css/MediaItems/List.css" />
