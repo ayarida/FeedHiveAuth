@@ -21,6 +21,7 @@
                     <div>
                         <label for="name" class="mb-4">: الاسم</label>
                         <input name="name" class="form-control" type="text" id="role-name" style="text-align: right" value="@Model.Role.Name"/>
+                        <input type="hidden" id="role-id" value="@Model.Role.Id"
                     </div>
                 </div>
 
@@ -51,7 +52,7 @@
                                     {
                                         @* <span>@action</span> *@
                                         <li>
-                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="permissions" data-controller="@(controller.Key)" />
+                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="permissions" data-controller="@(controller.Key)" @(Model.Role.Permissions.Any(x => x.Controller == controller.Key && x.Action == action) ? "checked" : "") />
                                             <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
                                         </li>
                                     }
@@ -79,6 +80,7 @@
     function submitPermissions() {
         var roleName = $('#role-name').val();
         var roleDescription = $('#role-description').val();
+        var roleId = $('#role-id').val();
         var permissions = [];
 
         // Get all checked checkboxes
@@ -88,6 +90,7 @@
             permissions.push({ controller: controllerName, action: actionName });
         });
         var roleData = {
+            Id:roleId,
             Name: roleName,
             Description: roleDescription,
             permissions: permissions

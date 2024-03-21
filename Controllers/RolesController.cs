@@ -4,10 +4,12 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Text.Json;
 
 namespace FeedHiveAuth.Controllers
@@ -34,6 +36,7 @@ namespace FeedHiveAuth.Controllers
         public async Task<Role> GetRoleById(string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
+            var roleClaims = Instances.Repositories.RoleRepository.GetUserClaims(roleId);
             if (role == null)
             {
                 return null;
@@ -42,46 +45,96 @@ namespace FeedHiveAuth.Controllers
             {
                 Id = roleId,
                 Name = role.Name,
+                Permissions=MapPermission(roleClaims.ToList())
+
             };
         }
-
+        private List<RolePermission> MapPermission(List<string> permissions)
+        {
+            var list = new List<RolePermission>();
+            foreach(var permission in permissions)
+            {
+                var x = new RolePermission();
+                x.Controller = permission.Split('_')[0];
+                x.Action = permission.Split('_')[1];
+                list.Add(x);    
+            }
+            return list;
+        }
         [HttpPost]
         public async Task<IActionResult> SavePermissions([FromBody] Role roleData)
         {
+            IdentityRole roleToEdit = await roleManager.FindByIdAsync(roleData.Id.ToString());
             var curr = await userManager.GetUserAsync(User);
-            if (ModelState.IsValid)
+            var role = new Role
             {
-                var role = new Role
+                Name = roleData.Name,
+                Description = roleData.Description,
+            };
+            if (roleToEdit == null) // new role
+            {
+                if (ModelState.IsValid)
                 {
-                    Name = roleData.Name,
-                    Description = roleData.Description,
-                };
-                var result = await roleManager.CreateAsync(role);
-                if (result.Succeeded)
-                {
-                    // Associate permissions with the created role
-                    var permissions = roleData.Permissions
-                        .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
-                        .ToList();
-
-                    foreach (var permission in permissions)
+                    var result = await roleManager.CreateAsync(role);
+                    if (result.Succeeded)
                     {
-                        await roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", permission.Name));
-                        await userManager.AddClaimAsync(curr, new System.Security.Claims.Claim("Permission", permission.Name));
-                    }
+                        var permissions = roleData.Permissions
+                            .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
+                            .ToList();
 
-                    return Ok(); // or return a specific result based on your needs
+                        foreach (var permission in permissions)
+                        {
+
+                            await roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", permission.Name));
+                            //await userManager.AddClaimAsync(curr, new System.Security.Claims.Claim("Permission", permission.Name));
+                        }
+
+                        return Ok(); // or return a specific result based on your needs
+                    }
+                    else
+                    {
+                        // Handle role creation failure
+                        return BadRequest(result.Errors);
+                    }
                 }
                 else
                 {
-                    // Handle role creation failure
-                    return BadRequest(result.Errors);
+                    return BadRequest(ModelState);
                 }
-            }
-            else
+            }//end if new
+            else //update role
             {
+                if (roleToEdit.Name != roleData.Name)
+                {
+                    roleToEdit.Name = roleData.Name;
+                }
+
+                IdentityResult result = await roleManager.UpdateAsync(roleToEdit);
+                if (result.Succeeded)
+                {
+                    var permissions = roleData.Permissions
+                           .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
+                           .ToList(); //list of new permissions
+                    //////////remove old permission
+                    var oldpermissions = await roleManager.GetClaimsAsync(roleToEdit);
+                    foreach(var oldclaim in oldpermissions)
+                    {
+                        var resultdelete = await roleManager.RemoveClaimAsync(roleToEdit,oldclaim);
+                    }
+                    ///
+                    
+                    foreach (var permission in permissions)
+                    {
+                        await roleManager.AddClaimAsync(roleToEdit, new System.Security.Claims.Claim("Permission", permission.Name));   
+                    }
+
+                    
+                    return RedirectToAction("Index", "Home", new { Id = roleData.Id });
+                }
                 return BadRequest(ModelState);
+
             }
+            
         }
         [PermissionFilter("Roles_Update")]
         public async Task<IActionResult> Update(string id)
