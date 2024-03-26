@@ -1,0 +1,31 @@
+﻿@model List<FeedHiveAuth.Models.Channel>;
+
+@{
+    var model = Model;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <table dir="rtl" class="table table-sm table-bordered table-bordered mb-0">
+        <tr style="background-color: #edecf3 !important; border: 1px solid #dbdae1">
+            <th>الحساب</th>
+            <th>Network Id</th>
+            <th>Network Url</th>
+        </tr>
+    
+    @foreach (var channel in model)
+    {
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                        <img src="@channel.ProfileImageUrl" /> <span class="me-2">@channel.OriginalName</span>
+                </div>
+            </td>
+            <td>@channel.NetworkId</td>
+            <td>@channel.NetworkUrl</td>
+        </tr>
+    }
+    </table>
+</div>
+
+<link rel="stylesheet" href="~/css/Channels/fbPage.css"/>
