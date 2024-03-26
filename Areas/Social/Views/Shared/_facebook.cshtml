@@ -58,6 +58,16 @@
         console.log("reached");
         var url = @publicUrl;
         $.ajax({
+            type: 'POST',
+            url: "/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false",
+            success: function (data) {
+                var redirectUri = data.redirect;
+                console.log(redirectUri);
+                window.location.href = redirectUri; // Redirect to the obtained redirectUri
+            },
+            error: function () {
+                swal.fire("Request Error", "Error occurred while processing the request.", "error");
+            }
 
         });
     })

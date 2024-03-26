@@ -1,0 +1,60 @@
+﻿.media-list {
+    column-gap: 10px;
+    row-gap: 20px;
+}
+
+@media (max-width: 452px) {
+    .media-list {
+        justify-content: center;
+    }
+}
+
+.media-list img {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.media-details {
+    border: 1px solid black;
+    width: 200px;
+    max-width: 100%;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    overflow: auto;
+}
+
+button {
+    width: 100%;
+    background-color: #a5a5a5;
+}
+
+.delete {
+    background-color: #f8f7fd;
+    border-top: 1px solid #d0d0d5;
+}
+
+    .delete button {
+        color: red;
+        width: fit-content;
+        background: transparent;
+        height: fit-content;
+        border: none;
+        box-shadow: none;
+        padding: 0 !important;
+    }
+
+
+
+    .delete i::before {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+a {
+    text-decoration: none;
+}
+
+.caption {
+    background-color: white;
+}

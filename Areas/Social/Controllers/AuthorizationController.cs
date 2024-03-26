@@ -7,6 +7,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -45,7 +46,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     var obj = jsonRes.TryCast<JObject>();
                     var objResult = obj.ValueFromJson("Value", new JObject());
                     var redirect = objResult.ValueFromJson<string>("redirect", null);
-                    return Redirect(redirect);
+                    //return Redirect(redirect);*/
+                    //var redirectUri = ConstructFacebookOAuthUrl(account, subscription, reauthorize);
+                    return Ok(new { redirect });
                 case SocialNetworkTypeEnum.DailyMotion:
                     return DailymotionSignIn(network, id);
                 //        case SocialNetworkTypeEnum.Twitter:

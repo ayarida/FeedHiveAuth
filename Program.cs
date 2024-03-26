@@ -31,6 +31,16 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISubscriptionContext, SubscriptionService>();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+});
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHostedService<TasksBgService>();
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
@@ -54,16 +64,6 @@ builder.Services.AddSingleton(
     );
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Admin", "Editor", "Viewer" };
-
-    foreach (var role in roles)
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -84,6 +84,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+app.UseCors("AllowAll");
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(

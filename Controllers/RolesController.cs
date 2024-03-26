@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.Controllers;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
@@ -25,12 +26,14 @@ namespace FeedHiveAuth.Controllers
     {
         private RoleManager<IdentityRole> roleManager;
         private UserManager<IdentityUser> userManager;
+        private readonly ILogger<RolesController> _logger;
 
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ILogger<RolesController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this._logger = logger;
         }
 
         public async Task<Role> GetRoleById(string roleId)
@@ -244,85 +247,24 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            Role role = await GetRoleById(id);
+            IdentityRole role = await roleManager.FindByIdAsync(id);
             if (role != null)
             {
+                try { 
                 IdentityResult result = await roleManager.DeleteAsync(role);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
                     Errors(result);
+                }catch(Exception ex)
+                {
+                    _logger.LogError(ex, "********************* Error occurred while deleting role. *********************");
+                    ModelState.AddModelError("", "An error occurred while deleting the role.");
+                }
             }
             else
                 ModelState.AddModelError("", "No role found");
             return View("Index", roleManager.Roles);
-        }
-
-        [PermissionFilter("Roles_ReadRoles")]
-        [HttpGet]
-        public void ReadRoles()
-        {
-             
-        }
-        [PermissionFilter("Roles_CreateRole")]
-        [HttpPost]
-        public void CreateRole()
-        {
-            Role role = new Role();
-            role.Name = HttpContext.Request.Form["Name"];
-            role.NormalizedName = HttpContext.Request.Form["NormalizedName"];
-            //Instances.Repositories.RoleRepository.CreateRole(role);
-        }
-
-
-        private async Task CreateRolesandUsers(IServiceProvider serviceProvider)
-        {
-            var _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var _userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            string[] roleNames = { "Admin", "Manager", "Member" };
-            IdentityResult roleResult;
-
-            bool x = await _roleManager.RoleExistsAsync("Admin");
-            if (!x)
-            {
-                // first we create Admin rool    
-                var role = new IdentityRole();
-                role.Name = "Admin";
-                await _roleManager.CreateAsync(role);
-
-                //Here we create a Admin super user who will maintain the website                   
-
-                var user = new IdentityUser();
-                user.UserName = "default";
-                user.Email = "default@default.com";
-                string userPWD = "somepassword";
-
-                IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);
-
-                //Add default User to Role Admin    
-                if (chkUser.Succeeded)
-                {
-                    var result1 = await _userManager.AddToRoleAsync(user, "Admin");
-                }
-            }
-
-            // creating Creating Manager role     
-            x = await _roleManager.RoleExistsAsync("Manager");
-            if (!x)
-            {
-                var role = new IdentityRole();
-                role.Name = "Manager";
-                await _roleManager.CreateAsync(role);
-            }
-
-            // creating Creating Employee role     
-            x = await _roleManager.RoleExistsAsync("Employee");
-            if (!x)
-            {
-                var role = new IdentityRole();
-                role.Name = "Employee";
-                await _roleManager.CreateAsync(role);
-            }
         }
 
     }
