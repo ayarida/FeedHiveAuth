@@ -56,7 +56,6 @@
 
     $(".post-to-facebook").on("click", function () {
         console.log("reached");
-        //var url = @publicUrl;
         $.ajax({
             type: 'POST',
             url: "/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false",
