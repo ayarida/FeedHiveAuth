@@ -12,7 +12,7 @@
         <section>
             <form id="account" method="post" dir="rtl">
                 <h2>تسجيل الدخول</h2>
-               @*  <hr /> *@
+                @*  <hr /> *@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
                     <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" placeholder="اسم المستخدم" />
@@ -26,12 +26,12 @@
                 </div>
                 <div class="mt-3">
                     <div class="checkbox" style="display: flex;justify-content: flex-start;" dir="auto">
-      
+
                         <label asp-for="Input.RememberMe" class="form-label">
                             حفظ المعلومات
                         </label>
                         <input class="form-check-input" asp-for="Input.RememberMe" />
-                      
+
 
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto" style="font-size: 18px;">تسجيل مستخدم جديد</a>
                     </p>
-          
+
                     <p>
                         <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto" style="font-size: 18px;">إعادة إرسال تأكيد البريد الإلكتروني</a>
                     </p>
@@ -106,10 +106,10 @@
 
 
 
-/*     .login-section {
-        box-shadow: 0px 3px 7px 2px #00000029;
-    }
- */
+    /*     .login-section {
+            box-shadow: 0px 3px 7px 2px #00000029;
+        }
+     */
     #account {
         row-gap: 5px;
         display: flex;
@@ -168,7 +168,7 @@
     .checkbox {
         column-gap: 10px;
     }
-     
+
     form input::placeholder {
         color: #969AB8 !important;
         padding-bottom: 1.625rem !important;
@@ -177,6 +177,16 @@
 
     h1, h2, h3, h4, p, a, label, input, span, div {
         font-family: sans-serif !important;
+    }
+
+    ul {
+        padding-right: 0;
+        margin-bottom: 0;
+    }
+
+
+    li {
+        list-style: none;
     }
 
 </style>
