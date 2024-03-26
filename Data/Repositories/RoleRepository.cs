@@ -34,5 +34,6 @@ namespace FeedHiveAuth.Data.Repositories
                 return connection.Query<string>("select ClaimValue from AspNetRoleClaims" + " WHERE RoleId=@roleid", new { RoleId = roleid });
             }
         }
+        
     }
 }
