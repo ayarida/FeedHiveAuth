@@ -17,8 +17,8 @@ $("#mediaInput").on("change", e => {
             customClass: {
                 confirmButton: "btn btn-primary  warning",
             },
-            title: "Select a valid media Type",
-            text: "mp4 jpeg jpg or png",
+            title: "الرجاء التحميل ميديا من الأنواع التالية",
+            text: "mp4 jpeg jpg أو png",
             confirmButtonText: "موافق",
         });
     } else {

@@ -159,7 +159,7 @@
         //Highlight current sidebar menu link
 
         $("#sidebarMenu a").each(function (i) {
-            if (window.location.href.indexOf($(this).attr('href')) > -1) {
+            if (window.location.href.includes($(this).attr('href'))) {
                 $(this).addClass("active")
             }
         })
