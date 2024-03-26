@@ -1,7 +1,9 @@
-﻿using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
+﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,12 +17,20 @@ namespace FeedHiveAuth.Controllers
                     var credentials = AuthorizationManager.ExchangeCode(baseCallbackUrl, code, subscriptionId, out msg);
                 }*/
         [PermissionFilter("OAuthorization_FacebookSignIn")]
+        //[EnableCors]
         public IEnumerable<Channel> FacebookSignIn(string state, string code)
         {
             try
             {
                 var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
-                var channels = FacebookService.GetChannelsInfo("https://localhost:7157/",code,
+                var baseCallBackUrl = "";
+#if DEBUG
+
+                baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+#else
+            baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+#endif
+                var channels = FacebookService.GetChannelsInfo(baseCallBackUrl, code,
                                 state, subscription, out string msg);
                 if (channels.Empty())
                 {
