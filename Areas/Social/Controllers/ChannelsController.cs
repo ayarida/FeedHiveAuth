@@ -25,7 +25,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public IActionResult Index()
         {
             var channels = _channelRepository.GlobalGetAll();
-            return View("~/Areas/Social/Views/Channels/Index.cshtml", channels);
+            return View(channels);
             //return _context.Channel != null ?
             //            View(await _context.Channel.ToListAsync()) :
             //            Problem("Entity set 'ApplicationDbContext.Channel'  is null.");

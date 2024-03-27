@@ -13,10 +13,9 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
     public static class FacebookService
     {
         #region account
-        public static IEnumerable<Channel> GetChannelsInfo(string baseCallbackUrl, string code, string state,
-                    string subscriptionId, out string msg)
+        public static IEnumerable<Channel> GetChannelsInfo(string baseCallbackUrl, string code, string state,out string msg)
         {
-            var credentials = AuthorizationManager.ExchangeCode(baseCallbackUrl, code, subscriptionId, out msg);
+            var credentials = AuthorizationManager.ExchangeCode(baseCallbackUrl, code, out msg);
             if (credentials == null)
             {
                 return null;
@@ -27,18 +26,18 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             switch (accountType)
             {
                 case SocialAccountTypeEnum.Page:
-                    return GetPages(credentials, subscriptionId);
+                    return GetPages(credentials);
                 case SocialAccountTypeEnum.AdManager:
-                    return GetAdManagers(credentials, subscriptionId);
+                    return GetAdManagers(credentials);
                 case SocialAccountTypeEnum.Profile:
                 default:
-                    var profile = GetProfile(credentials, subscriptionId);
+                    var profile = GetProfile(credentials);
                     return profile == null ? new List<Channel>() : new List<Channel> { profile };
             }
         }
-        private static Channel GetProfile(FacebookCredentials credentials, string subscriptionId)
+        private static Channel GetProfile(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId).FacebookConfigs;
+            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetUser();
             if (!result.IsSuccessful)
@@ -62,9 +61,9 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             };
         }
 
-        private static IEnumerable<Channel> GetPages(FacebookCredentials credentials, string subscriptionId)
+        private static IEnumerable<Channel> GetPages(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId).FacebookConfigs;
+            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetPages();
             if (!result.IsSuccessful) { return null; }
@@ -100,9 +99,9 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             return channels;
         }
 
-        private static IEnumerable<Channel> GetAdManagers(FacebookCredentials credentials, string subscriptionId)
+        private static IEnumerable<Channel> GetAdManagers(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId).FacebookConfigs;
+            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetAdManagers();
             if (!result.IsSuccessful) { return null; }

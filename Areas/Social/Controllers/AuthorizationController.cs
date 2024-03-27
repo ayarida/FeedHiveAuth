@@ -33,7 +33,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             //var subscription = await _adminWorkContext.GetCurrentSubscriptionAsync();
             var currentUser = _userService.GetByUsername("testnew");
-            Subscription subscription = _subscriptionService.Get("1f59028d-15d0-4bf6-a61b-28f33b895310");
             var type = EnumExtension.FromKey<SocialNetworkTypeEnum>(network);
             switch (type)
             {
@@ -42,7 +41,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     var s = "sss";
                     return FacebookSignIn("type:'Page',subscriptionCode:'SocialPublisher',reauthorize:false", "SocialPublisher");
 */
-                    var jsonRes = FacebookOAuthFlow(account, subscription, reauthorize);
+                    var jsonRes = FacebookOAuthFlow(account, reauthorize);
                     var obj = jsonRes.TryCast<JObject>();
                     var objResult = obj.ValueFromJson("Value", new JObject());
                     var redirect = objResult.ValueFromJson<string>("redirect", null);
@@ -75,7 +74,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
         #region facebook
         [PermissionFilter("Authorization_FacebookOAuthFlow")]
-        public IActionResult FacebookOAuthFlow(string type, Subscription subscription, bool reauthorize = false)
+        public IActionResult FacebookOAuthFlow(string type, bool reauthorize = false)
         {
             var success = false;
             var redirect = "";
@@ -89,7 +88,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 #else
             baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 #endif
-                var result = AuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize, subscription).Decode();
+                var result = AuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
@@ -119,16 +118,15 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             try
             {
-                var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
                 var channels = FacebookService.GetChannelsInfo("https://localhost:7157/Social/", code,
-                                state, subscription, out string msg);
+                                state, out string msg);
                 if (channels.Empty())
                 {
                     Debug.WriteLine(msg ?? "Couldn't authorize the selected Facebook account");
                     return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
                 }
                 var reauthorize = false;
-                return SaveChannels(channels, subscription, reauthorize, SocialNetworkTypeEnum.Facebook);
+                return SaveChannels(channels, reauthorize, SocialNetworkTypeEnum.Facebook);
             }
             catch (Exception ex)
             {
@@ -162,12 +160,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return View("~/Areas/Social/Views/Channels/Index.cshtml", allChannels);
         }
 
-        private IActionResult SaveChannels(IEnumerable<Channel> channels, string subscriptionId, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
+        private IActionResult SaveChannels(IEnumerable<Channel> channels, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
         {
             if (reauthorize)
             {
                 var networkType = networkTypeEnum.Key();
-                var existingChannelsIds = Collections.ChannelsOf(subscriptionId).Where(channel => channel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() })).Select(channel => channel.NetworkId);
+                var existingChannelsIds = Collections.Channels().Where(channel => channel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() })).Select(channel => channel.NetworkId);
                 channels = channels.Where(channel => existingChannelsIds.ContainsIgnoreCase(channel.NetworkId));
                 if (channels.Empty())
                 {

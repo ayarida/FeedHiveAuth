@@ -26,7 +26,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + $"OAuthorization/{network}SignIn/";
         }
 
-        public string GetLoginUrl(string type, bool reauthorize, string subscriptionCode, string scope)
+        public string GetLoginUrl(string type, bool reauthorize, string scope)
         {
             var apiUrl = UseFbLogin ? FacebookLoginUrl : InstagramLoginUrl;
             var state = "{type:'" + type + "',reauthorize:" + reauthorize.ToString().ToLower() + "}";

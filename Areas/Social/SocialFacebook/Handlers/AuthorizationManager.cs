@@ -16,19 +16,19 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 {
     public static class AuthorizationManager
     {
-        public static string StartOAuthFlow(string baseCallbackUrl, string type, bool reauthorize, Subscription subscription, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook)
+        public static string StartOAuthFlow(string baseCallbackUrl, string type, bool reauthorize, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook)
         {
-            var client = GetAuthorizationClient(baseCallbackUrl, type, subscription.Id, network);
+            var client = GetAuthorizationClient(baseCallbackUrl, type, network);
             var scope = GetScopes(type, network);
-            return client.GetLoginUrl(type, reauthorize, subscription.Code, scope).Decode();
+            return client.GetLoginUrl(type, reauthorize, scope).Decode();
         }
 
 
 
-        private static AuthorizationClient GetAuthorizationClient(string baseCallbackUrl, string type, string subscriptionId, SocialNetworkTypeEnum network, string nodeUrl = "/oauth")
+        private static AuthorizationClient GetAuthorizationClient(string baseCallbackUrl, string type,SocialNetworkTypeEnum network, string nodeUrl = "/oauth")
         {
             var useFbLogin = network.Equals(SocialNetworkTypeEnum.Facebook) || type.EqualsIgnoreCase(SocialAccountTypeEnum.Business.Key());
-            var configs = GetConfigs(network, subscriptionId, useFbLogin);
+            var configs = GetConfigs(network,useFbLogin);
             return new AuthorizationClient(configs, baseCallbackUrl, network, useFbLogin, nodeUrl);
         }
         private static string GetScopes(string type, SocialNetworkTypeEnum network)
@@ -47,15 +47,15 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                     return "email,groups_access_member_info,publish_to_groups,user_age_range,user_birthday,user_events,user_gender,user_hometown,user_likes,user_link,user_location,user_photos,user_posts,user_tagged_places,user_videos";
             }
         }
-        private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network, String subscriptionId)
+        private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId.ToString());
+            var configs = SocialServiceHelper.GetConfigs();
             return network.Equals(SocialNetworkTypeEnum.Facebook) ? configs.FacebookConfigs : null;
         }
 
-        private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network, string subscriptionId, bool useFbLogin)
+        private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network, bool useFbLogin)
         {
-            var configs = SocialServiceHelper.GetConfigs(subscriptionId.ToString());
+            var configs = SocialServiceHelper.GetConfigs();
             if (useFbLogin)
                 return configs.FacebookConfigs;
 
@@ -68,10 +68,10 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             }
         }
 
-        public static FacebookCredentials ExchangeCode(string baseCallbackUrl, string code, string subscriptionId, out string msg, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook)
+        public static FacebookCredentials ExchangeCode(string baseCallbackUrl, string code, out string msg, SocialNetworkTypeEnum network = SocialNetworkTypeEnum.Facebook)
         {
             msg = "";
-            var client = new AuthorizationClient(GetConfigs(network, subscriptionId), baseCallbackUrl, network);
+            var client = new AuthorizationClient(GetConfigs(network), baseCallbackUrl, network);
             var result = network.Equals(SocialNetworkTypeEnum.Facebook) ? client.ExchangeCode(code) : client.ExchangeInstaCode(code);
             if (!result.IsSuccessful)
             {
