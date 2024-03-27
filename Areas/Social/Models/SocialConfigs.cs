@@ -29,7 +29,8 @@ namespace FeedHiveAuth.Areas.Social.Models
                     {
                         DisplayName = "OCPublisher",
                         AppId = "1629657670987973",
-                        AppSecret = "7e2fd21dedf5a4249c4fc638ee82fcb6"
+                        AppSecret = "7e2fd21dedf5a4249c4fc638ee82fcb6",
+                        Enable = true
                     }
                 },
                 TelegramConfigs = new TelegramConfigs
