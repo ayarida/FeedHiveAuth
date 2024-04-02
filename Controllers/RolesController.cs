@@ -161,6 +161,7 @@ namespace FeedHiveAuth.Controllers
                 NonMembers = nonMembers
             });
         }
+        [PermissionFilter("Roles_Edit")]
         public async Task<IActionResult> Edit(string id)
         {
             Role role = await GetRoleById(id);
@@ -243,7 +244,7 @@ namespace FeedHiveAuth.Controllers
 
             return identityRole;
         }
-        [PermissionFilter("Roles_Delete")]
+       [PermissionFilter("Roles_Delete")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

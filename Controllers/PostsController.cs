@@ -21,11 +21,11 @@ namespace FeedHiveAuth.Controllers
         private readonly ILogger<PostsController> _logger;
 
         private readonly UserManager<IdentityUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        public PostsController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<PostsController> logger)
+   
+        public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger)
         {
             this.userManager = userManager;
-            this.roleManager = roleManager;
+            
             _logger = logger;
         }
         
@@ -71,7 +71,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         [Authorize]
-        [PermissionFilter("Posts_Create")]
+        [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
         public ActionResult CreatePost()
         {

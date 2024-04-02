@@ -1,0 +1,49 @@
+﻿@inject RoleManager<IdentityRole> Rolemanager
+@inject UserManager<IdentityUser> UserManager
+@model User
+@{
+    var availableRoles = Rolemanager.Roles.ToList();
+
+    // var user = Model.user;
+    
+    var roles = availableRoles;
+    
+}
+
+
+<div class="card p-4 ms-auto" style="background: white !important; width: fit-content">
+    <div class="row justify-content-end create-user">
+        <form asp-controller="Users" asp-action="SaveUser" method="POST" dir="rtl">
+            <!-- Add your form fields -->
+            <div class="form-group mb-4">
+                <label for="Username">إسم المستخدم</label>
+                <input class="form-control" name="Username" id="Username" asp-for="@Model.Username" />
+                
+                @* <span asp-validation-for="Username"></span> *@
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="Email">البريد الإلكتروني</label>
+                <input class="form-control" name="Email" id="Email" asp-for="@Model.Email" />
+                <input type="hidden" class="form-control" name="Id" id="Email" asp-for="@Model.Id" />
+            </div>
+
+           @*  <div class="form-group mb-4">
+                <label for="password">كلمة المرور</label>
+                <input type="password" class="form-control" name="PasswordHash" id="PasswordHash" asp-for="@Model.PasswordHash" />
+                <span asp-validation-for="PasswordHash"></span>
+            </div>  *@
+            <select asp-for="RoleId"
+                    asp-items="@(new SelectList(roles, nameof(Role.Id), nameof(Role.Name)))">
+                <option>Please select Role</option>
+            </select>
+            <input type="submit" value="submit" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
+
+
+        </form>
+    </div>
+</div>
+
+
+<link rel="stylesheet" href="~/css/Users/create.css" />
+<script src="~/js/Users/create.js"></script>

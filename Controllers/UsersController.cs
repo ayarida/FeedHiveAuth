@@ -13,6 +13,7 @@ namespace FeedHiveAuth.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        
 
         public UserRepository _userService = Instances.Repositories.UserRepository;
 
@@ -20,6 +21,7 @@ namespace FeedHiveAuth.Controllers
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+          
         }
         [PermissionFilter("Users_Create")]
         [HttpGet]
@@ -29,6 +31,57 @@ namespace FeedHiveAuth.Controllers
             //ViewData["availableRoles"] = availableRoles;
             return View(availableRoles);
         }
+
+        [PermissionFilter("Users_Edit")]
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var availableRoles = roleManager.Roles.ToList();
+            //ViewData["availableRoles"] = availableRoles;
+            var model = new User();
+            var user= userManager.Users.FirstOrDefault(x => x.Id == id);
+            model.Username = user.UserName;
+            model.PasswordHash = user.PasswordHash;
+            model.Email = user.Email;
+            model.RoleId = Instances.Repositories.RoleRepository.GetUserRole(id);
+            return View(model);
+        }
+        [PermissionFilter("Users_SaveUser")]
+        [HttpPost]
+        public async Task<IActionResult> SaveUser(User model)
+        {
+            var currentuser = await userManager.FindByIdAsync(model.Id);
+            currentuser.UserName = model.Username;
+            currentuser.Email = model.Email;
+            currentuser.EmailConfirmed = true;
+           
+            currentuser.NormalizedUserName = model.Username.ToUpper();
+            currentuser.NormalizedEmail = model.Email.ToUpper();
+           
+           var result= await userManager.UpdateAsync(currentuser);
+            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
+            if (result.Succeeded && result.Errors.Count()==0 && getRole != null)
+            {
+                var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id);
+                var oldrole = (await roleManager.FindByIdAsync(oldroleid)).Name;
+                var resultdeleted = await userManager.RemoveFromRoleAsync(currentuser, oldrole);
+                var assignRole = await userManager.AddToRoleAsync(currentuser, getRole.Name);
+                if (assignRole.Succeeded)
+                {
+                    return RedirectToAction("List", "Users");
+                }
+            }
+            //foreach (var error in result.Errors)
+            //{
+            //    ModelState.AddModelError(string.Empty, error.Description);
+            //    return BadRequest(error.Description);
+            //}
+            return RedirectToAction("List", "Users");
+        }
+
+
+
+
         [PermissionFilter("Users_RegisterNewUser")]
         [HttpPost]
         public async Task<IActionResult> RegisterNewUser(User model)
@@ -53,6 +106,7 @@ namespace FeedHiveAuth.Controllers
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
+                return BadRequest(error.Description);
             }
             return RedirectToAction("List", "Users");
         }
@@ -77,33 +131,33 @@ namespace FeedHiveAuth.Controllers
 
              return RedirectToAction("Index", "Home");
          }*/
-        [PermissionFilter("Users_RegisterNewUser")]
-        [HttpPost]
-        public async Task<IActionResult> RegisterNewUser(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var newUser = new IdentityUser { UserName = model.Input.Email, Email = model.Input.Email };
-                var result = await userManager.CreateAsync(newUser, model.Input.Password);
+        //[PermissionFilter("Users_RegisterNewUser")]
+        //[HttpPost]
+        //public async Task<IActionResult> RegisterNewUser(RegisterModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var newUser = new IdentityUser { UserName = model.Input.Email, Email = model.Input.Email };
+        //        var result = await userManager.CreateAsync(newUser, model.Input.Password);
 
-                if (result.Succeeded)
-                {
-                    // You can sign in the new user if needed
-                    // await _signInManager.SignInAsync(newUser, isPersistent: false);
+        //        if (result.Succeeded)
+        //        {
+        //            // You can sign in the new user if needed
+        //            // await _signInManager.SignInAsync(newUser, isPersistent: false);
 
-                    // Your additional logic after successful registration
-                    return RedirectToAction("Index", "Home");
-                }
+        //            // Your additional logic after successful registration
+        //            return RedirectToAction("Index", "Home");
+        //        }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        }
+        //    }
 
-            // If registration fails, redisplay the form
-            return View("Register", model);
-        }
+        //    // If registration fails, redisplay the form
+        //    return View("Register", model);
+        //}
         [PermissionFilter("Users_List")]
         [HttpGet]
         public IActionResult List()

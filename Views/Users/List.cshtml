@@ -41,7 +41,7 @@
 
                         <tr>
                             <td> <input type="checkbox" class="check" value="@(check == user.UserName ? "e" : user.Id)" @(check == user.UserName ? "disabled" : "")></td>
-                            <td>@user.UserName</td>
+                            <td><a href="/Users/Edit/@user.Id">@user.UserName</a></td>
                             @if (userRole.Any())
                             {
                                 var ur = userRole.First();
