@@ -1,17 +1,24 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Clients;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Authorization;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Feed;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Photo;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
+using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 
 namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 {
     public static class FacebookService
     {
+        public static MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+
         #region account
         public static IEnumerable<Channel> GetChannelsInfo(string baseCallbackUrl, string code, string state,out string msg)
         {
@@ -47,6 +54,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 
             var user = result.Data;
             var pictureResult = client.GetProfilePic();
+            var pictureRes = client.GetProfilePictureUrl(user.Id,credentials.AccessToken);
             var picture = pictureResult.IsSuccessful ? pictureResult.Data.Data : null;
 
             return new Channel
@@ -83,6 +91,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             {
                 var pageClient = new AccountClient(configs, page.AccessToken);
                 var pictureResult = pageClient.GetProfilePic();
+                var pictureRes = pageClient.GetProfilePictureUrl(page.Id, page.AccessToken);
                 var picture = pictureResult.IsSuccessful ? pictureResult.Data.Data : null;
                 channels.Add(new Channel
                 {
@@ -130,45 +139,46 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         #endregion
 
         #region share 
-/*        public static ServiceOperationResult Send(Operation operation, Channel channel)
+        public static ServiceOperationResult Send(Operation operation, Channel channel)
         {
-            var configs = SocialServiceHelper.GetConfigs(channel.SubscriptionId).FacebookConfigs;
+            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
             var operationData = operation.Parameters.FromJson<FacebookOperationData>();
 
             var scheduled = operationData.ScheduleTime.HasValue && operationData.ScheduleTime.Value > DateTime.Now;
-            var scheduledPublishTime = scheduled ? operationData.ScheduleTime.Value.UtcDate(operation.SubscriptionId).ToUnixTimespans() : 0;
+            var scheduledPublishTime = 0;
 
-            if (operation.MediaItem() == null)
-            {
+            if (operation.MediaId == null) { 
                 var client = new FeedClient(configs, channel.Credentials);
                 var result = client.Publish(operationData.Text, operationData.Link, !scheduled, scheduledPublishTime);
                 return ProcessFeedResult(result, channel, operation, operationData);
             }
-            switch (EnumExtension.FromValue<MediaTypeEnum>(operation.MediaItem().Type))
+            //get the media from operation then retrieve from db to get its enum value and publish based on type
+            var getMedia = _mediaItemService.Get(operation.MediaId);
+            switch (EnumExtension.FromValue<MediaTypeEnum>(getMedia.Type))
             {
                 case MediaTypeEnum.Image:
                     var photoClient = new PhotoClient(configs, channel.Credentials);
-                    var photoResult = photoClient.Publish(operationData.Text, operation.MediaItem().PublicUrl(false).ComposeSafeUrl(false), !scheduled, scheduledPublishTime);
+                    var photoResult = photoClient.Publish(operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime);
                     return ProcessPhotoResult(photoResult, channel, operation, operationData);
-                case MediaTypeEnum.Video:
-                    //var videoClient = new VideoClient(configs, channel.Credentials, "https://graph-video.facebook.com");
-                    //var uploadResult = ChunkUpload(videoClient, operation, out var error);
-                    var videoClient = new VideoClient(configs, channel.Credentials);
-                    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, operation.MediaItem().PublicUrl(false).ComposeSafeUrl(false), !scheduled, scheduledPublishTime);
-                    if (uploadResult.IsSuccessful)
-                    {
-                        //var result = videoClient.FinishUpload(uploadResult.Data.UploadSessionId, null, operationData.Text, !scheduled, scheduledPublishTime);
-                        Instances.Repositories.OperationsRepository.UpdateStatus(operation.Id, StatusEnum.Waiting.Value());
-                        //videoClient = new VideoClient(configs, channel.Credentials);
-                        //var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.VideoId);
-                        var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.Id);
-                        return ProcessVideoResult(video, channel, operation, operationData);
-                    }
-                    else
-                    {
-                        //return ProcessFailed(error, channel, operation);
-                        return ProcessFailed(uploadResult.Data.Error, channel, operation);
-                    }
+                //case MediaTypeEnum.Video:
+                //    //var videoClient = new VideoClient(configs, channel.Credentials, "https://graph-video.facebook.com");
+                //    //var uploadResult = ChunkUpload(videoClient, operation, out var error);
+                //    var videoClient = new VideoClient(configs, channel.Credentials);
+                //    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, operation.MediaItem().PublicUrl(false).ComposeSafeUrl(false), !scheduled, scheduledPublishTime);
+                //    if (uploadResult.IsSuccessful)
+                //    {
+                //        //var result = videoClient.FinishUpload(uploadResult.Data.UploadSessionId, null, operationData.Text, !scheduled, scheduledPublishTime);
+                //        Instances.Repositories.OperationsRepository.UpdateStatus(operation.Id, StatusEnum.Waiting.Value());
+                //        //videoClient = new VideoClient(configs, channel.Credentials);
+                //        //var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.VideoId);
+                //        var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.Id);
+                //        return ProcessVideoResult(video, channel, operation, operationData);
+                //    }
+                //    else
+                //    {
+                //        //return ProcessFailed(error, channel, operation);
+                //        return ProcessFailed(uploadResult.Data.Error, channel, operation);
+                //    }
                 default:
                     return new ServiceOperationResult
                     {
@@ -176,9 +186,66 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                         Message = "Unsupported media type"
                     };
             }
+
         }
-*/
+        private static ServiceOperationResult ProcessPhotoResult(IRestResponse<PhotoResponse> result, Channel channel, Operation operation, FacebookOperationData operationData)
+        {
+            if (result.IsSuccessful)
+            {
+                var meta = new SocialMetaResult
+                {
+                    Id = result.Data.PostId,
+                    NetworkId = operationData.NetworkId,
+                    OperationId = operation.Id
+                };
+                return ProcessSuccess(meta, result.Data.Serialize(), operation);
+            }
+            else
+            {
+                return ProcessFailed(result.Data.Error, channel, operation);
+            }
+        }
+        private static ServiceOperationResult ProcessFeedResult(IRestResponse<FeedResponse> result, Channel channel, Operation operation, FacebookOperationData operationData)
+        {
+            if (result.IsSuccessful)
+            {
+                var meta = new SocialMetaResult
+                {
+                    Id = result.Data.Id,
+                    NetworkId = operationData.NetworkId,
+                    OperationId = operation.Id
+                };
+                return ProcessSuccess(meta, result.Data.Serialize(), operation);
+            }
+            else
+            {
+                return ProcessFailed(result.Data.Error, channel, operation);
+            }
+        }
         #endregion
+
+        private static ServiceOperationResult ProcessFailed(Error error, Channel channel, Operation operation)
+        {
+            if (error != null && (error.Code == 10 || error.Code == 190 || (error.Code >= 200 && error.Code <= 299)))
+            {
+                channel.SetChannelExpired();
+            }
+
+            return new ServiceOperationResult
+            {
+                Success = false,
+                Message = error?.ErrorUserMsg ?? error?.Message
+            };
+        }
+
+        private static ServiceOperationResult ProcessSuccess(SocialMetaResult socialResult, string result, Operation operation)
+        {
+            return new ServiceOperationResult
+            {
+                Success = true,
+                Result = result
+            };
+        }
 
     }
 }
