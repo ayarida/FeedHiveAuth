@@ -15,5 +15,13 @@ namespace FeedHiveAuth.Data.Repositories
             List <Operation> ops = connection.Query<Operation>(query).ToList();
             return ops;
         }
+        public void UpdateStatus(string id, int status)
+        {
+            Execute("UPDATE " + TableName + " SET Status=@Status WHERE Id=@Id ", new { Id = id, Status = status });
+        }
+        public void UpdateCurrentState(Operation operation)
+        {
+            UpdateColumn("CurrentState", operation.CurrentState, operation.Id.ToString());
+        }
     }
 }
