@@ -12,6 +12,7 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using Video = FeedHiveAuth.Areas.Social.SocialFacebook.Models.Video.Video;
 
 namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 {
@@ -160,25 +161,20 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                     var photoClient = new PhotoClient(configs, channel.Credentials);
                     var photoResult = photoClient.Publish(operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime);
                     return ProcessPhotoResult(photoResult, channel, operation, operationData);
-                //case MediaTypeEnum.Video:
-                //    //var videoClient = new VideoClient(configs, channel.Credentials, "https://graph-video.facebook.com");
-                //    //var uploadResult = ChunkUpload(videoClient, operation, out var error);
-                //    var videoClient = new VideoClient(configs, channel.Credentials);
-                //    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, operation.MediaItem().PublicUrl(false).ComposeSafeUrl(false), !scheduled, scheduledPublishTime);
-                //    if (uploadResult.IsSuccessful)
-                //    {
-                //        //var result = videoClient.FinishUpload(uploadResult.Data.UploadSessionId, null, operationData.Text, !scheduled, scheduledPublishTime);
-                //        Instances.Repositories.OperationsRepository.UpdateStatus(operation.Id, StatusEnum.Waiting.Value());
-                //        //videoClient = new VideoClient(configs, channel.Credentials);
-                //        //var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.VideoId);
-                //        var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.Id);
-                //        return ProcessVideoResult(video, channel, operation, operationData);
-                //    }
-                //    else
-                //    {
-                //        //return ProcessFailed(error, channel, operation);
-                //        return ProcessFailed(uploadResult.Data.Error, channel, operation);
-                //    }
+                case MediaTypeEnum.Video:                   
+                    var videoClient = new VideoClient(configs, channel.Credentials);
+                    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime);
+                    if (uploadResult.IsSuccessful)
+                    {
+                       
+                        Instances.Repositories.OperationRepository.UpdateStatus(operation.Id, StatusEnum.Waiting.Value());        
+                        var video = CheckVideoStatus(operation, videoClient, uploadResult.Data.Id);
+                        return ProcessVideoResult(video, channel, operation, operationData);
+                    }
+                    else
+                    {
+                        return ProcessFailed(uploadResult.Data.Error, channel, operation);
+                    }
                 default:
                     return new ServiceOperationResult
                     {
@@ -187,6 +183,42 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                     };
             }
 
+        }
+        private static IRestResponse<Video> CheckVideoStatus(Operation operation, VideoClient client, string videoId)
+        {
+            try
+            {
+                operation.UpdateCurrentState("Media is being processed by facebook");
+                var parms = new Dictionary<string, object>
+                {
+                    { "fields", "id,title,description,status" }
+                };
+                var result = client.Get<Social.SocialFacebook.Models.Video.Video>(videoId, parms);
+                if (!result.IsSuccessful)
+                {
+                    return (IRestResponse<Video>)result;
+                }
+
+                var processingInfo = result.Data.Status.VideoStatus;
+                switch (processingInfo)
+                {
+                    case "ready":
+                    case "error":
+                        return (IRestResponse<Video>)result;
+                    default:
+                        Thread.Sleep(60 * 1000);
+                        return CheckVideoStatus(operation, client, videoId);
+                }
+            }
+            catch (Exception ex)
+            {
+                //operation.AddMessageOperation(ex.FullMessage());
+                return null;
+            }
+            finally
+            {
+                operation.UpdateCurrentState("Media processing by facebook completed");
+            }
         }
         private static ServiceOperationResult ProcessPhotoResult(IRestResponse<PhotoResponse> result, Channel channel, Operation operation, FacebookOperationData operationData)
         {
@@ -198,6 +230,25 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                     NetworkId = operationData.NetworkId,
                     OperationId = operation.Id
                 };
+                return ProcessSuccess(meta, result.Data.Serialize(), operation);
+            }
+            else
+            {
+                return ProcessFailed(result.Data.Error, channel, operation);
+            }
+        }
+
+        private static ServiceOperationResult ProcessVideoResult(IRestResponse<Video> result, Channel channel, Operation operation, FacebookOperationData operationData)
+        {
+            if (result.IsSuccessful && result.Data.Status.VideoStatus.EqualsIgnoreCase("ready"))
+            {
+                var meta = new SocialMetaResult
+                {
+                    Id = result.Data.Id,
+                    NetworkId = operationData.NetworkId,
+                    OperationId = operation.Id
+                };
+                //meta.AddMediaServiceMeta(SocialNetworkTypeEnum.Facebook.Key(), operation.MediaId.ToString());
                 return ProcessSuccess(meta, result.Data.Serialize(), operation);
             }
             else
