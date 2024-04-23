@@ -24,6 +24,11 @@ namespace FeedHiveAuth.Data.Helpers
             channel.Status = StatusEnum.Expired.Value();
             Instances.Repositories.ChannelRepository.UpdateStatus(channel);
         }
+        public static void UpdateCurrentState(this Operation operation, string state)
+        {
+            operation.CurrentState = state;
+            Instances.Repositories.OperationRepository.UpdateCurrentState(operation);
+        }
 
     }
 }
