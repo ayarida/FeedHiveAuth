@@ -4,7 +4,6 @@ input {
 }
 
 input {
-    width: 510px !important;
     max-width: 100%;
     text-align: right;
     background-color: #e9ecef;
@@ -75,4 +74,13 @@ form input {
 input.form-control:focus {
     background: #e9ecef;
     border: 1px solid #ddd !important;
+}
+
+.form-group.mb-4 img {
+    max-width: 100%;
+}
+
+label.control-label {
+    font-weight: bold;
+    color: grey;
 }

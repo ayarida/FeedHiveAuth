@@ -14,13 +14,12 @@
         <table id="filter" class="table mb-0" dir="rtl">
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> الكل</lablel></th>
-                    <th>المستخدم</th>
+                    <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> المستخدم</lablel></th>
                     <th>دور</th>
                 </tr>
             </thead>
             <div class="d-flex align-items-center px-3 justify-content-between">
-                <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content; border-color: transparent">مستخدم جديد +</a>
+                <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content; border-color: transparent; ">مستخدم جديد +</a>
 
                 <div class="action-buttons">
                     <button type="button" class="delete-btn my-3" onClick="deleteSelectedUsers()" style="width: fit-content;height: fit-content;padding: 7px 20px !important;">
@@ -40,8 +39,8 @@
                         var check = User.Identity?.Name;
 
                         <tr>
-                            <td> <input type="checkbox" class="check" value="@(check == user.UserName ? "e" : user.Id)" @(check == user.UserName ? "disabled" : "")></td>
-                            <td><a href="/Users/Edit/@user.Id">@user.UserName</a></td>
+
+                            <td> <input type="checkbox" class="check" value="@(check == user.UserName ? "e" : user.Id)" @(check == user.UserName ? "disabled" : "")> <a href="/Users/Edit/@user.Id" style="color: black">@user.UserName</a></td>
                             @if (userRole.Any())
                             {
                                 var ur = userRole.First();
@@ -58,7 +57,7 @@
 
 
 
-<link rel="stylesheet" href="~/css/Users/list.css"/>
+<link rel="stylesheet" href="~/css/Users/list.css" />
 
 <script src="~/js/Users/list.js"></script>
 
