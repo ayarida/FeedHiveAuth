@@ -17,7 +17,8 @@ namespace FeedHiveAuth.Controllers
         public UserManager<IdentityUser> UserManager;
 
         protected PostRepository _postRepository = Instances.Repositories.PostRepository;
-        protected UserRepository _userRepository =  Instances.Repositories.UserRepository;
+        protected UserRepository _userRepository = Instances.Repositories.UserRepository;
+        protected MediaItemRepository _mediaRepository = Instances.Repositories.MediaItemRepository;
         //private readonly IConfiguration configuration;
 
 
@@ -45,7 +46,7 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Index()
         {
             var posts = _postRepository.GetPosts();
-            foreach(var post in posts)
+            foreach (var post in posts)
             {
                 post.PostMediaItems = _mediaRepository.GetMediasByPostId(post.Id);
             }
