@@ -45,6 +45,10 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Index()
         {
             var posts = _postRepository.GetPosts();
+            foreach(var post in posts)
+            {
+                post.PostMediaItems = _mediaRepository.GetMediasByPostId(post.Id);
+            }
             var userPostsCount = _postRepository.GetCurrentUserPosts(GetCurrentUser().Id).Count();
             UserDataViewModel uvm = new UserDataViewModel
             {
