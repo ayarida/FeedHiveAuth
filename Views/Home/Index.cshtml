@@ -173,27 +173,40 @@
 
 
     <div class="row">
-        <div class="swiper mySwiper p-4" style="background-color: white;box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
-            <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
-                <!-- Slides -->
-                @foreach (var post in posts.Take(10))
-                {
-                    <div class="swiper-slide post-list">
+        <p style="font-weight: bold ; font-size: 20px">الأرشيف</p>
+        <p style="color: #a2aebc">إختر اقتراحا أدناه و قم بجدولة عرضه مرة أخرى</p>
+        <div class="d-flex flex-row-reverse justify-content-around flex-sm-wrap">
+            @foreach (var post in posts.Take(4))
+            {
+                <div class="card p-3 justify-content-between rounded-3" style="width: 240px">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-row-reverse" style="font-size: 13px; color: #b3c1d3">
+                        <span>
+                            @post.PostDate
+                        </span>
+                        <div class="d-flex align-items-center" style="column-gap: 3px"><i class="bi bi-images"></i>@(post.PostMediaItems != null ? "1" : "0")</div>
+                    </div>
+                    <p> @post.Title</p>
+                    <p class="content" style="height: 75px !important; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">@post.Content</p>
+                    <div class="d-flex justify-content-between flex-row-reverse align-items-center">
+                        <span style="background-color: #728894; color: white; border-radius: 50%; width: 20px; font-size:13px; display: block; text-align: center">@User.Identity?.Name!.Substring(0, 1).ToUpper()</span>
 
-                        <p><span>العنوان : </span> @post.Title</p>
-                        <p><span>التاريخ : </span> @post.PostDate</p>
-                        <a href="/Posts/Edit/@post.Id">رابط الخبر</a>
+
+                        <div class="archive_menu">
+                            <i class="bi bi-three-dots-vertical"></i>
+                            <ul class="archive_operations">
+                                <li>@Html.ActionLink("تعديل", "Edit", "Posts", new { @post.Id })</li>
+                                <li><a href="/Social/Publish/Share?postid=@post.Id">المشاركة</a></li>
+                                <li><a onclick="deletePost(this.id)" id="@post.Id">حذف</a></li>
+                            </ul>
+                        </div>
 
                     </div>
-                }
 
-            </div>
+                </div>
+            }
 
-            <!-- If we need navigation buttons -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
         </div>
+
     </div>
 
 
@@ -238,3 +251,4 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="~/js/Index/index.js"></script>
