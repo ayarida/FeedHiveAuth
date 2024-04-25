@@ -62,7 +62,7 @@ namespace FeedHiveAuth.Controllers
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
             if (result.Succeeded && result.Errors.Count()==0 && getRole != null)
             {
-                var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id);
+                var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id) != null ? Instances.Repositories.RoleRepository.GetUserRole(model.Id) : getRole.Id;
                 var oldrole = (await roleManager.FindByIdAsync(oldroleid)).Name;
                 var resultdeleted = await userManager.RemoveFromRoleAsync(currentuser, oldrole);
                 var assignRole = await userManager.AddToRoleAsync(currentuser, getRole.Name);
@@ -95,7 +95,7 @@ namespace FeedHiveAuth.Controllers
             };
             var result = await userManager.CreateAsync(customUser, model.PasswordHash);
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
-            if (result.Succeeded && result.Errors == null && getRole!=null)
+            if (result.Succeeded && result.Errors.Count() == 0 )
             {
                 
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
