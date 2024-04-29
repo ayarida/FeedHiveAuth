@@ -24,19 +24,23 @@
 <div class="container pt-4" dir="rtl">
     <div class="row user">
         <div class="greeting my-4">
-            <div class="user-greet">
+            <div class="user-greet d-flex justify-content-between align-items-baseline" style="width: 100%">
                 @if (signedIn)
                 {
-                    <h2>  مساء الخير @User.Identity.Name </h2>
-                    <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
+                    <div>
+                        <h2>  مساء الخير @User.Identity.Name </h2>
+                        <p>مرحبا بك، ألقي نظرة على نشاطاتك</p>
+                    </div>
+                    <div>
+
+
+                        <a href="/Posts/Create" style="color: white; width: 255px;" class="d-flex w-100 h-100 align-items-center justify-content-center btn btn-primary p-3">
+                            أنشىْ منشورك التالي <i class="bi bi-plus-lg pe-2"></i>
+                        </a>
+
+                    </div>
                 }
             </div>
-            @*             <a href="/Posts/Create">
-            <button class="btn purple-btn">
-            أنشر المنشور الحالي
-            <i class="bi bi-plus-lg"></i>
-            </button>
-            </a> *@
         </div>
     </div>
 
@@ -90,87 +94,32 @@
             </div>
         </div>
         <!-- Card with button slider -->
-        <div class="col-lg-6">
-            <div class="card p-4">
-                <div class="card-head">
-                    <div class="card-icon">
-                        <img src="~/Static/Icons/Group35.png" />
-                    </div>
-                    <div class="card-text">
-                        <h1>————</h1>
-                        <h2>
-                            اختر نموذج تم إنشاؤه بواسطة الذكاء الاصطناعي لتبدء منه.
-                        </h2>
-                    </div>
-                </div>
 
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-body">
-                    <div class="stroke-div mb-0">
-                        <button type="button" class="btn grey-btn p-2 my-3">
-                            اللياقة والصحة
-                        </button>
-                        <p class="stroke-text">
-                            الأكل الصحي لا يجب أن يكون مملاً أو لا طعم له! في الواقع،
-                            يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
+                    <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form" dir="rtl">
+                        <p class="card-title ms-auto">
+                            <img src="~/Static/Icons/ligt-bulb.png" style="max-width: 50px !important" />
+                            <span style="font-weight: bold" class="pe-2">أنشىْ منشورك التالي</span>
                         </p>
-                    </div>
-                </div>
-                <div class="swiper2">
-                    <div class="swiper-wrapper">
-                        @foreach (var post in posts.Take(10))
-                        {
-                            <div class="swiper-slide">
-                                placeholder
-                            </div>
-                        }
-                    </div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-            </div>
-        </div>
+                        <div class="mb-3">
+                            <label for="Title">العنوان:</label>
+                            <input type="text" name="Title" id="Title" class="pe-1 quick_title" name="Title" style="border: none; border-bottom: 1px solid; outline: none; padding-right: 1px" />
+                        </div>
 
-        <div class="col-lg-6">
-            <div class="card p-4">
-                <div class="card-head">
-                    <div class="card-icon">
-                        <img src="~/Static/Icons/Group35.png" />
-                    </div>
-                    <div class="card-text">
-                        <h1>————</h1>
-                        <h2>
-                            اختر نموذج تم إنشاؤه بواسطة الذكاء الاصطناعي لتبدء منه.
-                        </h2>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div class="stroke-div mb-0">
-                        <button type="button" class="btn grey-btn p-2 my-3">
-                            اللياقة والصحة
-                        </button>
-                        <p class="stroke-text">
-                            الأكل الصحي لا يجب أن يكون مملاً أو لا طعم له! في الواقع،
-                            يمكن أن تكون لذيذة ومرضية. من خلال إجراء تغييرات صغيرة في
-                        </p>
-                    </div>
-                </div>
-                <div class="swiper2">
-                    <div class="swiper-wrapper">
-                        @foreach (var post in posts.Take(10))
-                        {
-                            <div class="swiper-slide">
-                                placeholder
-                            </div>
-                        }
-                    </div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
+                        <textarea type="text" class="w-100 pt-3" style="height: 200px; border-style: dashed; border-color: #c7d2de; outline: none" for="Content" id="Content"></textarea>
+                        <input type="hidden" name="ShortTitle" for="ShortTitle" />
+                        <input type="hidden" name="Summary" for="Summary" />
+                        @*  <input type="datetime-local" name="PostDate" id="PostDate" class="hiddenDate" / >*@
+                        <input type="submit" value="أنشئ المحتوى +" class="submit-button btn-primary p-3 mt-3 quick_submit" style="border-radius: 7px; width: 200px" />
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div class="row">
         <p style="font-weight: bold ; font-size: 20px">الأرشيف</p>
@@ -215,40 +164,9 @@
     @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data)
 </div>
 
-<style>
-    a {
-        text-decoration: none;
-    }
 
-    .swiper-slide {
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        padding: 15px;
-    }
-
-    .post-list span {
-        font-weight: bold;
-    }
-
-    .post-list a {
-        font-weight: bold;
-    }
-
-    .swiper2 {
-        position: relative;
-        overflow: hidden;
-        text-align: center;
-    }
-
-
-    @@media(max-width: 480px) {
-        .swiper-slide {
-            padding: 25px;
-        }
-    }
-
-</style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+<link rel="stylesheet" href="~/css/Index/index.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="~/js/Index/index.js"></script>
