@@ -48,7 +48,8 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                         Text = data.Text,
                         Title = data.Title,
                         Link = data.Link,
-                        HTMLSource = data.HTMLSource
+                        HTMLSource = data.HTMLSource,
+                        ScheduleTime = data.ScheduleTime,
                     };
                     break;
                 case SocialNetworkTypeEnum.Telegram:
