@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ResourceModel>
+
+@foreach (var resource in Model)
+{
+    <tr>
+        <td><a href="@Url.Action("Edit", "Resources", new { id = resource.Id })">@resource.Key</a></td>
+        <td>@resource.Value</td>
+        <td>@resource.Language</td>
+        @* <td>
+            <div class="action-buttons">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@resource.Id">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button data-toggle="dropdown" class="btn btn-new dropdown-toggle" aria-expanded="false">
+                        <span class="ace-icon fa fa-ellipsis-h icon-only"></span>
+                    </button>
+                    
+                </div>
+            </div>
+        </td> *@
+    </tr>
+}

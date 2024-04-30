@@ -1,5 +1,6 @@
 ﻿@inject RoleManager<IdentityRole> Rolemanager
 @inject UserManager<IdentityUser> UserManager
+@using FeedHiveAuth.Data.Helpers;
 @model User
 @{
     var availableRoles = Rolemanager.Roles.ToList();
@@ -16,7 +17,8 @@
         <form asp-controller="Users" asp-action="SaveUser" method="POST" dir="rtl">
             <!-- Add your form fields -->
             <div class="form-group mb-4">
-                <label for="Username">إسم المستخدم</label>
+                @* <label for="Username">إسم المستخدم</label> *@
+                @AppResources.Label("Username","ar")
                 <input class="form-control" name="Username" id="Username" asp-for="@Model.Username" />
                 
                 @* <span asp-validation-for="Username"></span> *@

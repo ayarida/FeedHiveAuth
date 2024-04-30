@@ -22,6 +22,7 @@ namespace FeedHiveAuth.Data
             public RoleRepository RoleRepository { get; set; }
             public UserRepository UserRepository { get; set;}
             public OperationRepository OperationRepository { get; set; }
+            public ResourcesRepository ResourcesRepository { get; set; }
             public void Fill()
             {
                 SubscriptionRepository = new SubscriptionRepository();
@@ -31,6 +32,7 @@ namespace FeedHiveAuth.Data
                 RoleRepository = new RoleRepository();
                 UserRepository = new UserRepository();
                 OperationRepository = new OperationRepository();
+                ResourcesRepository = new ResourcesRepository();
             }
         }
         

@@ -81,7 +81,7 @@ namespace FeedHiveAuth.Controllers
             {
                 var oldChannel = Collections.Channels().FirstOrDefault(c =>
                     c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
-                EventResult result;
+                //var result;
                 if (oldChannel == null)
                 {
                     var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);

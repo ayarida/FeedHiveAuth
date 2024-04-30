@@ -35,6 +35,7 @@ namespace FeedHiveAuth.Controllers
         public ActionResult Create()
         {
             return View();
+        
         }
 
         [PermissionFilter("Posts_List")]

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ResourceModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+<div class="page-content">
+    <div class="page-header" data-url="/Resources">
+        <a class="btn btn-sm btn-primary update-link" asp-action="Create">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <h1>
+            Resources
+        </h1>
+    </div>
+   
+    <div class="row">
+        <div class="col-12">
+            <form action="@Url.Action("Index", "Resources")" method="Post">
+                <div class="data-table" data-moreurl="@Url.Action("Index", "Resources")">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Translation</th>
+                                <th>Language</th>
+                                <th></th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            @await Html.PartialAsync("_resourcesRows", Model)
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

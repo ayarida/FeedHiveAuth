@@ -16,6 +16,7 @@
             public static string UserTokens = "AspNetUserTokens";
             public static string UserRoles = "AspNetUserRoles";
             public static string UserLogins = "AspNetUserLogins";
+            public static string Resources = "Resources";
         }
         public static class Columns
         {
@@ -31,7 +32,7 @@
             public static string Post = "Id,Title,ShortTitle,Summary,Content,PublicLink,PostDate,CreatedBy,ModifiedBy,Status";
             public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy,Extension,Type";
             public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs";
-
+            public static string Resources = "Id,Key,Value,Language";
         }
         public static class ExcludedColumns
         {
