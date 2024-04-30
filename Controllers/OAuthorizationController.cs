@@ -1,12 +1,10 @@
-﻿using FeedHiveAuth.Areas.Social.Controllers;
-using FeedHiveAuth.Areas.Social.Models;
+﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -36,7 +34,7 @@ namespace FeedHiveAuth.Controllers
             baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 #endif
                 var channels = FacebookService.GetChannelsInfo(baseCallBackUrl, code,
-                                state,out string msg);
+                                state, out string msg);
 
                 if (channels.Empty())
                 {
@@ -47,11 +45,11 @@ namespace FeedHiveAuth.Controllers
                 var reauthorize = false;
                 return SaveChannels(channels, subscription, reauthorize, SocialNetworkTypeEnum.Facebook);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine("Couldn't authorize the selected Facebook account: " + ex.FullMessage());
                 //return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
-                return null; 
+                return null;
             }
         }
         private IActionResult SaveChannels(IEnumerable<Channel> channels, string subscriptionId, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
@@ -103,9 +101,9 @@ namespace FeedHiveAuth.Controllers
                     }
 
                     Instances.Repositories.ChannelRepository.Update(oldChannel);
-                   /* result = oldChannel.Update(oldChannel.OriginalName,
-                        _adminWorkContext.getRequestData(Url.Action("Preview", "Channel",
-                            new { area = "Social", id = oldChannel.Id })));*/
+                    /* result = oldChannel.Update(oldChannel.OriginalName,
+                         _adminWorkContext.getRequestData(Url.Action("Preview", "Channel",
+                             new { area = "Social", id = oldChannel.Id })));*/
 
                     channel.Id = oldChannel.Id;
                 }

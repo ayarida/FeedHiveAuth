@@ -1,4 +1,8 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.Common;
+using FeedHiveAuth.Models.Enums;
 
 namespace FeedHiveAuth.Data.Helpers
 {
@@ -14,5 +18,17 @@ namespace FeedHiveAuth.Data.Helpers
             var configs = SocialConfigs.Construct();
             return configs;
         }
+
+        public static void SetChannelExpired(this Channel channel)
+        {
+            channel.Status = StatusEnum.Expired.Value();
+            Instances.Repositories.ChannelRepository.UpdateStatus(channel);
+        }
+        public static void UpdateCurrentState(this Operation operation, string state)
+        {
+            operation.CurrentState = state;
+            Instances.Repositories.OperationRepository.UpdateCurrentState(operation);
+        }
+
     }
 }

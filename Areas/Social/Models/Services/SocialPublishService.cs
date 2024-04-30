@@ -1,4 +1,5 @@
 ﻿using FeedHiveAuth.Areas.Social.SocialDailymotion.Models;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Mdels;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
@@ -41,15 +42,16 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
             var sendData = new SendOperationData();
             switch (type)
             {
-                /*case SocialNetworkTypeEnum.Facebook:
+                case SocialNetworkTypeEnum.Facebook:
                     sendData = new FacebookOperationData
                     {
                         Text = data.Text,
                         Title = data.Title,
                         Link = data.Link,
-                        HTMLSource = data.HTMLSource
+                        HTMLSource = data.HTMLSource,
+                        ScheduleTime = data.ScheduleTime,
                     };
-                    break;*/
+                    break;
                 case SocialNetworkTypeEnum.Telegram:
                     sendData = new TelegramOperationData
                     {

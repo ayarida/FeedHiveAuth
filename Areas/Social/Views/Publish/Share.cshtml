@@ -19,7 +19,7 @@
 }
 
 
-<div class="editor ms-auto pe-3" dir="rtl" style="max-width: 100%; width: 600px; background-color: white;">
+<div class="editor ms-auto pe-3 card" dir="rtl" style="max-width: 100%; background-color: white;">
     <div class="container pt-4 mt-4">
         <div class="form-items">
 
@@ -61,38 +61,39 @@
                 <div class="input-fields d-flex flex-column mt-4">
 
                     <div class="form-group mb-4">
-                        <label class="mb-2 control-label">عنوان المنشور</label>
+                        <label class="mb-3 control-label">عنوان المنشور</label>
                         <br />
                         <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" />
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="mb-2 control-label">عنوان قصير</label>
+                        <label class="mb-3 control-label">عنوان قصير</label>
                         <br />
                         <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="mb-2 control-label">ملخص</label>
+                        <label class="mb-3 control-label">ملخص</label>
                         <br />
                         <input value="@post.Summary" name="Summary" readonly class="form-control" />
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="mb-2 control-label">محتوى</label>
+                        <label class="mb-3 control-label">محتوى</label>
                         <br />
                         <input value="@post.Content" name="Content" readonly class="form-control" />
                     </div>
 
+                    <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
 
-                    <div class="form-group mb-4">
+                    <div class="form-group mb-4 d-flex flex-column">
                         @if (media != null)
                         {
-                            <label for="MediaId" class="mb-2 control-label">ميديا </label>
+                            <label for="MediaId" class="mb-3 control-label">ميديا </label>
+                            <br />
                             <img src="@media.Path" />
                             <br />
                             <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
-                            <input type="text" name="MediaId" value="@media.Id" class="form-control">
                         }
                     </div>
                 </div>

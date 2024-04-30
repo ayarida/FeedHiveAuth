@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data.Extensions;
+﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +24,19 @@ namespace FeedHiveAuth.Data.Repositories
             //convert objects to mediaItem objects 
             //save mediaItem objects in Db with post.Id foreign key
             List<MediaItem> medias = new List<MediaItem>();
+            var baseUrl = "";
             foreach (var file in files)
             {
                 MediaItem mediaItem = new MediaItem();
                 mediaItem.ThumbnailUrl = file.FileName;
                 mediaItem.Caption = file.FileName;
-                mediaItem.Path = "/uploads/" + file.FileName;
+#if DEBUG
+
+                baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+#else
+                baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+#endif                
+                mediaItem.Path = baseUrl + "uploads/" + file.FileName;
                 mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
                 medias.Add(mediaItem);
                 

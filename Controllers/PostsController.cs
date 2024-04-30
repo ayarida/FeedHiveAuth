@@ -1,11 +1,9 @@
-﻿using FeedHiveAuth.Areas.Social.Models.Services;
-using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 using System.Text;
@@ -21,15 +19,15 @@ namespace FeedHiveAuth.Controllers
         private readonly ILogger<PostsController> _logger;
 
         private readonly UserManager<IdentityUser> userManager;
-   
+
         public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger)
         {
             this.userManager = userManager;
-            
+
             _logger = logger;
         }
-        
-        
+
+
         [HttpGet]
         [PermissionFilter("Posts_Create")]
         public ActionResult Create()
@@ -40,7 +38,7 @@ namespace FeedHiveAuth.Controllers
 
         [PermissionFilter("Posts_List")]
         [HttpGet]
-        public async Task<ActionResult> List() 
+        public async Task<ActionResult> List()
         {
             var user = await userManager.GetUserAsync(User);
             var isAdminTask = userManager.IsInRoleAsync(user, "Admin");
@@ -105,6 +103,38 @@ namespace FeedHiveAuth.Controllers
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
             return View("~/Views/Posts/Create.cshtml");
         }
+        public ActionResult CreateQuickPost()
+        {
+
+            Post post = new Post
+            {
+                Title = HttpContext.Request.Form["Title"],
+                ShortTitle = HttpContext.Request.Form["ShortTitle"],
+                Summary = HttpContext.Request.Form["Summary"],
+                Content = HttpContext.Request.Form["Content"],
+                PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
+                PostDate = DateTime.Now
+            };
+            var currentUser = GetCurrentUser();
+            if (currentUser != null)
+            {
+                post.ModifiedBy = post.CreatedBy = currentUser.Id;
+            }
+            _postService.Save(post);
+            if (HttpContext.Request.Form.Files.Any())
+            {
+                var oneFile = HttpContext.Request.Form.Files[0];
+                var message = UploadMedia(oneFile);
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
+
+                //SavePostMedias(post);
+                var result = SaveMedia(postMedias, post.Id);
+                //UploadMedia(post.PostMediaItems.FirstOrDefault());
+            }
+            post.PostDate = DateTime.Now;
+            return RedirectToAction("Edit", "Posts", post.Id, "");
+        }
+
 
         public int SaveMedia(List<MediaItem> mediaItems, string postId)
         {
@@ -223,12 +253,13 @@ namespace FeedHiveAuth.Controllers
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
             var postOps = _postService.GetPostOperations(post.Id);
-            if (postMedia != null) {
+            if (postMedia != null)
+            {
                 _mediaItemService.Delete(postMedia.Id);
             }
             if (postOps != null)
             {
-                foreach(var op in postOps)
+                foreach (var op in postOps)
                 {
                     _operationService.Delete(op.Id);
                 }
@@ -236,8 +267,9 @@ namespace FeedHiveAuth.Controllers
             try
             {
                 _postService.Delete(post.Id);
-            }catch(Exception ex)
-             {
+            }
+            catch (Exception ex)
+            {
                 _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
                 return BadRequest(ex.Message);
             }
@@ -330,7 +362,7 @@ namespace FeedHiveAuth.Controllers
         {
             var post = _postService.GetPostById(id);
             var postMedia = _mediaItemService.GetMediasByPostId(id);
-            post.PostMediaItems = postMedia;
+            if (postMedia != null) { post.PostMediaItems = postMedia; };
             return View(post);
         }
 

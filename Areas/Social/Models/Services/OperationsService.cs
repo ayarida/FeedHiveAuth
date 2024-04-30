@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Social.Models.Helpers;
 using FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
@@ -70,6 +71,13 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                         {
                             OperationHelper.EndShareOperation(operation, result.Result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Result.Message, result.Result.Result);
                         });
+                    });
+                    break;
+                case SocialNetworkTypeEnum.Facebook:
+                    Task.Run(() =>
+                    {
+                        var result = FacebookService.Send(operation, channel);
+                        OperationHelper.EndShareOperation(operation,result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Message, result.Result); ;
                     });
                     break;
                 default:

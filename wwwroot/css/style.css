@@ -501,3 +501,29 @@ input.submit-button {
     margin: auto;
     height: 60px;
 }
+
+.archive_menu {
+    position: relative;
+}
+
+.archive_operations {
+    position: absolute;
+    display: none;
+    bottom: 0;
+    background-color: #f6f9fc;
+    list-style: none;
+    padding: 13px 17px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+      a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+      }
+}
+
+.archive_menu:hover .archive_operations {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
