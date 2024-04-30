@@ -35,11 +35,12 @@ namespace FeedHiveAuth.Controllers
             {
                 post.PostMediaItems = _mediaRepository.GetMediasByPostId(post.Id);
             }
-            var userPostsCount = _postRepository.GetCurrentUserPosts(GetCurrentUser().Id).Count();
+            var userPosts = _postRepository.GetCurrentUserPosts(GetCurrentUser().Id);
             UserDataViewModel uvm = new UserDataViewModel
             {
                 allPosts = posts,
-                userPostsCount = userPostsCount
+                userPostsCount = userPosts.Count(),
+                userPosts = userPosts
             };
             return View(uvm);
         }
