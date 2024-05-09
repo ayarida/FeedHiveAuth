@@ -1,4 +1,5 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Feed;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Photo;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Shared;
 using RestSharp;
@@ -12,7 +13,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
 
         }
 
-        public IRestResponse<PhotoResponse> Publish(string caption, string url, bool published = true, long? scheduledPublishTime = null)
+        public IRestResponse<PhotoResponse> Publish(string caption, string url, bool published = true, long? scheduledPublishTime = null, string? pageId=null)
         {
             var parms = new Dictionary<string, object> {
                 { "caption", caption },
@@ -20,9 +21,11 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
                 { "published", published }
             };
 
-            if (!published && scheduledPublishTime.HasValue)
+            if (!published && scheduledPublishTime!=null)
             {
                 parms.Add("scheduled_publish_time", scheduledPublishTime);
+                string endpoint = $"/{pageId}/photos";
+                return Post<PhotoResponse>(endpoint, parms);
             }
 
             return Post<PhotoResponse>("/me/photos", parms);

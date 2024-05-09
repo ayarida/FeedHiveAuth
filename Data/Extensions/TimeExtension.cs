@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Xml;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
@@ -102,8 +103,14 @@ namespace Mangox.Data.Extensions
         }
         public static long ToUnixTimespans(this DateTime date)
         {
-            long unixTimestamp = date.Ticks - new DateTime(1970, 1, 1).Ticks;
+            /*long unixTimestamp = date.Ticks - new DateTime(1970, 1, 1).Ticks;
             unixTimestamp /= TimeSpan.TicksPerSecond;
+            return unixTimestamp;*/
+            DateTime utcDate = date.ToUniversalTime();
+
+            // Calculate Unix timestamp
+            long unixTimestamp = (long)(utcDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+
             return unixTimestamp;
         }
         public static string ToStructuredDataDate(this DateTime date)
@@ -137,6 +144,17 @@ namespace Mangox.Data.Extensions
         public static string ToIso8601Duration(this TimeSpan timeSpan)
         {
             return XmlConvert.ToString(timeSpan);
+        }
+        public static string ToIso8601DateTime(DateTime dateTime)
+        {
+            TimeZoneInfo timezone = TimeZoneInfo.FindSystemTimeZoneById("Middle East Standard Time");
+
+            // Convert the DateTime to the specified timezone
+            DateTime localTime = TimeZoneInfo.ConvertTime(dateTime, timezone);
+            // Format the UTC time to ISO 8601 format
+            return localTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+            //return dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
     }
 }
