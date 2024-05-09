@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Feed;
+using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Photo;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Shared;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Video;
 using RestSharp;
@@ -54,7 +55,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             return Post<BasicResult>("/me/videos", parms, true);
         }
 
-        public IRestResponse<FeedResponse> Publish(string title, string description, string url, bool published = true, long? scheduledPublishTime = null)
+        public IRestResponse<FeedResponse> Publish(string title, string description, string url, bool published = true, string? scheduledPublishTime = null, string? pageId=null)
         {
             var parms = new Dictionary<string, object> {
                 { "title", title ?? "" },
@@ -63,9 +64,11 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
                 { "published", published }
             };
 
-            if (!published && scheduledPublishTime.HasValue)
+            if (!published && scheduledPublishTime!=null)
             {
                 parms.Add("scheduled_publish_time", scheduledPublishTime);
+                string endpoint = $"/{pageId}/videos";
+                return Post<FeedResponse>(endpoint, parms);
             }
 
             return Post<FeedResponse>("/me/videos", parms);

@@ -12,7 +12,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
 
 
         }
-        public IRestResponse<FeedResponse> Publish(string message, string link, bool published = true, long? scheduledPublishTime = null)
+        public IRestResponse<FeedResponse> Publish(string message, string link, bool published = true, string scheduledPublishTime = null, string? pageId=null)
         {
             var parms = new Dictionary<string, object> {
                 { "message", message },
@@ -20,9 +20,11 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
                 { "published", published }
             };
 
-            if (!published && scheduledPublishTime.HasValue)
+            if (!published && scheduledPublishTime!=null)
             {
                 parms.Add("scheduled_publish_time", scheduledPublishTime);
+                string endpoint = $"/{pageId}/feed";
+                return Post<FeedResponse>(endpoint, parms);
             }
 
             return Post<FeedResponse>("/me/feed", parms);
