@@ -3,7 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
 
 
@@ -16,20 +16,20 @@
             Resources
         </h1>
     </div>
-   
+
     <div class="row">
-        <div class="col-12">
+        <div class="card p-0">
             <form action="@Url.Action("Index", "Resources")" method="Post">
                 <div class="data-table" data-moreurl="@Url.Action("Index", "Resources")">
-                    <table class="table">
+                    <table class="table table-sm table-bordered table-bordered mb-0">
                         <thead>
                             <tr>
-                                <th>@AppResources.Label("key","ar")</th>
+                                <th>@AppResources.Label("key", "ar")</th>
                                 <th>@AppResources.Label("Translation", "ar")</th>
                                 <th>@AppResources.Label("Language", "ar")</th>
-                                <th></th>
+                                @* <th></th> *@
                             </tr>
-                            
+
                         </thead>
                         <tbody>
                             @await Html.PartialAsync("_resourcesRows", Model)
@@ -40,3 +40,5 @@
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="~/css/Resources/Resources.css" />

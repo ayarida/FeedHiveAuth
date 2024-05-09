@@ -12,43 +12,43 @@
 </div>
 <hr />
 
-<div class="container pt-4 mt-4 editor">
-    <div class="card px-4 py-5">
+<div class="pt-4 mt-4 editor">
+    <div class="card px-4 py-5 col-md-6">
+        <div class="create-post">
+            <div class="card-head my-2">
+                <form asp-controller="Resources" asp-action="Save" senctype="multipart/form-data" method="post" style="max-width: 100%; width: 100%">
+                    @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+                    <div class="form-group mb-4">
+                        <label asp-for="Key" class="control-label">Key</label>
+                        <input asp-for="Key" class="form-control req" />
+                        @* <span asp-validation-for="Key" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group mb-4">
+                        <label asp-for="Value" class="control-label">Value</label>
+                        <input asp-for="Value" class="form-control" />
+                        @* <span asp-validation-for="Value" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group mb-4 mt-5">
+                        <label asp-for="Language" class="control-label">Language</label>
+                        <br />
+                        @* <input asp-for="Language" class="form-control" /> *@
+                        @* <span asp-validation-for="Language" class="text-danger"></span> *@
+                        <select asp-for="Language" class="classic">
+                            <option value="ar">Ar</option>
+                            <option value="en">En</option>
+                        </select>
 
-        <div class="row">
-            <div class="create-post">
-                <div class="card-head my-2">
+                    </div>
 
-                    <form asp-controller="Resources" asp-action="Save" senctype="multipart/form-data" method="post" style="max-width: 100%; width: 100%">
-                        @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
-                        <div class="form-group mb-4">
-                            <label asp-for="Key" class="control-label">Key</label>
-                            <input asp-for="Key" class="form-control req" />
-                            @* <span asp-validation-for="Key" class="text-danger"></span> *@
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="Value" class="control-label">Value</label>
-                            <input asp-for="Value" class="form-control" />
-                            @* <span asp-validation-for="Value" class="text-danger"></span> *@
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="Language" class="control-label">Language</label>
-                            <input asp-for="Language" class="form-control" />
-                            @* <span asp-validation-for="Language" class="text-danger"></span> *@
-                        </div>
- 
-                        <input type="hidden" asp-for="Id" class="form-control" value="@Model?.Id" />
+                    <input type="hidden" asp-for="Id" class="form-control" value="@Model?.Id" />
 
-                        <div class="form-group mb-4 d-flex justify-content-center">
-                            <div class="btn btn-primary my-4 submit-div">
-                                <input type="submit" value="حفظ" class="update" />
-                                <i class="bi bi-floppy"></i>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="form-group mb-4 d-flex justify-content-center update-container">
 
+                        <input type="submit" value="حفظ" class="update btn btn-primary my-4 submit-div" style="border: white; border-radius: 5px"/>
+                        @*  <i class="bi bi-floppy"></i> *@
 
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -57,3 +57,5 @@
 
 
 <link rel="stylesheet" href="~/css/Posts/edit.css" />
+
+<link rel="stylesheet" href="~/css/Resources/Edit.css" />
