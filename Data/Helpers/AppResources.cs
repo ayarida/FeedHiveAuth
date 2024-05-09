@@ -10,6 +10,7 @@ namespace FeedHiveAuth.Data.Helpers
             private static Dictionary<string, string> Entries = new Dictionary<string, string>();
             public static string Label(string key, string lang = null)
             {
+            if(lang == null) lang = "ar";
                 return GetByKey(key, lang);
             }
             public static string GetByKey(string key, string lang = null, string defaultt = null)

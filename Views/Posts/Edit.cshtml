@@ -1,4 +1,5 @@
-﻿@model FeedHiveAuth.Models.Post
+﻿@using FeedHiveAuth.Data.Helpers
+@model FeedHiveAuth.Models.Post
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -9,7 +10,7 @@
 }
 
 <div dir="rtl">
-    <h2>تعديل محتوى:</h2>
+    <h2>@AppResources.Label("UpdateContent"):</h2>
     <h3> @Model?.Title </h3>
 </div>
 <hr />
@@ -24,27 +25,27 @@
                     <form asp-controller="Posts" asp-action="Update" senctype="multipart/form-data" method="post" style="max-width: 100%; width: 100%">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group mb-4">
-                            <label asp-for="Title" class="control-label">عنوان</label>
+                            <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
                             <input asp-for="Title" class="form-control req" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="ShortTitle" class="control-label">عنوان قصير</label>
+                            <label asp-for="ShortTitle" class="control-label">@AppResources.Label("ShortTitle")</label>
                             <input asp-for="ShortTitle" class="form-control" />
                             <span asp-validation-for="ShortTitle" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="Summary" class="control-label">ملخص</label>
+                            <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
                             <input asp-for="Summary" class="form-control" />
                             <span asp-validation-for="Summary" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="Content" class="control-label">محتوى</label>
+                            <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
                             <textarea asp-for="Content" class="form-control"></textarea>
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
+                            <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
                             <input asp-for="PostDate" class="form-control req" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
@@ -54,7 +55,7 @@
 
                         <div class="form-group mb-4 d-flex justify-content-center">
                             <div class="btn btn-primary my-4 submit-div">
-                                <input type="submit" value="تحديث" class="update submit-button" />
+                                <input type="submit" value="@AppResources.Label("Update")" class="update submit-button" />
                                 <i class="bi bi-floppy"></i>
                             </div>
                         </div>

@@ -38,12 +38,12 @@
     <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/Lib/axios.js"></script>
-
+   
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 </head>
 <body>
-
+@using FeedHiveAuth.Data.Helpers
     <div class="container">
         <header>
 
@@ -60,13 +60,13 @@
                         <a href="/Home/Index"
                            class="list-group-item list-group-item-action py-2"
                            aria-current="true">
-                            <i class="bi bi-house-fill"></i><span>الصفحة الرئيسية</span>
+                            <i class="bi bi-house-fill"></i><span>@AppResources.Label("Homepage")</span>
                         </a>
 
                         <a href="/Posts/Create"
                            class="list-group-item list-group-item-action py-2"
                            aria-current="true">
-                            <i class="bi bi-pencil-square"></i><span>إنشاء المحتوى</span>
+                            <i class="bi bi-pencil-square"></i><span>@AppResources.Label("CreatePost")</span>
                         </a>
                         @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
                         <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
@@ -77,40 +77,42 @@
                         </a>
                         <a href="/Social/Channels/Create"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-building-gear"></i><span>التواصل الاجتماعي</span>
+                            <i class="bi bi-building-gear"></i><span>@AppResources.Label("SocialMedia")</span>
                         </a>
                         <a href="/MediaItem/List"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-collection-fill"></i><span>الميديا</span>
+                            <i class="bi bi-collection-fill"></i><span>@AppResources.Label("Media")</span>
                         </a>
                         <a href="/Users/List"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-microsoft-teams"></i><span>الفريق</span>
+                            <i class="bi bi-microsoft-teams"></i><span>@AppResources.Label("Team")</span>
                         </a>
 
                         <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-tv"></i><span>القنوات</span>
+                            <i class="bi bi-tv"></i><span>@AppResources.Label("Channels")</span>
                         </a>
 
                         <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-briefcase-fill"></i><span>الأدوار</span>
+                            <i class="bi bi-briefcase-fill"></i><span>@AppResources.Label("Roles")</span>
                         </a>
                     </div>
                    
                     <div class="list-group list-group-flush mx-3 bottom-list">
-                        <a href="/Resources/Index"
+                        <partial name="_AdminControl" />
+                        @* <a href="/Resources/Index"
                            class="list-group-item list-group-item-action py-2 "
                            aria-current="true">
                             <i class="bi bi-gear"></i><span>Resources</span>
                         </a>
+                        
                         <a href="/Configs/TechnicalConfigs"
                            class="list-group-item list-group-item-action py-2 "
                            aria-current="true">
                             <i class="bi bi-gear"></i><span>الاعدادات</span>
-                        </a>
+                        </a> *@
                         <a href="/Identity/Account/Manage"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-person-circle"></i><span>الحساب</span>
+                            <i class="bi bi-person-circle"></i><span>@AppResources.Label("Account")</span>
                         </a>
                     </div>
                 </div>
@@ -131,9 +133,11 @@
                         <i class="bi bi-list"></i>
                     </button>
                     <partial name="_LoginPartial" />
+                    
                 </div>
             </nav>
-
+            <partial name="_Search" />
+            
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FeedHiveAuth</a>
             @*   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">

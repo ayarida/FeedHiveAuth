@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<FeedHiveAuth.Models.MediaItem>
+@using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Data;
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
@@ -13,11 +14,11 @@
 <div class="card">
 
     <div class="card-header" style="background: #F6F9FC !important">
-        <h3>قائمة الميديا</h3>
+        <h3>@AppResources.Label("MediaList","ar")</h3>
     </div>
     <p class="mt-4 mb-4 pe-3">
         <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
-padding: 6px;">إضافة ميديا +</a>
+padding: 6px;">@AppResources.Label("AddMedia","ar") +</a>
     </p>
     <div class="d-flex flex-row flex-wrap media-list p-3">
 
@@ -38,7 +39,7 @@ padding: 6px;">إضافة ميديا +</a>
                     </div>
                     <div class="delete d-flex p-3">
                         <button onclick="deleteMedia(this.id)" id="@item.Id">
-                            حذف
+                            @AppResources.Label("Delete","ar")
                             <i class="bi bi-trash3-fill"></i>
                         </button>
 
@@ -60,14 +61,14 @@ padding: 6px;">إضافة ميديا +</a>
             customClass: {
                 confirmButton: "btn btn-success",
             },
-            title: "هل أنت متأكد من رغبتك في حذف الوسائط؟ ",
-            text: "لا يمكن التراجع عن هذا الإجراء",
+            title: @AppResources.Label("SureDeleteMedia"),
+            text: @AppResources.Label("CannotUndo"),
             icon: "warning",
             buttons: true,
             dangerMode: true,
             // buttons: ["كلّا", "نعم"],
-            confirmButtonText: "نعم",
-            cancelButtonText: "لا",
+            confirmButtonText: @AppResources.Label("Yes"),
+            cancelButtonText: @AppResources.Label("No"),
             showCancelButton: true,
             showConfirmButton: true,
             className: {
@@ -85,8 +86,8 @@ padding: 6px;">إضافة ميديا +</a>
                         data: mediaId,
                         success: function (data) {
                             swal.fire({
-                                title: "تم الحذف",
-                                text: "تم حذف الميديا",
+                                title: @AppResources.Label("DeletedSuccesfully"),
+                                text: @AppResources.Label("MediaDeleted"),
                                 icon: "success"
                             }).then(function () {
                                 window.location.reload();
@@ -94,14 +95,14 @@ padding: 6px;">إضافة ميديا +</a>
                             )
                         },
                         error: function (data) {
-                            swal.fire("خطأ في الحذف!", "الرجاء المحاولة مرة أخرى", "error");
+                            swal.fire(@AppResources.Label("DeleteError"), @AppResources.Label("PlzTryagain"), "error");
                         },
                     })
 
                 } else {
                     swal.fire({
-                        title: "تم إلغاء محاولة الحذف",
-                        confirmButtonText: "موافق"
+                        title: @AppResources.Label("DeleteCanceled"),
+                        confirmButtonText: @AppResources.Label("Confirm")
                     });
                 }
             });

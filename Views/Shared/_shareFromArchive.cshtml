@@ -1,6 +1,7 @@
 ﻿@model UserDataViewModel
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
+@using FeedHiveAuth.Data.Helpers
 @using FeedHiveAuth.Models.ViewModels;
 @{
     var EmptyList = new List<Post>();
@@ -43,7 +44,7 @@
     else
     {
         <div class="col-lg-12">
-            No Previous Posts!
+            @AppResources.Label("NoPreviousPosts")!
         </div>
     }
 </div>

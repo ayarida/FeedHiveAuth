@@ -20,16 +20,31 @@ namespace FeedHiveAuth.Controllers
         {
             return View("Edit");
         }
+        public ActionResult Edit(Guid id)
+        {
+            var resource = _resourcesService.GetById(id.ToString());
+            return View("Edit",resource);
+        }
         public ActionResult Save(ResourceModel resourceForm)
         {
             var resource = new Models.Resources();
-            resource.Value = resourceForm.Value;
-            resource.Language = resourceForm.Language;
-            resource.SubscriptionId = null;
-            resource.Key = resourceForm.Key;
-            resource.Status = StatusEnum.Active.Value();
-            _resourcesService.SaveResource(resource);
-            return RedirectToAction ("index");
+                resource.Value = resourceForm.Value;
+                resource.Language = resourceForm.Language;
+                resource.SubscriptionId = null;
+                resource.Key = resourceForm.Key;
+                resource.Status = StatusEnum.Active.Value();
+            if(resourceForm.Id==Guid.Empty)
+            {
+                
+                _resourcesService.SaveResource(resource);
+                
+            }
+            else
+            {
+                resource.Id = resourceForm.Id.ToString();
+                _resourcesService.UpdateResource(resource);
+            }
+              return RedirectToAction("index");
         }
     }
 }

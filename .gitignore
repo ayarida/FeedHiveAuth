@@ -368,3 +368,4 @@ wwwroot/uploads
 /.idea/.idea.FeedHiveAuth/.idea/dictionaries
 /.idea/.idea.FeedHiveAuth/.idea
 /FeedHiveAuth.csproj
+/Views/Shared/_Search.cshtml

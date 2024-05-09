@@ -1,4 +1,5 @@
-﻿@model RoleEdit
+﻿@using FeedHiveAuth.Data.Helpers
+@model RoleEdit
 @{
     ViewData["Title"] = "UPDATE ROLE";
 }
@@ -17,8 +18,8 @@
 
             <thead>
             <tr>
-                <th scope="col">إضافة</th>
-                <th scope="col">المستخدم</th>
+                <th scope="col">@AppResources.Label("AddUser")</th>
+                <th scope="col">@AppResources.Label("User")</th>
             </tr>
             </thead>
 
@@ -26,7 +27,7 @@
             @if (Model.NonMembers.Count() == 0)
             {
                 <tr>
-                    <td colspan="2">All Users Are Members</td>
+                    <td colspan="2">@AppResources.Label("AllUsersMember")</td>
                 </tr>
             }
             else
@@ -80,7 +81,7 @@
     @*     } *@
     @* </table> *@
     <div>
-        <button type="submit" class="btn btn-primary save mt-3" style="width: 200px">حفظ</button>
+        <button type="submit" class="btn btn-primary save mt-3" style="width: 200px">@AppResources.Label("Save")</button>
     </div>
 </form>
 

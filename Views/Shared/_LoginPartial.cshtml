@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@using FeedHiveAuth.Data.Helpers
 
 
 @* <ul class="navbar-nav d-flex flex-row nav-left  mr-auto d-md-flex ">
@@ -29,10 +29,10 @@
     @if (SignInManager.IsSignedIn(User))
     {
 
-        <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a>
+        <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">@AppResources.Label("Hello") @User.Identity?.Name !</a>
 
         <form class="form-inline me-auto order-3" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link log-out" style="height: auto">تسجيل خروج</button>
+            <button type="submit" class="nav-link btn btn-link log-out" style="height: auto">@AppResources.Label("Logout")</button>
         </form>
 
 
@@ -59,9 +59,9 @@
     }
     else
     {
-        <div class="register"><a class="nav-link text-dark register" asp-area="Identity" asp-page="/Account/Register">Register</a></div>
+        <div class="register"><a class="nav-link text-dark register" asp-area="Identity" asp-page="/Account/Register">@AppResources.Label("Register")</a></div>
         <div class="login">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">@AppResources.Label("Login")</a>
         </div>
     }
 </ul>

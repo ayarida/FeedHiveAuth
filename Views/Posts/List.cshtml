@@ -1,5 +1,7 @@
-﻿@model List<FeedHiveAuth.Models.Post>
+﻿
+@model List<FeedHiveAuth.Models.Post>
 @using FeedHiveAuth.Data;
+@using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
 @{
@@ -27,24 +29,24 @@
                     </th>
                     <th></th>
                     <th>
-                            <input type="text" class="form-control" placeholder="العنوان" disabled />
+                            <input type="text" class="form-control" placeholder="@AppResources.Label("Title")" disabled />
                     </th>
                     <th>
-                            <input type="text" class="form-control" placeholder="العنوان القصير" disabled />
+                            <input type="text" class="form-control" placeholder="@AppResources.Label("ShortTitle")" disabled />
                     </th>
-                    <th>الحالة</th>
+                    <th>@AppResources.Label("Status")</th>
                     <th>
                         <input type="text" class="form-control" placeholder="التاريخ" disabled/>
                     </th>
-                    <th>عمليات</th>
+                        <th>@AppResources.Label("Operations")</th>
                 </tr>
                 </thead>
                 <div class="action-buttons">
                     <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
-                        تصفية الخيارات
+                        @AppResources.Label("FilterChoices")
                         <i class="bi bi-filter"></i>
                     </button>
-                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">حذف<i class="bi bi-trash me-2"></i> </button>
+                    <button type="button" class="delete-btn" onClick="deleteSelected()" style="width: fit-content">@AppResources.Label("Delete")<i class="bi bi-trash me-2"></i> </button>
                     @*   <button type="button" class="publish-btn" onClick="publishSelected()">نشر</button> *@
                 </div>
 

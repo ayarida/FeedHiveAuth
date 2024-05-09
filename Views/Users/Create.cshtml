@@ -1,4 +1,5 @@
-﻿@model List<IdentityRole>
+﻿
+@model List<IdentityRole>
 @{
     var availableRoles = Model;
     var roles = availableRoles;
@@ -10,23 +11,23 @@
         <form asp-controller="Users" asp-action="RegisterNewUser" method="POST" dir="rtl">
             <!-- Add your form fields -->
             <div class="form-group mb-4">
-                <label for="Username">إسم المستخدم</label>
+                <label for="Username"> @AppResources.Label("Username")</label>
                 <input class="form-control" name="Username" id="Username" />
                 @* <span asp-validation-for="Username"></span> *@
             </div>
 
             <div class="form-group mb-4">
-                <label for="Email">البريد الإلكتروني</label>
+                <label for="Email">@AppResources.Label("Email")</label>
                 <input class="form-control" name="Email" id="Email" />
             </div>
 
             <div class="form-group mb-4">
-                <label for="password">كلمة المرور</label>
+                <label for="password">@AppResources.Label("Pass")</label>
                 <input type="password" class="form-control" name="PasswordHash" id="PasswordHash" />
                 @* <span asp-validation-for="PasswordHash"></span> *@
             </div>
 
-            <label for="rolesid">إختر دور :</label>
+            <label for="rolesid">@AppResources.Label("ChooseRole") :</label>
             <div class="custom-select">
                 <select name="RoleId" id="rolesid">
                     @foreach (var role in roles)
@@ -34,7 +35,7 @@
                         <option value="@role.Id">@role</option>
                     }
                     <div class="d-flex justify-content-center">
-                        <button type="submit">Create User</button>
+                        <button type="submit">@AppResources.Label("Save")</button>
                     </div>
 
                 </select>

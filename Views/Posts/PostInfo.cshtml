@@ -1,4 +1,5 @@
-﻿@model FeedHiveAuth.Models.Post
+﻿@using FeedHiveAuth.Data.Helpers
+@model FeedHiveAuth.Models.Post
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -8,7 +9,7 @@
 }
 
 
-<h2 dir="rtl">تعديل المحتوى @post?.Title</h2>
+<h2 dir="rtl">@AppResources.Label("UpdateContent") @post?.Title</h2>
 
 <hr />
 
@@ -23,41 +24,41 @@
                         <form asp-route="/Posts/UpdatePostData/@post?.Id" enctype="multipart/form-data" method="post" style="max-width: 100%" dir="">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group mb-4">
-                                <label asp-for="Title" class="control-label">عنوان</label>
+                                <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
                                 <input asp-for="Title" class="form-control" />
                                 <span asp-validation-for="Title" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="ShortTitle" class="control-label">عنوان قصير</label>
+                                <label asp-for="ShortTitle" class="control-label">@AppResources.Label("ShortTitle")</label>
                                 <input asp-for="ShortTitle" class="form-control" />
                                 <span asp-validation-for="ShortTitle" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="Summary" class="control-label">ملخص</label>
+                                <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
                                 <input asp-for="Summary" class="form-control" />
                                 <span asp-validation-for="Summary" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="Content" class="control-label">محتوى</label>
+                                <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
                                 <input asp-for="Content" class="form-control" />
                                 <span asp-validation-for="Content" class="text-danger"></span>
                             </div>
                             <div class="form-group mb-4">
-                                <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
+                                <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
                                 <input asp-for="PostDate" class="form-control" />
                                 <span asp-validation-for="PostDate" class="text-danger"></span>
                             </div>
                             <div style="display: flex;align-items: center;column-gap: 20px;" class="my-5">
-                                <div class="mb-3" style="width: 78px;">صورة / فيديو</div>
+                                <div class="mb-3" style="width: 78px;">@AppResources.Label("VideoPhoto")</div>
                                 <label class="custom-file-upload mb-3" style="border-radius: 10px;border-color: var(--blue-color);box-shadow: 0px 3px 6px #00000029;background: white;">
-                                    تحميل
+                                   @AppResources.Label("Upload")
                                     <i class="bi bi-cloud-arrow-up-fill" style="font-size: 25px;color: var(--blue-color);margin-right: 5px;"></i>
                                     <input type="file" name="File" id="imgInput" />
                                 </label>
                                 <img id="imgPreview" src="" style="width: 400px; max-width: 100%" />
                             </div>
                             <div class="form-group mb-4">
-                                <input type="submit" value="تحديث" class="btn btn-primary update" style="max-width: 50%;width: 100%; border-radius: 28px;" />
+                                <input type="submit" value="@AppResources.Label("Update")" class="btn btn-primary update" style="max-width: 50%;width: 100%; border-radius: 28px;" />
                             </div>
 
                             @* <textarea class="content-area" name="example"></textarea> *@

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ResourceModel>
+﻿@using FeedHiveAuth.Data.Helpers;
+@model IEnumerable<ResourceModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,9 +24,9 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Key</th>
-                                <th>Translation</th>
-                                <th>Language</th>
+                                <th>@AppResources.Label("key","ar")</th>
+                                <th>@AppResources.Label("Translation", "ar")</th>
+                                <th>@AppResources.Label("Language", "ar")</th>
                                 <th></th>
                             </tr>
                             

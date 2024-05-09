@@ -1,6 +1,7 @@
 ﻿@model List<IdentityUser>
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
 @{
     var users = Model;
 
@@ -9,21 +10,21 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header" style="background: #F6F9FC !important;">
-            <h3>قائمة المستخدمين</h3>
+            <h3>@AppResources.Label("UsersList")</h3>
         </div>
         <table id="filter" class="table mb-0" dir="rtl">
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> المستخدم</lablel></th>
-                    <th>دور</th>
+                    <th><input type="checkbox" name="selectAll" class="check" onClick="toggle(this)"><lablel for="selectAll"> @AppResources.Label("Username")</lablel></th>
+                    <th>@AppResources.Label("Role")</th>
                 </tr>
             </thead>
             <div class="d-flex align-items-center px-3 justify-content-between">
-                <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content; border-color: transparent; ">مستخدم جديد +</a>
+                <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content; border-color: transparent; ">@AppResources.Label("newUser") +</a>
 
                 <div class="action-buttons">
                     <button type="button" class="delete-btn my-3" onClick="deleteSelectedUsers()" style="width: fit-content;height: fit-content;padding: 7px 20px !important;">
-                        حذف<i class="bi bi-trash me-2"></i>
+                        @AppResources.Label("Delete")<i class="bi bi-trash me-2"></i>
                     </button>
                 </div>
             </div>

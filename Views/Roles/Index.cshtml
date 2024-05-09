@@ -1,4 +1,5 @@
-﻿@model IEnumerable<IdentityRole>
+﻿@using FeedHiveAuth.Data.Helpers
+@model IEnumerable<IdentityRole>
 @{
     ViewData["Title"] = "Roles";
 }
@@ -7,7 +8,7 @@
 <div style="overflow-x:auto;" class="card">
     <table class="table table-sm table-bordered table-bordered mb-0">
         <tr>
-            <th>الاسم</th><th>الوصف</th><th>العمليات</th>
+            <th>@AppResources.Label("Name")</th><th>@AppResources.Label("Description")</th><th>@AppResources.Label("Operations")</th>
         </tr>
         @foreach (var role in Model)
         {

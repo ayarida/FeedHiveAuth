@@ -1,7 +1,7 @@
 ﻿@model RoleEdit
 @using FeedHiveAuth.Data.Helpers
 @{
-    ViewData["Title"] = "CREATE ROLE";
+    ViewData["Title"] = "Update ROLE";
     var controllers = PermissionHelper.Controllers();
 }
 
@@ -12,14 +12,14 @@
                 <h3 class="text-black">أنشئ دور</h3>
                 <button type="button" onclick="submitPermissions()" class="btn btn-primary me-auto ms-2" style="width: 161px;height: fit-content;padding: 6px !important;" id="role-for">حفظ</button>
                 <a class="btn btn-secondary" style="width: fit-content;max-width: 100%;" href="/Roles/Index">
-                    العودة إلى قائمة الأدوار
+                    @AppResources.Label("BackToRolesMenu")
                     <i class="bi bi-box-arrow-in-left"></i>
                 </a>
             </div>
             <div style="text-align: right">
                 <div class="form-group ">
                     <div>
-                        <label for="name" class="mb-4">: الاسم</label>
+                        <label for="name" class="mb-4">: @AppResources.Label("Name")</label>
                         <input name="name" class="form-control" type="text" id="role-name" style="text-align: right" value="@Model.Role.Name"/>
                         <input type="hidden" id="role-id" value="@Model.Role.Id"
                     </div>
@@ -27,14 +27,14 @@
 
                 <div class="form-group mt-3">
                     <div>
-                        <label for="roleDescription" class="mb-3"> : الوصف</label>
+                        <label for="roleDescription" class="mb-3"> : @AppResources.Label("Description")</label>
                         <input name="roleDescription" class="form-control" type="text" id="role-description" style="text-align: right" />
                     </div>
 
                 </div>
             </div>
 
-            <h3 class="mt-5">Permissions</h3>
+            <h3 class="mt-5">@AppResources.Label("Permissions")</h3>
 
             <div class="form-group my-4 card p-3">
 

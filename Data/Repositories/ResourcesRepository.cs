@@ -14,6 +14,14 @@ namespace FeedHiveAuth.Data.Repositories
             TableName = Database.Tables.Resources;
             Columns = Database.Columns.Resources;
         }
+        public ResourceModel GetById(string id)
+        {
+            using (connection)
+            {
+                return connection.Query<ResourceModel>("select [Id],[Key],[Language],[Value] from Resources" + " WHERE Id=@id", new { Id = id }).FirstOrDefault();
+
+            }
+        }
         public IEnumerable<ResourceModel> GetAll()
         {
             var query = SqlSelectWhole;
@@ -34,6 +42,22 @@ namespace FeedHiveAuth.Data.Repositories
                                     resource.Language.EscapeForSql()
                                     
                                     
+
+                                    );
+            ExecuteQuery(query);
+        }
+        public void UpdateResource(Resources resource)
+        {
+   
+            string query = string.Format(
+                                    "Update {0} Set [Key]={2},[Value]=N{3},[Language]={4} where Id = {1}",
+                                    TableName,
+                                    resource.Id.EscapeForSql(),
+                                    resource.Key.EscapeForSql(),
+                                    resource.Value.EscapeForSql(),
+                                    resource.Language.EscapeForSql()
+
+
 
                                     );
             ExecuteQuery(query);
