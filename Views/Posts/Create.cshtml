@@ -26,62 +26,65 @@
 
 <div class="d-flex flex-wrap create">
 
-    <div class="" style="width: 100% ">
-        <div class="card  p-3">
-            <h1>أنشئ المحتوى</h1>
 
-            <br />
-            @*  <h4>Post</h4> *@
-           @*  <h4>@User.Identity?.Name </h4> *@
-            <hr />
-            <div class="row">
-                <div class="create-post">
-                    <div class="card-head my-2">
-
-                        <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form" dir="rtl">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group mb-4">
-                                <label asp-for="Title" class="control-label">عنوان</label>
-                                <input asp-for="Title" class="form-control req" />
-                                <span asp-validation-for="Title" class="text-danger"></span>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
-                                <input asp-for="ShortTitle" class="form-control" />
-                                <span asp-validation-for="ShortTitle" class="text-danger"></span>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label asp-for="Summary" class="control-label">ملخص</label>
-                                <input asp-for="Summary" class="form-control" />
-                                <span asp-validation-for="Summary" class="text-danger"></span>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label asp-for="Content" class="control-label">محتوى</label>
-                                <textarea asp-for="Content" class="form-control"></textarea>
-                                <span asp-validation-for="Content" class="text-danger"></span>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
-                                <input asp-for="PostDate" class="form-control req" />
-                                <span asp-validation-for="PostDate" class="text-danger"></span>
-                            </div>
-                            @* PreviewIamge and handle exceptions *@
-                            <partial name="_imagePreview" />
-                            <div class="form-group mb-4 d-flex justify-content-center">
-                                <div class="btn btn-primary  submit-div">
-                                    <input type="submit" value="أنشئ المحتوى" class="submit-button" />
-                                    <i class="bi bi-floppy"></i>
-                                </div>
-
-                            </div>
-                        </form>
+    <div class="p-3 col-md-10 col-sm-12 createForm">
+        <div class="createHeader">
+            <div class="chatIcon">
+                <i class="bi bi-chat-right-text"></i>
+            </div>
+            <div>
+                <p class="headerTitle">إنشاء منشور</p>
+                <p class="headerSubtitle">أنشئ منشورًا عالي الأداء لتوصيل رسالتك.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="create-post my-2">
+                <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="createUpper">
+                        <div class="form-group mb-4">
+                            <label asp-for="Title" class="control-label">عنوان</label>
+                            <input asp-for="Title" class="form-control req" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
+                            <input asp-for="ShortTitle" class="form-control" />
+                            <span asp-validation-for="ShortTitle" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="Summary" class="control-label">ملخص</label>
+                            <input asp-for="Summary" class="form-control" />
+                            <span asp-validation-for="Summary" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="Content" class="control-label">محتوى</label>
+                            <textarea asp-for="Content" class="form-control"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
+                            <input asp-for="PostDate" class="form-control req" />
+                            <span asp-validation-for="PostDate" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
+                    @* PreviewIamge and handle exceptions *@
+                    <div class="submitPreview">
+                        <partial name="_imagePreview" />
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="submit-div">
+                                <input type="submit" value="+" class="submit-button" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="imgPreview">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
 
 <link rel="stylesheet" href="~/css/Posts/create.css" />
 <script src="~/js/Posts/create.js"></script>
