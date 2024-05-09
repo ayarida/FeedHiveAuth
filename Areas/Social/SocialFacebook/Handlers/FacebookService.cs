@@ -10,8 +10,10 @@ using FeedHiveAuth.Data.Helpers;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
+using Mangox.Data.Extensions;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using System.Globalization;
 using Video = FeedHiveAuth.Areas.Social.SocialFacebook.Models.Video.Video;
 
 namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
@@ -143,14 +145,21 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         public static ServiceOperationResult Send(Operation operation, Channel channel)
         {
             var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
-            var operationData = operation.Parameters.FromJson<FacebookOperationData>();
-
+            var operationData = operation.Parameters.FromJson<FacebookOperationData>();            
+            var pageId = channel.NetworkId;
             var scheduled = operationData.ScheduleTime.HasValue && operationData.ScheduleTime.Value > DateTime.Now;
-            var scheduledPublishTime = 0;
+            //var scheduledPublishTime = scheduled ? operationData.ScheduleTime.Value.UtcDate().ToUnixTimespans() : 0;
+            var isoDate = scheduled ? TimeExtensions.ToIso8601DateTime(operationData.ScheduleTime.Value) : null;
+            //var checkDte = operationData.ScheduleTime.Value;
+            //var isoD = operationData.ScheduleTime.Value.ToIso8601Date();
+            //DateTime utcScheduledTime = operationData.ScheduleTime.Value.ToUniversalTime();
+            //long scheduledPublishTime = (long)(utcScheduledTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+
+            //var scheduledPublishTime = scheduled ? operationData.ScheduleTime.Value.ToUnixTimespans() : 0;
 
             if (operation.MediaId == null) { 
                 var client = new FeedClient(configs, channel.Credentials);
-                var result = client.Publish(operationData.Text, operationData.Link, !scheduled, scheduledPublishTime);
+                var result = client.Publish(operationData.Text, operationData.Link, !scheduled, isoDate, pageId);
                 return ProcessFeedResult(result, channel, operation, operationData);
             }
             //get the media from operation then retrieve from db to get its enum value and publish based on type
@@ -158,12 +167,15 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             switch (EnumExtension.FromValue<MediaTypeEnum>(getMedia.Type))
             {
                 case MediaTypeEnum.Image:
+                    DateTime scheduledDateTime = DateTime.ParseExact(isoDate, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                    long scheduledPublishTime = ((DateTimeOffset)scheduledDateTime).ToUnixTimeSeconds();
                     var photoClient = new PhotoClient(configs, channel.Credentials);
-                    var photoResult = photoClient.Publish(operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime);
+                    var photoResult = photoClient.Publish(operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime, pageId);
+
                     return ProcessPhotoResult(photoResult, channel, operation, operationData);
                 case MediaTypeEnum.Video:                   
                     var videoClient = new VideoClient(configs, channel.Credentials);
-                    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, getMedia.Path, !scheduled, scheduledPublishTime);
+                    var uploadResult = videoClient.Publish(operationData.Title, operationData.Text, getMedia.Path, !scheduled, isoDate, pageId);
                     if (uploadResult.IsSuccessful)
                     {
                        
