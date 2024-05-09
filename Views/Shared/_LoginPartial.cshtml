@@ -28,30 +28,42 @@
 <ul class="navbar-nav d-flex flex-row nav-left greeting w-100 p-0">
     @if (SignInManager.IsSignedIn(User))
     {
-
-        <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">@AppResources.Label("Hello") @User.Identity?.Name !</a>
+        @*
+    <a class="nav-link text-dark order-1 " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="font-size: 23px">مرحبًا @User.Identity?.Name !</a> *@
 
         <form class="form-inline me-auto order-3" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link log-out" style="height: auto">@AppResources.Label("Logout")</button>
+            <span style="border-radius: 50%;color: white !important;background: #728894;width: fit-content;padding: 8px 15px;"> @User.Identity?.Name!.Substring(0, 1).ToUpper()</span>
+            <div class="dropdown">
+                <div style="/* border-radius: 50%;color: white !important;background: #728894;width: fit-content;padding: 8px 15px; */" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle"></div>
+                <ul class="dropdown-menu account" aria-labelledby="dropdownMenuButton1">
+                    <li class="dropdown-item text-center">@User.Identity?.Name</li>
+                    <hr style="margin-top: 2px; margin-bottom: 3px;">
+                    <a href="/Identity/Account/Manage"
+                       class="list-group-item list-group-item-action py-2 text-center">
+                        <i class="bi bi-person-circle"></i><span class="pe-2">الحساب</span>
+                    </a>
+                    <button type="submit" class="nav-link btn btn-link log-out" style="height: auto">تسجيل خروج</button>
+                </ul>
+            </div>
         </form>
 
 
-        <a href="/Home/Index" class="">
-            <img src="~/uploads/logo.png" style="width: 57px;max-width: 100%;border-radius: 5px;" />
-        </a>
+        @*     <a href="/Home/Index" class="">
+    <img src="~/uploads/logo.png" style="width: 57px;max-width: 100%;border-radius: 5px;" />
+    </a> *@
 
         //var userIdentities = User.Identities.Select(x => x.RoleClaimType).FirstOrDefault();
         //var test = User.Claims.Where(x=>x.Value == User.Identities.)
         //var cI = User.Identities.FirstOrDefault().RoleClaimType;
         var userRoles = User.Claims.Where(x => x.Type == User.Identities.Select(x => x.RoleClaimType).FirstOrDefault()).Select(c => c.Value);
-        foreach (var role in userRoles)
-        {
-            if (role.ToLower().Equals("admin"))
-            {
-                <a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Create">New Subscription</a>
+        @*         foreach (var role in userRoles)
+    {
+    if (role.ToLower().Equals("admin"))
+    {
+    <a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Create">New Subscription</a>
 
-            }
-        }
+    }
+    } *@
         @*    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
     <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
     </form> *@

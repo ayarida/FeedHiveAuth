@@ -15,22 +15,31 @@
 </div>
 <hr />
 
-<div class="container pt-4 mt-4 editor">
-    <div class="card px-4 py-5">
+<div class="d-flex flex-wrap create">
 
+
+    <div class="p-3 col-md-10 col-sm-12 createForm">
+        <div class="createHeader">
+            <div class="chatIcon">
+                <i class="bi bi-chat-right-text"></i>
+            </div>
+            <div>
+                <p class="headerTitle">إنشاء منشور</p>
+                <p class="headerSubtitle">أنشئ منشورًا عالي الأداء لتوصيل رسالتك.</p>
+            </div>
+        </div>
         <div class="row">
-            <div class="create-post">
-                <div class="card-head my-2">
-
-                    <form asp-controller="Posts" asp-action="Update" senctype="multipart/form-data" method="post" style="max-width: 100%; width: 100%">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="create-post my-2">
+                <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="createUpper">
                         <div class="form-group mb-4">
                             <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
                             <input asp-for="Title" class="form-control req" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="ShortTitle" class="control-label">@AppResources.Label("ShortTitle")</label>
+                            <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
                             <input asp-for="ShortTitle" class="form-control" />
                             <span asp-validation-for="ShortTitle" class="text-danger"></span>
                         </div>
@@ -49,25 +58,28 @@
                             <input asp-for="PostDate" class="form-control req" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
+                    </div>
+                    @* PreviewIamge and handle exceptions *@
+                    <div class="submitPreview">
 
-                        <partial name="_imagePreviewEdit" />
-                        <input type="hidden" asp-for="Id" class="form-control" value="@Model?.Id" />
+                        <label class="custom-file-upload">
+                            <i class="bi bi-camera"></i>
+                        </label>
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="submit-div">
+                                <input type="submit" value="+" class="submit-button" />
 
-                        <div class="form-group mb-4 d-flex justify-content-center">
-                            <div class="btn btn-primary my-4 submit-div">
-                                <input type="submit" value="@AppResources.Label("Update")" class="update submit-button" />
-                                <i class="bi bi-floppy"></i>
                             </div>
                         </div>
-                    </form>
+                    </div>
 
-
-                </div>
+    
+                    <partial name="_imagePreviewEdit" />
+                    <div id="imgPreview">
+                    </div>
+                </form>
             </div>
         </div>
-
     </div>
 </div>
-
-
 <link rel="stylesheet" href="~/css/Posts/edit.css" />

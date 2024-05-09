@@ -35,7 +35,7 @@ $("#mediaInput").on("change", e => {
                                      </div>
                                  </div>
                              `;
-                $("#media-section").append(html);
+                $("#imgPreview").append(html);
             }
         }
     }
@@ -54,7 +54,7 @@ $("#mediaInput").on("change", e => {
                                  </div>
                             </div>
                                `;
-            $("#media-section").append(html);
+            $("#imgPreview").append(html);
         }
     }
 
