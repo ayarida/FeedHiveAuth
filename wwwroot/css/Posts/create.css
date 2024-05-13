@@ -163,7 +163,7 @@ input.form-control {
     outline: none;
 }
 
-input.submit-button {
+input.submit-button:not(.save-submit) {
     width: auto;
     background: transparent;
     border: none;
@@ -267,4 +267,9 @@ input.submit-button {
 
 .uploaded-img img {
     width: 100%;
+}
+
+
+input.btn.btn-primary.mt-3:focus {
+    background: #0b5ed7 !important;
 }

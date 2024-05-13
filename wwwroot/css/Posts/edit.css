@@ -281,7 +281,7 @@ input.form-control {
     outline: none;
 }
 
-input.submit-button {
+input.submit-button:not(.save-submit) {
     width: auto;
     background: transparent;
     border: none;
