@@ -8,7 +8,8 @@ namespace FeedHiveAuth.Data.Helpers
         public static Dictionary<string, Tuple<IEnumerable<string>, string>> Controllers()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var controllers = assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Controller))).ToList();
+            var controllersToExclude = new List<string> {"HomeController", "PageResult", "SubscriptionsController" };
+            var controllers = assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Controller)) && !controllersToExclude.Contains(type.Name)).ToList();
 
             return controllers.Select(controller => new 
             { 
