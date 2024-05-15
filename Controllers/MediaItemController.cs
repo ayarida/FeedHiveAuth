@@ -13,13 +13,6 @@ namespace FeedHiveAuth.Controllers
         {
 
         }
-        [PermissionFilter("MediaItem_Upload")]
-        public ActionResult Upload()
-        {
-
-            return View("~/Views/MediaItem/Upload.cshtml");
-        }
-        
 
         [HttpPost]
         [PermissionFilter("MediaItem_UploadFile")]
@@ -43,14 +36,6 @@ namespace FeedHiveAuth.Controllers
 
             return View();
         }
-
-        //MediaUpload based on coming media type 
-        [PermissionFilter("MediaItem_MediaUpload")]
-        public ActionResult MediaUpload(string type)
-        {
-            return View("Upload/_mediaUploadWizard", type);
-        }
-
         [HttpGet]
         [PermissionFilter("MediaItem_List")]
         public IActionResult List()
