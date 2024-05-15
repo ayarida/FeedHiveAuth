@@ -1,12 +1,7 @@
 ﻿namespace FeedHiveAuth.Models
 {
-    public class User : BaseModel
+    public class User
     {
-        public User(string subscriptionId) : base(subscriptionId) { }
-        public User() : this(string.Empty) {
-           
-        }
-
         public string? Username { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

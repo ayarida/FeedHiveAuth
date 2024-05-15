@@ -18,7 +18,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     [Area("Social")]
     public class AuthorizationController : Controller
     {
-        protected UserRepository _userService = Instances.Repositories.UserRepository;
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
         protected ChannelRepository _channelService = Instances.Repositories.ChannelRepository;
         private readonly ILogger<AuthorizationController> _logger;
@@ -32,15 +31,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public async Task<IActionResult> OAuthFlow(string network, string account, bool reauthorize = false, string credentials = null, string id = null)
         {
             //var subscription = await _adminWorkContext.GetCurrentSubscriptionAsync();
-            var currentUser = _userService.GetByUsername("testnew");
+            //var currentUser = _userService.GetByUsername("testnew");
             var type = EnumExtension.FromKey<SocialNetworkTypeEnum>(network);
             switch (type)
             {
                 case SocialNetworkTypeEnum.Facebook:
-                    /*var resultreturned = FacebookOAuthFlow(account, subscription, reauthorize);
-                    var s = "sss";
-                    return FacebookSignIn("type:'Page',subscriptionCode:'SocialPublisher',reauthorize:false", "SocialPublisher");
-*/
                     var jsonRes = FacebookOAuthFlow(account, reauthorize);
                     var obj = jsonRes.TryCast<JObject>();
                     var objResult = obj.ValueFromJson("Value", new JObject());
@@ -61,7 +56,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 //        case SocialNetworkTypeEnum.Odnoklassniki:
                 //            return OdnoklassnikiOAuthFlow(subscription, reauthorize);
                 case SocialNetworkTypeEnum.Telegram:
-                    return TelegramSignIn(id, currentUser, reauthorize);
+                    return TelegramSignIn(id, reauthorize);
                     //        case SocialNetworkTypeEnum.Mangomolo:
                     //            var selectedChannel = Collections.ChannelsOf(subscription.Id).FirstOrDefault(channel => channel.NetworkId.EqualsIgnoreCase(id));
                     //            var url = reauthorize ? Url.Action("Edit", "Channel", new { Area = "Social", selectedChannel.Id }) : Url.Action("Edit", "Channel", new { Area = "Social", network = type.Key(), account = SocialAccountTypeEnum.Profile.Key() });
@@ -114,6 +109,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         [PermissionFilter("Authorization_FacebookSignIn")]
+        //[EnableCors]
         public IActionResult FacebookSignIn(string state, string code)
         {
             try
@@ -128,20 +124,25 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 #endif
                 var channels = FacebookService.GetChannelsInfo(baseCallBackUrl, code,
                                 state, out string msg);
+
                 if (channels.Empty())
                 {
                     Debug.WriteLine(msg ?? "Couldn't authorize the selected Facebook account");
                     return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
                 }
+
                 var reauthorize = false;
                 return SaveChannels(channels, reauthorize, SocialNetworkTypeEnum.Facebook);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Couldn't authorize the selected Facebook account: " + ex.FullMessage());
-                return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
+                //return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
+                return null;
             }
         }
+
+
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
         {
@@ -225,8 +226,10 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
             return channels;
         }
+
+
         [PermissionFilter("Authorization_TelegramSignIn")]
-        public IActionResult TelegramSignIn(string username, User currentUser, bool reauthorize = false)
+        public IActionResult TelegramSignIn(string username, bool reauthorize = false)
         {
             var success = false;
             var redirect = "";

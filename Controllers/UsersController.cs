@@ -2,6 +2,7 @@
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp.Extensions;
@@ -13,7 +14,7 @@ namespace FeedHiveAuth.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        
+
 
         public UserRepository _userService = Instances.Repositories.UserRepository;
 
@@ -21,15 +22,21 @@ namespace FeedHiveAuth.Controllers
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-          
+
         }
         [PermissionFilter("Users_Create")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var availableRoles = roleManager.Roles.ToList();
-            //ViewData["availableRoles"] = availableRoles;
-            return View(availableRoles);
+            var role = await roleManager.FindByNameAsync("Master Subscription");
+            var usersInRole = (role != null) ? await userManager.GetUsersInRoleAsync(role.Name) : null;
+            var createUserVM = new AddUserViewModel
+            {
+                Roles = availableRoles,
+                ParentUsers = usersInRole
+            };
+            return View(createUserVM);
         }
 
         [PermissionFilter("Users_Edit")]
@@ -38,9 +45,9 @@ namespace FeedHiveAuth.Controllers
         {
             var availableRoles = roleManager.Roles.ToList();
             //ViewData["availableRoles"] = availableRoles;
-            var model = new User();
-            var user= userManager.Users.FirstOrDefault(x => x.Id == id);
-            model.Username = user.UserName;
+            var model = new ApplicationUser();
+            var user = userManager.Users.FirstOrDefault(x => x.Id == id);
+            model.UserName = user.UserName;
             model.PasswordHash = user.PasswordHash;
             model.Email = user.Email;
             model.RoleId = Instances.Repositories.RoleRepository.GetUserRole(id);
@@ -48,19 +55,19 @@ namespace FeedHiveAuth.Controllers
         }
         [PermissionFilter("Users_SaveUser")]
         [HttpPost]
-        public async Task<IActionResult> SaveUser(User model)
+        public async Task<IActionResult> SaveUser(ApplicationUser model)
         {
             var currentuser = await userManager.FindByIdAsync(model.Id);
-            currentuser.UserName = model.Username;
+            currentuser.UserName = model.UserName;
             currentuser.Email = model.Email;
             currentuser.EmailConfirmed = true;
-           
-            currentuser.NormalizedUserName = model.Username.ToUpper();
+
+            currentuser.NormalizedUserName = model.UserName.ToUpper();
             currentuser.NormalizedEmail = model.Email.ToUpper();
-           
-           var result= await userManager.UpdateAsync(currentuser);
+
+            var result = await userManager.UpdateAsync(currentuser);
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
-            if (result.Succeeded && result.Errors.Count()==0 && getRole != null)
+            if (result.Succeeded && result.Errors.Count() == 0 && getRole != null)
             {
                 var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id) != null ? Instances.Repositories.RoleRepository.GetUserRole(model.Id) : getRole.Id;
                 var oldrole = (await roleManager.FindByIdAsync(oldroleid)).Name;
@@ -84,24 +91,27 @@ namespace FeedHiveAuth.Controllers
 
         [PermissionFilter("Users_RegisterNewUser")]
         [HttpPost]
-        public async Task<IActionResult> RegisterNewUser(User model)
+        public async Task<IActionResult> RegisterNewUser(ApplicationUser model)
         {
-            var customUser = new IdentityUser
+            var customUser = new ApplicationUser
             {
-                UserName = model.Username,
+                UserName = model.UserName,
                 Email = model.Email,
                 EmailConfirmed = true,
                 PasswordHash = model.PasswordHash,
+                //ParentId = model.ParentId
             };
             var result = await userManager.CreateAsync(customUser, model.PasswordHash);
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
-            if (result.Succeeded && result.Errors.Count() == 0 )
+            if (result.Succeeded && result.Errors.Count() == 0)
             {
-                
+
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
-                if (assignRole.Succeeded) {
+                var assignParent = _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
+                if (assignRole.Succeeded)
+                {
                     return RedirectToAction("List", "Users");
-                }               
+                }
             }
             foreach (var error in result.Errors)
             {
@@ -110,6 +120,7 @@ namespace FeedHiveAuth.Controllers
             }
             return RedirectToAction("List", "Users");
         }
+        
         [PermissionFilter("Users_Login")]
         public IActionResult Login()
         {
@@ -212,15 +223,10 @@ namespace FeedHiveAuth.Controllers
             }
 
         }
-        [PermissionFilter("Users_GetCurrentUser")]
-        public User GetCurrentUser()
+
+        public void getParentUsers(string parentId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User currentUser = _userService.Get(userId);
-            return currentUser;
+
         }
-
-
-
     }
 }

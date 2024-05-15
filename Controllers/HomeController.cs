@@ -17,7 +17,6 @@ namespace FeedHiveAuth.Controllers
         public UserManager<IdentityUser> UserManager;
 
         protected PostRepository _postRepository = Instances.Repositories.PostRepository;
-        protected UserRepository _userRepository = Instances.Repositories.UserRepository;
         protected MediaItemRepository _mediaRepository = Instances.Repositories.MediaItemRepository;
         //private readonly IConfiguration configuration;
 
@@ -31,11 +30,13 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Index()
         {
             var posts = _postRepository.GetPosts();
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+
             foreach (var post in posts)
             {
                 post.PostMediaItems = _mediaRepository.GetMediasByPostId(post.Id);
             }
-            var userPosts = _postRepository.GetCurrentUserPosts(GetCurrentUser().Id);
+            var userPosts = _postRepository.GetCurrentUserPosts(userId);
             UserDataViewModel uvm = new UserDataViewModel
             {
                 allPosts = posts,
@@ -44,11 +45,12 @@ namespace FeedHiveAuth.Controllers
             };
             return View(uvm);
         }
-        public User GetCurrentUser()
+        public async Task<string> GetCurrentUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User currentUser = _userRepository.Get(userId);
-            return currentUser;
+            //var user = await _userManager.GetUserAsync(User);
+
+            return userId;
         }
         public IActionResult Welcome()
         {

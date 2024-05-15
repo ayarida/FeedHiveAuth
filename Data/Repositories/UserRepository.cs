@@ -4,32 +4,36 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FeedHiveAuth.Data.Repositories
 {
-    public class UserRepository : BaseRepository<User>
+    public class UserRepository
     {
-        public UserRepository() {
-            TableName = Database.Tables.Users;
-            Columns = Database.Columns.Users;
+        public static string _connectionString = DatabaseConnection.GetConnectionStrings();
+        public static CustomSqlConnection connection = DatabaseConnection.GetConnection(_connectionString);
+        public ApplicationUser GetByUsername(string username)
+        {
+            using (connection)
+            {
+                var returnedUser = connection.Query<ApplicationUser>("SELECT * FROM AspNetUsers WHERE Username IN @userName", new { userName = new[] { username } }).FirstOrDefault();
+                return returnedUser;
+            }
         }
 
-        public User GetByUsername(string username)
+        public IEnumerable<ApplicationUser>? Delete(string id)
         {
-            var query =
-                $"SELECT {Columns.AddBraces()}, " +
-                $"FROM {TableName} u " +
-                $"WHERE u.Username = {username.EscapeForSql()}";
-
-            return Query<User>(SqlSelect + " WHERE UserName=@username", new { UserName = username }).FirstOrDefault();
+            using (connection)
+            {
+                var resultQuery = connection.Query<ApplicationUser>("DELETE FROM AspNetUsers WHERE Id=@Id;", new { Id = new[] { id } });
+                return resultQuery;
+            }
         }
 
-
-        /*public IAction RegisterSubscriptionUser(string id)
+        public IEnumerable<ApplicationUser>? AssignParentToUser(string parentId, string id)
         {
-            //param: id for user subscription
-            return View("")
-
-        }*/
-        
-
+            using (connection)
+            {
+                var resultQuery = connection.Query<ApplicationUser>("UPDATE AspNetUsers SET ParentId=@ParentId WHERE Id=@Id;", new { Id = new[] { id }, ParentId = new[] { parentId } });
+                return resultQuery;
+            }
+        }
 
     }
 }

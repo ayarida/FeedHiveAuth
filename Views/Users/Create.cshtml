@@ -1,7 +1,9 @@
-﻿@model List<IdentityRole>
+﻿@using FeedHiveAuth.Models.ViewModels;
+
+@model AddUserViewModel
 @{
-    var availableRoles = Model;
-    var roles = availableRoles;
+    var roles = Model.Roles;
+    var parentUsers = Model.ParentUsers;
 }
 
 
@@ -37,6 +39,16 @@
                         <button type="submit">Create User</button>
                     </div>
 
+                </select>
+            </div>
+
+            <label for="parentId">Parent Id:</label>
+            <div class="custom-select">
+                <select name="ParentId" id="parentId">
+                    @foreach (var parent in parentUsers)
+                    {
+                        <option value="@parent.Id">@parent.UserName</option>
+                    }
                 </select>
             </div>
 

@@ -14,7 +14,6 @@ namespace FeedHiveAuth.Controllers
     {
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
-        protected UserRepository _userService = Instances.Repositories.UserRepository;
         protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
         private readonly ILogger<PostsController> _logger;
 
@@ -84,10 +83,10 @@ namespace FeedHiveAuth.Controllers
                 PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
                 PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
             };
-            var currentUser = GetCurrentUser();
-            if (currentUser != null)
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            if (userId != null)
             {
-                post.ModifiedBy = post.CreatedBy = currentUser.Id;
+                post.ModifiedBy = post.CreatedBy = userId;
             }
             _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
@@ -115,10 +114,10 @@ namespace FeedHiveAuth.Controllers
                 PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
                 PostDate = DateTime.Now
             };
-            var currentUser = GetCurrentUser();
-            if (currentUser != null)
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            if (userId != null)
             {
-                post.ModifiedBy = post.CreatedBy = currentUser.Id;
+                post.ModifiedBy = post.CreatedBy = userId;
             }
             _postService.Save(post);
             if (HttpContext.Request.Form.Files.Any())
@@ -153,13 +152,14 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public ActionResult Update(Post updatedPost)
         {
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
             var oldPost = _postService.GetPostById(updatedPost.Id);
             oldPost.Title = updatedPost.Title;
             oldPost.ShortTitle = updatedPost.ShortTitle;
             oldPost.Content = updatedPost.Content;
             oldPost.Summary = updatedPost.Summary;
             oldPost.PublicLink = GeneratePostLink(updatedPost.Title);
-            oldPost.ModifiedBy = GetCurrentUser()?.Id;
+            oldPost.ModifiedBy = userId;
             try
             {
                 var result = _postService.Update(oldPost);
@@ -205,7 +205,6 @@ namespace FeedHiveAuth.Controllers
                 }
             }
         }
-        [PermissionFilter("Posts_GeneratePostLink")]
         public static string GeneratePostLink(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -275,14 +274,14 @@ namespace FeedHiveAuth.Controllers
             }
             return Ok();
         }
-        [PermissionFilter("Posts_Publish")]
+
         public void Publish(string Id)
         {
-            var currUser = GetCurrentUser();
-            _postService.Publish(Id, currUser.Id);
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+
+            _postService.Publish(Id, userId);
 
         }
-        [PermissionFilter("Posts_MultiplePublish")]
         public void MultiplePublish([FromQuery] string idsStr)
         {
             Guid[] idsArray = idsStr.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
@@ -334,28 +333,29 @@ namespace FeedHiveAuth.Controllers
             }
             return Ok();
         }
-        [PermissionFilter("Posts_PublishedPosts")]
+
         [HttpGet]
         public List<Post> PublishedPosts()
         {
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
         }
-        [PermissionFilter("Posts_GetCurrentUser")]
+/*        [PermissionFilter("Posts_GetCurrentUser")]
         public User GetCurrentUser()
         {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User currentUser = _userService.Get(userId);
             return currentUser;
-        }
-        [PermissionFilter("Posts_GetUserRole")]
-        public async void GetUserRole(string userId)
+        }*/
+        public async Task<string> GetCurrentUserId()
         {
-            var user = await userManager.FindByIdAsync(userId);
-            if (user == null) { }
-            var roles = userManager.GetRolesAsync(user);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var user = await userManager.GetUserAsync(User);
+
+            return userId;
         }
+
         [PermissionFilter("Posts_Edit")]
         [HttpGet]
         public ActionResult Edit(string id)
@@ -372,13 +372,15 @@ namespace FeedHiveAuth.Controllers
         {
             return View();
         }
-        [PermissionFilter("Posts_GetCurrUserPosts")]
+
         [HttpGet]
         public List<Post> GetCurrUserPosts()
         {
+            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+
             try
             {
-                var userPosts = _postService.GetCurrentUserPosts(GetCurrentUser()?.Id);
+                var userPosts = _postService.GetCurrentUserPosts(userId);
                 return userPosts;
             }
             catch (Exception ex)

@@ -1,14 +1,13 @@
 ﻿@inject RoleManager<IdentityRole> Rolemanager
 @inject UserManager<IdentityUser> UserManager
 @using FeedHiveAuth.Data.Helpers;
-@model User
+@model ApplicationUser
 @{
     var availableRoles = Rolemanager.Roles.ToList();
 
-    // var user = Model.user;
+    var user = Model;
 
     var roles = availableRoles;
-
 }
 
 
@@ -19,7 +18,7 @@
             <div class="form-group mb-4">
                 @* <label for="Username">إسم المستخدم</label> *@
                 @AppResources.Label("Username","ar")
-                <input class="form-control" name="Username" id="Username" asp-for="@Model.Username" />
+                <input class="form-control" name="UserName" id="UserName" asp-for="@Model.UserName" />
 
                 @* <span asp-validation-for="Username"></span> *@
             </div>

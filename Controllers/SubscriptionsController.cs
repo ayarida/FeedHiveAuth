@@ -16,7 +16,6 @@ namespace FeedHiveAuth.Controllers
     {
         private readonly ApplicationDbContext _context;
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
-        protected UserRepository _userService = Instances.Repositories.UserRepository;
         public SubscriptionsController(ApplicationDbContext context)
         {
             _context = context;
