@@ -34,6 +34,14 @@ namespace FeedHiveAuth.Data.Repositories
                 return resultQuery;
             }
         }
+        public IEnumerable<ApplicationUser>? GetAll()
+        {
+            using (connection)
+            {
+                var resultQuery = connection.Query<ApplicationUser>("SELECT * FROM AspNetUsers").ToList();
+                return resultQuery;
+            }
+        }
 
     }
 }
