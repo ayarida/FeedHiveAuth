@@ -23,7 +23,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             }
 
             UseFbLogin = useFbLogin;
-            CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + $"OAuthorization/{network}SignIn/";
+            CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + $"Social/Authorization/{network}SignIn/";
         }
 
         public string GetLoginUrl(string type, bool reauthorize, string scope)

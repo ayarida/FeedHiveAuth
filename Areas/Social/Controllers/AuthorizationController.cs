@@ -118,7 +118,15 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             try
             {
-                var channels = FacebookService.GetChannelsInfo("https://localhost:7157/Social/", code,
+                //var subscription = "1f59028d-15d0-4bf6-a61b-28f33b895310";
+                var baseCallBackUrl = "";
+#if DEBUG
+
+                baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+#else
+            baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+#endif
+                var channels = FacebookService.GetChannelsInfo(baseCallBackUrl, code,
                                 state, out string msg);
                 if (channels.Empty())
                 {
@@ -174,11 +182,48 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 }
             }
 
-            TempData["channels"] = channels.ToList();
-            if (channels.Count() == 1 && !reauthorize)
-                //SaveNewChannels(channels, subscriptionId);
-                Debug.WriteLine("NICE TO REACH HERE");
-            return RedirectToAction(reauthorize ? "Save" : "Create", "Channel", new { area = "social" });
+            /*TempData["channels"] = channels.ToList();*/
+            if (channels.Count() >= 1 && !reauthorize)
+                _ = SaveNewChannels(channels);
+            return RedirectToAction("Index", "Channels", new { area = "Social" });
+        }
+
+        private async Task<IEnumerable<Channel>> SaveNewChannels(IEnumerable<Channel> channels)
+        {
+            foreach (var channel in channels)
+            {
+                var oldChannel = Collections.Channels().FirstOrDefault(c =>
+                    c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
+                if (oldChannel == null)
+                {
+                    var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);
+                    channel.Id = newChannel.Id;
+                }
+                else
+                {
+                    oldChannel.OriginalName = channel.OriginalName;
+                    oldChannel.NetworkUrl = channel.NetworkUrl;
+                    oldChannel.Credentials = channel.Credentials;
+                    oldChannel.Status = StatusEnum.Active.Value();
+                    if (oldChannel.Status.Equals(StatusEnum.Deleted.Value()))
+                    {
+                        oldChannel.Name = channel.Name;
+                        oldChannel.Description = channel.Description;
+                        oldChannel.ProfileImageUrl = channel.ProfileImageUrl;
+                        oldChannel.CreationDate = channel.CreationDate;
+                        oldChannel.Settings = channel.Settings;
+                    }
+
+                    Instances.Repositories.ChannelRepository.Update(oldChannel);
+                    /* result = oldChannel.Update(oldChannel.OriginalName,
+                         _adminWorkContext.getRequestData(Url.Action("Preview", "Channel",
+                             new { area = "Social", id = oldChannel.Id })));*/
+
+                    channel.Id = oldChannel.Id;
+                }
+            }
+
+            return channels;
         }
         [PermissionFilter("Authorization_TelegramSignIn")]
         public IActionResult TelegramSignIn(string username, User currentUser, bool reauthorize = false)

@@ -1,4 +1,4 @@
-﻿using FeedHiveAuth.Areas.Social.Models;
+﻿/*using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
@@ -66,7 +66,7 @@ namespace FeedHiveAuth.Controllers
                 }
             }
 
-            /*TempData["channels"] = channels.ToList();*/
+            *//*TempData["channels"] = channels.ToList();*//*
             if (channels.Count() >= 1 && !reauthorize)
                 _ = SaveNewChannels(channels, subscriptionId);
             return RedirectToAction("Index", "Channels", new { area = "Social" });
@@ -101,18 +101,18 @@ namespace FeedHiveAuth.Controllers
                     }
 
                     Instances.Repositories.ChannelRepository.Update(oldChannel);
-                    /* result = oldChannel.Update(oldChannel.OriginalName,
+                    *//* result = oldChannel.Update(oldChannel.OriginalName,
                          _adminWorkContext.getRequestData(Url.Action("Preview", "Channel",
-                             new { area = "Social", id = oldChannel.Id })));*/
+                             new { area = "Social", id = oldChannel.Id })));*//*
 
                     channel.Id = oldChannel.Id;
                 }
 
                 //Collections.RefreshChannels();
-                /*foreach (Exception resultException in result.Exceptions)
+                *//*foreach (Exception resultException in result.Exceptions)
                 {
                     //Logger.Warn(typeof(ChannelHelper), resultException.FullMessage());
-                }*/
+                }*//*
             }
 
             return channels;
@@ -120,3 +120,4 @@ namespace FeedHiveAuth.Controllers
 
     }
 }
+*/
