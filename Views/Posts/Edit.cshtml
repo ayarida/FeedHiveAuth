@@ -64,6 +64,7 @@
 
                         <label class="custom-file-upload">
                             <i class="bi bi-camera"></i>
+                            <input type="file" name="File" id="mediaInput" multiple />
                         </label>
                         <div class="form-group d-flex justify-content-center">
                             <div class="submit-div">
@@ -83,4 +84,16 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
+    var subFields = '@Html.Raw(AppResources.Label("StarFields", "ar"))';
+
+    var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
+    var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
+
+</script>
+
 <link rel="stylesheet" href="~/css/Posts/edit.css" />
+<script src="~/js/Posts/edit.js"></script>

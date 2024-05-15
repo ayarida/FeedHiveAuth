@@ -81,14 +81,24 @@
                     </div>
                     <div id="imgPreview">
                     </div>
-                    <input type="submit" value="حفظ" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px"/>
+                    <input type="submit" value="حفظ" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px" />
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+
 <link rel="stylesheet" href="~/css/Posts/create.css" />
+<script>
+
+    var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
+    var subFields = '@Html.Raw(AppResources.Label("StarFields", "ar"))';
+
+    var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
+    var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
+
+</script>
 <script src="~/js/Posts/create.js"></script>
 @section Scripts {
     @{
