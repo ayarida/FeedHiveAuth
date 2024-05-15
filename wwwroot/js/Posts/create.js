@@ -17,8 +17,8 @@ $("#mediaInput").on("change", e => {
             customClass: {
                 confirmButton: "btn btn-primary  warning",
             },
-            title: "الرجاء التحميل ميديا من الأنواع التالية",
-            text: "mp4 jpeg jpg أو png",
+            title: `${wrongType}`,
+            text: `${requiredMediaType}`,
             confirmButtonText: "موافق",
         });
     } else {
@@ -60,6 +60,7 @@ $("#mediaInput").on("change", e => {
 })
 
 
+
 //check for missing fields
 $(function (e) {
 
@@ -73,8 +74,8 @@ $(function (e) {
                     customClass: {
                         confirmButton: "btn btn-primary  warning",
                     },
-                    title: "Fill all required fields",
-                    text: "fields indicated by red stars",
+                    title: `${fields}`,
+                    text: `${subFields}`,
                     confirmButtonText: "موافق",
                 });
 
