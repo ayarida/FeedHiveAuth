@@ -6,12 +6,6 @@ namespace FeedHiveAuth.Controllers
 {
     public class ConfigsController : Controller
     {
-        [PermissionFilter("Configs_GetSubscriptionSocialConfigs")]
-        public SocialConfigs GetSubscriptionSocialConfigs(string subscriptionId)
-        {
-            return SocialServiceHelper.GetConfigs(subscriptionId);
-        }
-
         [PermissionFilter("Configs_TechnicalConfigs")]
         [HttpGet]
         public ActionResult TechnicalConfigs()
