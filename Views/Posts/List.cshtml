@@ -1,12 +1,13 @@
 ﻿
-@model List<FeedHiveAuth.Models.Post>
+@model PostListViewModel
 @using FeedHiveAuth.Data;
 @using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
+@using FeedHiveAuth.Models.ViewModels;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<Post> posts = Model;
+    List<Post> posts = Model.allPosts;
     var _mediaService = Instances.Repositories.MediaItemRepository;
 }
 
@@ -80,8 +81,13 @@
                                 <td>
                                     <img src="~/uploads/no-img.jpg" style="border: 1px solid grey;"/>
                                 </td>
+                                
                             }
-                            <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id })</td>
+                                <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id }) 
+                                    @if(Model.IsAdmin) {
+                                        <p>@post.CreatedByName</p>
+                                    }                              
+                                </td>
                             <td>@post.ShortTitle</td>
                             <td>
 
