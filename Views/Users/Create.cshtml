@@ -3,7 +3,7 @@
 @model AddUserViewModel
 @{
     var roles = Model.Roles;
-    var parentUsers = Model.ParentUsers;
+    var parentUsers = Model.ParentUsers.Any() ? Model.ParentUsers : null;
 }
 
 

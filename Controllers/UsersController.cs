@@ -29,12 +29,14 @@ namespace FeedHiveAuth.Controllers
         public async Task<IActionResult> Create()
         {
             var availableRoles = roleManager.Roles.ToList();
-            var role = await roleManager.FindByNameAsync("Master Subscription");
-            var usersInRole = (role != null) ? await userManager.GetUsersInRoleAsync(role.Name) : null;
+            var usersWithMasterRole = await userManager.GetUsersInRoleAsync("Master");
+            var usersWithAdminRole = await userManager.GetUsersInRoleAsync("Admin");
+            var usersWithHighRoles = usersWithMasterRole.Concat(usersWithAdminRole).Distinct().ToList();
+
             var createUserVM = new AddUserViewModel
             {
                 Roles = availableRoles,
-                ParentUsers = usersInRole
+                ParentUsers = usersWithHighRoles
             };
             return View(createUserVM);
         }
@@ -66,7 +68,7 @@ namespace FeedHiveAuth.Controllers
             currentuser.NormalizedEmail = model.Email.ToUpper();
 
             var result = await userManager.UpdateAsync(currentuser);
-            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
+            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Master");
             if (result.Succeeded && result.Errors.Count() == 0 && getRole != null)
             {
                 var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id) != null ? Instances.Repositories.RoleRepository.GetUserRole(model.Id) : getRole.Id;
@@ -78,11 +80,11 @@ namespace FeedHiveAuth.Controllers
                     return RedirectToAction("List", "Users");
                 }
             }
-            //foreach (var error in result.Errors)
-            //{
-            //    ModelState.AddModelError(string.Empty, error.Description);
-            //    return BadRequest(error.Description);
-            //}
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+                return BadRequest(error.Description);
+            }
             return RedirectToAction("List", "Users");
         }
 
@@ -107,7 +109,7 @@ namespace FeedHiveAuth.Controllers
             {
 
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
-                var assignParent = _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
+                if(model.ParentId!=null) _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
                 if (assignRole.Succeeded)
                 {
                     return RedirectToAction("List", "Users");
@@ -224,9 +226,9 @@ namespace FeedHiveAuth.Controllers
 
         }
 
-        public void getParentUsers(string parentId)
+        public void getParentUsers()
         {
-
+            var users = Instances.Repositories.UserRepository.GetAll();
         }
     }
 }
