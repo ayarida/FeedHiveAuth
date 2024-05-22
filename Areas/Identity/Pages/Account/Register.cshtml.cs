@@ -131,7 +131,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                var saveAsEditor = await _roleManager.FindByNameAsync("Editor");
+                var saveAsMaster = await _roleManager.FindByNameAsync("Master");
 
                 if (result.Succeeded)
                 {
@@ -140,7 +140,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //default registered users are as Editors
-                    await _userManager.AddToRoleAsync(user, saveAsEditor.Name);
+                    await _userManager.AddToRoleAsync(user, saveAsMaster.Name);
 
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
