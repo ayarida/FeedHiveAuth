@@ -160,5 +160,11 @@ namespace FeedHiveAuth.Data.Repositories
 
             return scheduledPosts;
         }
+        public List<Post> GetPostByTitle(string title)
+        {
+            var query = SqlSelect + $" WHERE Content LIKE N'%{title}%' or Title LIKE N'%{title}%' or ShortTitle LIKE N'%{title}%'";
+            List<Post> listPosts = connection.Query<Post>(query).ToList();
+            return listPosts;
+        }
     }
 }

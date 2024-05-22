@@ -396,5 +396,13 @@ namespace FeedHiveAuth.Controllers
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(postId);
             return ops;
         }
+        [PermissionFilter("Posts_Search")]
+        [HttpPost]
+        public JsonResult Search([FromQuery] string valinput) 
+        {
+            var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
+            var result = new JsonResult(postsresult);
+            return result;
+        }
     }
 }
