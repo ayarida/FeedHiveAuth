@@ -68,7 +68,7 @@ namespace FeedHiveAuth.Controllers
                 allPosts = posts, 
                 IsAdmin = isAdmin
             };
-            return View(pvm);
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
 
         public async Task<bool> isAdmin()
@@ -81,7 +81,7 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public ActionResult CreatePost()
+        public Task<ActionResult> CreatePost()
         {
 
             Post post = new Post
@@ -110,7 +110,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return View("~/Views/Posts/Create.cshtml");
+            return List();
         }
         public ActionResult CreateQuickPost()
         {
