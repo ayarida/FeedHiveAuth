@@ -228,7 +228,20 @@ namespace FeedHiveAuth.Controllers
         }
 
         [PermissionFilter("Roles_Index")]
-        public ViewResult Index() => View(roleManager.Roles);
+        public ViewResult Index() {
+            var identityRoles = roleManager.Roles;
+            var roles = new List<Role>();
+            foreach(var role in identityRoles)
+            {
+                roles.Add(new Role
+                {
+                    Name = role.Name,
+                    NormalizedName = role.NormalizedName,
+                    Description = roleRepository.getRoleDescription(role.Id)
+                });
+            }
+            
+            return View(roles); }
 
         private void Errors(IdentityResult result)
         {
