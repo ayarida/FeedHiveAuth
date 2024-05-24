@@ -5,7 +5,9 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RestSharp.Extensions;
+using System.Data;
 using System.Security.Claims;
 
 namespace FeedHiveAuth.Controllers
@@ -28,16 +30,36 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var availableRoles = roleManager.Roles.ToList();
-            var role = await roleManager.FindByNameAsync("Master Subscription");
-            var usersInRole = (role != null) ? await userManager.GetUsersInRoleAsync(role.Name) : null;
+            var availableRoles = roleManager.Roles;
+            
+            //if master : show only admins and whos parentId is this master
+            //else: assign current admin as parentId
+            var user = await userManager.GetUserAsync(User);
+            var isAdmin = user != null && await userManager.IsInRoleAsync(user, "Admin");           
+            var isInMasterRole = user != null && await userManager.IsInRoleAsync(user, "Master");
             var createUserVM = new AddUserViewModel
             {
-                Roles = availableRoles,
-                ParentUsers = usersInRole
+                User = user,
+                IsAdmin = isAdmin,
             };
+            if (isInMasterRole)
+            {
+                var withAdminRoleAndMasterMembers = await userManager.GetUsersInRoleAsync("Admin");
+                createUserVM.ParentUsers = withAdminRoleAndMasterMembers.ToList();
+                createUserVM.Roles = availableRoles.ToList();
+            }
+            else
+            {
+                createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() != "admin" && r.Name.ToLower() != "master").ToList();            
+            }
             return View(createUserVM);
         }
+
+        /*public List<IdentityUser> adminUsersAndMasterMembers(string masterId)
+        {
+            var withAdminRoleAndMasterMembers = _userService.adminUsersAndMasterMembers(masterId);
+        }*/
+
 
         [PermissionFilter("Users_Edit")]
         [HttpGet]
@@ -66,7 +88,7 @@ namespace FeedHiveAuth.Controllers
             currentuser.NormalizedEmail = model.Email.ToUpper();
 
             var result = await userManager.UpdateAsync(currentuser);
-            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
+            var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Master");
             if (result.Succeeded && result.Errors.Count() == 0 && getRole != null)
             {
                 var oldroleid = Instances.Repositories.RoleRepository.GetUserRole(model.Id) != null ? Instances.Repositories.RoleRepository.GetUserRole(model.Id) : getRole.Id;
@@ -78,11 +100,11 @@ namespace FeedHiveAuth.Controllers
                     return RedirectToAction("List", "Users");
                 }
             }
-            //foreach (var error in result.Errors)
-            //{
-            //    ModelState.AddModelError(string.Empty, error.Description);
-            //    return BadRequest(error.Description);
-            //}
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+                return BadRequest(error.Description);
+            }
             return RedirectToAction("List", "Users");
         }
 
@@ -107,7 +129,7 @@ namespace FeedHiveAuth.Controllers
             {
 
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
-                var assignParent = _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
+                if(model.ParentId!=null) _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
                 if (assignRole.Succeeded)
                 {
                     return RedirectToAction("List", "Users");
@@ -224,9 +246,15 @@ namespace FeedHiveAuth.Controllers
 
         }
 
-        public void getParentUsers(string parentId)
+        public void getParentUsers()
         {
+            var users = Instances.Repositories.UserRepository.GetAll();
+        }
 
+        public async Task<string> GetCurrentUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return userId;
         }
     }
 }

@@ -15,6 +15,8 @@
         public string? PublishedBy { get; set; }
         public string? PublicLink { get; set; }
 
+        public string? CreatedByName { get; set; }
+
         public DateTime? ExpireDate { get; set; }
 
         public List<MediaItem> PostMediaItems { get; set; }

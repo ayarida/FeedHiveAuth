@@ -1,5 +1,5 @@
 ﻿@using FeedHiveAuth.Data.Helpers
-@model IEnumerable<IdentityRole>
+@model List<Role>
 @{
     ViewData["Title"] = "Roles";
 }
@@ -14,7 +14,7 @@
         {
             <tr>
                 <td>@role.Name</td>
-                <td>placeholder</td>
+                <td>@role.Description</td>
                 <td>
                     <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@role.Id">
                         <i class="bi bi-pencil-square"></i>

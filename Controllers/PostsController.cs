@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace FeedHiveAuth.Controllers
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
+        protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
 
         private readonly UserManager<IdentityUser> userManager;
@@ -39,14 +41,16 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public async Task<ActionResult> List()
         {
-            var user = await userManager.GetUserAsync(User);
+           var user = await userManager.GetUserAsync(User);
             var isAdminTask = userManager.IsInRoleAsync(user, "Admin");
             var isAdmin = await isAdminTask;
             List<Post> posts;
-            //Admin: return all
+            //Admin: return all posts who created them is member of admin team
             if (isAdmin)
             {
-                posts = _postService.GetPosts();
+                var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
+                posts = _postService.GetAdminUsersPosts(adminUsers);
+                //posts = _postService.GetPosts();
             }
             //Else: return curr user posts
             else
@@ -56,9 +60,15 @@ namespace FeedHiveAuth.Controllers
             foreach (var post in posts)
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
+                var createdByName = _userService.GetNameById(post.CreatedBy);
                 if (postMedia != null) post.PostMediaItems = postMedia;
+                post.CreatedByName = createdByName;
             }
-            return View(posts);
+            PostListViewModel pvm = new PostListViewModel {
+                allPosts = posts, 
+                IsAdmin = isAdmin
+            };
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
 
         public async Task<bool> isAdmin()
@@ -71,7 +81,7 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public ActionResult CreatePost()
+        public Task<ActionResult> CreatePost()
         {
 
             Post post = new Post
@@ -100,7 +110,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return View("~/Views/Posts/Create.cshtml");
+            return List();
         }
         public ActionResult CreateQuickPost()
         {
@@ -395,6 +405,14 @@ namespace FeedHiveAuth.Controllers
         {
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(postId);
             return ops;
+        }
+        [PermissionFilter("Posts_Search")]
+        [HttpPost]
+        public JsonResult Search([FromQuery] string valinput) 
+        {
+            var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
+            var result = new JsonResult(postsresult);
+            return result;
         }
     }
 }

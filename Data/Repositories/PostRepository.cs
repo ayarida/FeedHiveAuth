@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data.Extensions;
+﻿using Dapper;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,23 @@ namespace FeedHiveAuth.Data.Repositories
         {
             var query = SqlSelectWhole;
             List<Post> posts = connection.Query<Post>(query).ToList();
+            return posts;
+        }
+        public List<Post> GetAdminUsersPosts(List<string> adminUsersIds)
+        {
+            var paramNames = adminUsersIds.Select((id, index) => $"@userId{index}");
+            var query = SqlSelectWhole + $" WHERE CreatedBy IN ({string.Join(",", paramNames)})";
+            //var query = SqlSelectWhole + $" WHERE CreatedBy IN (" + adminUsersIds + ")";
+            var parameters = new DynamicParameters();
+            for (var i = 0; i < adminUsersIds.Count; i++)
+            {
+                parameters.Add($"userId{i}", adminUsersIds[i]);
+            }
+
+            // Execute the query with parameters
+            List<Post> posts = connection.Query<Post>(query, parameters).ToList();
+
+            //List<Post> posts = connection.Query<Post>(query).ToList();
             return posts;
         }
 
@@ -159,6 +177,12 @@ namespace FeedHiveAuth.Data.Repositories
             List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
 
             return scheduledPosts;
+        }
+        public List<Post> GetPostByTitle(string title)
+        {
+            var query = SqlSelect + $" WHERE Content LIKE N'%{title}%' or Title LIKE N'%{title}%' or ShortTitle LIKE N'%{title}%'";
+            List<Post> listPosts = connection.Query<Post>(query).ToList();
+            return listPosts;
         }
     }
 }

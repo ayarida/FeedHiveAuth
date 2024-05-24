@@ -18,13 +18,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     @*     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&display=swap"
     rel="stylesheet" /> *@
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&family=IBM+Plex+Sans+Arabic&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    
+
     <link rel="stylesheet" href="~/FeedHiveAuth.styles.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -128,7 +130,7 @@
                     </div>
                 </div>
             </nav>
-
+            <partial name="_SearchResult" />
             <nav id="main-navbar"
                  class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
                 <!-- Container wrapper -->
@@ -143,6 +145,7 @@
                             aria-label="Toggle navigation">
                         <i class="bi bi-list"></i>
                     </button>
+                    
                     <partial name="_LoginPartial" />
                     
                 </div>

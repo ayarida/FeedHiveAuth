@@ -34,6 +34,23 @@ namespace FeedHiveAuth.Data.Repositories
                 return connection.Query<string>("select ClaimValue from AspNetRoleClaims" + " WHERE RoleId=@roleid", new { RoleId = roleid });
             }
         }
-        
+        public void saveRoleDescription(string roleId, string roleDesc)
+        {
+            using (connection)
+            {
+                var result = connection.Query<string>("Update AspNetRoles set Description=@Description WHERE Id=@Id", new { Id = new[] { roleId }, Description = new[] { roleDesc } });
+
+            }
+        }
+        public string getRoleDescription(string roleId)
+        {
+            using (connection)
+            {
+                var result = connection.Query<string>("select Description from AspNetRoles where Id=@Id", new { Id = new[] { roleId }}).FirstOrDefault();
+                return result;
+
+            }
+        }
+
     }
 }

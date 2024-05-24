@@ -4,6 +4,7 @@
 @{
     var roles = Model.Roles;
     var parentUsers = Model.ParentUsers;
+    var isAdmin = Model.IsAdmin;
 }
 
 
@@ -41,17 +42,25 @@
 
                 </select>
             </div>
-
-            <label for="parentId">Parent Id:</label>
-            <div class="custom-select">
-                <select name="ParentId" id="parentId">
-                    @foreach (var parent in parentUsers)
-                    {
-                        <option value="@parent.Id">@parent.UserName</option>
+            @if (isAdmin)
+            {
+                <input type="hidden" value="@Model.User.Id" name="ParentId" id="parentId" />
+            }
+            else{
+                <div id="parentDropdown" style="display: none;">
+                    @if(parentUsers !=null && Model.IsAdmin == false) {
+                        <label for="parentId">Parent Id:</label>
+                        <div class="custom-select">
+                            <select name="ParentId" id="parentId">
+                                @foreach (var parent in parentUsers)
+                                {
+                                    <option value="@parent.Id">@parent.UserName</option>
+                                }                 
+                            </select>
+                        </div>
                     }
-                </select>
-            </div>
-
+                </div>
+            }
             <input type="submit" value="تسجيل المستخدم" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
 
 
@@ -59,6 +68,29 @@
     </div>
 </div>
 
-
 <link rel="stylesheet" href="~/css/Users/create.css" />
+<script>
+    $("#rolesid").on("click", function(event){
+        var selectedRole = $("#rolesid").find(":selected").text();
+        var parentDropdown = $('#parentDropdown');
+
+        if (selectedRole === 'Editor') {
+            console.log("editor")
+            parentDropdown.show();
+        } else {
+            console.log("not")
+            parentDropdown.hide();
+        }
+    })
+    // document.getElementById('rolesid').addEventListener('change', function () {
+    //     var selectedRole = this.valuez;
+    //     var parentDropdown = document.getElementById('parentDropdown');
+
+    //     if (selectedRole === 'editor') {
+    //         parentDropdown.style.display = 'block';
+    //     } else {
+    //         parentDropdown.style.display = 'none';
+    //     }
+    // });
+</script>
 <script src="~/js/Users/create.js"></script>

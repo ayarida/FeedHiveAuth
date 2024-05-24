@@ -28,6 +28,7 @@ namespace FeedHiveAuth.Controllers
         private UserManager<IdentityUser> userManager;
         private readonly ILogger<RolesController> _logger;
 
+        protected RoleRepository roleRepository = Instances.Repositories.RoleRepository;
 
         public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ILogger<RolesController> logger)
         {
@@ -39,7 +40,7 @@ namespace FeedHiveAuth.Controllers
         public async Task<Role> GetRoleById(string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
-            var roleClaims = Instances.Repositories.RoleRepository.GetUserClaims(roleId);
+            var roleClaims = roleRepository.GetUserClaims(roleId);
             if (role == null)
             {
                 return null;
@@ -48,7 +49,8 @@ namespace FeedHiveAuth.Controllers
             {
                 Id = roleId,
                 Name = role.Name,
-                Permissions=MapPermission(roleClaims.ToList())
+                Permissions = MapPermission(roleClaims.ToList()),
+                Description = roleRepository.getRoleDescription(roleId)
 
             };
         }
@@ -91,7 +93,10 @@ namespace FeedHiveAuth.Controllers
                             await roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", permission.Name));
                             //await userManager.AddClaimAsync(curr, new System.Security.Claims.Claim("Permission", permission.Name));
                         }
-
+                        if (roleData.Description != null)
+                        {
+                            roleRepository.saveRoleDescription(roleData.Id, roleData.Description);
+                        }
                         return Ok(); // or return a specific result based on your needs
                     }
                     else
@@ -130,8 +135,11 @@ namespace FeedHiveAuth.Controllers
                     {
                         await roleManager.AddClaimAsync(roleToEdit, new System.Security.Claims.Claim("Permission", permission.Name));   
                     }
+                    if (roleData.Description != null)
+                    {
+                        roleRepository.saveRoleDescription(roleData.Id, roleData.Description);
+                    }
 
-                    
                     return RedirectToAction("Index", "Home", new { Id = roleData.Id });
                 }
                 return BadRequest(ModelState);
@@ -220,7 +228,20 @@ namespace FeedHiveAuth.Controllers
         }
 
         [PermissionFilter("Roles_Index")]
-        public ViewResult Index() => View(roleManager.Roles);
+        public ViewResult Index() {
+            var identityRoles = roleManager.Roles;
+            var roles = new List<Role>();
+            foreach(var role in identityRoles)
+            {
+                roles.Add(new Role
+                {
+                    Name = role.Name,
+                    NormalizedName = role.NormalizedName,
+                    Description = roleRepository.getRoleDescription(role.Id)
+                });
+            }
+            
+            return View(roles); }
 
         private void Errors(IdentityResult result)
         {
