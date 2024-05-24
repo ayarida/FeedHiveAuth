@@ -18,7 +18,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
-        ILogger<PostsController> _logger; 
+        ILogger<PostsController> _logger;
 
         public PublishController(ILogger<PostsController> logger)
         {
@@ -49,7 +49,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             //Aya's local DB ids for API testing reasons
 
             var post = _postService.Get(postid);
-            if (medias != null) 
+            if (medias != null)
                 post.PostMediaItems = medias;
             var subSocialConfigs = SocialServiceHelper.GetConfigs();
             var channels = GetChannels(out error);
@@ -92,7 +92,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
-                    form.Channels =  Instances.Repositories.ChannelRepository.GlobalGetAll().Select(ch => ch.Id).ToList();
+                    form.Channels = Instances.Repositories.ChannelRepository.GlobalGetAll().Select(ch => ch.Id).ToList();
                     _logger.LogError("********************* No Channels Selected! ********************");
                     //create an Error Page to redirect 
                     //return View();
@@ -121,5 +121,19 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
+        [HttpGet]
+        public ActionResult GetPreview(string previewName, string postId)
+        {
+            var post = _postService.Get(postId);
+            var media = _mediaItemService.GetMediaByPostId(postId);
+            var medias = _mediaItemService.GetMediasByPostId(postId);
+            if (medias != null)
+                post.PostMediaItems = medias;
+
+            return PartialView("~/Areas/Social/Views/Shared/_" + previewName + "Preview.cshtml", post);
+        }
     }
+
 }
