@@ -235,6 +235,7 @@ namespace FeedHiveAuth.Controllers
             {
                 roles.Add(new Role
                 {
+                    Id = role.Id,
                     Name = role.Name,
                     NormalizedName = role.NormalizedName,
                     Description = roleRepository.getRoleDescription(role.Id)
