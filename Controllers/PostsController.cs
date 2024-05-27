@@ -323,6 +323,7 @@ namespace FeedHiveAuth.Controllers
 
             Guid[] idsArray = idsStr?.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
             List<string> stringList = new List<string>();
+            var errors = new List<string>();
             foreach (Guid guid in idsArray)
             {
                 stringList.Add(guid.ToString());
@@ -333,13 +334,17 @@ namespace FeedHiveAuth.Controllers
             {
                 try
                 {
-                    return Delete(post);
+                    Delete(post);
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
-                    _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
-                    return BadRequest(ex.Message);
+                    errors.Add($"Error deleting post with ID {post.Id}: {ex.Message}");
+                    _logger.LogError($"********************* Error in deleting post with ID {post.Id}, EXCEPTION \r\n{ex}\r\n*********************");
                 }
+            }
+            if (errors.Any())
+            {
+                return BadRequest(errors);
             }
             return Ok();
         }
