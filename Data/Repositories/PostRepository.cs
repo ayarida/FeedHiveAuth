@@ -184,5 +184,13 @@ namespace FeedHiveAuth.Data.Repositories
             List<Post> listPosts = connection.Query<Post>(query).ToList();
             return listPosts;
         }
+        public List<Post> GetByDate(DateTime date, string userId)
+        {
+            string formattedDate = date.ToString("yyyy-MM-dd");
+            var query = $"{SqlSelect} WHERE CONVERT(date, PostDate) = @Date AND CreatedBy= @userId";
+            List<Post> posts = connection.Query<Post>(query, new { Date = formattedDate , userId = userId } ).ToList();
+
+            return posts;
+        }
     }
 }
