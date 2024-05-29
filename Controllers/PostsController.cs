@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -19,11 +20,11 @@ namespace FeedHiveAuth.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
 
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<IdentityUser> UserManager;
 
         public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger)
         {
-            this.userManager = userManager;
+            this.UserManager = userManager;
 
             _logger = logger;
         }
@@ -34,28 +35,65 @@ namespace FeedHiveAuth.Controllers
         public ActionResult Create()
         {
             return View();
-        
-        }
 
+        }
+        [PermissionFilter("Posts_Search")]
+        [HttpPost]
+        public JsonResult Search([FromQuery] string valinput)
+        {
+            List<Post> posts=new List<Post>();
+            List<Post> userPosts;
+            var isAdmin = User.IsInRole("Admin");
+            var isMaster = User.IsInRole("Master");
+            var user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
+            if (isMaster)
+            {
+                var masterAdmins = _userService.GetWhosParentId(user.Id).ToList();//get admins
+                foreach(var admin in masterAdmins)
+                {
+                    var adminUsers= _userService.GetWhosParentId(admin.ToString()).ToList();//get Users
+                    userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
+                    posts.AddRange(userPosts);
+                }
+                
+            }
+            else if (isAdmin)
+            {
+                var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
+                if(adminUsers.Count > 0 )
+                {
+                    posts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
+                }
+                
+                //posts = _postService.GetPosts();
+            }
+            else
+            {
+                posts = _postService.GetCurrentUserPostsSearch(user.Id, valinput);
+            }
+            //var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
+            var result = new JsonResult(posts);
+            return result;
+        }
         [PermissionFilter("Posts_List")]
         [HttpGet]
         public async Task<ActionResult> List()
         {
-           var user = await userManager.GetUserAsync(User);
-            var isAdminTask = userManager.IsInRoleAsync(user, "Admin");
+            var user = await UserManager.GetUserAsync(User);
+            var isAdminTask = UserManager.IsInRoleAsync(user, "Admin");
             var isAdmin = await isAdminTask;
             List<Post> posts;
             //Admin: return all posts who created them is member of admin team
             if (isAdmin)
             {
                 var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
-                posts = _postService.GetAdminUsersPosts(adminUsers);
+                posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
                 //posts = _postService.GetPosts();
             }
             //Else: return curr user posts
             else
             {
-                posts = _postService.GetCurrentUserPosts(user.Id);
+                posts = _postService.GetCurrentUserPostsSearch(user.Id, "");
             }
             foreach (var post in posts)
             {
@@ -64,8 +102,9 @@ namespace FeedHiveAuth.Controllers
                 if (postMedia != null) post.PostMediaItems = postMedia;
                 post.CreatedByName = createdByName;
             }
-            PostListViewModel pvm = new PostListViewModel {
-                allPosts = posts, 
+            PostListViewModel pvm = new PostListViewModel
+            {
+                allPosts = posts,
                 IsAdmin = isAdmin
             };
             return View("~/Views/Posts/List.cshtml", pvm);
@@ -73,8 +112,8 @@ namespace FeedHiveAuth.Controllers
 
         public async Task<bool> isAdmin()
         {
-            var currUser = await userManager.GetUserAsync(User);
-            var isAdmin = await userManager.IsInRoleAsync(currUser, "Admin");
+            var currUser = await UserManager.GetUserAsync(User);
+            var isAdmin = await UserManager.IsInRoleAsync(currUser, "Admin");
             return isAdmin;
         }
 
@@ -355,14 +394,14 @@ namespace FeedHiveAuth.Controllers
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
         }
-/*        [PermissionFilter("Posts_GetCurrentUser")]
-        public User GetCurrentUser()
-        {
+        /*        [PermissionFilter("Posts_GetCurrentUser")]
+                public User GetCurrentUser()
+                {
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User currentUser = _userService.Get(userId);
-            return currentUser;
-        }*/
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    User currentUser = _userService.Get(userId);
+                    return currentUser;
+                }*/
         public async Task<string> GetCurrentUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -395,7 +434,7 @@ namespace FeedHiveAuth.Controllers
 
             try
             {
-                var userPosts = _postService.GetCurrentUserPosts(userId);
+                var userPosts = _postService.GetCurrentUserPostsSearch(userId, "");
                 return userPosts;
             }
             catch (Exception ex)
@@ -411,13 +450,7 @@ namespace FeedHiveAuth.Controllers
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(postId);
             return ops;
         }
-        [PermissionFilter("Posts_Search")]
-        [HttpPost]
-        public JsonResult Search([FromQuery] string valinput) 
-        {
-            var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
-            var result = new JsonResult(postsresult);
-            return result;
-        }
+
+
     }
 }

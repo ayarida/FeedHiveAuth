@@ -16,7 +16,14 @@ namespace FeedHiveAuth.Data.Repositories
                 return returnedUser;
             }
         }
-
+        public ApplicationUser GetById(string id)
+        {
+            using (connection)
+            {
+                var returnedUser = connection.Query<ApplicationUser>("SELECT * FROM AspNetUsers WHERE Id IN @id", new { Id = new[] { id } }).FirstOrDefault();
+                return returnedUser;
+            }
+        }
         public IEnumerable<ApplicationUser>? Delete(string id)
         {
             using (connection)

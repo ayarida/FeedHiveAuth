@@ -61,13 +61,14 @@
             url: '/Posts/Search?valinput=' + searchtext,
             dataType: 'JSON',  
             data: {
-                valinput: "marhaba"
+                valinput: ""
             },
             contentType: "application/json; charset=utf-8",
             
             success: function (msg) {
 
                 populateTable(msg);
+                
 
                 // for (var i = 0; i < posts_array.length; i++) {
                 //     title = msg[i][0];
