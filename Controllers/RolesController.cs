@@ -73,6 +73,7 @@ namespace FeedHiveAuth.Controllers
             var curr = await userManager.GetUserAsync(User);
             var role = new Role
             {
+                Id = roleData.Id,
                 Name = roleData.Name,
                 Description = roleData.Description,
             };
