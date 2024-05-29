@@ -7,5 +7,7 @@
         public List<Post> allPosts { get; set; }
 
         public int userPostsCount { get; set; }
+        public int userTotalTodayCount { get; set; }
+
     }
 }

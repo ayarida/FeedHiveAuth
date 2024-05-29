@@ -11,6 +11,7 @@
     var socialConfigs = new SocialConfigs();
     var activeNetworkTypes = Model.ActiveSocialNetworks;
 
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var allChannels = Model.Channels.Where(channel => activeNetworkTypes.Select(networkType => networkType.ToString().ToLower()).Contains(channel.Network.ToLower()));
@@ -19,8 +20,10 @@
 }
 
 
+
+
 <div class="editor ms-auto pe-3 card" dir="rtl" style="max-width: 100%; background-color: white;">
-    <div class="container pt-4 mt-4">
+    <div class="pt-4 mt-4">
         <div class="form-items">
 
             <form id="form-share" method="post" action="send" class="p-4">
@@ -32,10 +35,7 @@
                 <hr />
                 <div class="channel-list my-3 d-flex" style="column-gap: 20px; overflow-x: auto">
 
-                    @{
-                        var index = 0;
 
-                    }
                     @foreach (var channel in allChannels)
                     {
 
@@ -49,7 +49,7 @@
                                 @channel.OriginalName
                             </label>
 
-                            <input type="radio" name="Data[0].ChannelId" value="@channel.Id" style="width: fit-content !important; height: auto" />
+                            <input type="radio" name="Data[0].ChannelId" value="@channel.Id" style="width: fit-content !important; height: auto" id="@channel.Network" />
                             <input type="hidden" name="Channels" value="@allChannels" style="width: fit-content !important; height: auto" />
 
                         </div>
@@ -58,55 +58,111 @@
                     }
                 </div>
 
-                <div class="input-fields d-flex flex-column mt-4">
+                <div class="row m-4 gx-5 p-3 preview-box">
+                    <div class="input-fields d-flex flex-column col-md-6">
 
-                    <div class="form-group mb-4">
-                        <label class="mb-3 control-label">عنوان المنشور</label>
-                        <br />
-                        <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" />
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">عنوان المنشور</label>
+                            <br />
+                            <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">عنوان قصير</label>
+                            <br />
+                            <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">ملخص</label>
+                            <br />
+                            <input value="@post.Summary" name="Summary" readonly class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">محتوى</label>
+                            <br />
+                            <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
+                        </div>
+
+                        <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
+
+                        <div class="form-group mb-4 d-flex flex-column">
+                            @if (media != null)
+                            {
+                                <label for="MediaId" class="mb-3 control-label">ميديا </label>
+                                <br />
+                                <img src="@media.Path" />
+                                <br />
+                                <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
+                            }
+                        </div>
                     </div>
 
-                    <div class="form-group mb-4">
-                        <label class="mb-3 control-label">عنوان قصير</label>
-                        <br />
-                        <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
-                    </div>
+                    <div class="col-md-6" id="sharePreview">
 
-                    <div class="form-group mb-4">
-                        <label class="mb-3 control-label">ملخص</label>
-                        <br />
-                        <input value="@post.Summary" name="Summary" readonly class="form-control" />
-                    </div>
+                        @* <div id="telegram-preview">
+                        <div class="preview-container">
+                        <div>
+                        @post.Title
+                        </div>
 
-                    <div class="form-group mb-4">
-                        <label class="mb-3 control-label">محتوى</label>
-                        <br />
-                        <input value="@post.Content" name="Content" readonly class="form-control" />
-                    </div>
-
-                    <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
-
-                    <div class="form-group mb-4 d-flex flex-column">
-                        @if (media != null)
+                        @if (post.ShortTitle != null)
                         {
-                            <label for="MediaId" class="mb-3 control-label">ميديا </label>
-                            <br />
-                            <img src="@media.Path" />
-                            <br />
-                            <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
+                        <div>
+                        @post.ShortTitle
+                        </div>
                         }
+
+                        @if (post.Summary != null)
+                        {
+                        <div>
+                        @post.Summary
+                        </div>
+                        }
+
+                        @if (post.Content != null)
+                        {
+                        <div>
+                        @post.Content
+                        </div>
+                        }
+
+                        @if (post.PostMediaItems != null)
+                        {
+                        @foreach (var mediaItems in post.PostMediaItems)
+                        {
+                        <div>
+                        <img src="@mediaItems.Path" class="previewImage" />
+                        </div>
+                        }
+                        }
+
+                        <div class="svg-appendix"><svg width="9" height="20" xmlns="http://www.w3.org/2000/svg"><defs><filter x="-50%" y="-14.7%" width="200%" height="141.2%" filterUnits="objectBoundingBox" id="a"><feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset> <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur> <feColorMatrix values="0 0 0 0 0.0621962482 0 0 0 0 0.138574144 0 0 0 0 0.185037364 0 0 0 0.15 0" in="shadowBlurOuter1"></feColorMatrix></filter></defs> <g fill="none" fill-rule="evenodd"><path d="M3 17h6V0c-.193 2.84-.876 5.767-2.05 8.782-.904 2.325-2.446 4.485-4.625 6.48A1 1 0 003 17z" fill="#000" filter="url(#a)"></path> <path d="M3 17h6V0c-.193 2.84-.876 5.767-2.05 8.782-.904 2.325-2.446 4.485-4.625 6.48A1 1 0 003 17z" fill="#FFF" class="corner"></path></g></svg></div>
+
+
+                        </div>
+                        </div> *@
                     </div>
                 </div>
+
                 <input type="hidden" value="@post.Id" name="PostId" />
+
+
 
             </form>
 
         </div>
     </div>
+
+
 </div>
-
-
-<link rel="stylesheet" href="~/css/Posts/share.css"/>
+<link rel="stylesheet" href="~/css/Posts/share.css" />
 <script src="~/js/Posts/share.js"> </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $("#telegram").on("click", function (event) {
+        $("#sharePreview").load("/Social/Publish/GetPreview?previewName=telegram&postId=@(post.Id)");
+        // event.preventDefault();
+    })
+</script>

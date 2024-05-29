@@ -53,13 +53,12 @@
                         <img src="~/Static/Icons/Group35.png" />
                     </div>
                     <div class="card-text">
-                        <h1>جدول المنشورات</h1>
+                        <h1>مجموع منشوراتك اليوم</h1>
                         <h2>لديك منشورات جديدة</h2>
                     </div>
                 </div>
                 <div class="card-body">
-                    @*                     <h1>0 أيام</h1>
-                    *@                    <h1>@Model.userPostsCount منشورات</h1>
+                    <h1>@Model.userTotalTodayCount منشورات</h1>
                     <a href="/Posts/Create">
                         <button type="button" class="btn green-btn">
                             أنشئ منشور
@@ -77,12 +76,13 @@
                         <img src="~/Static/Icons/Group35.png" />
                     </div>
                     <div class="card-text">
-                        <h1>جدول المنشورات</h1>
+                        <h1>مجموع جميع منشوراتك</h1>
                         <h2>لديك منشورات جديدة</h2>
+                       
                     </div>
                 </div>
                 <div class="card-body">
-                    <h1>0 أيام</h1>
+                    <h1>@Model.userPostsCount منشورات</h1>
                     <a href="/Posts/Create">
                         <button type="button" class="btn green-btn">
                             أنشئ منشور

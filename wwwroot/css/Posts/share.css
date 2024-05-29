@@ -84,3 +84,50 @@ label.control-label {
     font-weight: bold;
     color: grey;
 }
+
+#telegram-preview {
+    background-image: url('../../Static/Images/Background/photo1505987819.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 20px 50px;
+    height: fit-content;
+}
+
+
+.share-wrapper .content-preview .telegram-post .svg-appendix {
+    overflow: hidden;
+    position: absolute;
+    left: 4.44rem;
+    bottom: 0.9rem;
+    width: .5625rem;
+    height: 1.125rem;
+    font-size: 1rem !important;
+}
+
+.svg-appendix {
+    width: fit-content;
+    position: absolute;
+    left: -9px;
+    bottom: -3px;
+}
+
+.preview-container {
+    background: white;
+    position: relative;
+    padding: 20px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+    .preview-container div {
+        margin-top: 15px;
+    }
+
+.previewImage {
+    width: 100px;
+}
+
+.preview-box {
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}

@@ -107,7 +107,7 @@ namespace FeedHiveAuth.Controllers
                 allPosts = posts,
                 IsAdmin = isAdmin
             };
-            return View(pvm);
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
 
         public async Task<bool> isAdmin()
@@ -120,7 +120,7 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public ActionResult CreatePost()
+        public Task<ActionResult> CreatePost()
         {
 
             Post post = new Post
@@ -149,7 +149,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return View("~/Views/Posts/Create.cshtml");
+            return List();
         }
         public ActionResult CreateQuickPost()
         {
@@ -362,6 +362,7 @@ namespace FeedHiveAuth.Controllers
 
             Guid[] idsArray = idsStr?.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
             List<string> stringList = new List<string>();
+            var errors = new List<string>();
             foreach (Guid guid in idsArray)
             {
                 stringList.Add(guid.ToString());
@@ -372,13 +373,17 @@ namespace FeedHiveAuth.Controllers
             {
                 try
                 {
-                    return Delete(post);
+                    Delete(post);
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
-                    _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
-                    return BadRequest(ex.Message);
+                    errors.Add($"Error deleting post with ID {post.Id}: {ex.Message}");
+                    _logger.LogError($"********************* Error in deleting post with ID {post.Id}, EXCEPTION \r\n{ex}\r\n*********************");
                 }
+            }
+            if (errors.Any())
+            {
+                return BadRequest(errors);
             }
             return Ok();
         }

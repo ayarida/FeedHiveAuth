@@ -3,6 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Your Post Title" />
+    <meta property="og:description" content="A brief description of your post." />
+    <meta property="og:image" content="URL to the image" />
+    <meta property="og:url" content="URL to the post" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Your Website Name" />
+
     <title>@ViewData["Title"] - FeedHiveAuth</title>
 
 
@@ -107,7 +115,7 @@
                         <a href="/Resources/Index"
                            class="list-group-item list-group-item-action py-2 "
                            aria-current="true">
-                            <i class="bi bi-gear"></i><span>Resources</span>
+                            <i class="bi bi-gear"></i><span>@AppResources.Label("Dictionary")</span>
                         </a>
                         
                         <a href="/Configs/TechnicalConfigs"
@@ -143,11 +151,6 @@
                 </div>
             </nav>
 
-            @*    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FeedHiveAuth</a> *@
-            @*   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button> *@
 
             @*Calling navbar*@
 

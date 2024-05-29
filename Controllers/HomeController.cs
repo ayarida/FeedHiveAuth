@@ -37,11 +37,14 @@ namespace FeedHiveAuth.Controllers
                 post.PostMediaItems = _mediaRepository.GetMediasByPostId(post.Id);
             }
             var userPosts = _postRepository.GetCurrentUserPosts(userId);
+            var currentDate = DateTime.Now.Date;
+            var todaysPosts = _postRepository.GetByDate(currentDate,userId);
             UserDataViewModel uvm = new UserDataViewModel
             {
                 allPosts = posts,
                 userPostsCount = userPosts.Count(),
-                userPosts = userPosts
+                userPosts = userPosts,
+                userTotalTodayCount = todaysPosts.Count()
             };
             return View(uvm);
         }

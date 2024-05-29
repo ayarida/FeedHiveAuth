@@ -158,3 +158,9 @@ nav#main-navbar {
 .list-group.list-group-flush.mx-3 i {
     -webkit-text-stroke: 0.3px;
 }
+
+@media (min-width: 992px) {
+    .list-group.list-group-flush {
+        max-height: 280px;
+    }
+}
