@@ -96,26 +96,20 @@ namespace FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers
 
                 }
                 var post = Instances.Repositories.PostRepository.GetPostById(operation.PostId);
-                var subscriptionId = operation.SubscriptionId;
                 var media = Instances.Repositories.MediaItemRepository.GetMediaByPostId(operation.PostId);
-                //var media = !operation.PostId.HasValue && operation.MediaId.HasValue ? Instances.Repositories.MediaRepository.Get(operation.MediaId.Value) : null;
-                var postMediaIds = post != null && post.PostMediaItems.NotEmpty() ? post.PostMediaItems.Select(m => m.Id).ToList() : null;
-
-                
-                //var postMIds = post.PostMediaItems.Select(m=>m.Id).ToList();
-                //var medias = postMediaIds != null ? Instances.Repositories.MediaItemRepository.Get(postMediaIds).ToList() : null;
-
-                //var url = medias.FirstOrDefault(x => x.Type == 30) != null ? medias.Where(x => x.Type == 30).FirstOrDefault().Path : (media != null ? media.Path : null);
-                //var mediainfo = medias.Where(x => x.Type == 30).FirstOrDefault() != null ? medias.Where(x => x.Type == 30).FirstOrDefault() : (media != null ? media : null);
+                var postMediaIds = post != null && post.PostMediaItems.NotEmpty() ? post.PostMediaItems.Select(m => m.Id).ToList() : null;               
                 var success = true;
                 var mediaSsl = true;
                 var postContent = string.IsNullOrEmpty(post.Content) ? "" : Regex.Replace(post.Content, "<.*?>", String.Empty);
                 var apiResult = "";
-                //var isUrgent = post.PostTerms.Any(m => m._term.Code == "urgent");
-                //title = isUrgent ? post.PostTerms.Where(m => m._term.Code == "urgent").Select(m => m._term.Name).FirstOrDefault() + " : " + title : title;
-                //apiResult = client.SendMessage(title, postContent, post.CoverImage.PublicImageUrl(mediaSsl), operation.Post.PublicId.ToString(), operation.Post.PublicUrl(true));
+                if (media == null || (media!=null && media.Type!=MediaTypeEnum.Video.Value()) )
+                {
+                    opResult.Success = false;
+                    opResult.Message = "No media, No video to publish!";
+                    return opResult;
+                }
+
                 var result = PublishVideo(media.Path, media);
-                //var bsObj = JsonConvert.DeserializeObject<UploadedResponse>(result);
                 string message = result.Result.id + result.Result.txt;
                 string id = result.Result.id;
 
