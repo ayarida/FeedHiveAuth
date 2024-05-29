@@ -3,6 +3,7 @@ using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.ViewModels;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp.Extensions;
@@ -178,6 +179,49 @@ namespace FeedHiveAuth.Controllers
             //TODO: Update users returned based on current subscriptionId
             List<IdentityUser> users = userManager.Users.ToList();
             return View(users);
+        }
+        [PermissionFilter("Users_ListTree")]
+        [HttpGet]
+        public IActionResult ListTree()
+        {
+            //TODO: Update users returned based on current subscriptionId
+            List<IdentityUser> users = userManager.Users.ToList();
+            var userList = new List<UsersWithRolesViewModel>();
+           
+            if(User.IsInRole("Master"))
+            {
+                var MasterViewModel = new UsersWithRolesViewModel();
+                MasterViewModel.user = userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name));
+                MasterViewModel.role = "Master";//add master to list
+                userList.Add(MasterViewModel);
+                var admins = Instances.Repositories.UserRepository.GetWhosParentId(userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name)).Id);
+                if(admins!=null)
+                {
+                    //get user by id admin
+                    foreach(var  admin in admins)
+                    {
+                        //add admins to list
+                        var AdminViewModel = new UsersWithRolesViewModel();
+                        AdminViewModel.user = Instances.Repositories.UserRepository.GetById(admin);
+                        AdminViewModel.role = "Admin";
+                        userList.Add(AdminViewModel);
+                        var childs = Instances.Repositories.UserRepository.GetWhosParentId(AdminViewModel.user.Id);
+                        if(childs!=null)
+                        {
+                            foreach(var child in childs)
+                            {
+                                var userViewModel=new UsersWithRolesViewModel();
+                                userViewModel.user= Instances.Repositories.UserRepository.GetById(child);
+                                userViewModel.role = "Editor";
+                                userViewModel.ParentId=AdminViewModel.user.Id;
+                                userList.Add(userViewModel);
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            return View(userList);
         }
         [PermissionFilter("Users_GetById")]
         public IdentityUser GetById(string id)

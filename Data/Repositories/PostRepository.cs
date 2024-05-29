@@ -71,6 +71,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public List<Post> GetAdminUsersPosts(List<string> adminUsersIds)
         {
+
             var paramNames = adminUsersIds.Select((id, index) => $"@userId{index}");
             var query = SqlSelectWhole + $" WHERE CreatedBy IN ({string.Join(",", paramNames)})";
             //var query = SqlSelectWhole + $" WHERE CreatedBy IN (" + adminUsersIds + ")";
@@ -86,7 +87,28 @@ namespace FeedHiveAuth.Data.Repositories
             //List<Post> posts = connection.Query<Post>(query).ToList();
             return posts;
         }
+        public List<Post> GetAdminUsersPostsSearch(List<string> adminUsersIds, string searchtxt)
+        {
+            var AND = "";
+            if (searchtxt != string.Empty)
+            {
+                AND = $"and (Content LIKE N'%{searchtxt}%' or Title LIKE N'%{searchtxt}%' or ShortTitle LIKE N'%{searchtxt}%')";
+            }
+            var paramNames = adminUsersIds.Select((id, index) => $"@userId{index}");
+            var query = SqlSelectWhole + $" WHERE CreatedBy IN ({string.Join(",", paramNames)}) " + AND;
+            //var query = SqlSelectWhole + $" WHERE CreatedBy IN (" + adminUsersIds + ")";
+            var parameters = new DynamicParameters();
+            for (var i = 0; i < adminUsersIds.Count; i++)
+            {
+                parameters.Add($"userId{i}", adminUsersIds[i]);
+            }
 
+            // Execute the query with parameters
+            List<Post> posts = connection.Query<Post>(query, parameters).ToList();
+
+            //List<Post> posts = connection.Query<Post>(query).ToList();
+            return posts;
+        }
         public List<Post> GetScheduledPosts()
         {
             var query = SqlSelect + $" WHERE Status = 150";
@@ -108,7 +130,8 @@ namespace FeedHiveAuth.Data.Repositories
             try
             {
                 connection.Query<Post>(SqlUpdate, post);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.Message);
                 return 0;
@@ -137,7 +160,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         public void SavePost(Post post)
         {
-            post.Id = Guid.NewGuid().ToString();                                                                                                                                                              
+            post.Id = Guid.NewGuid().ToString();
             string query = string.Format(
                                     "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},N{6},N{7},{8},{9},{10})",
                                     TableName,
@@ -148,8 +171,8 @@ namespace FeedHiveAuth.Data.Repositories
                                     post.Summary.EscapeForSql(),
                                     post.Content.EscapeForSql(),
                                     post.PublicLink.EscapeForSql(),
-                                    post.PostDate.EscapeForSql(true), 
-                                    post.CreatedBy.EscapeForSql(), 
+                                    post.PostDate.EscapeForSql(true),
+                                    post.CreatedBy.EscapeForSql(),
                                     post.ModifiedBy.EscapeForSql()
                                     );
             ExecuteQuery(query);
@@ -171,6 +194,18 @@ namespace FeedHiveAuth.Data.Repositories
             return operations;
         }
 
+        public List<Post> GetCurrentUserPostsSearch(string userId, string searchtxt)
+        {
+            var AND = "";
+            if (searchtxt != string.Empty)
+            {
+                AND = $"and (Content LIKE N'%{searchtxt}%' or Title LIKE N'%{searchtxt}%' or ShortTitle LIKE N'%{searchtxt}%')";
+            }
+            var query = SqlSelect + $" WHERE CreatedBy='{userId}'" + AND;
+            List<Post> scheduledPosts = connection.Query<Post>(query).ToList();
+
+            return scheduledPosts;
+        }
         public List<Post> GetCurrentUserPosts(string userId)
         {
             var query = SqlSelect + $" WHERE CreatedBy='{userId}'";
