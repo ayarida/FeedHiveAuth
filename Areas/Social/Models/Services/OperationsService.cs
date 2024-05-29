@@ -47,7 +47,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
 
         public static void ProcessShareOperation(Operation operation)
         {
-            //OperationHelper.StartShareOperation(operation);
+            OperationHelper.StartShareOperation(operation);
             var operationData = operation.Parameters.FromJson<SendOperationData>();
             var channel = Collections.Channels().FirstOrDefault(x => x.Id.Equals(operation.ChannelId));
             if (channel == null)
@@ -77,7 +77,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                     Task.Run(() =>
                     {
                         var result = FacebookService.Send(operation, channel);
-                        /*OperationHelper.EndShareOperation(operation,result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Message, result.Result); ;*/
+                        OperationHelper.EndShareOperation(operation,result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Message, result.Result);
                     });
                     break;
                 default:

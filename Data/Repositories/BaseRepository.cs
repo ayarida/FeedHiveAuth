@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -72,7 +73,8 @@ namespace FeedHiveAuth.Data.Repositories
         {
             using (connection)
             {
-                var resultQuery = connection.Query<T>(SqlUpdate);
+                var sql = SqlUpdate;
+                Execute(sql, entity);
             }
         }
 

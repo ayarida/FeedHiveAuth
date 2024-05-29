@@ -38,11 +38,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Helpers
             if (message.IsNotNullOrEmpty())
             { operation.Messages += DomainTime.Now() + ": " + message + "\r\n"; }
             operation.Messages += DomainTime.Now() + ": " + "The operation has ended\r\n************************************************\r\n";
-            Instances.Repositories.OperationRepository.Update(operation);
-            if (operation.Callback.IsNotNullOrEmpty())
-            {
-                //operation.Callback(status);
-            }
+            Instances.Repositories.OperationRepository.Update(operation);         
         }
     }
 }
