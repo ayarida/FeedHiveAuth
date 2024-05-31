@@ -594,7 +594,13 @@ input#txtSearch {
     border-bottom: 2px solid #ced6de !important;
 }
 
-#result a  {
-    color: inherit ;
+#result a {
+    color: inherit;
     text-decoration: underline;
+}
+
+#result img {
+    width: 78px;
+    height: 50px;
+    border: 1px solid grey;
 }
