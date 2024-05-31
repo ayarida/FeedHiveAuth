@@ -23,5 +23,6 @@ namespace FeedHiveAuth.Data.Repositories
         {
             UpdateColumn("CurrentState", operation.CurrentState, operation.Id.ToString());
         }
+        public List<Operation> getPostOperations(string postId)
     }
 }

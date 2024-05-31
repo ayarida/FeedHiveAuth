@@ -14,7 +14,7 @@
         public string? ModifiedBy { get; set; }
         public string? PublishedBy { get; set; }
         public string? PublicLink { get; set; }
-
+        public List<Operation> Operations { get; set; }
         public string? CreatedByName { get; set; }
 
         public DateTime? ExpireDate { get; set; }
