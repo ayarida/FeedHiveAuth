@@ -1,12 +1,12 @@
 ﻿
 <div class="row mt-5">
     <div class="col-md-5 mx-auto">
-        <div class="input-group">
-            <input class="form-control border-end-0 border" type="search" value="البحث" id="txtSearch" >
-            
-            <button type="button" class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="GetSearchResult()">
-                    <i class="fa fa-search"></i>
-                </button>
+        <div class="input-group search-div">
+            <input class="form-control border-end-0 border" type="search" placeholder="البحث" id="txtSearch">
+
+            <button type="button" class="border-start-0 border-bottom-0 border ms-n5" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="GetSearchResult()" id="search-btn">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
     </div>
 </div>
@@ -17,41 +17,60 @@
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <table class="table table-bordered">
+        <div class="modal-content p-3">
+            <table class="table">
                 <thead class="alert-info">
                     <tr>
+                        <th>Image</th>
                         <th>Title</th>
-                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody id="result"></tbody>
             </table>
-            <div class="modal-footer">
+            <div class="modal-footer" style="border: none !important">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript"> 
+
+
+
+<script type="text/javascript">
+    // $("input#txtSearch").bind("keypress", {}, keypressInBox);
+
+    // function keypressInBox() {
+    //     console.log("here");
+    //     GetSearchResult();
+    // }
+
+    $('#txtSearch').keypress(function (e) {
+        if (e.which == 13) {
+            $("#search-btn").click();
+        }
+    })
+
     function populateTable(data) {
         var table = "";
+        if (data.length == 0) {
+            table = "No results"
+        }
+        else {
+            for (var i in data) {
+                console.log(data[i])
+                table += "<tr>";
+                table += "<td> <img src='" + (data[i].Path ? data[i].Path : "/uploads/no-img.jpg" ) + "'</td>" + "<td><a href=' / Posts / Edit / " + data[i].id + "'>"
+                    + data[i].title + "</a><p>" + data[i].postDate + "</td>"
 
-        for (var i in data) {
-            console.log(data[i])
-            table += "<tr>";
-            table += "<td><a href='/Posts/Edit/"+data[i].id +"'>"
-                + data[i].title + "</a></td>"
-                + "<td>" + data[i].postDate + "</td>"
                 // + "<td>" + data[i].address + "</td>";
-            table += "</tr>";
+                table += "</tr>";
+            }
         }
 
         document.getElementById("result").innerHTML = table;
 
     };
-    function GetSearchResult() 
-        {
+    function GetSearchResult() {
         var searchtext = $('#txtSearch').val();
         console.log(searchtext);
         var urltarget = '/Posts/Search?valinput=' + searchtext;
@@ -59,24 +78,21 @@
         $.ajax({
             type: 'POST',
             url: '/Posts/Search?valinput=' + searchtext,
-            dataType: 'JSON',  
+            dataType: 'JSON',
             data: {
                 valinput: ""
             },
             contentType: "application/json; charset=utf-8",
-            
-            success: function (msg) {
 
+            success: function (msg) {
                 populateTable(msg);
-                
 
                 // for (var i = 0; i < posts_array.length; i++) {
                 //     title = msg[i][0];
                 // }
-                }
-            
+            }
         });
-        }
+    }
 
-    
+
 </script>

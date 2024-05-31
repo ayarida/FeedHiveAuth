@@ -558,3 +558,43 @@ ul.dropdown-menu.account {
 .list-group.list-group-flush i {
     font-size: 18px;
 }
+
+#search-btn {
+    width: fit-content;
+}
+
+.search-div {
+    flex-direction: row-reverse;
+    border: none;
+    background: transparent;
+    align-items: baseline;
+}
+
+input#txtSearch {
+    background: transparent;
+    border: none !important;
+}
+
+    input#txtSearch:active, input#txtSearch:focus {
+        border-color: inherit;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+#search-btn {
+    background: none;
+    border: none !important;
+    box-shadow: none !important;
+    height: fit-content;
+    padding-right: 0px !important;
+    padding-left: 5px !important;
+}
+
+.input-group.search-div {
+    border-bottom: 2px solid #ced6de !important;
+}
+
+#result a  {
+    color: inherit ;
+    text-decoration: underline;
+}
