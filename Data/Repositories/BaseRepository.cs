@@ -40,6 +40,14 @@ namespace FeedHiveAuth.Data.Repositories
             var connString = configuration.GetConnectionString("DefaultConnection");
             return connString;
         }*/
+        public List<T> GetAll()
+        {
+            var query = SqlSelect;
+            var all = connection.Query<T>(query).ToList();
+            return all;
+
+        }
+
         public T Get(string id)
         {
             if (string.IsNullOrEmpty(SqlSelect))
