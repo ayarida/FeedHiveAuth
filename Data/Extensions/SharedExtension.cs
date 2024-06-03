@@ -80,7 +80,27 @@ namespace FeedHiveAuth.Data.Extensions
                 }
             }
         }
+        public static DateTime UtcDate(this DateTime localdate)
+        {
+            if (string.IsNullOrEmpty("(UTC+02.00) Beirut"))
+            {
+                return localdate;
+            }
 
+            return localdate.AddHours(-1 * localdate.GetTimeZoneOffset());
+        }
+        public static int GetTimeZoneOffset(this DateTime date)
+        {
+            if (string.IsNullOrEmpty("(UTC+02.00) Beirut"))
+            {
+                return 0;
+            }
+
+            var timezone = TimeZoneInfo.FindSystemTimeZoneById("Middle East Standard Time");
+            var offset =
+                timezone.GetUtcOffset(date.AddDays(0));
+            return offset.Hours;
+        }
         public static bool IsPrimitive(this Type type)
         {
             return type.IsPrimitive || type == typeof(decimal) || type == typeof(string) || type == typeof(Guid);
