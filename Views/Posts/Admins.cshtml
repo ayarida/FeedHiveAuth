@@ -1,0 +1,20 @@
+﻿@using FeedHiveAuth.Models.ViewModels;
+@model IEnumerable<ApplicationUser>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    var Admins = Model;
+    
+}
+@foreach(var admin in Admins)
+{
+    <div class="card" style="width: 18rem;" dir="rtl">
+        @* <img src="..." class="card-img-top" alt="..."> *@
+        <div class="card-body">
+            <h5 class="card-title">@admin.UserName</h5>
+            @* <p class="card-text">@admin.rol</p> *@
+             @* <a href="@Url.ActionLink("/Posts/Editors?id=" + admin.Id)" class="stretched-link">Details</a>  *@
+             @Html.ActionLink("Editors","AllPosts","Posts",new {id=admin.Id})
+        </div>
+    </div>
+}

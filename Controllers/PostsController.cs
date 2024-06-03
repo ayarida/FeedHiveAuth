@@ -1,12 +1,11 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Account;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Text;
 namespace FeedHiveAuth.Controllers
@@ -41,7 +40,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public JsonResult Search([FromQuery] string valinput)
         {
-            List<Post> posts=new List<Post>();
+            List<Post> posts = new List<Post>();
             List<Post> userPosts;
             var isAdmin = User.IsInRole("Admin");
             var isMaster = User.IsInRole("Master");
@@ -49,22 +48,26 @@ namespace FeedHiveAuth.Controllers
             if (isMaster)
             {
                 var masterAdmins = _userService.GetWhosParentId(user.Id).ToList();//get admins
-                foreach(var admin in masterAdmins)
+                foreach (var admin in masterAdmins)
                 {
                     var adminUsers= _userService.GetWhosParentId(admin.ToString()).ToList();//get Users
-                    userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
-                    posts.AddRange(userPosts);
+                    if(adminUsers.Count>0)
+                    {
+                        userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
+                        posts.AddRange(userPosts);
+                    }
+                    
                 }
                 
             }
             else if (isAdmin)
             {
                 var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
-                if(adminUsers.Count > 0 )
+                if (adminUsers.Count > 0)
                 {
                     posts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
                 }
-                
+
                 //posts = _postService.GetPosts();
             }
             else
@@ -74,6 +77,35 @@ namespace FeedHiveAuth.Controllers
             //var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
             var result = new JsonResult(posts);
             return result;
+        }
+        [HttpGet]
+        [PermissionFilter("Posts_Admins")]
+        public ActionResult Admins()
+        {
+            var user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
+            var adminUsers = _userService.GetAll().Where(x=>x.ParentId == user.Id);
+            return View(adminUsers);
+
+        }
+        [HttpGet]
+        [PermissionFilter("Posts_AllPosts")]
+        public ActionResult AllPosts(string id)
+        {
+            var posts = new List<Post>();
+            var user = Instances.Repositories.UserRepository.GetById(id);
+            var Editors = _userService.GetAll().Where(x => x.ParentId == user.Id);
+            var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
+            if(adminUsers.Count>0 )
+            {
+                posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
+            }
+            
+            PostListViewModel pvm = new PostListViewModel
+            {
+                allPosts = posts,
+                IsAdmin = true
+            };
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
         [PermissionFilter("Posts_List")]
         [HttpGet]
@@ -108,6 +140,17 @@ namespace FeedHiveAuth.Controllers
                 IsAdmin = isAdmin
             };
             return View("~/Views/Posts/List.cshtml", pvm);
+        }
+
+
+        [HttpGet]
+        public IActionResult Preview(string id)
+        {
+            var post = _postService.GetPostById(id);
+            var postMedia = _mediaItemService.GetMediasByPostId(id);
+            if (postMedia != null) { post.PostMediaItems = postMedia; };
+
+            return View("~/Views/Posts/Preview.cshtml", post);
         }
 
         public async Task<bool> isAdmin()

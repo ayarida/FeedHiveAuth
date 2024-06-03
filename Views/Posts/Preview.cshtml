@@ -1,0 +1,84 @@
+﻿@using FeedHiveAuth.Areas.Social.Models;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model FeedHiveAuth.Models.Post
+
+@{
+    var post = Model;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="editor ms-auto pe-3 card" dir="rtl" style="max-width: 100%; background-color: white;">
+    <div class="pt-4 mt-4">
+        <div class="form-items">
+            <div class="row mx-4 gx-5 p-3">
+                <h2>استعراض المنشور</h2>
+            </div>
+
+            <form id="form-share" method="post" action="send" class="p-4">
+
+                <div class="row m-4 gx-5 p-3 preview-box">
+                    <div class="input-fields d-flex flex-column col-md-6">
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">عنوان المنشور</label>
+                            <br />
+                            <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">عنوان قصير</label>
+                            <br />
+                            <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">ملخص</label>
+                            <br />
+                            <input value="@post.Summary" name="Summary" readonly class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="mb-3 control-label">محتوى</label>
+                            <br />
+                            <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
+                        </div>
+
+                        <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
+
+                        <div class="form-group mb-4 mt-3 d-flex flex-column">
+                            @if (post.PostMediaItems != null && post.PostMediaItems.Count > 0)
+                            {
+                                <label for="MediaId" class="mb-3 control-label">ميديا </label>
+                                <br />
+                                <img src="@post.PostMediaItems.FirstOrDefault()?.Path" />
+                                <br />
+                                <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@post.PostMediaItems.FirstOrDefault()?.Path">
+                            }
+                            else
+                            {
+                                <h5 class="mb-3 control-label" style="font-weight: bold">
+                                    لا بوجد ميديا
+                                </h5>
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <input type="hidden" value="@post.Id" name="PostId" />
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="~/css/Posts/share.css" />
+<script src="~/js/Posts/share.js"> </script>

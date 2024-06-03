@@ -15,47 +15,76 @@
         <div class="card-header" style="background: #F6F9FC !important;">
             <h3>قائمة المستخدمين</h3>
         </div>
-        </div>
+
+        <ul id="myUL" class="m-3">
+            <li>
+                <span class="caret">@users?.Where(x => x.role == "Master")?.FirstOrDefault()?.user.UserName</span>
+                <ul class="nested">
+                    @foreach (var admin in Admins)
+                    {
+                        <li>
+                            <span class="caret last" style="border-right: 6px solid #65c465">@admin.user.UserName</span>
+                            <ul class="nested last">
+                                @foreach (var editor in Editors.Where(x => x.ParentId == admin.user.Id).ToList())
+                                {
+                                    <span>
+                                        <i class="arrow right"></i>
+                                    <li>@editor.user.UserName</li>
+                                    </span>
+                                }
+
+
+                            </ul>
+                        </li>
+                    }
+
+                </ul>
+            </li>
+        </ul>
+
+    </div>
 </div>
 
-    <ul id="myUL">
-        <li>
-            <span class="caret">@users.Where(x=>x.role=="Master").FirstOrDefault().user.UserName</span>
-            <ul class="nested">
-                @foreach(var admin in Admins)
-            {
-                <li>
-                    <span class="caret">@admin.user.UserName</span>
-                    <ul class="nested">
-                        @foreach(var editor in Editors.Where(x=>x.ParentId==admin.user.Id).ToList())
-                        {
-                            <li>@editor.user.UserName</li>
-                        }
 
 
-                    </ul>
-                </li>
-            }
-                
-            </ul>
-        </li>
-    </ul>
+<script>
+    var toggler = document.getElementsByClassName("caret");
+    var i;
 
-    <script>
-        var toggler = document.getElementsByClassName("caret");
-        var i;
-
-        for (i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function () {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
-            });
-        }
-    </script>
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
+</script>
 
 
 
 <style>
+
+    ul li {
+        border: 1px solid #e5e5e5;
+    }
+
+    ul.nested.last.active li {
+        border: none;
+    }
+
+    span.caret {
+        display: flex;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    ul.nested.active li {
+        margin-bottom: 5px;
+    }
+
+        ul.nested.active li span {
+            display: flex;
+        }
+
     ul, #myUL {
         list-style-type: none;
     }
@@ -71,20 +100,17 @@
         -moz-user-select: none; /* Firefox 2+ */
         -ms-user-select: none; /* IE 10+ */
         user-select: none;
+        border-right: 6px solid #f38787;
+        padding-right: 3px;
     }
 
         .caret::before {
-            content: "\25B6";
             color: black;
             display: inline-block;
             margin-right: 6px;
         }
 
-    .caret-down::before {
-        -ms-transform: rotate(90deg); /* IE 9 */
-        -webkit-transform: rotate(90deg); /* Safari */
-        ' transform: rotate(90deg);
-    }
+
 
     .nested {
         display: none;
@@ -93,4 +119,20 @@
     .active {
         display: block;
     }
+
+    .right {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+
+    ul.nested.last.active > span::before {
+        content: "\25B6";
+        color: black;
+        display: inline-block;
+        margin-left: 6px;
+        transform: rotate(180deg);
+    }
+
+
+
 </style>

@@ -64,10 +64,12 @@
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="PostDate" class="control-label">تاريخ النشر</label>
-                            <input asp-for="PostDate" class="form-control req" />
+                            <label asp-for="PostDate"  class="control-label">تاريخ النشر</label>
+                            @* <input asp-for="PostDate" type="datetime" class="form-control req" value=@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") /> *@
+                            <input asp-for="PostDate" class="form-control req" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" min=" @DateTime.Now" max=" @DateTime.Now" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
+
                     </div>
                     @* PreviewIamge and handle exceptions *@
                     <div class="submitPreview">
@@ -97,7 +99,7 @@
 
     var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
     var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
-
+    
 </script>
 <script src="~/js/Posts/create.js"></script>
 @section Scripts {
@@ -105,3 +107,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
