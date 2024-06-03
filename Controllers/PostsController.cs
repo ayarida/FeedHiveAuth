@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Account;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.ViewModels;
@@ -52,8 +53,12 @@ namespace FeedHiveAuth.Controllers
                 foreach(var admin in masterAdmins)
                 {
                     var adminUsers= _userService.GetWhosParentId(admin.ToString()).ToList();//get Users
-                    userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
-                    posts.AddRange(userPosts);
+                    if(adminUsers.Count>0)
+                    {
+                        userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
+                        posts.AddRange(userPosts);
+                    }
+                    
                 }
                 
             }
@@ -74,6 +79,35 @@ namespace FeedHiveAuth.Controllers
             //var postsresult = Instances.Repositories.PostRepository.GetPostByTitle(valinput);
             var result = new JsonResult(posts);
             return result;
+        }
+        [HttpGet]
+        [PermissionFilter("Posts_Admins")]
+        public ActionResult Admins()
+        {
+            var user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
+            var adminUsers = _userService.GetAll().Where(x=>x.ParentId == user.Id);
+            return View(adminUsers);
+
+        }
+        [HttpGet]
+        [PermissionFilter("Posts_AllPosts")]
+        public ActionResult AllPosts(string id)
+        {
+            var posts = new List<Post>();
+            var user = Instances.Repositories.UserRepository.GetById(id);
+            var Editors = _userService.GetAll().Where(x => x.ParentId == user.Id);
+            var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
+            if(adminUsers.Count>0 )
+            {
+                posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
+            }
+            
+            PostListViewModel pvm = new PostListViewModel
+            {
+                allPosts = posts,
+                IsAdmin = true
+            };
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
         [PermissionFilter("Posts_List")]
         [HttpGet]
