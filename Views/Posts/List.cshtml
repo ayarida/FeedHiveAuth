@@ -83,7 +83,7 @@
                                 </td>
                                 
                             }
-                                <td class="post-title">@Html.ActionLink(post.Title, "Edit", "Posts", new { @post.Id }) 
+                                <td class="post-title">@Html.ActionLink(post.Title, "Preview", "Posts", new { @post.Id }) 
                                     @if(Model.IsAdmin) {
                                         <p>@post.CreatedByName</p>
                                     }                              
