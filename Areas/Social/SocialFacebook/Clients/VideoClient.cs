@@ -55,7 +55,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             return Post<BasicResult>("/me/videos", parms, true);
         }
 
-        public IRestResponse<FeedResponse> Publish(string title, string description, string url, bool published = true, string? scheduledPublishTime = null, string? pageId=null)
+        public IRestResponse<FeedResponse> Publish(string title, string description, string url, bool published = true, long? scheduledPublishTime = null, string? pageId=null)
         {
             var parms = new Dictionary<string, object> {
                 { "title", title ?? "" },

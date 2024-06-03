@@ -12,7 +12,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
 
 
         }
-        public IRestResponse<FeedResponse> Publish(string message, string link, bool published = true, string scheduledPublishTime = null, string? pageId=null)
+        public IRestResponse<FeedResponse> Publish(string message, string link, bool published = true, long? scheduledPublishTime = null, string? pageId=null)
         {
             var parms = new Dictionary<string, object> {
                 { "message", message },
