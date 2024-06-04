@@ -131,7 +131,13 @@ namespace FeedHiveAuth.Controllers
             {
 
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
-                if(model.ParentId!=null) _userService.AssignParentToUser(currentuser.Result, GetByName(model.UserName).Id);
+                if (model.ParentId != null) { //Master adding a editor
+                    _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
+                }
+                else { //Adding an editor
+                    _userService.AssignParentToUser(currentuser.Result, GetByName(model.UserName).Id);
+                }
+
                 if (assignRole.Succeeded)
                 {
                     return RedirectToAction("List", "Users");

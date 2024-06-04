@@ -32,6 +32,8 @@
             <label for="rolesid">إختر دور :</label>
             <div class="custom-select">
                 <select name="RoleId" id="rolesid">
+                    <option disabled selected> Select Role </option>
+
                     @foreach (var role in roles)
                     {
                         <option value="@role.Id">@role</option>
@@ -44,7 +46,7 @@
             </div>
             @if (isAdmin)
             {
-                <input type="hidden" value="@Model.User.Id" name="ParentId" id="parentId" />
+                <input type="hidden" value="" name="ParentId" id="parentId" />
             }
             else{
                 <div id="parentDropdown" style="display: none;">
@@ -52,6 +54,7 @@
                         <label for="parentId">Parent Id:</label>
                         <div class="custom-select">
                             <select name="ParentId" id="parentId">
+                                  <option disabled selected> Select Parent </option>
                                 @foreach (var parent in parentUsers)
                                 {
                                     <option value="@parent.Id">@parent.UserName</option>
