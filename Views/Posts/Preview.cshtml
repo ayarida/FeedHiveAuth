@@ -22,40 +22,42 @@
             <form id="form-share" method="post" action="send" class="p-4">
 
                 <div class="row m-4 gx-5 p-3 preview-box">
-                    <div class="input-fields d-flex flex-column col-md-6">
+                    <div class="input-fields col-md-6 d-flex justify-content-between w-100">
 
-                        <div class="form-group mb-4">
-                            <label class="mb-3 control-label">عنوان المنشور</label>
-                            <br />
-                            <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                        <div style="width: 400px">
+                            <div class="form-group mb-4">
+                                <label class="mb-3 control-label">عنوان المنشور</label>
+                                <br />
+                                <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="mb-3 control-label">عنوان قصير</label>
+                                <br />
+                                <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="mb-3 control-label">ملخص</label>
+                                <br />
+                                <input value="@post.Summary" name="Summary" readonly class="form-control" />
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label class="mb-3 control-label">محتوى</label>
+                                <br />
+                                <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
+                            </div>
+
+                            <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
                         </div>
-
-                        <div class="form-group mb-4">
-                            <label class="mb-3 control-label">عنوان قصير</label>
-                            <br />
-                            <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label class="mb-3 control-label">ملخص</label>
-                            <br />
-                            <input value="@post.Summary" name="Summary" readonly class="form-control" />
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label class="mb-3 control-label">محتوى</label>
-                            <br />
-                            <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
-                        </div>
-
-                        <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
 
                         <div class="form-group mb-4 mt-3 d-flex flex-column">
                             @if (post.PostMediaItems != null && post.PostMediaItems.Count > 0)
                             {
                                 <label for="MediaId" class="mb-3 control-label">ميديا </label>
                                 <br />
-                                <img src="@post.PostMediaItems.FirstOrDefault()?.Path" />
+                                <img src="@post.PostMediaItems.FirstOrDefault()?.Path" style="width: 300px; max-width: 100%" />
                                 <br />
                                 <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@post.PostMediaItems.FirstOrDefault()?.Path">
                             }
@@ -64,6 +66,9 @@
                                 <h5 class="mb-3 control-label" style="font-weight: bold">
                                     لا بوجد ميديا
                                 </h5>
+                                <div>
+                                    <img src="~/uploads/no-img.jpg" style="border: 1px solid grey; width: 300px; max-width: 100%" />
+                                </div>
                             }
                         </div>
                     </div>
