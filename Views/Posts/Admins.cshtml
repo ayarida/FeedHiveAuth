@@ -4,17 +4,27 @@
 @inject UserManager<IdentityUser> UserManager
 @{
     var Admins = Model;
-    
+
 }
-@foreach(var admin in Admins)
-{
-    <div class="card" style="width: 18rem;" dir="rtl">
-        @* <img src="..." class="card-img-top" alt="..."> *@
+<div class="row">
+    <div class="card" dir="rtl">
         <div class="card-body">
-            <h5 class="card-title">@admin.UserName</h5>
-            @* <p class="card-text">@admin.rol</p> *@
-             @* <a href="@Url.ActionLink("/Posts/Editors?id=" + admin.Id)" class="stretched-link">Details</a>  *@
-             @Html.ActionLink("Editors","AllPosts","Posts",new {id=admin.Id})
+            <div class="card-list">
+                @foreach (var admin in Admins)
+                {
+
+                    @* <img src="..." class="card-img-top" alt="..."> *@
+                    <div class="card px-4 pt-4">
+                        <h5 class="card-title"><span style="font-weight: bold">المستخدم :</span> @admin.UserName</h5>
+                        @* <p class="card-text">@admin.rol</p> *@
+                        @* <a href="@Url.ActionLink("/Posts/Editors?id=" + admin.Id)" class="stretched-link">Details</a>  *@
+                        <hr />
+                        <div class="card-body"> <p>منشورات من :</p> @Html.ActionLink("Editors", "AllPosts", "Posts", new { id = admin.Id })</div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-}
+</div>
+
+<link rel="stylesheet" href="~/css/posts/admins.css" />            
