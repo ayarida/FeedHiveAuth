@@ -124,13 +124,14 @@ namespace FeedHiveAuth.Controllers
                 PasswordHash = model.PasswordHash,
                 //ParentId = model.ParentId
             };
+            var currentuser = GetCurrentUserId();
             var result = await userManager.CreateAsync(customUser, model.PasswordHash);
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Editor");
             if (result.Succeeded && result.Errors.Count() == 0)
             {
 
                 var assignRole = await userManager.AddToRoleAsync(customUser, getRole.Name);
-                if(model.ParentId!=null) _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
+                if(model.ParentId!=null) _userService.AssignParentToUser(currentuser.Result, GetByName(model.UserName).Id);
                 if (assignRole.Succeeded)
                 {
                     return RedirectToAction("List", "Users");
@@ -239,6 +240,26 @@ namespace FeedHiveAuth.Controllers
                         }
                     }
                     
+                }
+            }
+            else if(User.IsInRole("Admin"))
+            {
+                
+                var AdminViewModel = new UsersWithRolesViewModel();
+                AdminViewModel.user = userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name));
+                AdminViewModel.role = "Admin";
+                userList.Add(AdminViewModel);
+                var childs = Instances.Repositories.UserRepository.GetWhosParentId(AdminViewModel.user.Id);
+                if (childs != null)
+                {
+                    foreach (var child in childs)
+                    {
+                        var userViewModel = new UsersWithRolesViewModel();
+                        userViewModel.user = Instances.Repositories.UserRepository.GetById(child);
+                        userViewModel.role = "Editor";
+                        userViewModel.ParentId = AdminViewModel.user.Id;
+                        userList.Add(userViewModel);
+                    }
                 }
             }
             return View(userList);

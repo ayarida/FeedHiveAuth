@@ -52,10 +52,14 @@
 </head>
 <body>
 @using FeedHiveAuth.Data.Helpers
+@inject SignInManager<IdentityUser> SignInManager
     <div class="container">
         <header>
-
+            @{
+                var postslink = User.IsInRole("Master") ? "/Posts/Admins" : "/Posts/List";
+            }
             @*Calling Sidebar*@
+            @if (SignInManager.IsSignedIn(User)) {
             <nav dir="auto" id="sidebarMenu"
                  class="collapse d-lg-block sidebar collapse bg-white" style="">
                 <div class="position-sticky">
@@ -84,7 +88,7 @@
                         @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
                         <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
                         </a> *@
-                        <a href="/Posts/List"
+                        <a href="@postslink"
                            class="list-group-item list-group-item-action py-2 ">
                             <i class="bi bi-grid"></i><span>المنشورات</span>
                         </a>
@@ -130,6 +134,7 @@
                     </div>
                 </div>
             </nav>
+            }
             <partial name="_SearchResult" />
             <nav id="main-navbar"
                  class="navbar navbar-expand-lg navbar-light bg-white fixed-top">

@@ -4,7 +4,7 @@
 @inject UserManager<IdentityUser> UserManager
 @{
     var users = Model;
-    var Master = users.Where(x => x.role == "Master").FirstOrDefault().user.UserName;
+    var Master = users.Where(x => x.role == "Master").FirstOrDefault()?.user.UserName;
     var Admins = users.Where(x => x.role == "Admin").ToList();
     var Editors = users.Where(x => x.role == "Editor").ToList();
 
