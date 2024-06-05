@@ -82,8 +82,17 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 message.Subject = "Reset Password";
                 message.Body = $" <a href='{HtmlEncoder.Default.Encode(EmailConfirmationUrl)}'>Click here to confirm your account</a>.";
                 message.IsBodyHtml = true;
-
-                await _smtpClient.SendMailAsync(message);
+                try
+                {
+                    var smtp = _smtpClient;
+                    // Send the email
+                    _smtpClient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle the exception appropriately
+                    return RedirectToPage("/Error");
+                }
             }
 
             return Page();
