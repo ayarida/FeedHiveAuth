@@ -79,7 +79,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 var message = new MailMessage();
                 message.From = new MailAddress("socialpub365@outlook.com");
                 message.To.Add(new MailAddress(email));
-                message.Subject = "Reset Password";
+                message.Subject = "Confirm Registration Please!";
                 message.Body = $" <a href='{HtmlEncoder.Default.Encode(EmailConfirmationUrl)}'>Click here to confirm your account</a>.";
                 message.IsBodyHtml = true;
                 try
