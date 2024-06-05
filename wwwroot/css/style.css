@@ -604,3 +604,11 @@ input#txtSearch {
     height: 50px;
     border: 1px solid grey;
 }
+
+.login {
+    background: #0d6efd;
+}
+
+    .login a {
+        color: white !important;
+    }

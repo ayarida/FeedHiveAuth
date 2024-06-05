@@ -13,3 +13,22 @@
     .card-list a {
         color: black !important;
     }
+
+
+.card-access {
+    background: #dce7fc;
+    border-radius: 5px;
+    color: #5f93ef !important;
+    font-weight: bold;
+    width: 300px;
+    max-width: 100%;
+}
+
+
+.card-access .card-body{
+    align-items: unset;
+    flex-direction: row;
+    justify-content: flex-start;
+    column-gap: 4px;
+    padding-right: 0px;
+}

@@ -12,12 +12,8 @@
             <div class="card-list">
                 @foreach (var admin in Admins)
                 {
-
-                    @* <img src="..." class="card-img-top" alt="..."> *@
-                    <div class="card px-4 pt-4">
-                        <h5 class="card-title"><span style="font-weight: bold">المستخدم :</span> @admin.UserName</h5>
-                        @* <p class="card-text">@admin.rol</p> *@
-                        @* <a href="@Url.ActionLink("/Posts/Editors?id=" + admin.Id)" class="stretched-link">Details</a>  *@
+                    <div class="card px-4 pt-4 card-access">
+                        <h5 class="card-title">@admin.UserName</h5>
                         <hr />
                         <div class="card-body"> <p>منشورات من :</p> @Html.ActionLink("Editors", "AllPosts", "Posts", new { id = admin.Id })</div>
                     </div>

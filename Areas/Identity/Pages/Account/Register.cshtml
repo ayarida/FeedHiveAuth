@@ -16,10 +16,10 @@
         <div class="sign-up-header">
             @* <h2 class="sign-up-title">ابدأ دون أي تكلفة</h2> *@
             <h3 class="sign-up-title2">أنشئ حسابًا جديدًا</h3>
-            <button class="sign-up-google">
+ @*            <button class="sign-up-google">
                 Google
                 <i class="bi bi-google"></i>
-            </button>
+            </button> *@
         </div>
         <div class="sign-up-name">
             <input asp-for="Input.Username" class="" autocomplete="username" aria-required="true" type="text" id="field" placeholder="اسم المستخدم" />
@@ -44,11 +44,11 @@
         </div>
 
         <div class="sign-up-control d-flex flex-column align-items-center">
-            <button id="registerSubmit" type="submit" class="control">
+            <button id="registerSubmit" type="submit" class="control mt-4">
                 أنشئ حسابًا جديدًا
                 <span><i class="bi bi-arrow-left-short"></i></span>
             </button>
-            <h4 class="privacy-policy">
+            <h4 class="privacy-policy mb-4">
                 من خلال التسجيل، فإنك توافق على شروطنا وخدماتنا وتقر بسياسة الخصوصية الخاصة بنا
             </h4>
         </div>
@@ -88,82 +88,8 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-<style>
-    .sign-up-control h4 {
-        font-weight: normal;
-        font-size: 20px;
-        margin-top: 20px;
-    }
 
-    form {
-        text-align: end;
-    }
-
-        form input {
-            width: 400px;
-            height: 60px;
-            border-radius: 0px;
-            background: white;
-            font-size: 1.1rem;
-            border-style: none;
-            box-shadow: none;
-            text-align: left;
-            padding-left: 20px;
-            border-bottom: 1px solid;
-            text-align: right;
-            padding-right: 10px;
-        }
-
-    .sign-up-card > div:not(.sign-up-control) {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        margin: auto;
-    }
-
-    form input::placeholder {
-        font-weight: bold;
-        opacity: 0.7;
-        text-align: right;
-    }
-
-        form input:focus{
-            border: none !important;
-            border-bottom: 1px solid !important;
-        }
-
-    textarea:focus, form input:focus {
-        outline: none !important;
-    }
-
-    .sign-up-google {
-        box-shadow: 0px 0px 2px 2px #00000029;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        column-gap: 5px;
-    }
-
-    .bi-google {
-        background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .privacy-policy {
-        text-align: right;
-        margin: auto;
-        margin: auto;
-        width: 400px;
-    }
-
-    .privacy-policy {
-        line-height: 1.5;
-    }
-</style>
-
+<link rel="stylesheet" href="~/css/Register/Register.css" />
 
 <link rel="stylesheet" href="~/css/LandingPage/landingPage.css" />
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -175,5 +101,5 @@
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
-<link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
-<link rel="stylesheet" href="~/css/Sidebar/core.css" />
+@* <link rel="stylesheet" href="~/css/Sidebar/navbar.css" />
+<link rel="stylesheet" href="~/css/Sidebar/core.css" /> *@
