@@ -1,4 +1,5 @@
 ﻿@using FeedHiveAuth.Models.ViewModels;
+@using FeedHiveAuth.Data.Helpers
 
 @model AddUserViewModel
 @{
@@ -13,23 +14,23 @@
         <form asp-controller="Users" asp-action="RegisterNewUser" method="POST" dir="rtl">
             <!-- Add your form fields -->
             <div class="form-group mb-4">
-                <label for="Username">إسم المستخدم</label>
+                <label for="Username">@AppResources.Label("Username")</label>
                 <input class="form-control" name="Username" id="Username" />
                 @* <span asp-validation-for="Username"></span> *@
             </div>
 
             <div class="form-group mb-4">
-                <label for="Email">البريد الإلكتروني</label>
+                <label for="Email">@AppResources.Label("Email")</label>
                 <input class="form-control" name="Email" id="Email" />
             </div>
 
             <div class="form-group mb-4">
-                <label for="password">كلمة المرور</label>
+                <label for="password">@AppResources.Label("Password")</label>
                 <input type="password" class="form-control" name="PasswordHash" id="PasswordHash" />
                 @* <span asp-validation-for="PasswordHash"></span> *@
             </div>
 
-            <label for="rolesid">إختر دور :</label>
+            <label for="rolesid">@AppResources.Label("ChooseRole"):</label>
             <div class="custom-select">
                 <select name="RoleId" id="rolesid">
                     <option disabled selected> Select Role </option>
@@ -64,7 +65,7 @@
                     }
                 </div>
             }
-            <input type="submit" value="تسجيل المستخدم" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
+            <input type="submit" value="@AppResources.Label("SaveUser")" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
 
 
         </form>

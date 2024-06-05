@@ -44,27 +44,27 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="createUpper">
                         <div class="form-group mb-4">
-                            <label asp-for="Title" class="control-label">عنوان</label>
+                            <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
                             <input asp-for="Title" class="form-control req" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
+                            <label asp-for="ShortTitle" class="control-label ">@AppResources.Label("Shorttitle")</label>
                             <input asp-for="ShortTitle" class="form-control" />
                             <span asp-validation-for="ShortTitle" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="Summary" class="control-label">ملخص</label>
+                            <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
                             <input asp-for="Summary" class="form-control" />
                             <span asp-validation-for="Summary" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="Content" class="control-label">محتوى</label>
+                            <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
                             <textarea asp-for="Content" class="form-control"></textarea>
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="PostDate"  class="control-label">تاريخ النشر</label>
+                            <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
                             @* <input asp-for="PostDate" type="datetime" class="form-control req" value=@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") /> *@
                             <input asp-for="PostDate" class="form-control req" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" min=" @DateTime.Now" max=" @DateTime.Now" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
@@ -83,7 +83,7 @@
                     </div>
                     <div id="imgPreview">
                     </div>
-                    <input type="submit" value="حفظ" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px" />
+                    <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px" />
                 </form>
             </div>
         </div>
