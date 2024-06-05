@@ -68,14 +68,14 @@
                         <partial name="_accountDisplay" />
 
                         <a href="/Posts/Create" style="color: white !important;     background-color: #4984ed; border-color: #1861ac !important; text-wrap: nowrap; border-radius: 14px;" class="d-flex w-100 h-100 align-items-center justify-content-center btn btn-primary py-2 mt-3 mb-4">
-                            انشئ منشور <i class="bi bi-plus-lg"></i>
+                                @AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
                         </a>
 
 
                         <a href="/Home/Index"
                            class="list-group-item list-group-item-action py-2 mt-5 mb-3 active"
                            aria-current="true">
-                            <i class="bi bi-house-fill"></i><span>لوحة التحكّم</span>
+                                <i class="bi bi-house-fill"></i><span>@AppResources.Label("Dashboard")</span>
                         </a>
 
                         <hr />
@@ -90,7 +90,7 @@
                         </a> *@
                         <a href="@postslink"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-grid"></i><span>المنشورات</span>
+                                <i class="bi bi-grid"></i><span>@AppResources.Label("Posts")</span>
                         </a>
                         <a href="/Social/Channels/Create"
                            class="list-group-item list-group-item-action py-2 ">
@@ -98,11 +98,11 @@
                         </a>
                         <a href="/MediaItem/List"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-collection"></i><span>الميديا</span>
+                                <i class="bi bi-collection"></i><span>@AppResources.Label("Media")</span>
                         </a>
                         <a href="/Users/List"
                            class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-people"></i><span>الفريق</span>
+                                <i class="bi bi-people"></i><span>@AppResources.Label("Team")</span>
                         </a>
 
                         <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
@@ -110,7 +110,7 @@
                         </a>
 
                         <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
-                            <i class="bi bi-briefcase"></i><span>الأدوار</span>
+                                <i class="bi bi-briefcase"></i><span>@AppResources.Label("Roles")</span>
                         </a>
                     </div>
 
@@ -125,7 +125,7 @@
                         <a href="/Configs/TechnicalConfigs"
                            class="list-group-item list-group-item-action py-2 "
                            aria-current="true">
-                            <i class="bi bi-gear"></i><span>الاعدادات</span>
+                                <i class="bi bi-gear"></i><span>@AppResources.Label("Settings")</span>
                         </a>
                         <a href="/Identity/Account/Manage"
                            class="list-group-item list-group-item-action py-2 ">
