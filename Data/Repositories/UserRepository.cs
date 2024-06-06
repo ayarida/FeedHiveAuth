@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Runtime.CompilerServices;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -32,7 +33,14 @@ namespace FeedHiveAuth.Data.Repositories
                 return resultQuery;
             }
         }
-
+        public IEnumerable<ApplicationUser>? ChangeStatus(string id,bool status)
+        {
+            using (connection)
+            {
+                var resultQuery = connection.Query<ApplicationUser>("Update AspNetUsers set [Status]=@status WHERE Id=@Id;", new { Id = new[] { id }, status = new[]{status} });
+                return resultQuery;
+            }
+        }
         public IEnumerable<ApplicationUser>? AssignParentToUser(string parentId, string id)
         {
             using (connection)
