@@ -612,3 +612,13 @@ input#txtSearch {
     .login a {
         color: white !important;
     }
+
+
+
+.input-group.search-div {
+    flex-wrap: nowrap;
+}
+
+    .input-group.search-div input#txtSearch {
+        background: transparent !important;
+    }
