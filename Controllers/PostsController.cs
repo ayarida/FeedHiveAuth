@@ -1,7 +1,9 @@
 ﻿using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Account;
 using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.Enums;
 using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -103,8 +105,11 @@ namespace FeedHiveAuth.Controllers
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 var createdByName = _userService.GetNameById(post.CreatedBy);
+                var postOps = GetPostOperations(post.Id);
+
                 if (postMedia != null) post.PostMediaItems = postMedia;
                 post.CreatedByName = createdByName;
+                if (postOps != null) post.Operations = postOps.Where(op => op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
             }
             
             PostListViewModel pvm = new PostListViewModel
@@ -138,7 +143,9 @@ namespace FeedHiveAuth.Controllers
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 var createdByName = _userService.GetNameById(post.CreatedBy);
+                var postOps  = GetPostOperations(post.Id);
                 if (postMedia != null) post.PostMediaItems = postMedia;
+                if(postOps !=null) post.Operations = postOps.Where(op=>op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
                 post.CreatedByName = createdByName;
             }
             PostListViewModel pvm = new PostListViewModel
