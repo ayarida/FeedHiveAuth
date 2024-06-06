@@ -35,7 +35,7 @@
                     <th>
                             <input type="text" class="form-control" placeholder="@AppResources.Label("ShortTitle")" disabled />
                     </th>
-                    <th>@AppResources.Label("Status")</th>
+                    <th>@AppResources.Label("CreatedBy")</th>
                     <th>
                         <input type="text" class="form-control" placeholder="التاريخ" disabled/>
                     </th>
@@ -84,16 +84,16 @@
                                 
                             }
                                 <td class="post-title">@Html.ActionLink(post.Title, "Preview", "Posts", new { @post.Id }) 
-                                    @if(Model.IsAdmin) {
+                                   @*  @if(Model.IsAdmin) {
                                         <p>@post.CreatedByName</p>
-                                    }                              
+                                    }  *@                             
                                 </td>
                             <td>@post.ShortTitle</td>
-                            <td>
+                                <td style="text-align: right">
 
+                                    @post.CreatedByName
 
-
-                                @if (postStatus.ToString() == "New")
+                               @*  @if (postStatus.ToString() == "New")
                                 {
                                     <div class="status status_new">
                                         @postStatus
@@ -104,7 +104,7 @@
                                     <div class="status status_published">
                                         @postStatus
                                     </div>
-                                }
+                                } *@
 
                             </td>
 
