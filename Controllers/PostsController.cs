@@ -99,6 +99,13 @@ namespace FeedHiveAuth.Controllers
             {
                 posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
             }
+            foreach (var post in posts)
+            {
+                var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
+                var createdByName = _userService.GetNameById(post.CreatedBy);
+                if (postMedia != null) post.PostMediaItems = postMedia;
+                post.CreatedByName = createdByName;
+            }
             
             PostListViewModel pvm = new PostListViewModel
             {
