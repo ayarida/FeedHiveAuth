@@ -27,6 +27,7 @@ ul, #myUL {
 #myUL {
     margin: 0;
     padding: 0;
+    background: #f8f8f8;
 }
 
 .caret {
@@ -35,8 +36,8 @@ ul, #myUL {
     -moz-user-select: none; /* Firefox 2+ */
     -ms-user-select: none; /* IE 10+ */
     user-select: none;
-    border-right: 6px solid #f38787;
-    padding-right: 3px;
+    border-right: 6px solid #dddddd;
+    padding-right: 18px;
 }
 
     .caret::before {
@@ -60,10 +61,57 @@ ul, #myUL {
     -webkit-transform: rotate(-45deg);
 }
 
-ul.nested.last.active > span::before {
+/*ul.nested.last.active > span::before {
     content: "\25B6";
     color: black;
     display: inline-block;
     margin-left: 6px;
     transform: rotate(180deg);
+}
+*/
+
+ul.nested.active li span {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+/*span.badge.text-bg-success {
+    background-color: var(--green-status-back) !important;
+    color: var(--green-status-color) !important;
+    padding: 16px;
+    margin-right: 6px;
+}
+
+
+span.badge.text-bg-danger {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+span.caret {
+    font-weight: bold;
+}
+*/
+
+i.bi.bi-check {
+    background-color: var(--green-status-back);
+    color: var(--green-status-color);
+    margin-left: 9px;
+    display: flex;
+    border-radius: 50%;
+    font-size: 21px;
+}
+
+
+i.bi.bi-x {
+    display: flex;
+    background-color: #d6081c;
+    color: #fff8f8;
+    border-radius: 50%;
+    font-size: 21px;
+    margin: 0;
+    margin-left: 10px;
 }

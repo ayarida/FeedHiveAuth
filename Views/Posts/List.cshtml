@@ -1,5 +1,4 @@
-﻿
-@model PostListViewModel
+﻿@model PostListViewModel
 @using FeedHiveAuth.Data;
 @using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Models.Enums
@@ -9,6 +8,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model.allPosts;
     var _mediaService = Instances.Repositories.MediaItemRepository;
+    var uniqueServices = new HashSet<String>();
 }
 
 
@@ -24,23 +24,23 @@
 
             <table id="filter" class="table" dir="rtl">
                 <thead>
-                <tr class="filters">
-                    <th>
-                        <input type="checkbox" name="selectAll" class="check" onClick="toggle(this)">
-                    </th>
-                    <th></th>
-                    <th>
+                    <tr class="filters">
+                        <th>
+                            <input type="checkbox" name="selectAll" class="check" onClick="toggle(this)">
+                        </th>
+                        <th></th>
+                        <th>
                             <input type="text" class="form-control" placeholder="@AppResources.Label("Title")" disabled />
-                    </th>
-                    <th>
+                        </th>
+                        <th>
                             <input type="text" class="form-control" placeholder="@AppResources.Label("ShortTitle")" disabled />
-                    </th>
-                    <th>@AppResources.Label("CreatedBy")</th>
-                    <th>
-                        <input type="text" class="form-control" placeholder="التاريخ" disabled/>
-                    </th>
+                        </th>
+                        <th>@AppResources.Label("CreatedBy")</th>
+                        <th>
+                            <input type="text" class="form-control" placeholder="التاريخ" disabled />
+                        </th>
                         <th>@AppResources.Label("Operations")</th>
-                </tr>
+                    </tr>
                 </thead>
                 <div class="action-buttons">
                     <button class="btn btn-default btn-xs btn-filter" style="font-weight: bold;background: #f8f8f8;">
@@ -53,92 +53,94 @@
 
                 <tbody>
 
-                @if (posts.Any())
-                {
-                    @foreach (var post in posts)
+                    @if (posts.Any())
                     {
+                        @foreach (var post in posts)
+                        {
                         //var mediapostId = _mediaService.GetMediaByPostId(post.Id)!=null ? _mediaService.GetMediaByPostId(post.Id).Id : "" ;
-                                @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
+                            @*  var shareIcon = "< i class='bi bi-penc0il-square'></i>"; *@
 
 
-                        var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
+                            var postStatus = EnumExtension.FromValue<StatusEnum>(post.Status);
 
 
-                        <tr>
+                            <tr>
 
 
-                            <td>
-                                <input type="checkbox" class="check" value="@post.Id" @(postStatus.ToString() == "New" ? "" : "disabled")>
-                            </td>
-                            @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
-                            {
                                 <td>
-                                    <img src="@post.PostMediaItems?.FirstOrDefault()?.Path"/>
+                                    <input type="checkbox" class="check" value="@post.Id" @(postStatus.ToString() == "New" ? "" : "disabled")>
                                 </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <img src="~/uploads/no-img.jpg" style="border: 1px solid grey;"/>
+                                @if (post.PostMediaItems != null && post.PostMediaItems.Count != 0)
+                                {
+                                    <td>
+                                        <img src="@post.PostMediaItems?.FirstOrDefault()?.Path" />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <img src="~/uploads/no-img.jpg" style="border: 1px solid grey;" />
+                                    </td>
+
+                                }
+                                <td class="post-title">
+                                    <div>
+                                        @Html.ActionLink(post.Title, "Preview", "Posts", new { @post.Id })
+
+                                        @if (post.Operations != null)
+                                        {
+                                        <div class="mt-3">
+                                            @foreach (var postChannel in post.Operations)
+                                            {
+                                                var service = postChannel?.Service?.ToString();
+                                                if (service != null && uniqueServices.Add(service))
+                                                {
+                                                    <i class="bi bi-@(postChannel?.Service?.ToString() == " dailymotion" ? "camera-video" : @postChannel?.Service?.ToString()) "></i>
+                                                }
+
+                                            }
+                                        </div>
+                                        }
+                                    </div>
                                 </td>
-                                
-                            }
-                                <td class="post-title">@Html.ActionLink(post.Title, "Preview", "Posts", new { @post.Id }) 
-                                   @*  @if(Model.IsAdmin) {
-                                        <p>@post.CreatedByName</p>
-                                    }  *@                             
-                                </td>
-                            <td>@post.ShortTitle</td>
+                                <td>@post.ShortTitle</td>
                                 <td style="text-align: right">
 
                                     @post.CreatedByName
 
-                               @*  @if (postStatus.ToString() == "New")
-                                {
-                                    <div class="status status_new">
-                                        @postStatus
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="status status_published">
-                                        @postStatus
-                                    </div>
-                                } *@
+                                </td>
 
-                            </td>
-
-                            <td dir="ltr" style="text-align: right">@post.PostDate</td>
-                            <td class="operations">
-                                <div>
+                                <td dir="ltr" style="text-align: right">@post.PostDate</td>
+                                <td class="operations">
                                     <div>
-                                        <a href="/Posts/Edit/@post.Id">
-                                            <i class="bi bi-pencil" style="color: #1B5EE1"></i>
+                                        <div>
+                                            <a href="/Posts/Edit/@post.Id">
+                                                <i class="bi bi-pencil" style="color: #1B5EE1"></i>
+                                            </a>
+                                        </div>
+                                        <a href="/Social/Publish/Share?postid=@post.Id">
+                                            <i class="bi bi-share-fill"></i>
                                         </a>
+                                        @if (postStatus.ToString() == "New")
+                                        {
+                                            <div onclick="deletePost(this.id)" id="@post.Id">
+                                                <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div id="@post.Id" style="pointer-events: none; width: fit-content">
+                                                <i class="bi bi-trash3-fill" style="color: grey"></i>
+                                            </div>
+                                        }
                                     </div>
-                                    <a href="/Social/Publish/Share?postid=@post.Id">
-                                        <i class="bi bi-share-fill"></i>
-                                    </a>
-                                    @if (postStatus.ToString() == "New")
-                                    {
-                                        <div onclick="deletePost(this.id)" id="@post.Id">
-                                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div id="@post.Id" style="pointer-events: none; width: fit-content">
-                                            <i class="bi bi-trash3-fill" style="color: grey"></i>
-                                        </div>
-                                    }
-                                </div>
-                            </td>
+                                </td>
 
-                            @* <td></td> *@
+                                @* <td></td> *@
 
-                        </tr>
+                            </tr>
+                        }
                     }
-                }
                 </tbody>
             </table>
 
@@ -147,10 +149,11 @@
 </div>
 
 
+
 <link rel="stylesheet" href="~/css/Posts/list.css" />
 
 
 
-<link rel="stylesheet" href="~/css/Filter.css"/>
+<link rel="stylesheet" href="~/css/Filter.css" />
 <script type="text/javascript" src="~/js/Sidebar/mdb.js"></script>
 <script src="~/js/Posts/list.js"></script>

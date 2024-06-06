@@ -16,7 +16,7 @@
             <h3>قائمة المستخدمين</h3>
         </div>
         <div class="d-flex align-items-center px-3 justify-content-between">
-            <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary" style="background: #0d6efd; height:fit-content; border-color: transparent; ">مستخدم جديد +</a>
+            <a asp-controller="Users" asp-action="Create" type="submit" class="btn btn-secondary mt-3" style="background: #0d6efd; height:fit-content; border-color: transparent; ">مستخدم جديد +</a>
 
             @* <div class="action-buttons">
                 <button type="button" class="delete-btn my-3" onClick="deleteSelectedUsers()" style="width: fit-content;height: fit-content;padding: 7px 20px !important;">
@@ -31,23 +31,25 @@
                     @foreach (var admin in Admins)
                     {
                         <li>
-                            <span class="caret last" style="border-right: 6px solid #65c465">@admin.user.UserName</span>
+                            <span class="caret last" style="border-right: 6px solid #dddddd">@admin.user.UserName</span>
                             <ul class="nested last">
                                 @foreach (var editor in Editors.Where(x => x.ParentId == admin.user.Id).ToList())
                                 {
                                     <span>
-                                        <i class="arrow right"></i>
+                                      @*   <i class="arrow right"></i> *@
 
                                     <li><a href="/Users/Edit/@editor.user.Id" style="color: black">@editor.user.UserName</a>  </li>
                                     @if (editor.user.Status == true)
                                     {
 
-                                    <span class="badge text-bg-success">Active</span>
+                                    @* <span class="badge text-bg-success">Active</span> *@
+                                        <i class="bi bi-check"></i>
                                     }
 
                                     @if (editor.user.Status == false)
                                     {
-                                    <span class="badge text-bg-danger">NotActive</span>
+                                    @* <span class="badge text-bg-danger">NotActive</span> *@
+                                        <i class="bi bi-x"></i>
                                     }
                                     </span>
                                     

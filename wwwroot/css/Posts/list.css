@@ -123,3 +123,20 @@ td.post-title a {
     text-decoration-color: #0a2c3f;
     text-decoration-thickness: 1px;
 }
+
+i.bi.bi-telegram {
+    color: #2fa3d9;
+}
+
+i.bi.bi-facebook {
+    color: #0765fe;
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2 !important;
+}
+
+
+.table > :not(caption) > * > * {
+    padding: .9rem .5rem;
+}
