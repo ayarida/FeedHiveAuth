@@ -39,7 +39,7 @@
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
-                            <label asp-for="ShortTitle" class="control-label ">عنوان قصير</label>
+                            <label asp-for="ShortTitle" class="control-label ">@AppResources.Label("ShortTitle")</label>
                             <input asp-for="ShortTitle" class="form-control" />
                             <span asp-validation-for="ShortTitle" class="text-danger"></span>
                         </div>
@@ -78,7 +78,7 @@
                     <partial name="_imagePreviewEdit" />
                     <div id="imgPreview">
                     </div>
-                    <input type="submit" value="حفظ" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px" />
+                    <input type="submit" value="@AppResources.Label("Update")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px" />
                 </form>
             </div>
         </div>
