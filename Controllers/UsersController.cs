@@ -66,14 +66,17 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public IActionResult Edit(string id)
         {
+            var currentuser = Instances.Repositories.UserRepository.GetById(id);
             var availableRoles = roleManager.Roles.ToList();
             //ViewData["availableRoles"] = availableRoles;
             var model = new ApplicationUser();
-            var user = userManager.Users.FirstOrDefault(x => x.Id == id);
-            model.UserName = user.UserName;
-            model.PasswordHash = user.PasswordHash;
-            model.Email = user.Email;
+            //var user = userManager.Users.FirstOrDefault(x => x.Id == id);
+            model.UserName = currentuser.UserName;
+            model.PasswordHash = currentuser.PasswordHash;
+            model.Email = currentuser.Email;
             model.RoleId = Instances.Repositories.RoleRepository.GetUserRole(id);
+            model.Status = currentuser.Status;
+            model.Id= id;
             return View(model);
         }
         [PermissionFilter("Users_SaveUser")]
@@ -84,10 +87,8 @@ namespace FeedHiveAuth.Controllers
             currentuser.UserName = model.UserName;
             currentuser.Email = model.Email;
             currentuser.EmailConfirmed = true;
-
             currentuser.NormalizedUserName = model.UserName.ToUpper();
             currentuser.NormalizedEmail = model.Email.ToUpper();
-
             var result = await userManager.UpdateAsync(currentuser);
             var getRole = model.RoleId.HasValue() ? await roleManager.FindByIdAsync(model.RoleId) : await roleManager.FindByNameAsync("Master");
             if (result.Succeeded && result.Errors.Count() == 0 && getRole != null)
@@ -218,7 +219,7 @@ namespace FeedHiveAuth.Controllers
             if(User.IsInRole("Master"))
             {
                 var MasterViewModel = new UsersWithRolesViewModel();
-                MasterViewModel.user = userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name));
+                MasterViewModel.user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
                 MasterViewModel.role = "Master";//add master to list
                 userList.Add(MasterViewModel);
                 var admins = Instances.Repositories.UserRepository.GetWhosParentId(userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name)).Id);
@@ -252,7 +253,7 @@ namespace FeedHiveAuth.Controllers
             {
                 
                 var AdminViewModel = new UsersWithRolesViewModel();
-                AdminViewModel.user = userManager.Users.FirstOrDefault(x => x.UserName.Equals(User.Identity.Name));
+                AdminViewModel.user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
                 AdminViewModel.role = "Admin";
                 userList.Add(AdminViewModel);
                 var childs = Instances.Repositories.UserRepository.GetWhosParentId(AdminViewModel.user.Id);
@@ -282,10 +283,19 @@ namespace FeedHiveAuth.Controllers
             IdentityUser identityUser = userManager.Users.FirstOrDefault(x => x.UserName.Equals(userName));
             return identityUser;
         }
+        [PermissionFilter("Users_Deactivate")]
+        [HttpGet]
+        public IActionResult Deactivate(string id)
+        {
+            Instances.Repositories.UserRepository.ChangeStatus(id, false);
+
+            return RedirectToAction("Index");
+        }
         [PermissionFilter("Users_Delete")]
-        [HttpPost]
+        [HttpGet]
         public void Delete(string id)
         {
+            Instances.Repositories.UserRepository.ChangeStatus(id, false);
             /*    var subscriptionId =
                 var currentUser = await _adminWorkContext.GetCurrentUserAsync();*/
             Instances.Repositories.UserRepository.Delete(id);
@@ -327,5 +337,6 @@ namespace FeedHiveAuth.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
         }
+
     }
 }

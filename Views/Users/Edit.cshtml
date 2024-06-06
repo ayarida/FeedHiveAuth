@@ -38,10 +38,26 @@
                     asp-items="@(new SelectList(roles, nameof(Role.Id), nameof(Role.Name)))" class="form-select">
                 <option>Please select Role</option>
             </select>
-            <input type="submit" value="submit" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
+            @{
+                if (Model.Status == true)
+                {
+                    <a class="btn btn-warning" href="/Users/Deactivate/@Model.Id" role="button">Deactivate</a>
+                }
 
+                else
+                {
+                    <a class="btn btn-success" href="/Users/Activate/@Model.Id" role="button">Activate</a>
+                }
+
+
+            }
+            <input type="submit" value="submit" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
+            
 
         </form>
+        
+        
+        
     </div>
 </div>
 
