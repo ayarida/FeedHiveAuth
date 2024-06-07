@@ -236,7 +236,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostDate = DateTime.Now;
-            return RedirectToAction("List", "Posts", post.Id, "");
+            return RedirectToAction("Share", "Publish", new { area = "Social", postid = post.Id });
         }
 
 
