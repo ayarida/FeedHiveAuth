@@ -208,15 +208,14 @@ namespace FeedHiveAuth.Controllers
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
             return List();
         }
+        [HttpPost]
         public ActionResult CreateQuickPost()
         {
 
             Post post = new Post
             {
                 Title = HttpContext.Request.Form["Title"],
-                ShortTitle = HttpContext.Request.Form["ShortTitle"],
                 Summary = HttpContext.Request.Form["Summary"],
-                Content = HttpContext.Request.Form["Content"],
                 PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
                 PostDate = DateTime.Now
             };
@@ -225,7 +224,7 @@ namespace FeedHiveAuth.Controllers
             {
                 post.ModifiedBy = post.CreatedBy = userId;
             }
-            _postService.Save(post);
+            _postService.SaveQuickPost(post);
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
@@ -237,7 +236,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostDate = DateTime.Now;
-            return RedirectToAction("Edit", "Posts", post.Id, "");
+            return RedirectToAction("List", "Posts", post.Id, "");
         }
 
 
