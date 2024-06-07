@@ -15,3 +15,11 @@ form button {
     background: var(--bs-blue);
     color: white;
 }
+
+#rolesid {
+    width: 100%;
+}
+
+select#parentId {
+    width: 100%;
+}
