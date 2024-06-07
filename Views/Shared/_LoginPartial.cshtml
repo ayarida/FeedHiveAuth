@@ -13,7 +13,7 @@
         <form class="form-inline me-auto order-3" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <span style="border-radius: 50%;color: white !important;background: #728894;width: fit-content;padding: 8px 15px;"> @User.Identity?.Name!.Substring(0, 1).ToUpper()</span>
             <div class="dropdown">
-                <div type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle"></div>
+                <div type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle mt-4"></div>
                 <ul class="dropdown-menu account" aria-labelledby="dropdownMenuButton">
                     <li class="dropdown-item text-center">@User.Identity?.Name</li>
                     <hr style="margin-top: 2px; margin-bottom: 3px;">

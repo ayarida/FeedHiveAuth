@@ -1,0 +1,58 @@
+﻿@model FeedHiveAuth.Models.Post
+
+
+@{
+    var postInfo = Model;
+}
+
+
+<div id="facebook-preview">
+
+    <div class="channelTop">
+        <i class="bi bi-three-dots"></i>
+        <div class="facebookChannelInfo">
+            <img src="~/uploads/no-img.jpg" class="channel-img">
+            <div class="publish-info">
+                <div>Feedhive</div>
+                <div class="d-flex" id="facebook-time"><span>Published by OCPublisher </span><i class="bi bi-question-circle"></i> <p>Just now</p> <i class="bi bi-globe-americas"></i> </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="preview-container">
+        <div>
+            @postInfo.Title
+        </div>
+
+        @if (postInfo.ShortTitle != null)
+        {
+            <div>
+                @postInfo.ShortTitle
+            </div>
+        }
+
+        @if (postInfo.Summary != null)
+        {
+            <div>
+                @postInfo.Summary
+            </div>
+        }
+
+        @if (postInfo.Content != null)
+        {
+            <div>
+                @postInfo.Content
+            </div>
+        }
+
+        @if (postInfo.PostMediaItems != null)
+        {
+            @foreach (var mediaItems in postInfo.PostMediaItems)
+            {
+                <div>
+                    <img src="@mediaItems.Path" class="previewImage" />
+                </div>
+            }
+        }
+    </div>
+</div>
