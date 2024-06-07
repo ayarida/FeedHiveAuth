@@ -52,7 +52,7 @@
             else{
                 <div id="parentDropdown" style="display: none;">
                     @if(parentUsers !=null && Model.IsAdmin == false) {
-                        <label for="parentId">Parent Id:</label>
+                        <label for="parentId" class="mt-3">@AppResources.Label("Team")</label>
                         <div class="custom-select">
                             <select name="ParentId" id="parentId">
                                   <option disabled selected> Select Parent </option>
