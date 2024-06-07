@@ -147,10 +147,11 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
             var operationData = operation.Parameters.FromJson<FacebookOperationData>();            
             var pageId = channel.NetworkId;
-            DateTime utcScheduledDateTime = TimeZoneInfo.ConvertTimeToUtc(operationData.ScheduleTime.Value);
+
+            //DateTime utcScheduledDateTime = TimeZoneInfo.ConvertTimeToUtc(operationData.ScheduleTime.Value);
 
             // Convert the UTC DateTime to a Unix timestamp
-            long scheduledPublishTime = ((DateTimeOffset)utcScheduledDateTime).ToUnixTimeSeconds();
+            long scheduledPublishTime = operationData.ScheduleTime.HasValue ? ((DateTimeOffset)TimeZoneInfo.ConvertTimeToUtc(operationData.ScheduleTime.Value)).ToUnixTimeSeconds() : 0;
 
             var scheduled = operationData.ScheduleTime.HasValue && operationData.ScheduleTime.Value > DateTime.Now;
             //var scheduledPublishTime = scheduled ? operationData.ScheduleTime.Value.UtcDate().ToUnixTimespans() : 0;
