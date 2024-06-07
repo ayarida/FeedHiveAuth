@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     column-gap: 20px;
     row-gap: 10px;
+    width: 100%;
 }
 
     .card-list p {
@@ -31,4 +32,8 @@
     justify-content: flex-start;
     column-gap: 4px;
     padding-right: 0px;
+}
+
+.card.px-4.pt-4.card-access .card-title {
+    font-weight: bold;
 }
