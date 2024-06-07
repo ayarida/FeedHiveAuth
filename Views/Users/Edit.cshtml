@@ -42,17 +42,17 @@
                 @{
                     if (Model.Status == true)
                     {
-                        <a class="btn btn-warning" href="/Users/Deactivate/@Model.Id" role="button">Deactivate</a>
+                        <a class="btn btn-warning" href="/Users/Deactivate/@Model.Id" role="button">@AppResources.Label("Deactivate")</a>
                     }
 
                     else
                     {
-                        <a class="btn btn-success" href="/Users/Activate/@Model.Id" role="button">Activate</a>
+                        <a class="btn btn-success" href="/Users/Activate/@Model.Id" role="button">@AppResources.Label("Activate")</a>
                     }
 
 
                 }
-                <input type="submit" value="submit" class="btn btn-primary" style="max-width: 200px;" id="submit-user" />
+                <input type="submit" value="@(AppResources.Label("Save"))" class="btn btn-primary" style="max-width: 200px;" id="submit-user" />
             </div>
 
 
