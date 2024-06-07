@@ -178,6 +178,24 @@ namespace FeedHiveAuth.Data.Repositories
             ExecuteQuery(query);
         }
 
+        public void SaveQuickPost(Post post)
+        {
+            post.Id = Guid.NewGuid().ToString();
+            string query = string.Format(
+                                    "Insert Into {0} (Id,Title,Summary,PublicLink,PostDate,CreatedBy,ModifiedBy) Values ({2},N{3},N{4},N{5},{6},{7},{8})",
+                                    TableName,
+                                    Columns.AddBraces(ExcludedColumns),
+                                    post.Id.EscapeForSql(),
+                                    post.Title.EscapeForSql(),
+                                    post.Summary.EscapeForSql(),
+                                    post.PublicLink.EscapeForSql(),
+                                    post.PostDate.EscapeForSql(true),
+                                    post.CreatedBy.EscapeForSql(),
+                                    post.ModifiedBy.EscapeForSql()
+                                    );
+            ExecuteQuery(query);
+        }
+
         public MediaItem GetPostMedia(string postId, string mediaId, out PublishErrorEnum error)
         {
             var media = postId.HasValue() && mediaId.HasValue() ? Instances.Repositories.MediaItemRepository.Get(mediaId) : null;
