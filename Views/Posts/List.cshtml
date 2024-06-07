@@ -8,7 +8,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<Post> posts = Model.allPosts;
     var _mediaService = Instances.Repositories.MediaItemRepository;
-    var uniqueServices = new HashSet<String>();
+
 }
 
 
@@ -89,17 +89,18 @@
 
                                         @if (post.Operations != null)
                                         {
-                                        <div class="mt-3">
-                                            @foreach (var postChannel in post.Operations)
-                                            {
-                                                var service = postChannel?.Service?.ToString();
-                                                if (service != null && uniqueServices.Add(service))
+                                            var uniqueServices = new HashSet<String>();
+                                            <div class="mt-3">
+                                                @foreach (var postChannel in post.Operations)
                                                 {
-                                                    <i class="bi bi-@(postChannel?.Service?.ToString() == " dailymotion" ? "camera-video" : @postChannel?.Service?.ToString()) "></i>
-                                                }
+                                                    var service = postChannel?.Service?.ToString();
+                                                    if (service != null && uniqueServices.Add(service))
+                                                    {
+                                                        <i class="bi bi-@(postChannel?.Service?.ToString() == " dailymotion" ? "camera-video" : @postChannel?.Service?.ToString()) "></i>
+                                                    }
 
-                                            }
-                                        </div>
+                                                }
+                                            </div>
                                         }
                                     </div>
                                 </td>
