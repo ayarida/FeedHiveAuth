@@ -88,7 +88,7 @@
 
 <div class="card ms-auto p-3 mt-4">
 
-    <h3 class="card-title"> Opertations </h3>
+    <h3 class="card-title" style="text-align: left"> Opertations </h3>
 
     @if (operation != null)
     {
@@ -140,12 +140,15 @@
 <style>
     .section-title {
         width: 78px;
+        text-align: left;
     }
 
     .section {
         display: flex;
         column-gap: 38px;
         margin-top: 12px;
+        text-align: left;
+        flex-direction: row-reverse;
     }
 
     .section-info {
