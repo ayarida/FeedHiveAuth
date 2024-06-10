@@ -622,3 +622,7 @@ input#txtSearch {
     .input-group.search-div input#txtSearch {
         background: transparent !important;
     }
+
+.tox.tox-tinymce button {
+    padding: unset !important;
+}

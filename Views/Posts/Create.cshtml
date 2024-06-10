@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group mb-4">
                             <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
-                            <textarea asp-for="Content" class="form-control"></textarea>
+                            <textarea asp-for="Content" class="form-control" id="mytextarea"></textarea>
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4" style="display:none;">
@@ -98,7 +98,15 @@
 
     var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
     var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
-    
+
+</script>
+
+<script>
+    tinymce.init({
+        selector: '#mytextarea',
+        plugins: 'code autolink media fullscreen quickbars insertdatetime directionality lists searchreplace',
+        toolbar: 'fullscreen | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | Autolink | autoresize | insertdatetime | ltr rtl | numlist bullis | searchreplace'
+    });
 </script>
 <script src="~/js/Posts/create.js"></script>
 @section Scripts {
