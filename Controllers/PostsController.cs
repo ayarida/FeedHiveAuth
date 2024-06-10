@@ -1,5 +1,4 @@
-﻿using FeedHiveAuth.Areas.Social.SocialFacebook.Models.Account;
-using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
@@ -52,15 +51,15 @@ namespace FeedHiveAuth.Controllers
                 var masterAdmins = _userService.GetWhosParentId(user.Id).ToList();//get admins
                 foreach (var admin in masterAdmins)
                 {
-                    var adminUsers= _userService.GetWhosParentId(admin.ToString()).ToList();//get Users
-                    if(adminUsers.Count>0)
+                    var adminUsers = _userService.GetWhosParentId(admin.ToString()).ToList();//get Users
+                    if (adminUsers.Count > 0)
                     {
                         userPosts = _postService.GetAdminUsersPostsSearch(adminUsers, valinput);
                         posts.AddRange(userPosts);
                     }
-                    
+
                 }
-                
+
             }
             else if (isAdmin)
             {
@@ -85,7 +84,7 @@ namespace FeedHiveAuth.Controllers
         public ActionResult Admins()
         {
             var user = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name);
-            var adminUsers = _userService.GetAll().Where(x=>x.ParentId == user.Id);
+            var adminUsers = _userService.GetAll().Where(x => x.ParentId == user.Id);
             return View(adminUsers);
 
         }
@@ -97,7 +96,7 @@ namespace FeedHiveAuth.Controllers
             var user = Instances.Repositories.UserRepository.GetById(id);
             var Editors = _userService.GetAll().Where(x => x.ParentId == user.Id);
             var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
-            if(adminUsers.Count>0 )
+            if (adminUsers.Count > 0)
             {
                 posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
             }
@@ -111,7 +110,7 @@ namespace FeedHiveAuth.Controllers
                 post.CreatedByName = createdByName;
                 if (postOps != null) post.Operations = postOps.Where(op => op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
             }
-            
+
             PostListViewModel pvm = new PostListViewModel
             {
                 allPosts = posts,
@@ -143,9 +142,9 @@ namespace FeedHiveAuth.Controllers
             {
                 var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 var createdByName = _userService.GetNameById(post.CreatedBy);
-                var postOps  = GetPostOperations(post.Id);
+                var postOps = GetPostOperations(post.Id);
                 if (postMedia != null) post.PostMediaItems = postMedia;
-                if(postOps !=null) post.Operations = postOps.Where(op=>op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
+                if (postOps != null) post.Operations = postOps.Where(op => op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
                 post.CreatedByName = createdByName;
             }
             PostListViewModel pvm = new PostListViewModel
@@ -161,6 +160,8 @@ namespace FeedHiveAuth.Controllers
         public IActionResult Preview(string id)
         {
             var post = _postService.GetPostById(id);
+            var ops = Instances.Repositories.OperationRepository.getPostOperationsById(id);
+            post.Operations = ops;
             var postMedia = _mediaItemService.GetMediasByPostId(id);
             if (postMedia != null) { post.PostMediaItems = postMedia; };
 
