@@ -104,8 +104,11 @@
 <script>
     tinymce.init({
         selector: '#mytextarea',
+        
         plugins: 'code autolink media fullscreen quickbars insertdatetime directionality lists searchreplace',
-        toolbar: 'fullscreen | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | Autolink | autoresize | insertdatetime | ltr rtl | numlist bullis | searchreplace'
+        toolbar: 'fullscreen | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | Autolink | autoresize | insertdatetime | ltr rtl | numlist bullis | searchreplace',
+        branding: false,
+        statusbar: false,
     });
 </script>
 <script src="~/js/Posts/create.js"></script>
