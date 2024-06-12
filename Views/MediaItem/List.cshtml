@@ -14,61 +14,90 @@
 <div class="card">
 
     <div class="card-header" style="background: #F6F9FC !important">
-        <h3>@AppResources.Label("MediaList","ar")</h3>
+        <h3>@AppResources.Label("MediaList", "ar")</h3>
     </div>
+
     <p class="mt-4 mb-4 pe-3">
-        <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
-padding: 6px;">@AppResources.Label("AddMedia","ar") +</a>
-    </p>
-    <div class="d-flex flex-row flex-wrap media-list p-3">
+        @*  <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
+        padding: 6px;">@AppResources.Label("AddMedia","ar") +</a> *@
+        <div class="d-flex flex-wrap create">
+            <div class="d-flex flex-row flex-wrap media-list p-3">
 
-        @foreach (var item in Model)
-        {
-
-            <div class="media-item">
-                <img src="@item.Path" style="width: 200px;height: 132px; max-width: 100%; max-height: 100%" />
-
-                @if (item.Type == 20)
+                @foreach (var item in Model)
                 {
 
+                    <div class="media-item">
+                        <img src="@item.Path" style="width: 200px;height: 132px; max-width: 100%; max-height: 100%" />
+
+                        @if (item.Type == 20)
+                        {
+
+                        }
+
+                        <div class="media-details">
+                            <div class="p-3 caption">
+                                <p style="word-break: break-all;white-space: normal">@item.Caption</p>
+                            </div>
+                            <div class="delete d-flex p-3">
+                        
+                                <button id="@item.Id" onclick="DeleteMed(this.id)">Delete</button>
+
+                            </div>
+                        </div>
+                    </div>
                 }
 
-                <div class="media-details">
-                    <div class="p-3 caption">
-                        <p style="word-break: break-all;white-space: normal">@item.Caption</p>
-                    </div>
-                    <div class="delete d-flex p-3">
-                        <button onclick="deleteMedia(this.id)" id="@item.Id">
-                            @AppResources.Label("Delete","ar")
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
-
-                    </div>
-                </div>
             </div>
-        }
 
-    </div>
+            
+        </div>
+                   
+
+            <form asp-controller="MediaItem" asp-action="SaveMedia" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="submitPreview">
+                <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column; padding: 0px 10px" id="media-section">
+
+                    <label class="custom-file-upload">
+                        <i class="bi bi-camera"></i>
+                    </label>
+                    <input type="file" name="File" id="mediaInput" multiple />
+
+                </div>
+                
+            </div>
+            <div id="imgPreview">
+            </div>
+            <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px; border: none !important" />
+                    
+                    
+                </form>
+         
+
+        </div>
+</div>
+    </p>
+
 
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function deleteMedia(event) {
-
+    function DeleteMed(id) {
+        console.log(id);
         swal.fire({
             customClass: {
                 confirmButton: "btn btn-success",
             },
-            title: @AppResources.Label("SureDeleteMedia"),
-            text: @AppResources.Label("CannotUndo"),
+            title:"SureDeleteMedia",
+            text: "CannotUndo",
             icon: "warning",
             buttons: true,
             dangerMode: true,
             // buttons: ["كلّا", "نعم"],
-            confirmButtonText: @AppResources.Label("Yes"),
-            cancelButtonText: @AppResources.Label("No"),
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
             showCancelButton: true,
             showConfirmButton: true,
             className: {
@@ -78,16 +107,16 @@ padding: 6px;">@AppResources.Label("AddMedia","ar") +</a>
             .then((willDelete) => {
                 if (willDelete.isConfirmed) {
 
-                    var serviceURL = "/MediaItem/DeleteMediaItem/" + event;
-                    var mediaId = event;
+                    var serviceURL = "/MediaItem/DeleteMediaItem/" + id;
+                    var mediaId = id;
                     $.ajax({
                         type: "DELETE",
                         url: serviceURL,
                         data: mediaId,
                         success: function (data) {
                             swal.fire({
-                                title: @AppResources.Label("DeletedSuccesfully"),
-                                text: @AppResources.Label("MediaDeleted"),
+                                title: "DeletedSuccesfully",
+                                text: "MediaDeleted",
                                 icon: "success"
                             }).then(function () {
                                 window.location.reload();
@@ -95,19 +124,35 @@ padding: 6px;">@AppResources.Label("AddMedia","ar") +</a>
                             )
                         },
                         error: function (data) {
-                            swal.fire(@AppResources.Label("DeleteError"), @AppResources.Label("PlzTryagain"), "error");
+                            swal.fire("DeleteError", "PlzTryagain", "error");
                         },
                     })
 
                 } else {
                     swal.fire({
-                        title: @AppResources.Label("DeleteCanceled"),
-                        confirmButtonText: @AppResources.Label("Confirm")
+                        title: "DeleteCanceled",
+                        confirmButtonText: "Confirm"
                     });
                 }
             });
-
     }
-</script>
 
+    
+</script>
 <link rel="stylesheet" href="~/css/MediaItems/List.css" />
+<link rel="stylesheet" href="~/css/Posts/create.css" />
+<script>
+
+    var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
+    var subFields = '@Html.Raw(AppResources.Label("StarFields", "ar"))';
+
+    var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
+    var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
+
+</script>
+<script src="~/js/Posts/create.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

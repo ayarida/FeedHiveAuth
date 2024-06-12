@@ -1,40 +1,74 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace FeedHiveAuth.Controllers
 {
     public class MediaItemController : Controller
     {
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
-
+        private readonly ILogger<PostsController> _logger;
         public MediaItemController()
         {
 
         }
-
+        public int InsertMedia(List<MediaItem> mediaItems)
+        {
+            try
+            {
+                _mediaItemService.CreateMedia(mediaItems);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("********************* Error in saving media, EXCEPTION \r\n " + ex + "\r\n*********************");
+                return 0;
+            }
+        }
         [HttpPost]
         [PermissionFilter("MediaItem_UploadFile")]
-        public IActionResult UploadFile(MediaItem model)
+        public string UploadFile(IFormFile file)
         {
-            if (model.File != null && model.File.Length > 0)
+            if (file != null)
             {
-                var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + model.File.FileName;
-                var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
-
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    model.File.CopyTo(stream);
+                    file.CopyTo(stream);
                 }
-
-                // You can save the file path or other information in your database if needed.
-
-                return RedirectToAction("Index"); // Redirect to a relevant page after successful upload.
+                return "File uploaded successfully!";
             }
 
-            return View();
+            return "File failed to upload!";
+
+        }
+    
+        
+        [Authorize]
+        [PermissionFilter("MediaItem_SaveMedia")]
+        [HttpPost]
+        public IActionResult SaveMedia()
+        {
+            if (HttpContext.Request.Form.Files.Any())
+            {
+                var oneFile = HttpContext.Request.Form.Files[0];
+                UploadFile(oneFile);
+                List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);//mapFileToMediaItem
+                InsertMedia(Medias.ToList());
+            }
+            return RedirectToAction("List","MediaItem");
+        }
+       
+        
+        [HttpGet]
+        [PermissionFilter("MediaItem_Create")]
+        public IActionResult Create()
+        {
+            
+            return View("~/Views/MediaItem/Create.cshtml");
         }
         [HttpGet]
         [PermissionFilter("MediaItem_List")]

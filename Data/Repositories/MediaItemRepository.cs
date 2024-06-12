@@ -44,7 +44,43 @@ namespace FeedHiveAuth.Data.Repositories
             return medias;
 
         }
-
+        public void CreateMedia(List<MediaItem> postMedias)
+        {
+            foreach (var mediaItem in postMedias)
+            {
+                //Id, Caption, postId, creationDate, path, createdBy
+                var extension = mediaItem.Caption.Split('.')[1];
+                switch (extension)
+                {
+                    case "mp3":
+                        mediaItem.Type = 20;
+                        break;
+                    case "mp4":
+                        mediaItem.Type = 30;
+                        break;
+                    case "pdf":
+                        mediaItem.Type = 50;
+                        break;
+                    default:
+                        mediaItem.Type = 10;
+                        break;
+                }
+                string query = string.Format(
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9})",
+                                    TableName,
+                                    Columns.AddBraces(),
+                                    Guid.NewGuid().EscapeForSql(),
+                                    mediaItem.Caption.EscapeForSql(),
+                                    "null",
+                                    DateTime.Now.EscapeForSql(),
+                                    mediaItem.Path.EscapeForSql(),
+                                    mediaItem.CreatedBy.EscapeForSql(),
+                                    extension.EscapeForSql(),
+                                    mediaItem.Type
+                                    );
+                ExecuteQuery(query);
+            }
+        }
         public void InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
             foreach(var mediaItem in postMedias) {
