@@ -17,69 +17,75 @@
         <h3>@AppResources.Label("MediaList", "ar")</h3>
     </div>
 
-    <p class="mt-4 mb-4 pe-3">
-        @*  <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
-        padding: 6px;">@AppResources.Label("AddMedia","ar") +</a> *@
-        <div class="d-flex flex-wrap create">
-            <div class="d-flex flex-row flex-wrap media-list p-3">
 
-                @foreach (var item in Model)
-                {
+    @*  <a asp-action="Create" style="background-color:rgb(13, 110, 253); color: white; border-radius: 5px;
+    padding: 6px;">@AppResources.Label("AddMedia","ar") +</a> *@
 
-                    <div class="media-item">
-                        <img src="@item.Path" style="width: 200px;height: 132px; max-width: 100%; max-height: 100%" />
 
-                        @if (item.Type == 20)
-                        {
+    <form asp-controller="MediaItem" asp-action="SaveMedia" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        }
+        <div class="upload-div">
+            <label class="custom-file-upload">
+                <span>تحميل</span>
+                <i class="bi bi-cloud-arrow-up"></i>
+            </label>
+            <input type="file" name="File" id="mediaInput" multiple />
 
-                        <div class="media-details">
-                            <div class="p-3 caption">
-                                <p style="word-break: break-all;white-space: normal">@item.Caption</p>
-                            </div>
-                            <div class="delete d-flex p-3">
-                        
-                                <button id="@item.Id" onclick="DeleteMed(this.id)">Delete</button>
+            <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px; border: none !important" />
+        </div>
 
-                            </div>
+
+        <div id="imgPreview">
+        </div>
+
+        @*         <div class="submitPreview">
+        <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column; padding: 0px 10px" id="media-section">
+        </div>
+
+        </div> *@
+
+    </form>
+
+
+    <div class="d-flex flex-wrap create">
+        <div class="d-flex flex-row flex-wrap media-list p-3">
+
+            @foreach (var item in Model)
+            {
+
+                <div class="media-item">
+                    <img src="@item.Path" style="width: 200px;height: 132px; max-width: 100%; max-height: 100%" />
+
+                    @if (item.Type == 20)
+                    {
+
+                    }
+
+                    <div class="media-details">
+                        <div class="p-3 caption">
+                            <p style="word-break: break-all;white-space: normal">@item.Caption</p>
+                        </div>
+                        <div class="delete d-flex p-3">
+
+                            <button id="@item.Id" onclick="DeleteMed(this.id)">Delete</button>
+
                         </div>
                     </div>
-                }
-
-            </div>
-
-            
-        </div>
-                   
-
-            <form asp-controller="MediaItem" asp-action="SaveMedia" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="submitPreview">
-                <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column; padding: 0px 10px" id="media-section">
-
-                    <label class="custom-file-upload">
-                        <i class="bi bi-camera"></i>
-                    </label>
-                    <input type="file" name="File" id="mediaInput" multiple />
-
                 </div>
-                
-            </div>
-            <div id="imgPreview">
-            </div>
-            <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px; border: none !important" />
-                    
-                    
-                </form>
-         
+            }
 
         </div>
-</div>
-    </p>
 
 
+    </div>
+
+
+
 </div>
+
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -90,7 +96,7 @@
             customClass: {
                 confirmButton: "btn btn-success",
             },
-            title:"SureDeleteMedia",
+            title: "SureDeleteMedia",
             text: "CannotUndo",
             icon: "warning",
             buttons: true,
@@ -137,10 +143,10 @@
             });
     }
 
-    
+
 </script>
 <link rel="stylesheet" href="~/css/MediaItems/List.css" />
-<link rel="stylesheet" href="~/css/Posts/create.css" />
+@* <link rel="stylesheet" href="~/css/Posts/create.css" /> *@
 <script>
 
     var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
@@ -150,7 +156,7 @@
     var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
 
 </script>
-<script src="~/js/Posts/create.js"></script>
+<script src="~/js/Media/medialist.js"></script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
