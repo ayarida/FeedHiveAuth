@@ -29,7 +29,7 @@
     </div>
 
 
-    <div class="infobox next-page" ">
+    <div class="infobox next-page profile-publish-fb">
         <div class="infobox-icon">
             <i class="bi bi-person-fill"></i>
         </div>
@@ -39,7 +39,7 @@
     </div>
 
 
-    <div class="infobox next-page ">
+    <div class="infobox next-page group-publish-fb">
         <div class="infobox-icon">
             <i class="bi bi-collection-fill"></i>
         </div>
@@ -52,13 +52,43 @@
 
 
 <script>
-
-
     $(".post-to-facebook").on("click", function () {
         console.log("reached");
         $.ajax({
             type: 'POST',
             url: "/Social/Authorization/OAuthFlow?network=Facebook&account=Page&reauthorize=false",
+            success: function (data) {
+                var redirectUri = data.redirect;
+                console.log(redirectUri);
+                window.location.href = redirectUri; // Redirect to the obtained redirectUri
+            },
+            error: function () {
+                swal.fire("Request Error", "Error occurred while processing the request.", "error");
+            }
+
+        });
+    })
+    $(".group-publish-fb").on("click", function () {
+        console.log("reached");
+        $.ajax({
+            type: 'POST',
+            url: "/Social/Authorization/OAuthFlow?network=Facebook&account=Group&reauthorize=false",
+            success: function (data) {
+                var redirectUri = data.redirect;
+                console.log(redirectUri);
+                window.location.href = redirectUri; // Redirect to the obtained redirectUri
+            },
+            error: function () {
+                swal.fire("Request Error", "Error occurred while processing the request.", "error");
+            }
+
+        });
+    })
+    $(".profile-publish-fb").on("click", function () {
+        console.log("reached");
+        $.ajax({
+            type: 'POST',
+            url: "/Social/Authorization/OAuthFlow?network=Facebook&account=Profile&reauthorize=false",
             success: function (data) {
                 var redirectUri = data.redirect;
                 console.log(redirectUri);
