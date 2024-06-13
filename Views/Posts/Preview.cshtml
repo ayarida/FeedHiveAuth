@@ -109,7 +109,17 @@
                 <div class="section">
                     <div class="section-title">Messages</div>
                     <div class="section-info">
-                        @op.Messages?.ToString()
+                        @{
+                            var splitValue = "************************************************";
+
+                            var message = op.Messages.Split(splitValue);
+                            <div>@splitValue</div>
+                            <div>@(message[1])</div>
+                            <div>
+                                @splitValue
+                            </div>
+
+                        }
 
                         @switch ((StatusEnum)op.Status)
                         {
@@ -129,7 +139,6 @@
                         <div>@op.CurrentState?.ToString()</div>
                     </div>
                 </div>
-                <hr />
             </div>
         }
     }
@@ -177,6 +186,15 @@
 
     .success {
         background-color: #e1ffe6;
+    }
+
+    .fail, success {
+        margin: 3px;
+        padding-bottom: 40px;
+    }
+
+    .section p {
+        direction: ltr;
     }
 
 </style>
