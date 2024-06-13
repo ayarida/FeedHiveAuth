@@ -5,23 +5,17 @@
 @model FeedHiveAuth.Areas.Social.Models.ShareView
 
 @{
-    var post = Model.Post;
-    var media = Model.Media;
-    var medias = Model.Medias;
+    var data = Model;
+    var post = data.Post != null ? data.Post : null;
+    var media = data.Media != null ? data.Media : null;
+    var medias = data.Medias != null ? data.Medias : null;
     var socialConfigs = new SocialConfigs();
-    var activeNetworkTypes = Model.ActiveSocialNetworks;
-
-
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    var activeNetworkTypes = Model.ActiveSocialNetworks;
     var allChannels = Model.Channels.Where(channel => activeNetworkTypes.Select(networkType => networkType.ToString().ToLower()).Contains(channel.Network.ToLower()));
     var channelIds = allChannels.Select(x => x.NetworkId);
     var loggedInUser = User?.Identity?.Name;
 }
-
-
-
-
 <div class="editor ms-auto pe-3 card" dir="rtl" style="max-width: 100%; background-color: white;">
     <div class="pt-4 mt-4">
         <div class="form-items">
@@ -64,25 +58,25 @@
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">عنوان المنشور</label>
                             <br />
-                            <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                            <input class="form-control" value="@(post!=null ? post.Title : "")" name="Data[0].Text" readonly type="text" id="post-title" />
                         </div>
 
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">عنوان قصير</label>
                             <br />
-                            <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
+                            <input value="@(post!=null ? post.ShortTitle : "")" name="ShortTitle" readonly type="text" class="form-control" />
                         </div>
 
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">ملخص</label>
                             <br />
-                            <input value="@post.Summary" name="Summary" readonly class="form-control" />
+                            <input value="@(post!=null ? post.Summary : "")" name="Summary" readonly class="form-control" />
                         </div>
 
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">محتوى</label>
                             <br />
-                            <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
+                            <input value="@(post!=null ? post.Content : "")" name="Content" readonly class="form-control" id="post-description" />
                         </div>
 
                         <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
@@ -146,7 +140,7 @@
                     </div>
                 </div>
 
-                <input type="hidden" value="@post.Id" name="PostId" />
+                <input type="hidden" value="@(post!=null ? post.Id : "")" name="PostId" />
 
 
 
@@ -155,19 +149,17 @@
         </div>
     </div>
 
-
 </div>
 <link rel="stylesheet" href="~/css/Posts/share.css" />
 <script src="~/js/Posts/share.js"> </script>
-
 <script>
     $("[id=telegram]").on("click", function (event) {
         $("#sharePreview").load("/Social/Publish/GetPreview?previewName=telegram&postId=@(post.Id)");
     })
 
-        $("[id=facebook]").on("click", function (event) {
-            $("#sharePreview").load("/Social/Publish/GetPreview?previewName=facebook&postId=@(post.Id)");
-           
-        })
-    
+    $("[id=facebook]").on("click", function (event) {
+        $("#sharePreview").load("/Social/Publish/GetPreview?previewName=facebook&postId=@(post.Id)");
+
+    })
+
 </script>

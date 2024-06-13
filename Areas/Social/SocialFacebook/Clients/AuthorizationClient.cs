@@ -33,7 +33,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Clients
             var redirectUrl = apiUrl.
                 AddParameter("client_id", GetAppId()).
                 AddParameter("state",state).
-                AddParameter("scope", "pages_manage_metadata,pages_read_engagement,pages_read_user_content,pages_manage_posts,pages_manage_engagement,pages_show_list").
+                AddParameter("scope", scope).
                 AddParameter("redirect_uri", CallbackUrl).Decode();
             return redirectUrl.AddParameter("response_type", "code").Decode();
         }
