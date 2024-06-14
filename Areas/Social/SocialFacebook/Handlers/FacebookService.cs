@@ -39,6 +39,8 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                     return GetPages(credentials);
                 case SocialAccountTypeEnum.AdManager:
                     return GetAdManagers(credentials);
+                case SocialAccountTypeEnum.Group:
+                    return GetGroups(credentials);
                 case SocialAccountTypeEnum.Profile:
                 default:
                     var profile = GetProfile(credentials);
@@ -72,6 +74,25 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
             };
         }
 
+        private static List<Channel> GetGroups(FacebookCredentials credentials)
+        {
+            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var client = new AccountClient(configs, credentials.AccessToken);
+            var result = client.GetGroups();
+            if (!result.IsSuccessful) { }
+
+            var groups = result.Data.Data.ToList();
+            var channels = new List<Channel>();
+            while (result.Data.Paging.Next.IsNotNullOrEmpty())
+            {
+                result = client.GetGroups(result.Data.Paging.Cursors.After);
+                if (result.IsSuccessful && result.Data.Data.NotEmpty())
+                {
+                    groups.AddRange(result.Data.Data);
+                }
+            }
+            return channels;
+        }
         private static IEnumerable<Channel> GetPages(FacebookCredentials credentials)
         {
             var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
