@@ -87,7 +87,14 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 var configs = SocialConfigs.Construct().TelegramConfigs;
                 var client = new TelegramClient(configs, channel.NetworkId);
                 var text = operationData.Text?.Replace("<br />", "\n");
-                if (operationData.Link.IsNotNullOrEmpty() && !text.Contains(operationData.Link))
+                var postSummary = operationData.postSummary?.Replace("<br />", "\n");
+                var postContent = operationData.postContent?.Replace("<br />", "\n");
+                if (postSummary.IsNotNullOrEmpty() && postContent.IsNotNullOrEmpty())
+                {
+                    text += "\n" + postSummary + "\n" + postContent;
+                }
+
+                    if (operationData.Link.IsNotNullOrEmpty() && !text.Contains(operationData.Link))
                 {
                     text += "\n" + operationData.Link;
                 }

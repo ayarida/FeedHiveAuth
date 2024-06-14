@@ -70,13 +70,13 @@
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">ملخص</label>
                             <br />
-                            <input value="@(post!=null ? post.Summary : "")" name="Summary" readonly class="form-control" />
+                            <input value="@(post!=null ? post.Summary : "")" name="Data[0].Summary" readonly class="form-control" />
                         </div>
 
                         <div class="form-group mb-4">
                             <label class="mb-3 control-label">محتوى</label>
                             <br />
-                            <input value="@(post!=null ? post.Content : "")" name="Content" readonly class="form-control" id="post-description" />
+                            <input value="@(post!=null ? post.Content : "")" name="Data[0].Content" readonly class="form-control" id="post-description" />
                         </div>
 
                         <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
