@@ -62,6 +62,8 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                     Task.Run(() =>
                     {
                         var result = TelegramService.Send(operation, channel);
+                        OperationHelper.EndShareOperation(operation, result.Result.Success ? StatusEnum.Success : StatusEnum.Failed, result.Result.Message, result.Result.Result);
+
                     });
                     break;
                 case SocialNetworkTypeEnum.DailyMotion:
