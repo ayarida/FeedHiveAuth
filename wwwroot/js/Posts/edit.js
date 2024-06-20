@@ -74,7 +74,6 @@ $(function (e) {
                         confirmButton: "btn btn-primary  warning",
                     },
                     title: `${fields}`,
-                    text: `${subFields}`,
                     confirmButtonText: "موافق",
                 });
 
