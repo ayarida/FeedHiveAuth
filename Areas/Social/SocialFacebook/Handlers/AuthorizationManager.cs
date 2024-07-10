@@ -41,6 +41,9 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
                 case SocialAccountTypeEnum.AdManager:
                     return "ads_management,ads_read,business_management,read_audience_network_insights,read_insights";
                 case SocialAccountTypeEnum.Profile:
+                    return "email,groups_access_member_info,publish_to_groups,user_age_range,user_birthday,user_events,user_gender,user_hometown,user_likes,user_link,user_location,user_photos,user_posts,user_tagged_places,user_videos";
+                case SocialAccountTypeEnum.Group:
+                    return "publish_to_group,groups_access_member_info";
                 default:
                     if (network.Equals(SocialNetworkTypeEnum.Instagram))
                         return "user_media,user_profile";

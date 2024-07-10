@@ -73,7 +73,7 @@ $(function (e) {
                 customClass: {
                     confirmButton: "btn btn-primary  warning",
                 },
-                title: "الرجاء املأ خانة العنوان!"
+                title: "الرجاء املأ خانة العنوان!",
                 confirmButtonText: "موافق",
             })
         }

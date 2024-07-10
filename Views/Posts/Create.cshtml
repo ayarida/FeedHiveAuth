@@ -76,11 +76,8 @@
                         <partial name="_imagePreview" />
                         <partial name="_imageFromArchive" />
                         <div class="form-group d-flex justify-content-center">
-                            <div class="submit-div">
-                                <input type="submit" value="+" class="submit-button" />
-                            </div>
-                        </div>
 
+                        </div>
                     </div>
                     <div id="imgPreview">
                     </div>
@@ -105,10 +102,11 @@
 
 <script>
     tinymce.init({
+        forced_root_block: " ",
         selector: '#mytextarea',
-        
-        plugins: 'code autolink media fullscreen quickbars insertdatetime directionality lists searchreplace',
-        toolbar: 'fullscreen | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | Autolink | autoresize | insertdatetime | ltr rtl | numlist bullis | searchreplace',
+        menubar: 'file edit view',
+        plugins: 'code fullscreen insertdatetime searchreplace',
+        toolbar: 'fullscreen | undo redo | styleselect | insertdatetime | searchreplace',
         branding: false,
         statusbar: false,
     });

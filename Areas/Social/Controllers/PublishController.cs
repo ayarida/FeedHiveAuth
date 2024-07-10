@@ -10,6 +10,7 @@ using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -18,6 +19,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+        OperationRepository _operationService = Instances.Repositories.OperationRepository;
         ILogger<PostsController> _logger;
 
         public PublishController(ILogger<PostsController> logger)
@@ -41,28 +43,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [PermissionFilter("Publish_Share")]
         public async Task<IActionResult> Share(string? postid = null)
         {
-            //get current subscription
-            //var subscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
-            var media = _mediaItemService.GetMediaByPostId(postid);
-            var medias = _mediaItemService.GetMediasByPostId(postid);
-            PublishErrorEnum error;
-            //Aya's local DB ids for API testing reasons
 
-            var post = _postService.Get(postid);
-            if (medias != null)
-                post.PostMediaItems = medias;
-            var subSocialConfigs = SocialServiceHelper.GetConfigs();
-            var channels = GetChannels(out error);
-            var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
-            var model = new ShareView
-            {
-                Post = post,
-                Media = media,
-                Medias = medias,
-                Channels = channels,
-                ActiveSocialNetworks = activeNetworkTypes
-            };
-            return View(model);
+            var svm = FillShareViewForm(postid);
+            return View(svm);
         }
         [PermissionFilter("Publish_GetActiveNetworkTypes")]
         public List<SocialNetworkTypeEnum> GetActiveNetworkTypes(SocialConfigs socialConfigs)
@@ -86,42 +69,46 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [HttpPost]
         public IActionResult Send(ShareForm form)
         {
+            var svm = FillShareViewForm(form.PostId);
             try
-            {
-
+            {            
                 var currUser = GlobalContext.UserConfigs;
                 if (form.Channels.Empty())
                 {
                     form.Channels = Instances.Repositories.ChannelRepository.GlobalGetAll().Select(ch => ch.Id).ToList();
                     _logger.LogError("********************* No Channels Selected! ********************");
-                    //create an Error Page to redirect 
-                    //return View();
+                    TempData["ShareToSocialMsg"] = "No channels selected!";
+                    return RedirectToAction("Preview", "Posts", new { id = form.PostId });
                 }
-                if (form.Data.Empty())
+                if (form.Data.Empty() || form.Data.First().Text.Empty())
                 {
                     _logger.LogError("********************* No Data Passed! ********************");
-                    //create an Error Page to redirect 
-                    //return View();
+                    return RedirectToAction("Preview", "Posts", new { id = form.PostId });
                 }
-                var channels = Instances.Repositories.ChannelRepository.GlobalGetAll();
-                form.Channels = channels.Select(X => X.Id).ToList();
+                form.Channels = svm.Channels.Select(X => X.Id).ToList();
                 var creationDate = DomainTime.Now();
                 foreach (var data in form.Data.Where(formData => formData.ChannelId.In(form.Channels)))
                 {
-                    var channel = channels.FirstOrDefault(x => x.Id.Equals(data.ChannelId) && x.Id.In(form.Channels));
+                    var channel = svm.Channels.FirstOrDefault(x => x.Id.Equals(data.ChannelId) && x.Id.In(form.Channels));
                     if (channel == null) continue;
                     var operationId = SocialPublishService.Send(form.PostId, form.MediaId, data, channel, creationDate);
-
+                    var op = _operationService.Get(operationId);
+                    if (operationId == null )
+                    {
+                        TempData["ShareToSocialMsg"] = "Something wrong happened, check post operations.";
+                        return RedirectToAction("Preview", "Posts", new { id = form.PostId });
+                    }
                 }
-                return Ok();
+                //TempData["ShareToSocialMsg"] = "Published Successfully!";
+                return RedirectToAction("Preview", "Posts", new { id = form.PostId });
             }
             catch (Exception e)
             {
                 _logger.LogError("********************* " + e.Message + "*********************");
-                return BadRequest(e.Message);
+                TempData["Error"] = e.Message;
+                return RedirectToAction("Preview", "Posts", new { id = form.PostId });
             }
         }
-
 
         [HttpGet]
         public ActionResult GetPreview(string previewName, string postId)
@@ -133,6 +120,28 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 post.PostMediaItems = medias;
 
             return PartialView("~/Areas/Social/Views/Shared/_" + previewName + "Preview.cshtml", post);
+        }
+
+        public ShareView FillShareViewForm(string? postid=null)
+        {
+            var subSocialConfigs = SocialServiceHelper.GetConfigs();
+            PublishErrorEnum error;
+            var channels = GetChannels(out error);
+            var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
+            var post = _postService.Get(postid);
+            var media = _mediaItemService.GetMediaByPostId(postid);
+            var medias = _mediaItemService.GetMediasByPostId(postid);
+            if (medias != null)
+                post.PostMediaItems = medias;
+            var svm = new ShareView {
+                ActiveSocialNetworks = activeNetworkTypes,
+                Channels = channels,
+                Post = post,
+                Media = media,
+                Medias = medias
+            
+            };
+            return svm;
         }
     }
 

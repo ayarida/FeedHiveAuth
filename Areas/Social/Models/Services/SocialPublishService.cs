@@ -55,6 +55,8 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
                 case SocialNetworkTypeEnum.Telegram:
                     sendData = new TelegramOperationData
                     {
+                        postContent = data.Content,
+                        postSummary = data.Summary,
                         Text = data.Text,
                         Link = data.Link
                     };

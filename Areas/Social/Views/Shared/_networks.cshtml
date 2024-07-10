@@ -5,7 +5,7 @@
     var socialConfigs = new SocialConfigs();
 
 
-    var facebookEnabled = socialConfigs.FacebookConfigs != null && socialConfigs.FacebookConfigs.Application.Enabled;
+    var facebookEnabled = false;
     var telegramEnabled = socialConfigs.TelegramConfigs != null && socialConfigs.TelegramConfigs.Bot.Enabled;
     // var instagramEnabled = socialConfigs.InstagramConfigs != null && socialConfigs.InstagramConfigs.Application.Enabled;
     // var twitterEnabled = socialConfigs.TwitterConfigs != null && socialConfigs.TwitterConfigs.Application.Enabled;
@@ -27,23 +27,23 @@
 <div class="social" id="channelContainer">
     <div class="step-pane active networks" data-step="1" id="channelHolder">
         <div class="infobox-container mb-5 social">
-            <div class="infobox next-page"  @(facebookEnabled ? "" : "disabled") id="callFacebook">
+            <button class="infobox next-page @(facebookEnabled ? "" : "disabled")" @(facebookEnabled ? "" : "disabled") id="callFacebook">
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-facebook"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Facebook</span>
                 </div>
-            </div>
-            <div class="infobox next-page @(instagramEnabled ? "":  "disabledbutton")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Instagram.Key()', @(instagramEnabled ? "true" : "false"))" @(instagramEnabled ? "" : "disabled")>
+            </button>
+            <button class="infobox next-page @(instagramEnabled ? "":  "disabledbutton")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Instagram.Key()', @(instagramEnabled ? "true" : "false"))" @(instagramEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-instagram"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Instagram</span>
                 </div>
-            </div>
-            <div class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Twitter.Key()', @(twitterEnabled ? "true" : "false"))" @(twitterEnabled ? "" : "disabled")>
+            </button>
+            <button class="infobox next-page @(twitterEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Twitter.Key()', @(twitterEnabled ? "true" : "false"))" @(twitterEnabled ? "" : "disabled")>
 
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-twitter"></i>
@@ -51,47 +51,47 @@
                 <div class="infobox-data">
                     <span class="infobox-text">Twitter</span>
                 </div>
-            </div>
-            <div class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Youtube.Key()', @(youtubeEnabled ? "true" : "false"))" @(youtubeEnabled ? "" : "disabled")>
+            </button>
+            <button class="infobox next-page @(youtubeEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Youtube.Key()', @(youtubeEnabled ? "true" : "false"))" @(youtubeEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-youtube"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Youtube</span>
                 </div>
-            </div>
-            <div class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Soundcloud.Key()', @(soundcloudEnabled ? "true" : "false"))" @(soundcloudEnabled ? "" : "disabled")>
+            </button>
+            <button class="infobox next-page @(soundcloudEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Soundcloud.Key()', @(soundcloudEnabled ? "true" : "false"))" @(soundcloudEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-mic-fill"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Soundcloud</span>
                 </div>
-            </div>
-            <div class="infobox next-page" id="callTelegram">
+            </button>
+            <button class="infobox next-page @(soundcloudEnabled ? "" : "disabled")" id="callTelegram" @(soundcloudEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon  bi bi-telegram"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Telegram</span>
                 </div>
-            </div>
-            <div class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.WhatsApp.Key()', @(whatsappEnabled ? "true" : "false"))" @(whatsappEnabled ? "" : "disabled")>
+            </button>
+            <button class="infobox next-page" v-on:click="updateNetwork('@SocialNetworkTypeEnum.WhatsApp.Key()', @(whatsappEnabled ? "true" : "false"))" @(whatsappEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-whatsapp"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Whatsapp</span>
                 </div>
-            </div>
-            <div class="infobox next-page" id="callDailyMotion">
+            </button>
+            <button class="infobox next-page  @(DailymotionEnabled ? "" : "disabled")" id="callDailyMotion" @(DailymotionEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-camera-video"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Dailymotion</span>
                 </div>
-            </div>
+            </button>
         </div>
     </div>
 </div>
@@ -100,21 +100,29 @@
     $(".channelContainer").ready(function () {
 
         $("#callTelegram").on("click", function (event) {
-            $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=telegram");
-            event.preventDefault();
+            if (!$("#callTelegram").is(':disabled')) {
+                $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=telegram");
+                event.preventDefault();
+            }
 
         })
 
         $("#callDailyMotion").on("click", function (event) {
-            $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=dailymotion");
-            event.preventDefault();
+            if (!$("#callDailyMotion").is(':disabled')) {
+                {
+                    $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=dailymotion");
+                    event.preventDefault();
+                }
 
+            }
         })
 
 
         $("#callFacebook").on("click", function (event) {
-            $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=facebook");
-            event.preventDefault();
+            if (!$("#callFacebook").is(':disabled')) {
+                $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=facebook");
+                event.preventDefault();
+            }
 
         })
 
@@ -224,5 +232,11 @@
     .disabledbutton {
         pointer-events: none;
         opacity: 0.4;
+    }
+
+    .disabled{
+        pointer-events: none;
+        opacity: 0.4;
+        cursor: not-allowed;
     }
 </style>

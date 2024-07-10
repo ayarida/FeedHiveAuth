@@ -346,6 +346,7 @@ input.btn.btn-primary.mt-3:focus {
     display: flex;
     justify-content: space-between;
     padding: 10px 30px 10px 30px;
+    align-items: baseline;
 }
 
     .upload-div input.submit-button.btn.btn-primary.mt-3.save-submit {
@@ -361,6 +362,8 @@ label.custom-file-upload {
     border-radius: 5px;
     align-items: center;
     column-gap: 11px;
+    justify-content: center;
+    width: 160px;
 }
 
     label.custom-file-upload span {

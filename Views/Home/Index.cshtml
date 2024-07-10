@@ -29,14 +29,14 @@
                 @if (signedIn)
                 {
                     <div>
-                        <h2>@AppResources.Label("Hello","ar") @User.Identity.Name  </h2>
-                        <p>@AppResources.Label("WelcomeMsg","ar")</p>
+                        <h2>@AppResources.Label("Hello", "ar") @User.Identity.Name  </h2>
+                        <p>@AppResources.Label("WelcomeMsg", "ar")</p>
                     </div>
                     <div>
 
 
                         <a href="/Posts/Create" style="color: white; font-size: 16px; padding: 10px;" class="d-flex w-100 h-100 align-items-center justify-content-center btn btn-primary">
-                            @AppResources.Label("CreateYourNewPost","ar") <i class="bi bi-plus-lg pe-2"></i>
+                            @AppResources.Label("CreateYourNewPost", "ar") <i class="bi bi-plus-lg pe-2"></i>
                         </a>
 
                     </div>
@@ -79,7 +79,7 @@
                     <div class="card-text">
                         <h1>مجموع جميع منشوراتك</h1>
                         <h2>لديك منشورات جديدة</h2>
-                       
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -104,10 +104,10 @@
                     <form asp-controller="Posts" asp-action="CreateQuickPost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%;" id="create-form" dir="rtl">
                         <p class="card-title ms-auto">
                             <img src="~/Static/Icons/ligt-bulb.png" style="max-width: 50px !important" />
-                            <span style="font-weight: bold" class="pe-2">@AppResources.Label("CreateYourNewPost","ar")</span>
+                            <span style="font-weight: bold" class="pe-2">@AppResources.Label("CreateYourNewPost", "ar")</span>
                         </p>
                         <div class="mb-3">
-                            <label for="Title">@AppResources.Label("Address","ar"):</label>
+                            <label for="Title">@AppResources.Label("Address", "ar"):</label>
                             <input type="text" name="Title" id="Title" class="pe-1 quick_title" name="Title" style="border: none; border-bottom: 1px solid; outline: none; padding-right: 1px" />
                         </div>
 
@@ -123,7 +123,7 @@
     </div>
 
     <div class="row">
-        <p style="font-weight: bold ; font-size: 20px">@AppResources.Label("Archive","ar")</p>
+        <p style="font-weight: bold ; font-size: 20px">@AppResources.Label("Archive", "ar")</p>
         <p style="color: #a2aebc">@AppResources.Label("ChooseSuggestion", "ar")</p>
         <div class="d-flex flex-row-reverse justify-content-around flex-sm-wrap">
             @foreach (var post in userPosts.Take(4))
@@ -144,8 +144,8 @@
                         <div class="archive_menu">
                             <i class="bi bi-three-dots-vertical"></i>
                             <ul class="archive_operations">
-                                <li>@Html.ActionLink(AppResources.Label("Update","ar"), "Edit", "Posts", new { @post.Id })</li>
-                                <li><a href="/Social/Publish/Share?postid=@post.Id">@AppResources.Label("Share","ar")</a></li>
+                                <li>@Html.ActionLink(AppResources.Label("Update", "ar"), "Edit", "Posts", new { @post.Id })</li>
+                                <li><a href="/Social/Publish/Share?postid=@post.Id">@AppResources.Label("Share", "ar")</a></li>
                                 <li><a onclick="deletePost(this.id)" id="@post.Id">@AppResources.Label("Delete", "ar")</a></li>
                             </ul>
                         </div>
@@ -165,9 +165,12 @@
     @await Html.PartialAsync("~/Views/Shared/_shareFromArchive.cshtml", data)
 </div>
 
-
+<script>
+    var quickPostTitle = '@AppResources.Label("FillAllRequiredFields", "ar")';
+</script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="~/css/Index/index.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="~/js/Index/index.js"></script>
+<script src="~/js/Posts/quickpost.js"></script>
