@@ -1,6 +1,8 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Areas.Social.SocialTwitter.Models.Common;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.JSON;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -74,14 +76,31 @@ namespace FeedHiveAuth.Controllers
         [PermissionFilter("MediaItem_List")]
         public IActionResult List()
         {
-            var mediaItemsList = _mediaItemService.GetMediaList();
+            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
             return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
         }
+        public JsonResult GetFromArchive(IEnumerable<MediaData> valinput)
+        {
+            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
+            var result = new JsonResult(mediaItemsList);
+            return result;
+        }
+
         [PermissionFilter("MediaItem_DeleteMediaItem")]
         [HttpDelete]
         public void DeleteMediaItem(MediaItem mediaItem)
         {
+
             _mediaItemService.Delete(mediaItem.Id);
+        }
+        [PermissionFilter("MediaItem_DeletePostMedia")]
+        [HttpDelete]
+        public void DeletePostMedia(string media,string post)
+        {
+
+           _mediaItemService.DeletePostMedia(media,post);
         }
 
     }

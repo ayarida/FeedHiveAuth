@@ -1,0 +1,136 @@
+﻿
+<div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column; padding: 0px 10px" id="media-section">
+    <button type="button" class="border-start-0 border-bottom-0 border ms-n5" data-bs-toggle="modal" data-bs-target="#staticBackdrop7" onclick="GetMedias()" id="media-btn">
+        From Archive
+        <div id="selectedpc" style="display: none;"></div>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop7" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content p-3">
+                <table class="table">
+                    <tbody id="resultgallery"></tbody>
+                </table>
+                <div id="selectedMedia" value=""></div>
+                <div class="modal-footer" style="border: none !important">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</<div>
+<!-- Button trigger modal -->
+
+<script type="text/javascript">
+    let arrayPic = [];
+      
+    function Removemedia(val) {
+
+    let res = arrayPic.filter(item => item.Id !== val);
+    document.getElementById("mediaItemsPaths").setAttribute("value", JSON.stringify(res));
+    var btn = document.getElementsByClassName('deleteIcon')
+    $('.deleteIcon').parent().remove();
+            }
+                        
+    function GetMedias() 
+    {
+        var urltarget = '/MediaItem/GetFromArchive';
+        
+        $.ajax({
+            type: 'POST',
+            url: urltarget,
+            dataType: 'JSON',
+            data: 
+            {
+                valinput :''
+            },
+            contentType: "application/json; charset=utf-8",
+
+            success: function (msg) {
+                console.log(msg)
+                CreateGallery(msg);
+                // for (var i = 0; i < posts_array.length; i++) {
+                //     title = msg[i][0];
+                // }
+            }
+        });
+    }
+    function CreateGallery(data) 
+    {
+        var myHtml = '<div class="d-flex flex-wrap create">' + ' <div class="d-flex flex-row flex-wrap media-list p-3">';
+        if (data.length == 0) 
+        {
+            table = "No results"
+        }
+        else { 
+            for (var i in data) 
+            {
+                var dataToSend = data[i].path + ',' + data[i].id;
+                myHtml += '<div class="media-item" >';
+                if (data[i].type == 10)
+                {
+                myHtml += '<img onclick="FillPath(\'' + data[i].path + '\', \'' + data[i].id + '\')" src="' + (data[i].path ? data[i].path : "/Static/Images/no-img.jpg") + '"  style="width: 200px;height: 132px; max-width: 100%; max-height: 100%">';
+                }
+                if (data[i].type == 30)
+                {
+                myHtml += '<div class="embed-responsive embed-responsive-16by9">';
+                            // myHtml += '< iframe class="embed-responsive-item" src = ' + data[i].path + '" allowfullscreen ></iframe>';
+                            myHtml += '<div  onclick="FillPath(\'' + data[i].path + '\', \'' + data[i].id + '\')"><iframe   class="embed-responsive-item" src="' + data[i].path + '" allowfullscreen></iframe></div>';
+                
+                }
+                myHtml += '<div class="media-details" ><div class="p-3 caption" ><p style="word-break: break-all;white-space: normal" >' + data[i].caption + '</p>'
+
+            }
+            myHtml += "</div></div>";
+           }
+        document.getElementById("resultgallery").innerHTML = myHtml;
+        
+
+    }
+    function FillPath(msg,id) {
+        console.log("path :" + msg);
+                console.log("id :" + id);
+        let media = { "Path": msg, "Id": id };
+        arrayPic.push(media);
+        document.getElementById("selectedpc").innerHTML=msg ;
+        document.getElementById("selectedpc").setAttribute("value", msg);
+        if (String(msg).endsWith('.mp4') == false) {
+            let html = `
+                                                 <div class = "uploaded-img mt-3">
+                                                     <img src = "${msg}" alt="placeholder" class="mb-3" />
+                                                      <div onclick="Removemedia('${id}')" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                                     </div>
+                                                 </div>
+                                             `;
+                    $("#imgPreview").append(html);
+        }
+        else {
+                    let html = `
+                                           <div class="video-holder">
+                                            <video controls class = "uploaded-img">
+                                                <source src = "${msg}" alt="placeholder" class="mb-3" type="video/mp4"/>
+
+                                            </video>
+                                                                     <div onclick="Removemedia('${id}')" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                             </div>
+                                        </div>
+                                           `;
+                    $("#imgPreview").append(html);
+
+        }
+        
+        
+        var myModalEl = document.getElementById('staticBackdrop7');
+        var modal = bootstrap.Modal.getInstance(myModalEl)
+        modal.hide();
+        console.log(arrayPic);
+
+        document.getElementById("mediaItemsPaths").setAttribute("value",JSON.stringify(arrayPic));
+    }
+
+
+   
+</script>
+
+

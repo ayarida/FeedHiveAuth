@@ -3,12 +3,19 @@ using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
+using FeedHiveAuth.Models.JSON;
 using FeedHiveAuth.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
+using System.Runtime.Serialization.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Xml;
+using System.Xml.Linq;
 namespace FeedHiveAuth.Controllers
 {
 
@@ -162,8 +169,14 @@ namespace FeedHiveAuth.Controllers
             var post = _postService.GetPostById(id);
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(id);
             post.Operations = ops;
-            var postMedia = _mediaItemService.GetMediasByPostId(id);
-            if (postMedia != null) { post.PostMediaItems = postMedia; };
+            var postMedia = _mediaItemService.GetPostMedias(id);
+            var mediaList=new List<MediaItem>();
+            foreach(var postmed in postMedia)
+            {
+               var media= _mediaItemService.GetMediaById(postmed.MediaItemId);
+                mediaList.Add(media);
+            }
+            if (postMedia != null) { post.PostMediaItems = mediaList; };
 
             return View("~/Views/Posts/Preview.cshtml", post);
         }
@@ -179,8 +192,7 @@ namespace FeedHiveAuth.Controllers
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
         public Task<ActionResult> CreatePost()
-        {
-
+        {            
             Post post = new Post
             {
                 Title = HttpContext.Request.Form["Title"],
@@ -195,7 +207,27 @@ namespace FeedHiveAuth.Controllers
             {
                 post.ModifiedBy = post.CreatedBy = userId;
             }
-            _postService.Save(post);
+             _postService.Save(post);
+
+            /////////SaveMedia////////////////////
+
+            //Medias from archive 
+            var MediasFromArchive = new List<MediaData>();
+            var med = HttpContext.Request.Form["mediaItemsPaths"];
+            if (med.ToString().IsNotNullOrEmpty())
+            {
+                MediasFromArchive = JsonSerializer.Deserialize<List<MediaData>>(med);
+            }
+            if (MediasFromArchive?.Count > 0)
+            {
+                foreach(var media in MediasFromArchive)
+                {
+                    _postService.InsertPostMedia(post.Id,media.Id);
+                }
+
+            }
+            //New Medias ( from File)
+            
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
@@ -204,11 +236,16 @@ namespace FeedHiveAuth.Controllers
 
                 //SavePostMedias(post);
                 var result = SaveMedia(postMedias, post.Id);
+                foreach(var media in result)
+                {
+                    _postService.InsertPostMedia(post.Id, media.Id);
+                }
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
             return List();
         }
+
         [HttpPost]
         public ActionResult CreateQuickPost()
         {
@@ -220,6 +257,7 @@ namespace FeedHiveAuth.Controllers
                 PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
                 PostDate = DateTime.Now
             };
+            var med = HttpContext.Request.Form["mediaItemPaths"];
             string userId = GetCurrentUserId().GetAwaiter().GetResult();
             if (userId != null)
             {
@@ -241,17 +279,17 @@ namespace FeedHiveAuth.Controllers
         }
 
 
-        public int SaveMedia(List<MediaItem> mediaItems, string postId)
+        public List<MediaItem> SaveMedia(List<MediaItem> mediaItems, string postId)
         {
             try
             {
-                _mediaItemService.InsertPostMedia(mediaItems, postId);
-                return 1;
+                var medias=_mediaItemService.InsertPostMedia(mediaItems, postId);
+                return medias;
             }
             catch (Exception ex)
             {
                 _logger.LogError("********************* Error in saving media, EXCEPTION \r\n " + ex + "\r\n*********************");
-                return 0;
+                return null;
             }
         }
         [PermissionFilter("Posts_Update")]

@@ -68,17 +68,19 @@
                             <input asp-for="PostDate" class="form-control req" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" min=" @DateTime.Now" max=" @DateTime.Now" />
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
+                        <input type="hidden" asp-for="mediaItemsPaths" class="form-control" id="mediaItemsPaths" name="mediaItemsPaths" />
 
                     </div>
                     @* PreviewIamge and handle exceptions *@
                     <div class="submitPreview">
                         <partial name="_imagePreview" />
+                        <partial name="_imageFromArchive" />
                         <div class="form-group d-flex justify-content-center">
                             <div class="submit-div">
                                 <input type="submit" value="+" class="submit-button" />
-
                             </div>
                         </div>
+
                     </div>
                     <div id="imgPreview">
                     </div>

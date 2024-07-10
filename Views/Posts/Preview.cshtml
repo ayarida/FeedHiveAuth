@@ -55,10 +55,29 @@
                         <div class="form-group mb-4 mt-3 d-flex flex-column">
                             @if (post.PostMediaItems != null && post.PostMediaItems.Count > 0)
                             {
+                                <br />
                                 <label for="MediaId" class="mb-3 control-label">ميديا </label>
-                                <br />
-                                <img src="@post.PostMediaItems.FirstOrDefault()?.Path" style="width: 300px; max-width: 100%" />
-                                <br />
+                                foreach(var media in post.PostMediaItems)
+                                {
+                                    if(media.Type==10)
+                                    {
+                                       <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
+                                        <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                    </div>
+                                    <img src="@media?.Path" style="width: 300px; max-width: 100%" />
+                                        <br />
+                                    }
+                                    if(media.Type==30)
+                                    {
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe class="embed-responsive-item" src="@media?.Path" allowfullscreen></iframe>
+                                        </div>
+                                    }
+
+                                }
+                                
+                                
+                                
                                 <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@post.PostMediaItems.FirstOrDefault()?.Path">
                             }
                             else
@@ -66,6 +85,7 @@
                                 <h5 class="mb-3 control-label" style="font-weight: bold">
                                     لا بوجد ميديا
                                 </h5>
+
                                 <div>
                                     <img src="~/Static/Images/no-img.jpg" style="border: 1px solid grey; width: 300px; max-width: 100%" />
                                 </div>
@@ -136,7 +156,73 @@
 
 <link rel="stylesheet" href="~/css/Posts/share.css" />
 <script src="~/js/Posts/share.js"> </script>
+<script>
+    function deletePostMedia(mediaid, postid) {
+        console.log("media" + mediaid);
+        console.log("post" + postid);
+        swal.fire({
+            customClass: {
+                confirmButton: "btn btn-success",
+            },
+            title: "SureDeletePostMedia",
+            text: "CannotUndo",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            // buttons: ["كلّا", "نعم"],
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            showCancelButton: true,
+            showConfirmButton: true,
+            className: {
+                text: 'pleaseWork',
+            },
+        })
+            .then((willDelete) => {
+                if (willDelete.isConfirmed) {
 
+                    var serviceURL = "/MediaItem/DeletePostMedia";
+                    // var mediaId = id;
+                    var data = {
+
+                        media: mediaid,
+
+                        post: postid
+
+                        
+
+                    };
+                    $.ajax({
+                        type: "DELETE",
+                        url: serviceURL,
+                        data: $.param(data),
+                        success: function (data) {
+                            swal.fire({
+                                title: "DeletedSuccesfully",
+                                text: "MediaDeleted",
+                                icon: "success"
+                            }).then(function () {
+                                window.location.reload();
+                            }
+                            )
+                        },
+                        error: function (data) {
+                            swal.fire("DeleteError", "PlzTryagain", "error");
+                        },
+                    })
+
+                }
+                else {
+                    swal.fire({
+                        title: "DeleteCanceled",
+                        confirmButtonText: "Confirm"
+                    });
+                }
+            });
+    }
+
+
+</script>
 <style>
     .section-title {
         width: 78px;
