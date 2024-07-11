@@ -1,6 +1,8 @@
 ﻿.uploaded-img {
     position: relative;
-    width: 100%;
+    width: 200px;
+    height: auto;
+    object-fit: cover;
 }
 
 .deleteIcon {
@@ -240,7 +242,7 @@ input.submit-button:not(.save-submit) {
 .custom-file-upload {
     border: none;
     width: fit-content;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: 26px;
 }
 
@@ -255,11 +257,10 @@ input.submit-button:not(.save-submit) {
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
     border-top: none;
-
 }
 
     .submitPreview input {
-        color: #2259E8;
+        /*color: #2259E8;*/
         font-weight: bold;
         font-size: 25px;
     }
@@ -272,4 +273,45 @@ input.submit-button:not(.save-submit) {
 
 input.btn.btn-primary.mt-3:focus {
     background: #0b5ed7 !important;
+}
+
+.archive-button {
+    width: fit-content;
+    margin-left: auto;
+}
+
+
+    .archive-button .bi-archive-fill {
+        color: grey;
+    }
+
+
+#media-section {
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+    height: 60px;
+}
+
+
+/*selectfrom archive*/
+.create .media-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.d-flex.flex-row.flex-wrap.media-list.p-3 {
+    column-gap: 26px;
+    width: 100%;
+}
+
+
+.modal-content.p-3 {
+    width: 70%;
+    margin: auto;
+}
+
+div#imgPreview {
+    display: flex;
+    column-gap: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
 }

@@ -1,11 +1,9 @@
-﻿using FeedHiveAuth.Areas.Social.SocialTwitter.Models.Common;
-using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.JSON;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -47,8 +45,8 @@ namespace FeedHiveAuth.Controllers
             return "File failed to upload!";
 
         }
-    
-        
+
+
         [Authorize]
         [PermissionFilter("MediaItem_SaveMedia")]
         [HttpPost]
@@ -61,15 +59,15 @@ namespace FeedHiveAuth.Controllers
                 List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);//mapFileToMediaItem
                 InsertMedia(Medias.ToList());
             }
-            return RedirectToAction("List","MediaItem");
+            return RedirectToAction("List", "MediaItem");
         }
-       
-        
+
+
         [HttpGet]
         [PermissionFilter("MediaItem_Create")]
         public IActionResult Create()
         {
-            
+
             return View("~/Views/MediaItem/Create.cshtml");
         }
         [HttpGet]
@@ -97,10 +95,10 @@ namespace FeedHiveAuth.Controllers
         }
         [PermissionFilter("MediaItem_DeletePostMedia")]
         [HttpDelete]
-        public void DeletePostMedia(string media,string post)
+        public void DeletePostMedia(string media, string post)
         {
 
-           _mediaItemService.DeletePostMedia(media,post);
+            _mediaItemService.DeletePostMedia(media, post);
         }
 
     }

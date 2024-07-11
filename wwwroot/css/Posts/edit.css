@@ -385,3 +385,26 @@ input.submit-button:not(.save-submit) {
 .uploaded-img img {
     width: 100%;
 }
+
+.create .media-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.d-flex.flex-row.flex-wrap.media-list.p-3 {
+    column-gap: 26px;
+    width: 100%;
+}
+
+
+.modal-content.p-3 {
+    width: 70%;
+    margin: auto;
+}
+
+div#imgPreview {
+    display: flex;
+    column-gap: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

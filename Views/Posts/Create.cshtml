@@ -25,7 +25,7 @@
 </div> *@
 
 
-<div class="d-flex flex-wrap create">
+<div class="d-flex flex-wrap create popup-media">
 
 
     <div class="p-3 col-md-10 col-sm-12 createForm">
@@ -72,16 +72,15 @@
 
                     </div>
                     @* PreviewIamge and handle exceptions *@
-                    <div class="submitPreview">
+                    <div class="submitPreview p-3">
                         <partial name="_imagePreview" />
                         <partial name="_imageFromArchive" />
                         <div class="form-group d-flex justify-content-center">
-
                         </div>
                     </div>
                     <div id="imgPreview">
                     </div>
-                    <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px; border: none !important" />
+                    <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary save-submit m-0 mt-2" style="width: 200px; border: none !important" />
                 </form>
             </div>
         </div>

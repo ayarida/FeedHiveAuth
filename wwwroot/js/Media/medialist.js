@@ -29,7 +29,7 @@ $("#mediaInput").on("change", e => {
             reader.onload = function (e) {
                 let html = `
                                  <div class = "uploaded-img mt-3">
-                                     <img src = "${e.target.result}" alt="placeholder" class="mb-3" />
+                                     <img src = "${e.target.result}" alt="placeholder"/>
                                      <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
                                      </div>
                                  </div>
@@ -102,7 +102,7 @@ $("#mediaInput").on("change", e => {
 //                               <div class="video-holder">
 //                                <video controls class = "uploaded-img">
 //                                    <source src = "${e.target.result}" alt="placeholder" class="mb-3" type="video/mp4"/>
-                                   
+
 //                                </video>
 //                                 <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
 //                                 </div>
@@ -142,6 +142,6 @@ $(function (e) {
 
 // Delete media              
 function deleteMedia(event) {
-     console.log("meddioarrrrrrrrrrrrrrrrrrrrrrrr")
+    console.log("meddioarrrrrrrrrrrrrrrrrrrrrrrr")
     $(event).parent().remove();
 }
