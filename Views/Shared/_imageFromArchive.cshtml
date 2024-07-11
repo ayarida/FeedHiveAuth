@@ -27,12 +27,16 @@
     let arrayPic = [];
 
     function Removemedia(val) {
-
         let res = arrayPic.filter(item => item.Id !== val);
-        document.getElementById("mediaItemsPaths").setAttribute("value", JSON.stringify(res));
-        var btn = document.getElementsByClassName('deleteIcon')
-        $('.deleteIcon').parent().remove();
+        console.log(res);
+        // document.getElementById("mediaItemsPaths").setAttribute("value", JSON.stringify(res));
+        // var btn = document.getElementById('deleteIcon')
+        let current = $("#" + val);
+        console.log(current);
+        $(current).parent().parent().remove();
     }
+
+
 
     function GetMedias() {
         var urltarget = '/MediaItem/GetFromArchive';
@@ -92,25 +96,27 @@
         document.getElementById("selectedpc").setAttribute("value", msg);
         if (String(msg).endsWith('.mp4') == false) {
             let html = `
-                                                                             <div class = "uploaded-img mt-3">
-                                                                                 <img src = "${msg}" alt="placeholder" class="mb-3" />
-                                                                                  <div onclick="Removemedia('${id}')" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                                                                 </div>
-                                                                             </div>
-                                                                         `;
+                                                    <div class="mediaItemsPaths">
+                                                                                                                 <div class = "uploaded-img mt-3">
+                                                                                                                     <img src = "${msg}" alt="placeholder" class="mb-3" />
+                                                                                                                          <div onclick="Removemedia('${id}')" class="deleteIcon" id="${id}"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                                                                                                     </div>
+                                                                                                                 </div>
+                                                                                                             `;
             $("#imgPreview").append(html);
         }
         else {
             let html = `
-                                                                       <div class="video-holder">
-                                                                        <video controls class = "uploaded-img">
-                                                                            <source src = "${msg}" alt="placeholder" class="mb-3" type="video/mp4"/>
+                                                                                                           <div class="video-holder">
+                                                                                                            <video controls class = "uploaded-img">
+                                                                                                                <source src = "${msg}" alt="placeholder" class="mb-3" type="video/mp4"/>
 
-                                                                        </video>
-                                                                                                 <div onclick="Removemedia('${id}')" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                                                         </div>
-                                                                    </div>
-                                                                       `;
+                                                                                                            </video>
+                                                                                                                                     <div onclick="Removemedia('${id}')" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                                                                                             </div>
+                                                                                                        </div>
+                                                                                                        </div>
+                                                                                                           `;
             $("#imgPreview").append(html);
 
         }

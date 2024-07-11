@@ -338,7 +338,7 @@ input.btn.btn-primary.mt-3:focus {
 
 
 .d-flex.flex-row.flex-wrap.media-list.p-3 {
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 
