@@ -63,12 +63,12 @@
         if ($("input:empty").length != 0) {
             event.preventDefault();
             swal.fire({
-                title: "Please fill all the fields ",
+                title: "@AppResources.Label("FillAllRequiredFields", "ar")",
                 icon: "warning",
                 // buttons: true,
                 // dangerMode: true,
                 // buttons: ["كلّا", "نعم"],
-                confirmButtonText: "ok",
+                confirmButtonText: "@AppResources.Label("ok", "ar") ",
                 showConfirmButton: true,
 
             });
