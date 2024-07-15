@@ -1,12 +1,29 @@
 ﻿using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 
 namespace FeedHiveAuth.Areas.Social.Models
 {
+    public class Configs : BaseModel
+    {
+        public Configs(string subscriptionId) : base(subscriptionId)
+        {
+
+        }
+        public Configs() : this(string.Empty)
+        {
+        }
+        public string Id { get; set; }
+        public int EnumKey { get; set; }
+        public DateTime CreationDate { get; set; }
+        //public int EnumKey { get; set; }
+        public string Name { get; set; }
+        public string JsonValue { get; set; }
+        public string MasterId { get; set; }
+    }
     public class SocialConfigs
     {
         public TechnicalConfigs TechnicalConfigs { get; set; } 
-        public string PersonalShareNetworks { get; set; }
         public bool EnableShareOnAllNetworks { get; set; }
         public FacebookConfigs FacebookConfigs { get; set; }
         public FacebookConfigs InstagramConfigs { get; set; }
@@ -22,7 +39,6 @@ namespace FeedHiveAuth.Areas.Social.Models
         {
             return new SocialConfigs
             {
-                PersonalShareNetworks = string.Join(',', EnumExtension.GetAllList<SocialNetworkTypeEnum>()),
                 FacebookConfigs = new FacebookConfigs
                 {
                     Application = new FacebookApp
@@ -48,7 +64,10 @@ namespace FeedHiveAuth.Areas.Social.Models
                 },
                 TwitterConfigs = new TwitterConfigs
                 {
-                    Application = new TwitterApp()
+                    Application = new TwitterApp
+                    {
+
+                    }
                 },
                 InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },
                 DailymotionConfigs = new DailymotionConfigs
@@ -64,24 +83,33 @@ namespace FeedHiveAuth.Areas.Social.Models
                         LocalPath = "C:/media/",
                         Enable = true
                     }
-                }, 
+                },
                 TechnicalConfigs = new TechnicalConfigs
                 {
-                    PublicUrl = "https://socialpublisher.net/",
-                    LocalUrl = "https://localhost:7157/"
+                    appTechnicalConfigs = new AppTechnicalConfigs
+                    {
+                        PublicUrl = "https://socialpublisher.net/",
+                        LocalUrl = "https://localhost:7157/",
+                        DefaultImageUrl = ""
+                    }
+                    
 
                 }
             };
-        }
+        }  
     }
-
-    public class TechnicalConfigs
+    public class TechnicalConfigs : Configs
+    {
+        public AppTechnicalConfigs appTechnicalConfigs { get; set; }
+       
+    }
+    public class AppTechnicalConfigs
     {
         public string? PublicUrl { get; set; }
         public string? LocalUrl { get; set; }
+        public string? DefaultImageUrl { get; set; }
     }
-
-    public class FacebookConfigs
+    public class FacebookConfigs : Configs
     {
         public FacebookApp Application { get; set; }
     }
@@ -90,11 +118,11 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string DisplayName { get; set; }
         public string AppId { get; set; }
         public string AppSecret { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = false;
         public bool Enabled => Enable && AppId.IsNotNullOrEmpty() && AppSecret.IsNotNullOrEmpty();
     }
 
-    public class TelegramConfigs
+    public class TelegramConfigs : Configs
     {
         public TelegramBot Bot { get; set; }
     }
@@ -102,30 +130,26 @@ namespace FeedHiveAuth.Areas.Social.Models
     {
         public string Username { get; set; }
         public string Token { get; set; }
-        public bool Enable { get; set; } = true;
+        public bool Enable { get; set; } = false;
         public bool Enabled => Enable && Token.IsNotNullOrEmpty();
     }
-
-    public class WhatsappConfigs
+    public class WhatsappConfigs : Configs
     {
         public WhatsappApp Application { get; set; }
     }
-
     public class WhatsappApp
     {
         public string bbs { get; set; }
         public string Nickname { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = false;
         public bool Enabled => Enable && bbs.IsNotNullOrEmpty() && Nickname.IsNotNullOrEmpty();
     }
-
-    public class TwitterConfigs
+    public class TwitterConfigs : Configs
     {
         public TwitterApp Application { get; set; }
         public int ChunkSizeMB { get; set; }
         public TrendingTopics TrendingTopics { get; set; }
     }
-
     public class TwitterApp
     {
         public string ScreenName { get; set; }
@@ -133,10 +157,9 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string ConsumerSecret { get; set; }
         public string Token { get; set; }
         public string TokenSecret { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = false;
         public bool Enabled => Enable && ConsumerKey.IsNotNullOrEmpty() && ConsumerSecret.IsNotNullOrEmpty();
     }
-
     public class TrendingTopics
     {
         public bool Enable { get; set; }
@@ -145,12 +168,10 @@ namespace FeedHiveAuth.Areas.Social.Models
         public int TopicsNumber { get; set; }
         public string WoeidFile { get; set; }
     }
-
-    public class DailymotionConfigs
+    public class DailymotionConfigs : Configs
     {
         public DailymotionApp Application { get; set; }
     }
-
     public class DailymotionApp
     {
         public string ChannelName { get; set; }
@@ -160,7 +181,7 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string Password { get; set; }
         public string CallBackUrl { get; set; }
         public string LocalPath { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = false;
         public bool Enabled => Enable;
     }
 }
