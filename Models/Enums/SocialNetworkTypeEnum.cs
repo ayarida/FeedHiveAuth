@@ -11,5 +11,6 @@
         DailyMotion = 60,
         Telegram = 70,
         WhatsApp = 80,
+        Technical = 100
     }
 }
