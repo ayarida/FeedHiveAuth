@@ -1,4 +1,5 @@
 ﻿@using FeedHiveAuth.Areas.Social.Models
+@using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Models;
 @model FeedHiveAuth.Areas.Social.Models.SocialConfigs;
 
@@ -6,7 +7,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var configs = SocialConfigs.Construct().TechnicalConfigs;
+    var configs = SocialServiceHelper.getSocialConfigs().TechnicalConfigs;
 
 }
 

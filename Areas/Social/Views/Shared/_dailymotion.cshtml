@@ -2,9 +2,8 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using FeedHiveAuth.Data.Helpers
 @{
-    var socialConfigs = SocialServiceHelper.GetConfigs();
+    var socialConfigs = SocialServiceHelper.getSocialConfigs();
 }
-
 
 <h1 style="text-align: left" class="mb-3">DailyMotion Channel</h1>
 

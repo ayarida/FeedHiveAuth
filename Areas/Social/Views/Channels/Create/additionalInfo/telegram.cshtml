@@ -1,7 +1,8 @@
 ﻿@using FeedHiveAuth.Areas.Social.Models;
 @using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
+@using FeedHiveAuth.Data.Helpers;
 @{
-    var configs = SocialConfigs.Construct().TelegramConfigs;
+    var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
     var telegramEnabled = configs!= null && configs.Bot.Enabled;
     if (!telegramEnabled)
     {

@@ -1,27 +1,29 @@
-﻿@using FeedHiveAuth.Models.Enums
+﻿@using FeedHiveAuth.Data.Helpers;
+@using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
 @using FeedHiveAuth.Areas.Social.Models
 @{
-    var socialConfigs = new SocialConfigs();
+    var socialConfigs = SocialServiceHelper.getSocialConfigs();
 
 
-    var facebookEnabled = false;
+    var facebookEnabled = socialConfigs.FacebookConfigs.Application.Enabled ? true : false;
     var telegramEnabled = socialConfigs.TelegramConfigs != null && socialConfigs.TelegramConfigs.Bot.Enabled;
-    // var instagramEnabled = socialConfigs.InstagramConfigs != null && socialConfigs.InstagramConfigs.Application.Enabled;
-    // var twitterEnabled = socialConfigs.TwitterConfigs != null && socialConfigs.TwitterConfigs.Application.Enabled;
+    var instagramEnabled = socialConfigs.InstagramConfigs != null && socialConfigs.InstagramConfigs.Application.Enabled;
+    var twitterEnabled = socialConfigs.TwitterConfigs != null && socialConfigs.TwitterConfigs.Application.Enabled;
+    var whatsappEnabled = socialConfigs.WhatsappConfigs != null && socialConfigs.WhatsappConfigs.Application.Enabled;
+    var DailymotionEnabled = socialConfigs.DailymotionConfigs != null && socialConfigs.DailymotionConfigs.Application.Enabled;
+    var googleEnabled = false;
+    var youtubeEnabled = false;
+    var soundcloudEnabled = false;
     // var googleEnabled = socialConfigs.GoogleConfigs != null && socialConfigs.GoogleConfigs.Application.Enabled;
     // var youtubeEnabled = googleEnabled && (socialConfigs.GoogleConfigs.YoutubeConfigs?.Enable ?? false);
     // var soundcloudEnabled = socialConfigs.SoundcloudConfigs != null && socialConfigs.SoundcloudConfigs.Application.Enabled;
     // var telegramEnabled = socialConfigs.TelegramConfigs != null && socialConfigs.TelegramConfigs.Bot.Enabled;
-    // var whatsappEnabled = socialConfigs.WhatsappConfigs != null && socialConfigs.WhatsappConfigs.Application.Enabled;
-    // var DailymotionEnabled = socialConfigs.DailymotionConfigs != null && socialConfigs.DailymotionConfigs.Application.Enabled;
-    var instagramEnabled = false;
-    var twitterEnabled = true;
-    var googleEnabled = true;
-    var youtubeEnabled = true;
-    var soundcloudEnabled = true;
-    var whatsappEnabled = true;
-    var DailymotionEnabled = true;
+   
+    //var instagramEnabled = false;
+    //var twitterEnabled = true;
+    //var whatsappEnabled = true;
+    //var DailymotionEnabled = true;
 
 }
 <div class="social" id="channelContainer">
@@ -68,7 +70,7 @@
                     <span class="infobox-text">Soundcloud</span>
                 </div>
             </button>
-            <button class="infobox next-page @(soundcloudEnabled ? "" : "disabled")" id="callTelegram" @(soundcloudEnabled ? "" : "disabled")>
+            <button class="infobox next-page @(telegramEnabled ? "" : "disabled")" id="callTelegram" @(telegramEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon  bi bi-telegram"></i>
                 </div>
@@ -125,10 +127,7 @@
             }
 
         })
-
     })
-
-
 </script>
 
 <style>

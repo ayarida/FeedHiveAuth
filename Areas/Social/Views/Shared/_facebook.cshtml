@@ -1,10 +1,11 @@
 ﻿@using FeedHiveAuth.Areas.Social.Models
+@using FeedHiveAuth.Data.Helpers;
 @using FeedHiveAuth.Models;
 @model FeedHiveAuth.Areas.Social.Models.SocialConfigs;
 
 
 @{
-    var publicUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+    var publicUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 
 }
 
