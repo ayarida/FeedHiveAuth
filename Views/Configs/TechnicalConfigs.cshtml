@@ -10,138 +10,139 @@
     var wpConfigs = configs.WhatsappConfigs;
     var dailymotionConfigs = configs.DailymotionConfigs;
     var technicalConfigs = configs.TechnicalConfigs;
-
 }
 
 
 <div class="card" dir="ltr">
     <div class="py-4" id="configsList">
 
-
-        <div id="PublicUrl">
-            <h6 class="config-title">Public Url</h6>
-            <div class="config-settings ps-md-5">
-                <div class="setting-instance form-group">
-                    <label></label>
-                    <input type="text" name="PublicUrl" value="@technicalConfigs.PublicUrl" class="form-control" />
+        <form asp-asp-controller="Configs" asp-action="Save" method="post">
+            <div id="technicalConfigs" class="mt-3">
+                <input type="hidden" value="@(technicalConfigs.Id ?? "")" name="TechnicalConfigsId" />
+                <div id="PublicUrl">
+                    <h6 class="config-title">Public Url</h6>
+                    <div class="config-settings ps-md-5">
+                        <div class="setting-instance form-group">
+                            <label></label>
+                            <input type="text" name="PublicUrl" value="@(technicalConfigs?.appTechnicalConfigs?.PublicUrl ?? "")" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div id="PrivateUrl" class="my-5">
+                    <h6 class="config-title">Local Url</h6>
+                    <div class="config-settings ps-md-5">
+                        <div class="setting-instance">
+                            <label></label>
+                            <input type="text" name="LocalUrl" value="@(technicalConfigs?.appTechnicalConfigs?.LocalUrl ?? "")" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div id="DefaultImageUrl" class="my-5">
+                    <h6 class="config-title">Default Image Url</h6>
+                    <div class="config-settings ps-md-5">
+                        <div class="setting-instance">
+                            <label></label>
+                            <input type="text" name="DefaultImageUrl" value="@(technicalConfigs?.appTechnicalConfigs?.DefaultImageUrl ?? "")" class="form-control" />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-
-
-        <div id="PrivateUrl" class="my-5">
-            <h6 class="config-title">Local Url</h6>
-            <div class="config-settings ps-md-5">
-                <div class="setting-instance">
-                    <label></label>
-                    <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
-                </div>
-            </div>
-        </div>
-
-        <div class="my-5">
-            <h6 class="config-title">Default Image Url</h6>
-            <div class="config-settings ps-md-5">
-                <div class="setting-instance">
-                    <label></label>
-                    <input type="text" name="PrivateUrl" value="@technicalConfigs.LocalUrl" class="form-control" />
-                </div>
-            </div>
-        </div>
-
 
         @* FacebookConfigs *@
         <div id="facebookConfigs" class="mt-3">
             <h6 class="config-title mb-5">Facebook Configs</h6>
+            <input type="hidden" value="@(fbConfigs.Id ?? "")" name="FacebookConfigsId" />
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="facebook-name">Display Name</label>
-                    <input type="text" id="facebook-name" name="data.name">
+                    <input type="text" id="facebook-name" name="DisplayName" value="@(fbConfigs.Application?.DisplayName ?? "")">
                 </div>
 
                 <div class="setting-instance">
                     <label for="facebook-id">App ID</label>
-                    <input type="text" id="facebook-id" name="data.id" />
+                    <input type="text" id="facebook-id" name="AppId" value="@(fbConfigs.Application?.AppId ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="facebook-id">App Secrete</label>
-                    <input type="text" id="facebook-id" name="data.secret" />
+                    <input type="text" id="facebook-id" name="AppSecret" value="@(fbConfigs.Application?.AppSecret ?? "")" />
                 </div>
 
 
-                <div class="setting-instance enable-setting">
-                    <label for="facebook-status">Enabled</label>
-                    <label class="switch">
-                        <input type="checkbox" id="facebook-status" name="data.status">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+                    <div class="setting-instance enable-setting">
+                        <label for="EnableFb">Enabled</label>
+                        <label class="switch">
+                            <input type="checkbox" name="EnableFb" value="true" checked="@(fbConfigs.Application?.Enable ?? false)" id="EnableFb">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
 
             </div>
         </div>
         @* TwitterConfigs *@
         <div id="twitterConfigs" class="mt-5">
             <h6 class="config-title mb-5">Twitter Configs</h6>
+                <input type="hidden" value="@(twitterConfigs.Id ?? "")" name="TwitterConfigsId" />
+
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="twitter-name">Display Name</label>
-                    <input type="text" id="twitter-name" name="data.name" />
+                    <input type="text" id="twitter-name" name="ScreenName" value="@(twitterConfigs.Application?.ScreenName ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Cosumer Key</label>
-                    <input type="text" id="twitter-id" name="data.consumerkey" />
+                    <input type="text" id="twitter-id" name="ConsumerKey" value="@(twitterConfigs.Application?.ConsumerKey ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Cosumer Secret</label>
-                    <input type="text" id="twitter-id" name="data.consumersecret" />
+                    <input type="text" id="twitter-id" name="ConsumerSecret" value="@(twitterConfigs.Application?.ConsumerSecret ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Token</label>
-                    <input type="text" id="twitter-id" name="data.token" />
+                    <input type="text" id="twitter-id" name="TokenX" value="@(twitterConfigs.Application?.Token ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Secret Token</label>
-                    <input type="text" id="twitter-id" name="data.tokensecret" />
+                    <input type="text" id="twitter-id" name="TokenSecret" value="@(twitterConfigs.Application?.TokenSecret ?? "")" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="twitter-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="twitter-status" name="data.enabled">
+                        <input type="checkbox" id="twitter-status" name="EnableX" value="true" checked="@(twitterConfigs.Application?.Enabled ?? false)">
                         <span class="slider round"></span>
                     </label>
                 </div>
-
-
 
             </div>
         </div>
         @* TelegramConfigs *@
         <div id="telegramConfigs" class="mt-5">
             <h6 class="config-title mb-5">Telegram Configs</h6>
+                <input type="hidden" value="@(telegramConfigs.Id ?? "")" name="TelegramConfigsId" />
+
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="telegram-name">User Name</label>
-                    <input type="text" id="telegram-name" name="data.name" />
+                        <input type="text" id="telegram-name" name="UsernameTelegram" value="@(telegramConfigs.Bot?.Username ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="telegram-id">Token</label>
-                    <input type="text" id="telegram-id" name="data.token" />
+                    <input type="text" id="telegram-id" name="TokenTelegram" value="@(telegramConfigs.Bot?.Token ?? "")" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="telegram-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="telegram-status" name="data.enabled">
+                            <input type="checkbox" id="telegram-status" name="EnableTelegram" checked="@(telegramConfigs.Bot?.Enabled ?? false)" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -151,29 +152,29 @@
             </div>
         </div>
         @* InstagramConfigs *@
-        <div id="instagramConfigs" class="mt-5">
+@*         <div id="instagramConfigs" class="mt-5">
             <h6 class="config-title mb-5">Instagram Configs</h6>
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="instagram-name">Display Name</label>
-                    <input type="text" id="instagram-name" name="data.name" />
+                    <input type="text" id="instagram-name" name="DisplayNameInsta" value="@(instagramConfigs.Application.DisplayName ?? "")"/>
                 </div>
 
                 <div class="setting-instance">
                     <label for="instagram-id">App ID</label>
-                    <input type="text" id="instagram-id" name="data.appid" />
+                    <input type="text" id="instagram-id" name="AppIdInsta" value="@(instagramConfigs.Application.AppId ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="instagram-id">App Secrete</label>
-                    <input type="text" id="instagram-id" name="data.appsecret" />
+                    <input type="text" id="instagram-id" name="AppsecretInsta" value="@(instagramConfigs.Application.AppSecret ?? "")" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="instagram-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="instagram-status" name="data.enabled">
+                        <input type="checkbox" id="instagram-status" name="EnableInsta" value="@(instagramConfigs.Application?.Enabled ?? false)">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -182,71 +183,72 @@
 
             </div>
         </div>
-        @* WhatsappConfigs *@
+ *@        @* WhatsappConfigs *@
         <div id="whatsappConfigs" class="mt-5">
             <h6 class="config-title mb-5">Whatsapp Configs</h6>
+                <input type="hidden" value="@(wpConfigs.Id ?? "")" name="WhatsappConfigsId" />
+
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="whatsapp-name">Display Name</label>
-                    <input type="text" id="whatsapp-name" name="data.name" />
+                    <input type="text" id="whatsapp-name" name="Nickname" value="@(wpConfigs.Application?.Nickname ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="whatsapp-id">Whatsapp BBS</label>
-                    <input type="text" id="whatsapp-id" name="data.bbs" />
+                    <input type="text" id="whatsapp-id" name="bbs" value="@(wpConfigs.Application?.bbs ?? "" )" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="whatsapp-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="whatsapp-status" name="data.enabled">
+                        <input type="checkbox" id="whatsapp-status" name="EnableWhatsapp" checked="@(wpConfigs.Application?.Enabled ?? false )" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
-
-
-
             </div>
         </div>
         @* DailyConfigs *@
         <div id="dailyMotionConfigs" class="mt-5">
             <h6 class="config-title mb-5">Dailymotion Configs</h6>
+                <input type="hidden" value="@(dailymotionConfigs.Id ?? "")" name="DailymotionConfigsId" />
+
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="dailymotion-name">Channel Name</label>
-                    <input type="text" id="dailymotion-name" name="data.name" />
+                    <input type="text" id="dailymotion-name" name="ChannelName" value="@(dailymotionConfigs.Application?.ChannelName ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-username">UserName</label>
-                    <input type="text" id="dailymotion-username" name="data.username" />
+                    <input type="text" id="dailymotion-username" name="UsernameDM" value="@(dailymotionConfigs.Application?.Username ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-apisecrete">API Secrete</label>
-                    <input type="text" id="dailymotion-apisecrete" name="data.apisecrete" />
+                        <input type="text" id="dailymotion-apisecrete" name="APISecret" value="@(dailymotionConfigs.Application?.APISecret ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-apikey">API Key</label>
-                    <input type="text" id="dailymotion-apikey" name="data.apikey" />
+                        <input type="text" id="dailymotion-apikey" name="APIKey" value="@(dailymotionConfigs.Application?.APIKey ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-callbackurl">Callback Url</label>
-                    <input type="text" id="dailymotion-callbackurl" name="data.callbackurl" />
+                    <input type="text" id="dailymotion-callbackurl" name="CallBackUrl" value="@(dailymotionConfigs.Application?.CallBackUrl ?? "")" />
                 </div>
 
 
                 <div class="setting-instance">
                     <label for="dailymotion-localpath">Local Path</label>
-                    <input type="text" id="dailymotion-localpath" name="data.localpath" />
+                    <input type="text" id="dailymotion-localpath" name="LocalPath" value="@(dailymotionConfigs.Application?.LocalPath ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-password">Password</label>
-                    <input type="text" id="dailymotion-password" name="data.password" />
+                    <input type="text" id="dailymotion-password" name="Password" value="@(dailymotionConfigs.Application?.Password ?? "")" />
                 </div>
 
 
@@ -254,7 +256,7 @@
                 <div class="setting-instance enable-setting">
                     <label for="dailymotion-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="dailymotion-status" name="data.enabled">
+                        <input type="checkbox" id="dailymotion-status" name="EnableDM" checked="@(dailymotionConfigs.Application?.Enabled ?? false)" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -263,247 +265,11 @@
             </div>
         </div>
 
-        <button id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
-
+        <button type="submit" id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
+        </form>
     </div>
 </div>
 <script type="text/javascript" src="~/js/JsonForm/JsonForm.js"></script>
-
-@if (fbConfigs != null)
-{
-
-
-    <script>
-        $("#details").ready(function () {
-            var facebook = {
-                name: "@fbConfigs.Application.DisplayName",
-                id: @fbConfigs.Application.AppId,
-                appsecret: "@fbConfigs.Application.AppSecret",
-                enabled: @fbConfigs.Application.Enabled.ToString().ToLower(),
-            }
-
-            $("#facebookConfigs").jsForm({
-                data: facebook,
-            });
-        });
-
-    </script>
-}
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var facebook = {
-                name:,
-                id: 0,
-                enabled: false,
-                secret:,
-
-            }
-        });
-    </script>
-}
-
-
-
-@if (telegramConfigs != null)
-{
-
-    <script>
-        $("#details").ready(function () {
-            var telegram = {
-                name: "@telegramConfigs.Bot.Username",
-                token: "@telegramConfigs.Bot.Token",
-        @* toStringTolower is required since javascript differenciate bewtween True and true *@
-                enabled: @telegramConfigs.Bot.Enabled.ToString().ToLower(),
-                                                                                                                            }
-
-                                                                                                                            $("#telegramConfigs").jsForm({
-                    data: telegram,
-                });
-                                                                                                                        });
-
-    </script>
-}
-
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var telegram = {
-                name:,
-                token:,
-                enabled: false,
-
-            }
-        });
-    </script>
-}
-
-
-@if (twitterConfigs != null)
-{
-
-    <script>
-        $("#details").ready(function () {
-            var twitter = {
-                name: "@twitterConfigs.Application.ScreenName",
-                consumerkey: "@twitterConfigs.Application.ConsumerKey",
-                consumersecret: "@twitterConfigs.Application.ConsumerSecret",
-                token: "@twitterConfigs.Application.Token",
-                tokensecret: "@twitterConfigs.Application.TokenSecret",
-                enabled: @twitterConfigs.Application.Enabled.ToString().ToLower(),
-            }
-
-            $("#twitterConfigs").jsForm({
-                data: twitter,
-            });
-        });
-
-    </script>
-}
-
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var twitter = {
-                name:,
-                consumerkey:,
-                consumersecret:,
-                token:,
-                tokensecret:,
-                enabled: false,
-
-            }
-        });
-    </script>
-}
-
-
-@if (instagramConfigs != null)
-{
-
-    <script>
-        $("#details").ready(function () {
-            var instagram = {
-                name: "@instagramConfigs.Application.DisplayName",
-                appid: "@instagramConfigs.Application.AppId",
-                appsecret: "@instagramConfigs.Application.AppSecret",
-                enabled: @instagramConfigs.Application.Enabled.ToString().ToLower(),
-            }
-
-            $("#instagramConfigs").jsForm({
-                data: instagram,
-            });
-        });
-
-    </script>
-}
-
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var instagram = {
-                name:,
-                appsecret:,
-                enabled: false,
-
-            }
-        });
-    </script>
-}
-
-@if (wpConfigs != null)
-{
-
-    <script>
-        $("#details").ready(function () {
-            var whatsapp = {
-                name: "@wpConfigs.Application.Nickname",
-                bbs: "@wpConfigs.Application.bbs",
-                enabled: @wpConfigs.Application.Enabled.ToString().ToLower(),
-            }
-
-            $("#whatsappConfigs").jsForm({
-                data: whatsapp,
-            });
-        });
-
-    </script>
-}
-
-else
-{
-    <script>
-        $("#dailyMotionConfigs").ready(function () {
-            var dailymotion = {
-                name:,
-                appsecret:,
-                enabled: false,
-            }
-        });
-    </script>
-}
-
-
-
-@if (dailymotionConfigs != null)
-{
-
-
-    <script>
-        $("#details").ready(function () {
-            var dailyMotionConfigs = {
-                name: "@dailymotionConfigs.Application.ChannelName",
-                username: "@dailymotionConfigs.Application.Username",
-                apisecrete: "@dailymotionConfigs.Application.APISecret",
-                callbackurl: "@dailymotionConfigs.Application.CallBackUrl",
-                enabled: "@dailymotionConfigs.Application.Enabled.ToString().ToLower()",
-                localpath: "@dailymotionConfigs.Application.LocalPath",
-                password: "@dailymotionConfigs.Application.Password",
-
-            }
-
-            $("#dailyMotionConfigs").jsForm({
-                data: dailyMotionConfigs,
-            });
-        });
-
-    </script>
-}
-else
-{
-    <script>
-        $("#details").ready(function () {
-            var dailymotion = {
-                name: ,
-                username: ,
-                apisecrete:,
-                callbackurl: ,
-                enabled: false,
-                localpath:,
-                password:,
-
-            }
-        });
-    </script>
-}
-
-
-
-@* else
-{
-<script>
-    $("#details").ready(function () {
-        var publicUrlDataConfigs = {
-            publicurl: ,
-
-        }
-    });
-</script>
-} *@
 
 <script>
 
