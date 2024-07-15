@@ -31,14 +31,14 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
 
         public static Telegram.Bot.Types.User GetBot()
         {
-            var configs = SocialServiceHelper.GetConfigs().TelegramConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
             var client = new TelegramClient(configs);
             return client.GetCurrentUser();
         }
 
         public static Channel GetChannelInfo(string username)
         {
-            var configs = SocialServiceHelper.GetConfigs().TelegramConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
             var client = new TelegramClient(configs, username);
             var result = client.GetCurrentChat();
             if (!result.IsSuccessful)
@@ -96,7 +96,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
             try
             {
                 var operationData = operation.Parameters.FromJson<TelegramOperationData>();
-                var configs = SocialServiceHelper.GetConfigs(channel.SubscriptionId).TelegramConfigs;
+                var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
                 var client = new TelegramClient(configs, channel.NetworkId);
                 var text = operationData.Text?.Replace("<br />", "\n");
                 if (operationData.Link.IsNotNullOrEmpty() && !text.Contains(operationData.Link))

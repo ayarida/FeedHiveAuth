@@ -52,13 +52,13 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         }
         private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network)
         {
-            var configs = SocialServiceHelper.GetConfigs();
+            var configs = SocialServiceHelper.getSocialConfigs();
             return network.Equals(SocialNetworkTypeEnum.Facebook) ? configs.FacebookConfigs : null;
         }
 
         private static FacebookConfigs GetConfigs(SocialNetworkTypeEnum network, bool useFbLogin)
         {
-            var configs = SocialServiceHelper.GetConfigs();
+            var configs = SocialServiceHelper.getSocialConfigs();
             if (useFbLogin)
                 return configs.FacebookConfigs;
 

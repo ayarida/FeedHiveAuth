@@ -49,7 +49,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         }
         private static Channel GetProfile(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetUser();
             if (!result.IsSuccessful)
@@ -76,7 +76,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 
         private static List<Channel> GetGroups(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetGroups();
             if (!result.IsSuccessful) { }
@@ -95,7 +95,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         }
         private static IEnumerable<Channel> GetPages(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetPages();
             if (!result.IsSuccessful) { return null; }
@@ -134,7 +134,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
 
         private static IEnumerable<Channel> GetAdManagers(FacebookCredentials credentials)
         {
-            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().FacebookConfigs;
             var client = new AccountClient(configs, credentials.AccessToken);
             var result = client.GetAdManagers();
             if (!result.IsSuccessful) { return null; }
@@ -165,7 +165,7 @@ namespace FeedHiveAuth.Areas.Social.SocialFacebook.Handlers
         #region share 
         public static ServiceOperationResult Send(Operation operation, Channel channel)
         {
-            var configs = SocialServiceHelper.GetConfigs().FacebookConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().FacebookConfigs;
             var operationData = operation.Parameters.FromJson<FacebookOperationData>();            
             var pageId = channel.NetworkId;
 

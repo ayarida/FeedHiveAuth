@@ -38,7 +38,7 @@ namespace FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers
             try
             {
                 var client = new WebClient();
-                var socialConfigs = SocialServiceHelper.GetConfigs();
+                var socialConfigs = SocialServiceHelper.getSocialConfigs();
                 var dailymotionConfigs = socialConfigs.DailymotionConfigs;
                 var ext = videourl.GetFileExtension();
                 var filePath = string.Format("{0}{1}{2}", dailymotionConfigs.Application.LocalPath, Guid.NewGuid(), "." + ext);

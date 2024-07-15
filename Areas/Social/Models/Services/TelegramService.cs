@@ -28,7 +28,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
         }
         public static Telegram.Bot.Types.User GetBot()
         {
-            var configs = SocialConfigs.Construct().TelegramConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
             var client = new TelegramClient(configs);
             return client.GetCurrentUser();
         }
@@ -36,7 +36,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
         public static Channel GetChannelInfo(string username)
         {
             /* username: channelName */
-            var configs = SocialConfigs.Construct().TelegramConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
             var client = new TelegramClient(configs, username);
             var result = client.GetCurrentChat();
             if (!result.IsSuccessful)
@@ -84,7 +84,7 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
             try
             {
                 var operationData = operation.Parameters.FromJson<TelegramOperationData>();
-                var configs = SocialConfigs.Construct().TelegramConfigs;
+                var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
                 var client = new TelegramClient(configs, channel.NetworkId);
                 var text = operationData.Text?.Replace("<br />", "\n");
                 var postSummary = operationData.postSummary?.Replace("<br />", "\n");
