@@ -4,6 +4,7 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using NuGet.Packaging.Signing;
 using RestSharp.Extensions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -146,19 +147,23 @@ namespace FeedHiveAuth.Data.Repositories
 
             return posts;
         }
-        public void Save(Post post)
+        public string Save(Post post)
         {
             if (post.Id == null)
             {
-                SavePost(post);
+               var postid = SavePost(post);
+                return postid.ToString();
+
             }
             else
             {
-                //Update(post);
+                Update(post);
+                return post.Id.ToString();
             }
 
         }
-        public void SavePost(Post post)
+
+        public string SavePost(Post post)
         {
             post.Id = Guid.NewGuid().ToString();
             string query = string.Format(
@@ -176,6 +181,7 @@ namespace FeedHiveAuth.Data.Repositories
                                     post.ModifiedBy.EscapeForSql()
                                     );
             ExecuteQuery(query);
+            return post.Id;
         }
 
         public void SaveQuickPost(Post post)
@@ -244,6 +250,18 @@ namespace FeedHiveAuth.Data.Repositories
             List<Post> posts = connection.Query<Post>(query, new { Date = formattedDate , userId = userId } ).ToList();
 
             return posts;
+        }
+
+        //////////////////////////////////////////////////////PostMedia////////////////////////////////////////////////////////////////
+        ///
+        public void InsertPostMedia(string postid,string mediaid)
+        {
+            string query = string.Format("Insert Into PostMedias  (PostId,MediaItemId) values({0},{1})",                                   
+                                    postid.EscapeForSql(),mediaid.EscapeForSql()                                 
+                                    );
+            ExecuteQuery(query);
+            //var result = connection.Query<string>("Insert into PostMedias set PostId=@PostId , MediaId=@MediaId", new { Id = new[] { postid ,mediaid } });
+            
         }
     }
 }

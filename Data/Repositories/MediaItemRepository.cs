@@ -2,12 +2,14 @@
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.JSON;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using Telegram.Bot.Types;
 
 namespace FeedHiveAuth.Data.Repositories
 {
@@ -82,9 +84,11 @@ namespace FeedHiveAuth.Data.Repositories
                 ExecuteQuery(query);
             }
         }
-        public void InsertPostMedia(List<MediaItem> postMedias, string postId)
+        //create the media in mediaitem table 
+        public List<MediaItem> InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
-            foreach(var mediaItem in postMedias) {
+            foreach(var mediaItem in postMedias) 
+            {
                 //Id, Caption, postId, creationDate, path, createdBy
                 var extension = mediaItem.Caption.Split('.')[1];
                 switch(extension)
@@ -102,11 +106,12 @@ namespace FeedHiveAuth.Data.Repositories
                         mediaItem.Type = 10;
                         break;
                 }
+                var mid = Guid.NewGuid();
                 string query = string.Format(
                                     "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9})",
                                     TableName,
                                     Columns.AddBraces(),
-                                    Guid.NewGuid().EscapeForSql(),
+                                    mid.EscapeForSql(),
                                     mediaItem.Caption.EscapeForSql(),
                                     postId.EscapeForSql(),
                                     DateTime.Now.EscapeForSql(), 
@@ -115,14 +120,17 @@ namespace FeedHiveAuth.Data.Repositories
                                     extension.EscapeForSql(), 
                                     mediaItem.Type
                                     );
+                mediaItem.Id = mid.ToString();
                 ExecuteQuery(query);
             }
+            return postMedias;
         }
 
         public IEnumerable<MediaItem> GetMediaList()
         {
+            
             var query = SqlSelectWhole;
-            IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList(); ;
+            IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList(); 
             return mediaItems;
         }
 
@@ -131,12 +139,34 @@ namespace FeedHiveAuth.Data.Repositories
             MediaItem postMediaItem =  connection.Query<MediaItem>(query).FirstOrDefault();
             return postMediaItem;
         }
-
+        public List <PostMedia> GetPostMedias(string id)
+        {
+            var query = "SELECT * FROM PostMedias Where PostId='" + @id + "' ";
+            List<PostMedia> postmedias= connection.Query<PostMedia>(query).ToList();
+            return postmedias;
+        }
         public List<MediaItem> GetMediasByPostId(string id)
         {
             var query = "SELECT * FROM MediaItem Where PostId='" + @id + "' ";
             List<MediaItem> postMediaItems = connection.Query<MediaItem>(query).ToList();
             return postMediaItems;
+        }
+        public MediaItem GetMediaById(string id)
+        {
+            var query = "SELECT * FROM MediaItem Where Id='" + @id + "' ";
+            MediaItem mediaItem = connection.Query<MediaItem>(query).FirstOrDefault();
+            return mediaItem;
+        }
+        public List<MediaItem> GetMediasByUser(string id)
+        {
+            var query = "SELECT * FROM MediaItem Where CreatedBy='" + @id + "' ";
+            List<MediaItem> postMediaItems = connection.Query<MediaItem>(query).ToList();
+            return postMediaItems;
+        }
+        public void DeletePostMedia(string mediaId,string postId)
+        {
+           var query = "Delete from PostMedias Where postId='" + postId + "' and mediaItemId='"+ mediaId + "' ";
+           var result= connection.Query<int>(query).FirstOrDefault();
         }
     }
 }

@@ -29,7 +29,7 @@ $("#mediaInput").on("change", e => {
             reader.onload = function (e) {
                 let html = `
                                  <div class = "uploaded-img mt-3">
-                                     <img src = "${e.target.result}" alt="placeholder" class="mb-3" />
+                                     <img src = "${e.target.result}" alt="placeholder"/>
                                      <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
                                      </div>
                                  </div>
@@ -59,7 +59,60 @@ $("#mediaInput").on("change", e => {
 
 })
 
+//$("#selectedMedia").on("change", e => {
 
+//    let reader = new FileReader();
+//    var extension = e.target.files[0].name.split('.').pop().toLowerCase();
+
+//    var isAccepted = fileTypes.indexOf(extension) > -1;
+
+//    // Check if file type is valid and show error message if not
+//    if (!isAccepted) {
+//        swal.fire({
+//            customClass: {
+//                confirmButton: "btn btn-primary  warning",
+//            },
+//            title: `${wrongType}`,
+//            text: `${requiredMediaType}`,
+//            confirmButtonText: "موافق",
+//        });
+//    } else {
+
+//        // If file type is image
+//        if (extension !== "mp4") {
+//            reader.readAsDataURL(e.target.files[0]);
+//            reader.onload = function (e) {
+//                let html = `
+//                                 <div class = "uploaded-img mt-3">
+//                                     <img src = "${e.target.result}" alt="placeholder" class="mb-3" />
+//                                     <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+//                                     </div>
+//                                 </div>
+//                             `;
+//                $("#imgPreview").append(html);
+//            }
+//        }
+//    }
+
+//    // If file type is video
+//    if (extension === "mp4") {
+//        reader.readAsDataURL(e.target.files[0]);
+//        reader.onload = function (e) {
+//            let html = `
+//                               <div class="video-holder">
+//                                <video controls class = "uploaded-img">
+//                                    <source src = "${e.target.result}" alt="placeholder" class="mb-3" type="video/mp4"/>
+
+//                                </video>
+//                                 <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+//                                 </div>
+//                            </div>
+//                               `;
+//            $("#imgPreview").append(html);
+//        }
+//    }
+
+//})
 
 //check for missing fields
 $(function (e) {
@@ -89,6 +142,6 @@ $(function (e) {
 
 // Delete media              
 function deleteMedia(event) {
-    // console.log(event)
+    console.log("meddioarrrrrrrrrrrrrrrrrrrrrrrr")
     $(event).parent().remove();
 }

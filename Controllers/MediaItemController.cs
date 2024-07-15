@@ -1,9 +1,9 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using FeedHiveAuth.Models.JSON;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -45,8 +45,8 @@ namespace FeedHiveAuth.Controllers
             return "File failed to upload!";
 
         }
-    
-        
+
+
         [Authorize]
         [PermissionFilter("MediaItem_SaveMedia")]
         [HttpPost]
@@ -59,29 +59,46 @@ namespace FeedHiveAuth.Controllers
                 List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);//mapFileToMediaItem
                 InsertMedia(Medias.ToList());
             }
-            return RedirectToAction("List","MediaItem");
+            return RedirectToAction("List", "MediaItem");
         }
-       
-        
+
+
         [HttpGet]
         [PermissionFilter("MediaItem_Create")]
         public IActionResult Create()
         {
-            
+
             return View("~/Views/MediaItem/Create.cshtml");
         }
         [HttpGet]
         [PermissionFilter("MediaItem_List")]
         public IActionResult List()
         {
-            var mediaItemsList = _mediaItemService.GetMediaList();
+            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
             return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
         }
+        public JsonResult GetFromArchive(IEnumerable<MediaData> valinput)
+        {
+            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
+            var result = new JsonResult(mediaItemsList);
+            return result;
+        }
+
         [PermissionFilter("MediaItem_DeleteMediaItem")]
         [HttpDelete]
         public void DeleteMediaItem(MediaItem mediaItem)
         {
+
             _mediaItemService.Delete(mediaItem.Id);
+        }
+        [PermissionFilter("MediaItem_DeletePostMedia")]
+        [HttpDelete]
+        public void DeletePostMedia(string media, string post)
+        {
+
+            _mediaItemService.DeletePostMedia(media, post);
         }
 
     }

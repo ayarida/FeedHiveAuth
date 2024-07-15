@@ -16,7 +16,7 @@
         public string? PublicLink { get; set; }
         public List<Operation> Operations { get; set; }
         public string? CreatedByName { get; set; }
-
+        public string mediaItemsPaths { get; set; }
         public DateTime? ExpireDate { get; set; }
 
         public List<MediaItem> PostMediaItems { get; set; }

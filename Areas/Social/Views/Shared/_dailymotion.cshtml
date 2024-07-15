@@ -50,7 +50,28 @@
         font-size: 20px;
     }
 
-    div#channelContainer{
+    div#channelContainer {
         width: 100%;
     }
 </style>
+
+
+<script>
+    $(".submit-button").on("click", function () {
+
+        if ($("input:empty").length != 0) {
+            event.preventDefault();
+            swal.fire({
+                title: "@AppResources.Label("FillAllRequiredFields", "ar")",
+                icon: "warning",
+                // buttons: true,
+                // dangerMode: true,
+                // buttons: ["كلّا", "نعم"],
+                confirmButtonText: "@AppResources.Label("ok", "ar") ",
+                showConfirmButton: true,
+
+            });
+
+        }
+    })
+</script>
