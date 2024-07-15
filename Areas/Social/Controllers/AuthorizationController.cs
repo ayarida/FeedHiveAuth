@@ -3,6 +3,7 @@ using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Data.Helpers;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
@@ -79,7 +80,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
 #if DEBUG 
 
-            baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+            baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
             baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 #endif
@@ -118,7 +119,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 var baseCallBackUrl = "";
 #if DEBUG
 
-                baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+                baseCallBackUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
             baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 #endif
@@ -146,7 +147,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
         {
-            var dailymotionConfigs = SocialConfigs.Construct().DailymotionConfigs;
+            var dailymotionConfigs = SocialServiceHelper.getSocialConfigs().DailymotionConfigs;
             var jsonDmConfigs = JsonConvert.SerializeObject(dailymotionConfigs);
             ChannelErrorEnum error;
             var channel = _channelService.GetById(id, out error);
