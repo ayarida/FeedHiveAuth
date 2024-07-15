@@ -4,7 +4,6 @@
     {
         public static class Tables
         {
-            public static string Subscription = "Subscription";
             public static string Role = "Role";
             public static string Operation = "Operation";
             public static string Post = "Post";
@@ -13,15 +12,16 @@
             public static string Users = "AspNetUsers";
             public static string Roles = "AspNetRoles";
             public static string RoleClaims = "AspNetRoleClaims";
+            public static string Subscription = "Subscription";
+
             public static string UserTokens = "AspNetUserTokens";
             public static string UserRoles = "AspNetUserRoles";
             public static string UserLogins = "AspNetUserLogins";
             public static string Resources = "Resources";
+            public static string Configs = "Configs";
         }
         public static class Columns
         {
-            public static string Subscription = "Id,PublicId,Name,Code,Status,Master,CreationDate,ParentId,Hosts";
-
             public static string Users =
                 "Id,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,SubscriptionId";
 
@@ -33,10 +33,12 @@
             public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy,Extension,Type";
             public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs";
             public static string Resources = "Id,Key,Value,Language";
+            public static string Configs = "Id,EnumKey,Name,JsonValue,MasterId,CreationDate";
         }
         public static class ExcludedColumns
         {
             public static string Post = "PublicId,Status";
+            public static string Configs = "";
 
         }
     }
