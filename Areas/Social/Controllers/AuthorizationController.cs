@@ -250,7 +250,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     if (reauthorize && existingChannel == null)
                     {
                         Console.WriteLine($"The reauthorized Telegram channel doesn't exist");
-                        redirect = Url.Action("Create", "Channel", new { area = "social", type = networkType });
+                        redirect = Url.Action("Create", "Channels", new { area = "social", type = networkType });
                     }
                     success = true;
                     channels.Add(channel);
@@ -280,7 +280,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 message = "Couldn't authorize the selected Telegram account: " + ex.FullMessage();
                 _logger.LogError(message);
             }
-            return Json(new { success, redirect, message });
+            //redirect = Url.Action("Index", "Channel", new { area = "social"});
+            return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
     }
 }
