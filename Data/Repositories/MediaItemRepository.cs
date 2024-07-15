@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Data.Extensions;
+using FeedHiveAuth.Data.Helpers;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace FeedHiveAuth.Data.Repositories
                 mediaItem.Caption = file.FileName;
 #if DEBUG
 
-                baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+                baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
                 baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
 #endif                
