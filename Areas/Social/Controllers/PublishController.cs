@@ -60,8 +60,17 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             if (socialConfigs.TelegramConfigs?.Bot?.Enabled ?? false)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.Telegram);
 
-            if (socialConfigs.DailymotionConfigs.Application?.Enabled ?? false)
+            if (socialConfigs.DailymotionConfigs?.Application?.Enabled ?? false)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.DailyMotion);
+
+            if (socialConfigs.WhatsappConfigs?.Application?.Enabled ?? false)
+                activeNetworkTypes.Add(SocialNetworkTypeEnum.WhatsApp);
+
+            if (socialConfigs.TwitterConfigs?.Application?.Enabled ?? false)
+                activeNetworkTypes.Add(SocialNetworkTypeEnum.Twitter);
+
+            /*if (socialConfigs.InstagramConfigs?.Application?.Enabled ?? false)
+                activeNetworkTypes.Add(SocialNetworkTypeEnum.Instagram);*/
 
             return activeNetworkTypes;
         }
@@ -124,7 +133,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         public ShareView FillShareViewForm(string? postid=null)
         {
-            var subSocialConfigs = SocialServiceHelper.GetConfigs();
+            var subSocialConfigs = SocialServiceHelper.getSocialConfigs();
             PublishErrorEnum error;
             var channels = GetChannels(out error);
             var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
