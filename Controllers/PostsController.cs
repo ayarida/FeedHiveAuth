@@ -159,7 +159,7 @@ namespace FeedHiveAuth.Controllers
                 allPosts = posts,
                 IsAdmin = isAdmin
             };
-            return View("~/Views/Posts/List.cshtml", pvm);
+            return View(pvm);
         }
 
 
@@ -191,7 +191,7 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public Task<ActionResult> CreatePost()
+        public IActionResult CreatePost()
         {            
             Post post = new Post
             {
@@ -243,7 +243,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return List();
+            return RedirectToAction("List", "Posts");
         }
 
         [HttpPost]
@@ -488,20 +488,10 @@ namespace FeedHiveAuth.Controllers
         {
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
-        }
-        /*        [PermissionFilter("Posts_GetCurrentUser")]
-                public User GetCurrentUser()
-                {
-
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    User currentUser = _userService.Get(userId);
-                    return currentUser;
-                }*/
+        }      
         public async Task<string> GetCurrentUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = await userManager.GetUserAsync(User);
-
             return userId;
         }
 
