@@ -174,11 +174,7 @@ namespace FeedHiveAuth.Controllers
                     }
                 }  
             };
-            if (isMaster) //Master
-            {
-                masterId = masterId;
-            }
-            else //Admin and never an Editor 
+            if (!isMaster && isAdmin) //Admin and never an Editor
             {
                 masterId = _userService.GetUserParent(masterId);
             }
@@ -203,7 +199,7 @@ namespace FeedHiveAuth.Controllers
                 else //update old
                     _configsService.UpdateConfigs(socialConfigs.TelegramConfigs.EnumKey,socialConfigs.TelegramConfigs.Id,telegramConfigsJson);
             }
-            if(socialConfigs.DailymotionConfigs != null)
+            if (socialConfigs.DailymotionConfigs != null)
             {
                 string dailymotionConfigsJson = JsonSerializer.Serialize(socialConfigs.DailymotionConfigs.Application);
                 //var olddailymotionConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.DailyMotion.Value());
@@ -228,7 +224,7 @@ namespace FeedHiveAuth.Controllers
                 else
                     _configsService.UpdateConfigs(socialConfigs.WhatsappConfigs.EnumKey, socialConfigs.WhatsappConfigs.Id, wpConfigsJson);
             }
-            if(socialConfigs.TwitterConfigs != null)
+            if (socialConfigs.TwitterConfigs != null)
             {
                 string twitterConfigsJson = JsonSerializer.Serialize(socialConfigs.TwitterConfigs.Application);
                 if (socialConfigs.TwitterConfigs.Id == null)
