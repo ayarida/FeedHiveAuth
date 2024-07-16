@@ -37,7 +37,7 @@ namespace FeedHiveAuth.Data.Repositories
 
                 baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
-                baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+                baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 #endif                
                 mediaItem.Path = baseUrl + "uploads/" + file.FileName;
                 mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;

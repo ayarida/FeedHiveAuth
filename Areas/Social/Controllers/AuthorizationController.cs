@@ -82,7 +82,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
             baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
-            baseUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+            baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 #endif
                 var result = AuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize).Decode();
                 //var result = "";
@@ -121,7 +121,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
                 baseCallBackUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
 #else
-            baseCallBackUrl = SocialConfigs.Construct().TechnicalConfigs.PublicUrl;
+            baseCallBackUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 #endif
                 var channels = FacebookService.GetChannelsInfo(baseCallBackUrl, code,
                                 state, out string msg);
