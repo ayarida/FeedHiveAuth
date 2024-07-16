@@ -1,5 +1,5 @@
 ﻿@model FeedHiveAuth.Areas.Social.Models.SocialConfigs
-
+@using FeedHiveAuth.Data.Helpers;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var configs = Model;
@@ -264,8 +264,9 @@
 
             </div>
         </div>
-
-        <button type="submit" id="saveData" class="mt-5 btn btn-primary m-auto">Save Changes</button>
+        <div class="configs-save-btn">
+                <button type="submit" id="saveData" class="mt-5 btn btn-primary m-auto">@AppResources.Label("SaveChanges")</button>
+        </div>
         </form>
     </div>
 </div>
@@ -297,10 +298,13 @@
 </script>
 
 <style>
+    .configs-save-btn{
+        text-align:center;
+    }
 
     input[type=text] {
-        border: 1px solid #212c37 !important;
-        border-radius: 3px !important;
+        border: 1px solid #212c373b !important;
+        border-radius: 5px !important;
         padding: 0.375rem 0.75rem;
     }
 
