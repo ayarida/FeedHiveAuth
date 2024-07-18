@@ -1,8 +1,9 @@
-﻿
+﻿@using FeedHiveAuth.Data.Helpers;
+
 <div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column;" id="media-section" class="ms-auto">
     <button type="button" class="border-start-0 border-bottom-0 border ms-n5 archive-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop7" onclick="GetMedias()" id="media-btn">
         <i class="bi bi-archive-fill"></i>
-        From Archive
+        @AppResources.Label("FromArchive")
         <div id="selectedpc" style="display: none;"></div>
     </button>
 
