@@ -70,34 +70,35 @@ namespace FeedHiveAuth.Controllers
 
             return View("~/Views/MediaItem/Create.cshtml");
         }
+        public List<MediaItem> currUserMediaItems()
+        {
+            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
+            return mediaItemsList;
+        }
         [HttpGet]
         [PermissionFilter("MediaItem_List")]
         public IActionResult List()
         {
-            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
-            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
-            return View("~/Views/MediaItem/List.cshtml", mediaItemsList);
+            var mediaItemsList = currUserMediaItems();
+            return View(mediaItemsList);
         }
-        public JsonResult GetFromArchive(IEnumerable<MediaData> valinput)
+        public JsonResult GetFromArchive()
         {
-            var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
-            var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
-            var result = new JsonResult(mediaItemsList);
-            return result;
+            var mediaItemsList = currUserMediaItems();
+            return new JsonResult(mediaItemsList);
         }
 
         [PermissionFilter("MediaItem_DeleteMediaItem")]
         [HttpDelete]
         public void DeleteMediaItem(MediaItem mediaItem)
         {
-
             _mediaItemService.Delete(mediaItem.Id);
         }
         [PermissionFilter("MediaItem_DeletePostMedia")]
         [HttpDelete]
         public void DeletePostMedia(string media, string post)
         {
-
             _mediaItemService.DeletePostMedia(media, post);
         }
 
