@@ -178,7 +178,7 @@ namespace FeedHiveAuth.Controllers
             }
             if (postMedia != null) { post.PostMediaItems = mediaList; };
 
-            return View("~/Views/Posts/Preview.cshtml", post);
+            return View(post);
         }
 
         public async Task<bool> isAdmin()
@@ -191,23 +191,33 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public IActionResult CreatePost()
-        {            
-            Post post = new Post
+        public IActionResult CreatePost(Post postForm)
+        {
+            if (postForm.Title != null)
             {
-                Title = HttpContext.Request.Form["Title"],
-                ShortTitle = HttpContext.Request.Form["ShortTitle"],
-                Summary = HttpContext.Request.Form["Summary"],
-                Content = HttpContext.Request.Form["Content"],
-                PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
-                PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
-            };
-            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+                postForm.PublicLink = "/Posts/" + GeneratePostLink(postForm.Title);
+            }
+            //Post post = new Post
+            //{
+            //    //Title = HttpContext.Request.Form["Title"],
+            //    //ShortTitle = HttpContext.Request.Form["ShortTitle"],
+            //    //Summary = HttpContext.Request.Form["Summary"],
+            //    //Content = HttpContext.Request.Form["Content"],
+            //    PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
+            //    PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
+            //};
+            string userId = currUserId();
             if (userId != null)
             {
-                post.ModifiedBy = post.CreatedBy = userId;
+                postForm.ModifiedBy = postForm.CreatedBy = userId;
             }
-             _postService.Save(post);
+            try 
+            {
+                _postService.Save(postForm);
+            }catch(Exception ex)
+            {
+                _logger.LogError("********************* Can't save an error occured: \r\n," + ex + "\r\n *********************");
+            }
 
             /////////SaveMedia////////////////////
 
@@ -222,12 +232,10 @@ namespace FeedHiveAuth.Controllers
             {
                 foreach(var media in MediasFromArchive)
                 {
-                    _postService.InsertPostMedia(post.Id,media.Id);
+                    _postService.InsertPostMedia(postForm.Id,media.Id);
                 }
-
             }
             //New Medias ( from File)
-            
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
@@ -235,14 +243,14 @@ namespace FeedHiveAuth.Controllers
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
 
                 //SavePostMedias(post);
-                var result = SaveMedia(postMedias, post.Id);
+                var result = SaveMedia(postMedias, postForm.Id);
                 foreach(var media in result)
                 {
-                    _postService.InsertPostMedia(post.Id, media.Id);
+                    _postService.InsertPostMedia(postForm.Id, media.Id);
                 }
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
-            post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
+            postForm.PostMediaItems = _mediaItemService.GetMediasByPostId(postForm.Id);
             return RedirectToAction("List", "Posts");
         }
 
@@ -258,7 +266,7 @@ namespace FeedHiveAuth.Controllers
                 PostDate = DateTime.Now
             };
             var med = HttpContext.Request.Form["mediaItemPaths"];
-            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            string userId = currUserId();
             if (userId != null)
             {
                 post.ModifiedBy = post.CreatedBy = userId;
@@ -296,7 +304,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public ActionResult Update(Post updatedPost)
         {
-            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            string userId = currUserId();
             var oldPost = _postService.GetPostById(updatedPost.Id);
             oldPost.Title = updatedPost.Title;
             oldPost.ShortTitle = updatedPost.ShortTitle;
@@ -421,7 +429,7 @@ namespace FeedHiveAuth.Controllers
 
         public void Publish(string Id)
         {
-            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            string userId = currUserId();
 
             _postService.Publish(Id, userId);
 
@@ -489,10 +497,14 @@ namespace FeedHiveAuth.Controllers
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
         }      
-        public async Task<string> GetCurrentUserId()
+        public async Task<string> identityUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
+        }
+        public string currUserId()
+        {
+            return identityUserId().GetAwaiter().GetResult();
         }
 
         [PermissionFilter("Posts_Edit")]
@@ -515,7 +527,7 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         public List<Post> GetCurrUserPosts()
         {
-            string userId = GetCurrentUserId().GetAwaiter().GetResult();
+            string userId = currUserId();
 
             try
             {
