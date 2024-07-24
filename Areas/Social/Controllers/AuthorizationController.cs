@@ -8,11 +8,12 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-
+using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.AuthorizationManager;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
@@ -26,9 +27,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             _logger = logger;
         }
-        [HttpPost]
+        
         [PermissionFilter("Authorization_OAuthFlow")]
+
         public async Task<IActionResult> OAuthFlow(string network, string account, bool reauthorize = false, string credentials = null, string id = null)
+
         {
             //var subscription = await _adminWorkContext.GetCurrentSubscriptionAsync();
             //var currentUser = _userService.GetByUsername("testnew");
@@ -66,6 +69,32 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     //        //    return ShutterstockOAuthFlow(reauthorize);
             }
             return NotFound();
+        }
+        public IActionResult TwitterOAuthFlow(string type, string username , bool reauthorize = false)
+        {
+            var success = false;
+            var redirect = "";
+            var message = "";
+            try
+            {
+                var baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+                var result = twtAuthorizationManager.StartOAuthFlow(baseUrl, username,false);
+                if (result.IsNotNullOrEmpty())
+                {
+                    success = true;
+                    redirect = result;
+                }
+                else
+                {
+                    message = "Couldn't start twitter authentication process";
+                }
+            }
+            catch (Exception ex)
+            {
+                //Logger.Error(this, "Couldn't start twitter authentication process", ex);
+                message = "Couldn't start twitter authentication process: " + ex.FullMessage();
+            }
+            return Json(new { success, redirect, message });
         }
         #region facebook
         [PermissionFilter("Authorization_FacebookOAuthFlow")]
@@ -105,7 +134,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [PermissionFilter("Authorization_Index")]
         public IActionResult Index()
         {
-            return View();
+            return View("/Areas/Social/Views/Shared/Index.cshtml /Views/Shared/Index.cshtml");
         }
 
         [PermissionFilter("Authorization_FacebookSignIn")]

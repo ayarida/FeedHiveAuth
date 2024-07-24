@@ -48,7 +48,15 @@ namespace FeedHiveAuth.Areas.Social.Models
                 },
                 TwitterConfigs = new TwitterConfigs
                 {
-                    Application = new TwitterApp()
+                    Application = new TwitterApp
+                    {
+                        ScreenName="",
+                        ConsumerKey= "HUZMedlx3tgx675KghAOMuAuY",
+                        ConsumerSecret= "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW",
+                        Token= "1508848274303819788-1OxbGMWGITe5t2Sc8OzoySluaqTSL",
+                        TokenSecret= "QJnmKlEAneazIABfjUAj69GvdJYZIQBAgj2LQ4xfufrD3",
+                        Enable=true
+                    }
                 },
                 InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },
                 DailymotionConfigs = new DailymotionConfigs

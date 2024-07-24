@@ -22,7 +22,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddAuthentication().AddTwitter(opts =>
+{
+    opts.ConsumerKey = "M8JNV3MnLo50oYzL958muDwRL";
+    opts.ConsumerSecret = "lzRq3Y1V0rVjeg3GvEbE3UVu123sUyK4iNb8Wxeksn7xzWPKlK";
+});
 builder.Host.ConfigureLogging(logging =>
 {
     logging.ClearProviders();

@@ -142,6 +142,6 @@ $(function (e) {
 
 // Delete media              
 function deleteMedia(event) {
-    console.log("meddioarrrrrrrrrrrrrrrrrrrrrrrr")
+    console.log(event)
     $(event).parent().remove();
 }
