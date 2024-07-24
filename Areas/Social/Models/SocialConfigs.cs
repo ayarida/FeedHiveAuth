@@ -50,11 +50,11 @@ namespace FeedHiveAuth.Areas.Social.Models
                 {
                     Application = new TwitterApp
                     {
-                        ScreenName="",
-                        ConsumerKey= "HUZMedlx3tgx675KghAOMuAuY",
-                        ConsumerSecret= "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW",
-                        Token= "1508848274303819788-1OxbGMWGITe5t2Sc8OzoySluaqTSL",
-                        TokenSecret= "QJnmKlEAneazIABfjUAj69GvdJYZIQBAgj2LQ4xfufrD3",
+                        ScreenName= "RoubaDarwich87",
+                        ConsumerKey= "xlqMf0BnlgrJ99GESlxgJGMeg",
+                        ConsumerSecret= "OUfKiyqJmJlh6EDIS6rDkzUV524qfy20QJErzNi7nyATBuO7Jv",
+                        Token= "1801170753942896641-5AQZtfUTrDX7IRpXciHwowL0k02EUe",
+                        TokenSecret= "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5",
                         Enable=true
                     }
                 },

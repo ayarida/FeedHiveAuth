@@ -1,6 +1,9 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using RestSharp;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 
 namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
 {
@@ -8,7 +11,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
     {
         private readonly string CallbackUrl;
 
-        public AuthorizationClient(TwitterConfigs configs, string baseCallbackUrl = null) : base(configs, "/oauth", "https://api.x.com")
+        public AuthorizationClient(TwitterConfigs configs, string baseCallbackUrl = null) : base(configs, "/oauth", "https://api.twitter.com/2")
         {
             if (string.IsNullOrWhiteSpace(baseCallbackUrl))
             {
@@ -18,11 +21,12 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
             CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + "Authorization/TwitterSignIn";
         }
 
-        public IRestResponse GenerateRequestToken(string Username, bool reauthorize = false)
+        public IRestResponse GenerateRequestToken( bool reauthorize = false)
         {
-            var parms = new Dictionary<string, object>
+          var url = "oauth / request_token";
+          var parms = new Dictionary<string, object>
             {
-                { "oauth_callback", $"{CallbackUrl}?subscriptionCode={Username}&reauthorize={reauthorize.ToString().ToLower()}" }
+                { "oauth_callback", $"{CallbackUrl}&reauthorize={reauthorize.ToString().ToLower()}" }
             };
             return Post("/request_token", parms);
         }

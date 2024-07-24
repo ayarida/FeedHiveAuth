@@ -8,30 +8,47 @@ using FeedHiveAuth.Areas.Social.SocialTwitter.Clients;
 using AuthorizationClient = FeedHiveAuth.Areas.Social.SocialTwitter.Clients.AuthorizationClient;
 using Tweetinvi.Exceptions;
 using Tweetinvi;
+using TwitterClient = Tweetinvi.TwitterClient;
+using Microsoft.AspNetCore.Mvc;
+using Telegram.Bot.Requests.Abstractions;
 
 namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
 {
     public static class AuthorizationManager
     {
-        public static string StartOAuthFlow(string baseCallbackUrl, string username, bool reauthorize)
+        public static string StartOAuthFlow(string baseCallbackUrl, bool reauthorize)
         {
-            var requestToken = GenerateRequestToken(baseCallbackUrl, username, reauthorize);
+            var requestToken = GenerateRequestToken(baseCallbackUrl, reauthorize);
 
             if (string.IsNullOrWhiteSpace(requestToken?.Token))
             {
                 return null;
             }
 
-            return "https://api.x.com/oauth/authenticate".AddParameter("oauth_token", requestToken.Token);
+            return "https://api.twitter.com/2/oauth/authenticate".AddParameter("oauth_token", requestToken.Token);
         }
-
-        public static  TwitterCredentials GenerateRequestToken(string baseCallbackUrl, string username, bool reauthorize)
+        
+        public  static  TwitterCredentials GenerateRequestToken(string baseCallbackUrl, bool reauthorize)
         {
-            //var clientt = new Tweetinvi.TwitterClient("HUZMedlx3tgx675KghAOMuAuY", "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW", "1801170753942896641-KHVD6DPz3ihnJfpCkIRhxhx9FXMXX6", "K1YBen2dDOC4M2r47tB9DZmjv9tF89LONqvQUaakPPXT9");
+            string consumerKey = "xlqMf0BnlgrJ99GESlxgJGMeg";
+            string consumerSecret = "OUfKiyqJmJlh6EDIS6rDkzUV524qfy20QJErzNi7nyATBuO7Jv";
+            string accessToken = "1801170753942896641-5AQZtfUTrDX7IRpXciHwowL0k02EUe";
+            string accessTokenSecret = "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5";
+
+            // Authenticate with Twitter
+            var userClient = new TwitterClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
            
+            // Fetch user information
+            var authenticatedUser = userClient.Users.GetAuthenticatedUserAsync().Result;
+
+            // Get the screen name
+            string screenName = authenticatedUser.ScreenName;
+            Console.WriteLine($"Authenticated user's screen name: {screenName}");
+            //var clientt = new Tweetinvi.TwitterClient("HUZMedlx3tgx675KghAOMuAuY", "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW", "1801170753942896641-KHVD6DPz3ihnJfpCkIRhxhx9FXMXX6", "K1YBen2dDOC4M2r47tB9DZmjv9tF89LONqvQUaakPPXT9");
+            
             var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
             var client = new AuthorizationClient(configs, baseCallbackUrl);
-            var result = client.GenerateRequestToken(username, reauthorize);
+            var result = client.GenerateRequestToken( reauthorize);
 
             if (!result.IsSuccessful)
             {

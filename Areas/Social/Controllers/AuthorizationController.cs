@@ -70,7 +70,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
             return NotFound();
         }
-        public IActionResult TwitterOAuthFlow(string type, string username , bool reauthorize = false)
+        public IActionResult TwitterOAuthFlow(string type, bool reauthorize = false)
         {
             var success = false;
             var redirect = "";
@@ -78,7 +78,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             try
             {
                 var baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
-                var result = twtAuthorizationManager.StartOAuthFlow(baseUrl, username,false);
+                var result = twtAuthorizationManager.StartOAuthFlow(baseUrl,false);
                 if (result.IsNotNullOrEmpty())
                 {
                     success = true;
@@ -170,8 +170,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 return null;
             }
         }
-
-
+        [PermissionFilter("Authorization_TwitterSignIn")]
+        public string TwitterSignIn()
+        {
+            return "https://localhost:7157/";
+        }
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
         {

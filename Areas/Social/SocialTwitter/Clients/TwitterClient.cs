@@ -68,7 +68,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
             var oauthString = "OAuth ";
             parms.Add("oauth_consumer_key", Configs.Application.ConsumerKey);
             parms.Add("oauth_nonce", GenerateNonce());
-            parms.Add("oauth_nonce", "zVBULCKqyI2");
+            //parms.Add("oauth_nonce", "zVBULCKqyI2");
             parms.Add("oauth_signature_method", "HMAC-SHA1");
             parms.Add("oauth_version", "1.0");
             parms.Add("oauth_timestamp", GetTimestamp());
