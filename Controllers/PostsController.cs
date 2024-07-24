@@ -404,6 +404,8 @@ namespace FeedHiveAuth.Controllers
         {
             var postMedia = _mediaItemService.GetMediaByPostId(post.Id);
             var postOps = _postService.GetPostOperations(post.Id);
+            var errors = new List<string>();
+
             if (postMedia != null)
             {
                 _mediaItemService.Delete(postMedia.Id);
@@ -421,8 +423,13 @@ namespace FeedHiveAuth.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("********************* Error in deleting this post, EXCEPTION \r\n" + ex + "\r\n*********************");
-                return BadRequest(ex.Message);
+                //_logger.LogError();
+                errors.Add($"\"********************* Error in deleting this post, EXCEPTION \\r\\n\" + {ex} + \"\\r\\n*********************\"");
+                _logger.LogError($"********************* Error in deleting post with ID {post.Id}, EXCEPTION \r\n{ex}\r\n*********************");
+            }
+            if (errors.Any())
+            {
+                return BadRequest(errors);
             }
             return Ok();
         }
