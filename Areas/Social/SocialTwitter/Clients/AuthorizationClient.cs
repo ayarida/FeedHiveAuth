@@ -11,14 +11,14 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
     {
         private readonly string CallbackUrl;
 
-        public AuthorizationClient(TwitterConfigs configs, string baseCallbackUrl = null) : base(configs, "/oauth", "https://api.twitter.com/2")
+        public AuthorizationClient(TwitterConfigs configs, string baseCallbackUrl = null) : base(configs, "/oauth", "https://api.twitter.com/")
         {
             if (string.IsNullOrWhiteSpace(baseCallbackUrl))
             {
                 return;
             }
 
-            CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + "Authorization/TwitterSignIn";
+            CallbackUrl = baseCallbackUrl + (baseCallbackUrl.EndsWith("/") ? "" : "/") + "Social/Authorization/TwitterSignIn";
         }
 
         public IRestResponse GenerateRequestToken( bool reauthorize = false)

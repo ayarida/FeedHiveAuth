@@ -17,9 +17,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
         public IRestResponse<Tweet> Tweet(string status, TwitterConfigs configs, TwitterCredentials token, string mediaIds = null)
         {
             OAuthRequest oAclient = OAuthRequest.ForProtectedResource("POST", configs.Application.ConsumerKey, configs.Application.ConsumerSecret, token.Token, token.TokenSecret);
-            oAclient.RequestUrl = "https://api.twitter.com/2/tweets";
+            oAclient.RequestUrl = "https://api.twitter.com/tweets";
             string auth = oAclient.GetAuthorizationHeader();
-            var client2 = new RestClient("https://api.twitter.com/2/tweets");
+            var client2 = new RestClient("https://api.twitter.com/tweets");
             client2.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", auth);

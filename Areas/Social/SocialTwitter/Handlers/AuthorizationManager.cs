@@ -25,7 +25,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
                 return null;
             }
 
-            return "https://api.twitter.com/2/oauth/authenticate".AddParameter("oauth_token", requestToken.Token);
+            return "https://api.twitter.com/oauth/authenticate".AddParameter("oauth_token", requestToken.Token);
         }
         
         public  static  TwitterCredentials GenerateRequestToken(string baseCallbackUrl, bool reauthorize)
@@ -48,7 +48,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             
             var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
             var client = new AuthorizationClient(configs, baseCallbackUrl);
-            var result = client.GenerateRequestToken( reauthorize);
+            var result = client.GenerateRequestToken(reauthorize);
 
             if (!result.IsSuccessful)
             {

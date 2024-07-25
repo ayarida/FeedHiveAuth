@@ -173,7 +173,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [PermissionFilter("Authorization_TwitterSignIn")]
         public string TwitterSignIn()
         {
-            return "https://localhost:7157/";
+            return "https://localhost:7157";
         }
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)

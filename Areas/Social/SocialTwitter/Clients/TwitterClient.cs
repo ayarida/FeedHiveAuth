@@ -14,7 +14,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
         private readonly string OAuthTokenSecret;
         private readonly ulong UserID;
 
-        public TwitterClient(TwitterConfigs configs, string node, string url = "https://api.twitter.com/2", TwitterCredentials token = null) : base(url + (string.IsNullOrWhiteSpace(node) || node.StartsWith("/") ? "" : "/") + node)
+        public TwitterClient(TwitterConfigs configs, string node, string url = "https://api.twitter.com/", TwitterCredentials token = null) : base(url + (string.IsNullOrWhiteSpace(node) || node.StartsWith("/") ? "" : "/") + node)
         {
             Configs = configs ?? new TwitterConfigs();
             if (token != null)
