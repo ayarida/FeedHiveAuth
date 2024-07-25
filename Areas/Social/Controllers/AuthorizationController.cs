@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
+using FeedHiveAuth.Areas.Social.SocialTwitter.Clients;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net.Http;
 using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.AuthorizationManager;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -135,7 +137,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public IActionResult Index()
         {
             return View("/Areas/Social/Views/Shared/Index.cshtml /Views/Shared/Index.cshtml");
-        }
+        }        
 
         [PermissionFilter("Authorization_FacebookSignIn")]
         //[EnableCors]
@@ -171,9 +173,24 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
         }
         [PermissionFilter("Authorization_TwitterSignIn")]
-        public string TwitterSignIn()
+        public async Task<IActionResult> TwitterSignIn(string oauth_token, string oauth_verifier)
         {
-            return "https://localhost:7157";
+            if (string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_verifier))
+            {
+                return BadRequest("Missing OAuth token or verifier");
+            }
+
+            /*var twitterClient = twtAuthorizationManager.
+
+            var accessToken = await twitterClient.GetAccessTokenAsync(oauth_token, oauth_verifier);
+            var twitterUser = await twitterClient.GetUserProfileAsync(accessToken);*/
+
+            // Here, you can use the twitterUser object to create or update the user in your application
+            // Example: var user = await _userService.FindOrCreateUserAsync(twitterUser.Name, twitterUser.Email, twitterUser.Id);
+
+            // Sign in the user using a local cookie or other method
+
+            return Redirect("https://socialpublisher.net/"); // Redirect to the desired URL after successful sign-in
         }
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
