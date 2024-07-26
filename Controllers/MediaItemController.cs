@@ -48,8 +48,9 @@ namespace FeedHiveAuth.Controllers
 
 
         [Authorize]
-        [PermissionFilter("MediaItem_SaveMedia")]
         [HttpPost]
+        [PermissionFilter("MediaItem_SaveMedia")]
+ 
         public IActionResult SaveMedia()
         {
             if (HttpContext.Request.Form.Files.Any())
@@ -88,16 +89,15 @@ namespace FeedHiveAuth.Controllers
             var mediaItemsList = currUserMediaItems();
             return new JsonResult(mediaItemsList);
         }
-
-        [PermissionFilter("MediaItem_DeleteMediaItem")]
         [HttpDelete]
+        [PermissionFilter("MediaItem_DeleteMediaItem")]
         public void DeleteMediaItem(MediaItem mediaItem)
         {
             _mediaItemService.Delete(mediaItem.Id);
         }
-        [PermissionFilter("MediaItem_DeletePostMedia")]
         [HttpDelete]
-        public void DeletePostMedia(string media, string post)
+        [PermissionFilter("MediaItem_DeletePostMedia")]
+        public void DeletePostMedia(string media,string post)
         {
             _mediaItemService.DeletePostMedia(media, post);
         }

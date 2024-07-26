@@ -24,9 +24,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
         private readonly ILogger<ExternalLoginModel> _logger;
         #region account
         protected readonly TwitterConfigs tConfigs;
-        public static Channel GetChannelInfo(string token, string verifier)
+        public static Channel GetChannelInfo(string token, string verifier, Guid subscriptionId)
         {
-            var credentials = AuthorizationManager.GenerateAccessToken(token, verifier);
+            var credentials = AuthorizationManager.GenerateAccessToken(token, verifier, subscriptionId);
             if (credentials == null)
             {
                 return null;

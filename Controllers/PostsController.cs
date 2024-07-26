@@ -44,8 +44,8 @@ namespace FeedHiveAuth.Controllers
             return View();
 
         }
-        [PermissionFilter("Posts_Search")]
         [HttpPost]
+        [PermissionFilter("Posts_Search")]
         public JsonResult Search([FromQuery] string valinput)
         {
             List<Post> posts = new List<Post>();
@@ -125,8 +125,9 @@ namespace FeedHiveAuth.Controllers
             };
             return View("~/Views/Posts/List.cshtml", pvm);
         }
-        [PermissionFilter("Posts_List")]
         [HttpGet]
+        [PermissionFilter("Posts_List")]
+        
         public async Task<ActionResult> List()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -187,7 +188,7 @@ namespace FeedHiveAuth.Controllers
             var isAdmin = await UserManager.IsInRoleAsync(currUser, "Admin");
             return isAdmin;
         }
-
+        [HttpPost]
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
@@ -300,8 +301,8 @@ namespace FeedHiveAuth.Controllers
                 return null;
             }
         }
-        [PermissionFilter("Posts_Update")]
         [HttpPost]
+        [PermissionFilter("Posts_Update")]
         public ActionResult Update(Post updatedPost)
         {
             string userId = currUserId();

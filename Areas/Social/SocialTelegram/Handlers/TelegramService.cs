@@ -96,7 +96,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTelegram.Handlers
             try
             {
                 var operationData = operation.Parameters.FromJson<TelegramOperationData>();
-                var configs = SocialServiceHelper.getSocialConfigs().TelegramConfigs;
+                var configs = SocialServiceHelper.GetConfigs().TelegramConfigs;
                 var client = new TelegramClient(configs, channel.NetworkId);
                 var text = operationData.Text?.Replace("<br />", "\n");
                 if (operationData.Link.IsNotNullOrEmpty() && !text.Contains(operationData.Link))

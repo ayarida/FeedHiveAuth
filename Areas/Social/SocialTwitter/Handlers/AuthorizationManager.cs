@@ -30,20 +30,20 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
         
         public  static  TwitterCredentials GenerateRequestToken(string baseCallbackUrl, bool reauthorize)
         {
-            string consumerKey = "BhoVGbY6vlnmP8nXcAAN26bJL";
-            string consumerSecret = "SjOOZB2z14O2wkNaUOIpK1rlj1U62wrMUuZM015cdgWfXHXhzg";
-            string accessToken = "1621472630724333570-TxdjokUaEYBG4oQYhvnwEnrKaHbUcc";
-            string accessTokenSecret = "AXtkOdnFb3fMqNqceIxJi1vRpemmxuH99U2WwmJ2lFoCu";
+            string consumerKey = "xlqMf0BnlgrJ99GESlxgJGMeg";
+            string consumerSecret = "OUfKiyqJmJlh6EDIS6rDkzUV524qfy20QJErzNi7nyATBuO7Jv";
+            string accessToken = "1801170753942896641-5AQZtfUTrDX7IRpXciHwowL0k02EUe";
+            string accessTokenSecret = "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5";
 
             // Authenticate with Twitter
             var userClient = new TwitterClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
            
             // Fetch user information
-            //var authenticatedUser = userClient.Users.GetAuthenticatedUserAsync().Result;
+            var authenticatedUser = userClient.Users.GetAuthenticatedUserAsync().Result;
 
             // Get the screen name
-            //string screenName = authenticatedUser.ScreenName;
-            //Console.WriteLine($"Authenticated user's screen name: {screenName}");
+            string screenName = authenticatedUser.ScreenName;
+            Console.WriteLine($"Authenticated user's screen name: {screenName}");
             //var clientt = new Tweetinvi.TwitterClient("HUZMedlx3tgx675KghAOMuAuY", "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW", "1801170753942896641-KHVD6DPz3ihnJfpCkIRhxhx9FXMXX6", "K1YBen2dDOC4M2r47tB9DZmjv9tF89LONqvQUaakPPXT9");
             
             var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
@@ -66,7 +66,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             };
         }
 
-        public static TwitterCredentials GenerateAccessToken(string token, string verifier)
+        public static TwitterCredentials GenerateAccessToken(string token, string verifier, Guid subscriptionId)
         {
             var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
             var client = new AuthorizationClient(configs);

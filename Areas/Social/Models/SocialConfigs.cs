@@ -66,18 +66,12 @@ namespace FeedHiveAuth.Areas.Social.Models
                 {
                     Application = new TwitterApp
                     {
-                        ScreenName = "DemoOcti",
-                        ConsumerKey = "BhoVGbY6vlnmP8nXcAAN26bJL",
-                        ConsumerSecret = "SjOOZB2z14O2wkNaUOIpK1rlj1U62wrMUuZM015cdgWfXHXhzg",
-                        Token = "1621472630724333570-TxdjokUaEYBG4oQYhvnwEnrKaHbUcc",
-                        TokenSecret = "AXtkOdnFb3fMqNqceIxJi1vRpemmxuH99U2WwmJ2lFoCu",
-                        Enable = true
-                        /*ScreenName= "RoubaDarwich87",
+                        ScreenName= "RoubaDarwich87",
                         ConsumerKey= "xlqMf0BnlgrJ99GESlxgJGMeg",
                         ConsumerSecret= "OUfKiyqJmJlh6EDIS6rDkzUV524qfy20QJErzNi7nyATBuO7Jv",
                         Token= "1801170753942896641-5AQZtfUTrDX7IRpXciHwowL0k02EUe",
-                        TokenSecret= "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5",*/
-
+                        TokenSecret= "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5",
+                        Enable=true
                     }
                 },
                 InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },

@@ -139,5 +139,16 @@ namespace FeedHiveAuth.Data.Helpers
             Instances.Repositories.OperationRepository.UpdateCurrentState(operation);
         }
 
+        public static Stream GetStream(this MediaItem mediaItem, string preset = null)
+        {
+            //var isLocal = mediaItem.Storage()?.Type == MediaSourceEnum.Local.Key() && string.IsNullOrWhiteSpace(preset);
+            //if (!isLocal && operation != null)
+            //{
+            //    operation.UpdateCurrentState("Downloading media from url");
+            //}
+
+                          
+                return (string.IsNullOrWhiteSpace(preset) ? mediaItem.ThumbnailUrl.GetStreamFromUrl() : mediaItem.ThumbnailUrl.AddParameter("preset", preset).GetStreamFromUrl());
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
+using FeedHiveAuth.Areas.Social.SocialTwitter.Clients;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
@@ -9,11 +10,13 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-
+using System.Net.Http;
+using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.AuthorizationManager;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
@@ -27,9 +30,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             _logger = logger;
         }
-        [HttpPost]
+        
         [PermissionFilter("Authorization_OAuthFlow")]
+
         public async Task<IActionResult> OAuthFlow(string network, string account, bool reauthorize = false, string credentials = null, string id = null)
+
         {
             //var subscription = await _adminWorkContext.GetCurrentSubscriptionAsync();
             //var currentUser = _userService.GetByUsername("testnew");
@@ -67,6 +72,32 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     //        //    return ShutterstockOAuthFlow(reauthorize);
             }
             return NotFound();
+        }
+        public IActionResult TwitterOAuthFlow(string type, bool reauthorize = false)
+        {
+            var success = false;
+            var redirect = "";
+            var message = "";
+            try
+            {
+                var baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+                var result = twtAuthorizationManager.StartOAuthFlow(baseUrl,false);
+                if (result.IsNotNullOrEmpty())
+                {
+                    success = true;
+                    redirect = result;
+                }
+                else
+                {
+                    message = "Couldn't start twitter authentication process";
+                }
+            }
+            catch (Exception ex)
+            {
+                //Logger.Error(this, "Couldn't start twitter authentication process", ex);
+                message = "Couldn't start twitter authentication process: " + ex.FullMessage();
+            }
+            return Json(new { success, redirect, message });
         }
         #region facebook
         [PermissionFilter("Authorization_FacebookOAuthFlow")]
@@ -106,8 +137,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         [PermissionFilter("Authorization_Index")]
         public IActionResult Index()
         {
-            return View();
-        }
+            return View("/Areas/Social/Views/Shared/Index.cshtml /Views/Shared/Index.cshtml");
+        }        
 
         [PermissionFilter("Authorization_FacebookSignIn")]
         //[EnableCors]
@@ -143,30 +174,25 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
         }
         [PermissionFilter("Authorization_TwitterSignIn")]
-        [HttpGet("Social/Authorization/TwitterSignIn")]
-        public IActionResult TwitterSignIn(string oauth_token, Subscription subscription, string oauth_verifier)
+        public async Task<IActionResult> TwitterSignIn(string oauth_token, string oauth_verifier)
         {
-            try
+            if (string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_verifier))
             {
-                var channel = TwitterService.GetChannelInfo(oauth_token, oauth_verifier);
-                if (channel == null)
-                {
-                    _logger.LogError("Couldn't authorize the selected twitter account");
-                    return null;
-                }
-        }
-
-                TempData["channels"] = JsonConvert.SerializeObject(new List<Channel> { channel });
-                return RedirectToAction("Save", "Channel");
+                return BadRequest("Missing OAuth token or verifier");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("Couldn't authorize the selected twitter account: " + ex.FullMessage());
-                return null;
-            }
+
+            /*var twitterClient = twtAuthorizationManager.
+
+            var accessToken = await twitterClient.GetAccessTokenAsync(oauth_token, oauth_verifier);
+            var twitterUser = await twitterClient.GetUserProfileAsync(accessToken);*/
+
+            // Here, you can use the twitterUser object to create or update the user in your application
+            // Example: var user = await _userService.FindOrCreateUserAsync(twitterUser.Name, twitterUser.Email, twitterUser.Id);
+
+            // Sign in the user using a local cookie or other method
+
+            return Redirect("https://socialpublisher.net/"); // Redirect to the desired URL after successful sign-in
         }
-
-
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
         {

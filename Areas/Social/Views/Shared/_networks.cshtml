@@ -45,7 +45,7 @@
                     <span class="infobox-text">Instagram</span>
                 </div>
             </button>
-            <button class="infobox next-page @(twitterEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Twitter.Key()', @(twitterEnabled ? "true" : "false"))" @(twitterEnabled ? "" : "disabled")>
+            @* <button class="infobox next-page @(twitterEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Twitter.Key()', @(twitterEnabled ? "true" : "false"))" @(twitterEnabled ? "" : "disabled")>
 
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-twitter"></i>
@@ -62,6 +62,7 @@
                     <span class="infobox-text">Twitter</span>
                 </div>
             </button>
+          @*  // <button type="button" onclick="location.href='@Url.Action("TwitterOAuthFlow", "Authorization",new { Area = "Social" })'" /> *@
             <button class="infobox next-page @(youtubeEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Youtube.Key()', @(youtubeEnabled ? "true" : "false"))" @(youtubeEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-youtube"></i>
@@ -102,10 +103,11 @@
                     <span class="infobox-text">Dailymotion</span>
                 </div>
             </button>
+            
         </div>
     </div>
 </div>
-
+<script src="~/js/Channels/channelsmodule.js"></script>
 <script>
     $(".channelContainer").ready(function () {
 
@@ -126,7 +128,6 @@
 
             }
         })
-
 
         $("#callFacebook").on("click", function (event) {
             if (!$("#callFacebook").is(':disabled')) {
