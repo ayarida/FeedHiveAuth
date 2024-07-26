@@ -80,7 +80,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var message = "";
             try
             {
-                var baseUrl = SocialConfigs.Construct().TechnicalConfigs.LocalUrl;
+                var baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs.appTechnicalConfigs.LocalUrl;
                 var result = twtAuthorizationManager.StartOAuthFlow(baseUrl,false);
                 if (result.IsNotNullOrEmpty())
                 {

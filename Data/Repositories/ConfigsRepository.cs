@@ -4,7 +4,10 @@ using FeedHiveAuth.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.Hosting;
+using FeedHiveAuth.Areas.Social.Models;
 using static FeedHiveAuth.Data.Database;
+using FeedHiveAuth.Models.Common;
+using FeedHiveAuth.Models.Enums;
 
 namespace FeedHiveAuth.Data.Repositories
 {

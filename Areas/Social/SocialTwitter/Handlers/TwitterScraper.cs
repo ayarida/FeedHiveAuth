@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
 
         public static IEnumerable<Trend> GetTrendsByPlace(ulong? placeId, string excludedTags, Guid subscriptionId)
         {
-            var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
             if (!configs.TrendingTopics.Enable)
             {
                 return null;

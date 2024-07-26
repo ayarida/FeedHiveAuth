@@ -32,7 +32,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
                 return null;
             }
 
-            var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
             var accountClient = new AccountClient(configs, credentials);
             var users = accountClient.GetUser();
             if (!users.IsSuccessful)
@@ -69,7 +69,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             var operationData = operation.Parameters.FromJson<TwitterOperationData>();
             var mediaIds = UploadMedia(operation, token, operationData);
 
-            var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
 
             var client = new TweetClient(configs, token);
             operation.UpdateCurrentState("Sharing tweet");
@@ -138,7 +138,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
                 fileStream = MediaExtension.GetStream((isVideo ? null : "twitter"));
                 var length = fileStream.Length;
                 var type = MimeTypes.GetMimeType(mediaItem.Path);
-                var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+                var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
                 var client = new MediaClient(configs, token);
                 operation.UpdateCurrentState("Uploading media process started");
 

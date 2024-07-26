@@ -46,7 +46,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             Console.WriteLine($"Authenticated user's screen name: {screenName}");
             //var clientt = new Tweetinvi.TwitterClient("HUZMedlx3tgx675KghAOMuAuY", "syXMXHpCLhT543JdxtPBYZQ3oAdtD9L16UgQ2PKj1sFDNlL3KW", "1801170753942896641-KHVD6DPz3ihnJfpCkIRhxhx9FXMXX6", "K1YBen2dDOC4M2r47tB9DZmjv9tF89LONqvQUaakPPXT9");
             
-            var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
             var client = new AuthorizationClient(configs, baseCallbackUrl);
             var result = client.GenerateRequestToken(reauthorize);
 
@@ -68,7 +68,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
 
         public static TwitterCredentials GenerateAccessToken(string token, string verifier, Guid subscriptionId)
         {
-            var configs = SocialServiceHelper.GetConfigs().TwitterConfigs;
+            var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
             var client = new AuthorizationClient(configs);
             var result = client.GenerateAccessToken(token, verifier);
 
