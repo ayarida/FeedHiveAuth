@@ -53,6 +53,14 @@
                 <div class="infobox-data">
                     <span class="infobox-text">Twitter</span>
                 </div>
+            </button> *@
+            <button type="button" onclick="location.href='@Url.Action("TwitterOAuthFlow", "Authorization",new { Area = "Social" })'" class="infobox next-page  @(twitterEnabled ? "" : "disabled")" id="callTwitter()" @(twitterEnabled ? "" : "disabled")>
+                <div class="infobox-icon">
+                    <i class="ace-icon bi bi-camera-video"></i>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-text">Twitter</span>
+                </div>
             </button>
             <button class="infobox next-page @(youtubeEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Youtube.Key()', @(youtubeEnabled ? "true" : "false"))" @(youtubeEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
@@ -127,6 +135,10 @@
             }
 
         })
+
+                });
+            }
+        }) 
     })
 </script>
 

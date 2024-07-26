@@ -46,8 +46,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     return Ok(new { redirect });
                 case SocialNetworkTypeEnum.DailyMotion:
                     return DailymotionSignIn(network, id);
-                //        case SocialNetworkTypeEnum.Twitter:
-                //            return TwitterOAuthFlow(account, subscription, reauthorize);
+                case SocialNetworkTypeEnum.Twitter:
+                    return TwitterOAuthFlow(account, reauthorize);
                 //        case SocialNetworkTypeEnum.Youtube:
                 //            return GoogleOAuthFlow(network, subscription, reauthorize);
                 //        case SocialNetworkTypeEnum.Firebase:
@@ -139,6 +139,29 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             {
                 Debug.WriteLine("Couldn't authorize the selected Facebook account: " + ex.FullMessage());
                 //return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Facebook.Key() });
+                return null;
+            }
+        }
+        [PermissionFilter("Authorization_TwitterSignIn")]
+        [HttpGet("Social/Authorization/TwitterSignIn")]
+        public IActionResult TwitterSignIn(string oauth_token, Subscription subscription, string oauth_verifier)
+        {
+            try
+            {
+                var channel = TwitterService.GetChannelInfo(oauth_token, oauth_verifier);
+                if (channel == null)
+                {
+                    _logger.LogError("Couldn't authorize the selected twitter account");
+                    return null;
+                }
+        }
+
+                TempData["channels"] = JsonConvert.SerializeObject(new List<Channel> { channel });
+                return RedirectToAction("Save", "Channel");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Couldn't authorize the selected twitter account: " + ex.FullMessage());
                 return null;
             }
         }
