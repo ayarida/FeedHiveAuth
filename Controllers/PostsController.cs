@@ -160,7 +160,7 @@ namespace FeedHiveAuth.Controllers
                 allPosts = posts,
                 IsAdmin = isAdmin
             };
-            return View("~/Views/Posts/List.cshtml", pvm);
+            return View(pvm);
         }
 
 
@@ -169,7 +169,8 @@ namespace FeedHiveAuth.Controllers
         {
             var post = _postService.GetPostById(id);
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(id);
-            post.Operations = ops;
+            post.Operations = (ops?.Count > 0) ? ops : new List<Operation>();
+
             var postMedia = _mediaItemService.GetPostMedias(id);
             var mediaList=new List<MediaItem>();
             foreach(var postmed in postMedia)
@@ -187,13 +188,11 @@ namespace FeedHiveAuth.Controllers
             var currUser = await UserManager.GetUserAsync(User);
             var isAdmin = await UserManager.IsInRoleAsync(currUser, "Admin");
             return isAdmin;
-        }
-        [HttpPost]
-        
+        }        
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public Task<ActionResult> CreatePost()
+        public ActionResult CreatePost()
         {
             Post post = new Post
             {
@@ -245,7 +244,7 @@ namespace FeedHiveAuth.Controllers
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
             post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return List();
+            return RedirectToAction("Preview","Posts",new {id = post.Id});
         }
 
         [HttpPost]
