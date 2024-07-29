@@ -160,7 +160,7 @@ namespace FeedHiveAuth.Controllers
                 allPosts = posts,
                 IsAdmin = isAdmin
             };
-            return View(pvm);
+            return View("~/Views/Posts/List.cshtml", pvm);
         }
 
 
