@@ -167,18 +167,18 @@ namespace FeedHiveAuth.Data.Repositories
         {
             post.Id = Guid.NewGuid().ToString();
             string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},N{3},N{4},N{5},N{6},N{7},{8},{9},{10})",
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9},{10})",
                                     TableName,
                                     Columns.AddBraces(ExcludedColumns),
                                     post.Id.EscapeForSql(),
-                                    post.Title.EscapeForSql(),
-                                    post.ShortTitle.EscapeForSql(),
-                                    post.Summary.EscapeForSql(),
-                                    post.Content.EscapeForSql(),
-                                    post.PublicLink.EscapeForSql(),
+                                    post.Title.EscapeForSql(true),
+                                    post.ShortTitle.EscapeForSql(true),
+                                    post.Summary.EscapeForSql(true),
+                                    post.Content.EscapeForSql(true),
+                                    post.PublicLink.EscapeForSql(true),
                                     post.PostDate.EscapeForSql(true),
-                                    post.CreatedBy.EscapeForSql(),
-                                    post.ModifiedBy.EscapeForSql()
+                                    post.CreatedBy.EscapeForSql(true),
+                                    post.ModifiedBy.EscapeForSql(true)
                                     );
             ExecuteQuery(query);
             return post.Id;
