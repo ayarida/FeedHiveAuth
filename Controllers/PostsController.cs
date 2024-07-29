@@ -189,36 +189,27 @@ namespace FeedHiveAuth.Controllers
             return isAdmin;
         }
         [HttpPost]
+        
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public IActionResult CreatePost(Post postForm)
+        public Task<ActionResult> CreatePost()
         {
-            if (postForm.Title != null)
+            Post post = new Post
             {
-                postForm.PublicLink = "/Posts/" + GeneratePostLink(postForm.Title);
-            }
-            //Post post = new Post
-            //{
-            //    //Title = HttpContext.Request.Form["Title"],
-            //    //ShortTitle = HttpContext.Request.Form["ShortTitle"],
-            //    //Summary = HttpContext.Request.Form["Summary"],
-            //    //Content = HttpContext.Request.Form["Content"],
-            //    PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
-            //    PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
-            //};
-            string userId = currUserId();
+                Title = HttpContext.Request.Form["Title"],
+                ShortTitle = HttpContext.Request.Form["ShortTitle"],
+                Summary = HttpContext.Request.Form["Summary"],
+                Content = HttpContext.Request.Form["Content"],
+                PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
+                PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
+            };
+            string userId  = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
             if (userId != null)
             {
-                postForm.ModifiedBy = postForm.CreatedBy = userId;
+                post.ModifiedBy = post.CreatedBy = userId;
             }
-            try 
-            {
-                _postService.Save(postForm);
-            }catch(Exception ex)
-            {
-                _logger.LogError("********************* Can't save an error occured: \r\n," + ex + "\r\n *********************");
-            }
+            _postService.Save(post);
 
             /////////SaveMedia////////////////////
 
@@ -231,28 +222,30 @@ namespace FeedHiveAuth.Controllers
             }
             if (MediasFromArchive?.Count > 0)
             {
-                foreach(var media in MediasFromArchive)
+                foreach (var media in MediasFromArchive)
                 {
-                    _postService.InsertPostMedia(postForm.Id,media.Id);
+                    _postService.InsertPostMedia(post.Id, media.Id);
                 }
+
             }
             //New Medias ( from File)
+
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
-                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
 
                 //SavePostMedias(post);
-                var result = SaveMedia(postMedias, postForm.Id);
-                foreach(var media in result)
+                var result = SaveMedia(postMedias, post.Id);
+                foreach (var media in result)
                 {
-                    _postService.InsertPostMedia(postForm.Id, media.Id);
+                    _postService.InsertPostMedia(post.Id, media.Id);
                 }
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
-            postForm.PostMediaItems = _mediaItemService.GetMediasByPostId(postForm.Id);
-            return RedirectToAction("List", "Posts");
+            post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
+            return List();
         }
 
         [HttpPost]
@@ -277,7 +270,7 @@ namespace FeedHiveAuth.Controllers
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
-                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
 
                 //SavePostMedias(post);
                 var result = SaveMedia(postMedias, post.Id);

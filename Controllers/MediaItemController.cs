@@ -55,9 +55,10 @@ namespace FeedHiveAuth.Controllers
         {
             if (HttpContext.Request.Form.Files.Any())
             {
+                var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
                 var oneFile = HttpContext.Request.Form.Files[0];
                 UploadFile(oneFile);
-                List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files);//mapFileToMediaItem
+                List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files, currentUser);//mapFileToMediaItem
                 InsertMedia(Medias.ToList());
             }
             return RedirectToAction("List", "MediaItem");

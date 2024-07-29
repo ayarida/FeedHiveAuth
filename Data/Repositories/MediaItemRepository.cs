@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Data.Repositories
             Columns = Database.Columns.MediaItem;
         }
 
-        public List<MediaItem> MediasList(IFormFileCollection files)
+        public List<MediaItem> MediasList(IFormFileCollection files,string currentuser)
         {
             //convert post.medias list to objects 
             //convert objects to mediaItem objects 
@@ -32,6 +32,7 @@ namespace FeedHiveAuth.Data.Repositories
             {
                 MediaItem mediaItem = new MediaItem();
                 mediaItem.ThumbnailUrl = file.FileName;
+                mediaItem.CreatedBy = currentuser;
                 mediaItem.Caption = file.FileName;
 #if DEBUG
 
@@ -40,7 +41,7 @@ namespace FeedHiveAuth.Data.Repositories
                 baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 #endif                
                 mediaItem.Path = baseUrl + "uploads/" + file.FileName;
-                mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
+                //mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
                 medias.Add(mediaItem);
                 
             }
