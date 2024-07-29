@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Differencing;
+using Microsoft.Extensions.Hosting;
 using System.Runtime.Serialization.Json;
 using System.Security.Claims;
 using System.Text;
@@ -192,29 +193,35 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public ActionResult CreatePost()
+        public ActionResult CreatePost(Post postForm)
         {
-            Post post = new Post
+            if (postForm.Title != null)
             {
-                Title = HttpContext.Request.Form["Title"],
-                ShortTitle = HttpContext.Request.Form["ShortTitle"],
-                Summary = HttpContext.Request.Form["Summary"],
-                Content = HttpContext.Request.Form["Content"],
-                PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
-                PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
-            };
-            string userId  = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+                postForm.PublicLink = "/Posts/" + GeneratePostLink(postForm.Title);
+            }
+            //Post post = new Post
+            //{
+            //    //Title = HttpContext.Request.Form["Title"],
+            //    //ShortTitle = HttpContext.Request.Form["ShortTitle"],
+            //    //Summary = HttpContext.Request.Form["Summary"],
+            //    //Content = HttpContext.Request.Form["Content"],
+            //    PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
+            //    PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
+            //};
+            string userId = currUserId();
             if (userId != null)
             {
-                post.ModifiedBy = post.CreatedBy = userId;
+                
+                postForm.ModifiedBy = postForm.CreatedBy = userId;
             }
-            _postService.Save(post);
+            _postService.Save(postForm);
 
             /////////SaveMedia////////////////////
 
             //Medias from archive 
             var MediasFromArchive = new List<MediaData>();
             var med = HttpContext.Request.Form["mediaItemsPaths"];
+            var testMed = postForm.mediaItemsPaths;
             if (med.ToString().IsNotNullOrEmpty())
             {
                 MediasFromArchive = JsonSerializer.Deserialize<List<MediaData>>(med);
@@ -223,7 +230,7 @@ namespace FeedHiveAuth.Controllers
             {
                 foreach (var media in MediasFromArchive)
                 {
-                    _postService.InsertPostMedia(post.Id, media.Id);
+                    _postService.InsertPostMedia(postForm.Id, media.Id);
                 }
 
             }
@@ -236,15 +243,15 @@ namespace FeedHiveAuth.Controllers
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
 
                 //SavePostMedias(post);
-                var result = SaveMedia(postMedias, post.Id);
+                var result = SaveMedia(postMedias, postForm.Id);
                 foreach (var media in result)
                 {
-                    _postService.InsertPostMedia(post.Id, media.Id);
+                    _postService.InsertPostMedia(postForm.Id, media.Id);
                 }
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
             }
-            post.PostMediaItems = _mediaItemService.GetMediasByPostId(post.Id);
-            return RedirectToAction("Preview","Posts",new {id = post.Id});
+            postForm.PostMediaItems = _mediaItemService.GetMediasByPostId(postForm.Id);
+            return RedirectToAction("Preview","Posts",new {id = postForm.Id});
         }
 
         [HttpPost]
