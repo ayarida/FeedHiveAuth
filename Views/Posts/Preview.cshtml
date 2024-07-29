@@ -20,7 +20,21 @@
     <div class="mt-4">
         <div class="form-items">
             <div class="row mx-4 gx-5">
-                <h2>استعراض المنشور</h2>
+                <div class="d-flex justify-content-between ">
+                    <h2>استعراض المنشور</h2>
+                    <div class="action-buttons d-flex">
+                        <a href="/Posts/Edit/@post.Id">
+                            <button class="edit btn">
+
+                                @AppResources.Label("edit", "ar") <i class="bi bi-pencil-square"></i>
+
+                            </button>
+                        </a>
+                        <a href="/Social/Publish/Share?postid=@post.Id">
+                            <button class="share btn">@AppResources.Label("share", "ar") <i class="bi bi-share me-2"></i></button>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <form id="form-share" method="post" action="send" class="">
@@ -61,17 +75,17 @@
                             {
                                 <br />
                                 <label for="MediaId" class="mb-3 control-label">ميديا </label>
-                                foreach(var media in post.PostMediaItems)
+                                foreach (var media in post.PostMediaItems)
                                 {
-                                    if(media.Type==10)
+                                    if (media.Type == 10)
                                     {
-                                       <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
-                                        <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                    </div>
-                                    <img src="@media?.Path" style="width: 300px; max-width: 100%" />
+                                        <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
+                                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                        </div>
+                                        <img src="@media?.Path" style="width: 300px; max-width: 100%" />
                                         <br />
                                     }
-                                    if(media.Type==30)
+                                    if (media.Type == 30)
                                     {
                                         <div class="embed-responsive embed-responsive-16by9">
                                             <iframe class="embed-responsive-item" src="@media?.Path" allowfullscreen></iframe>
@@ -79,9 +93,9 @@
                                     }
 
                                 }
-                                
-                                
-                                
+
+
+
                                 <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@post.PostMediaItems.FirstOrDefault()?.Path">
                             }
                             else
@@ -204,7 +218,7 @@
 
                         post: postid
 
-                        
+
 
                     };
                     $.ajax({
@@ -238,49 +252,4 @@
 
 
 </script>
-<style>
-    .section-title {
-        width: 78px;
-        text-align: left;
-    }
 
-    .section {
-        display: flex;
-        column-gap: 38px;
-        margin-top: 12px;
-        text-align: left;
-        flex-direction: row-reverse;
-        padding-left: 10px;
-    }
-
-    .section-info {
-        display: flex;
-        flex-direction: column;
-        row-gap: 14px;
-    }
-
-    hr {
-        width: 90%;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        margin-bottom: 40px;
-    }
-
-    .fail {
-        background-color: #ffe1e1;
-    }
-
-    .success {
-        background-color: #e1ffe6;
-    }
-
-    .fail, .success {
-        margin: 3px;
-        padding-bottom: 40px;
-    }
-
-    .section p {
-        direction: ltr;
-    }
-
-</style>

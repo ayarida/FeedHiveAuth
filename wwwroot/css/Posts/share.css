@@ -165,7 +165,7 @@ div#facebook-preview {
     align-items: center;
 }
 
-.publish-info span{
+.publish-info span {
     font-size: 14px;
 }
 
@@ -179,4 +179,26 @@ div#facebook-preview {
     flex-direction: row-reverse;
     column-gap: 4px;
     color: #9d9d9d;
+}
+
+.action-buttons {
+    column-gap: 15px;
+}
+
+    .action-buttons button {
+        width: fit-content;
+    }
+
+.share {
+    width: 100px;
+    color: white;
+    max-width: 100%;
+    background: rgb(76, 184, 122);
+}
+
+.edit {
+    width: 100px;
+    color: white;
+    max-width: 100%;
+    background-color: rgb(73, 132, 237);
 }
