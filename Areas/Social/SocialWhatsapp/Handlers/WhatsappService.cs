@@ -50,8 +50,8 @@ namespace FeedHiveAuth.Areas.Social.SocialWhatsapp.Handlers
                 if (mediaItem != null)
                 {
                     var sslEnabled = true;
-                    var mediaUrl = mediaItem.Path;
-                    switch (EnumExtension.FromValue<MediaTypeEnum>(mediaItem.Type))
+                    var mediaUrl = mediaItem.FirstOrDefault().Path;
+                    switch (EnumExtension.FromValue<MediaTypeEnum>(mediaItem.FirstOrDefault().Type))
                     {
                         case MediaTypeEnum.Image:
                             imageUrl = mediaUrl;

@@ -138,17 +138,30 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var channels = GetChannels(out error);
             var activeNetworkTypes = GetActiveNetworkTypes(subSocialConfigs);
             var post = _postService.Get(postid);
-            var media = _mediaItemService.GetMediaByPostId(postid);
-            var medias = _mediaItemService.GetMediasByPostId(postid);
-            if (medias != null)
-                post.PostMediaItems = medias;
-            var svm = new ShareView {
+            //var media = _mediaItemService.GetPostMedias(postid);
+            var medias = _mediaItemService.GetPostMedias(postid);
+            //var medialist = new List<MediaItem>();
+            var mediaslist = new List<MediaItem>();
+            //foreach (var mediaitem in media)
+            //{
+            //    var item = _mediaItemService.GetMediaById(mediaitem.MediaItemId);
+            //    medialist.Add(item);
+            //}
+            foreach (var mediaitem in medias)
+            {
+                var item = _mediaItemService.GetMediaById(mediaitem.MediaItemId);
+                mediaslist.Add(item);
+            }
+            //if (medias != null)
+            //    post.PostMediaItems = medias;
+            var svm = new ShareView
+            {
                 ActiveSocialNetworks = activeNetworkTypes,
                 Channels = channels,
                 Post = post,
-                Media = media,
-                Medias = medias
-            
+                //Media = mediaslist.FirstOrDefault(),
+                Medias = mediaslist
+
             };
             return svm;
         }

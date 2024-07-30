@@ -135,9 +135,9 @@ namespace FeedHiveAuth.Data.Repositories
             return mediaItems;
         }
 
-        public MediaItem GetMediaByPostId(string id) {
-            var query = "SELECT * FROM MediaItem Where PostId='" + @id + "' "; 
-            MediaItem postMediaItem =  connection.Query<MediaItem>(query).FirstOrDefault();
+        public List<MediaItem> GetMediaByPostId(string id) {
+            var query = "select * from MediaItem where Id in  (select MediaItemId from PostMedias where PostId='" + @id + "')"; 
+            List<MediaItem> postMediaItem =  connection.Query<MediaItem>(query).ToList();
             return postMediaItem;
         }
         public List <PostMedia> GetPostMedias(string id)

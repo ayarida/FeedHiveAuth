@@ -96,20 +96,20 @@ namespace FeedHiveAuth.Areas.Social.SocialDailymotion.Handlers
 
                 }
                 var post = Instances.Repositories.PostRepository.GetPostById(operation.PostId);
-                var media = Instances.Repositories.MediaItemRepository.GetMediaByPostId(operation.PostId);
+                var media = Instances.Repositories.MediaItemRepository.GetMediaByPostId(operation.PostId).Where(x => x.Type == 30);
                 var postMediaIds = post != null && post.PostMediaItems.NotEmpty() ? post.PostMediaItems.Select(m => m.Id).ToList() : null;               
                 var success = true;
                 var mediaSsl = true;
                 var postContent = string.IsNullOrEmpty(post.Content) ? "" : Regex.Replace(post.Content, "<.*?>", String.Empty);
                 var apiResult = "";
-                if (media == null || (media!=null && media.Type!=MediaTypeEnum.Video.Value()) )
+                if (media == null || (media!=null && media.FirstOrDefault().Type!=MediaTypeEnum.Video.Value()) )
                 {
                     opResult.Success = false;
                     opResult.Message = "No media, No video to publish!";
                     return opResult;
                 }
 
-                var result = PublishVideo(media.Path, media);
+                var result = PublishVideo(media.FirstOrDefault().Path, media.FirstOrDefault());
                 string message = result.Result.id + result.Result.txt;
                 string id = result.Result.id;
 
