@@ -29,7 +29,7 @@
 <div class="social" id="channelContainer">
     <div class="step-pane active networks" data-step="1" id="channelHolder">
         <div class="infobox-container mb-5 social">
-            <button class="infobox next-page @(facebookEnabled ? "" : "disabled")" @(facebookEnabled ? "" : "disabled") id="callFacebook">
+            <button class="infobox next-page @(facebookEnabled ? "" : "disabled")" id="callFacebook" @(facebookEnabled ? "" : "disabled") >
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-facebook"></i>
                 </div>
@@ -136,11 +136,8 @@
             }
 
         })
-
-                });
-            }
-        }) 
-    })
+    });
+           
 </script>
 
 <style>
