@@ -277,7 +277,6 @@ namespace FeedHiveAuth.Controllers
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
                 List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
-
                 //SavePostMedias(post);
                 var result = SaveMedia(postMedias, post.Id);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
@@ -406,10 +405,11 @@ namespace FeedHiveAuth.Controllers
             var postOps = _postService.GetPostOperations(post.Id);
             var errors = new List<string>();
 
-            if (postMedia != null)
-            {
-                _mediaItemService.Delete(postMedia.Id);
-            }
+            if (postMedia.Count > 0)
+                foreach (var med in postMedia)
+                {
+                    _mediaItemService.DeletePostMedia(med.Id, post.Id);
+                }
             if (postOps != null)
             {
                 foreach (var op in postOps)

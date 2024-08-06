@@ -82,14 +82,19 @@
                         <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
 
                         <div class="form-group mb-4 d-flex flex-column">
-                            @if (media != null)
+                            <label for="MediaId" class="mb-3 control-label">ميديا </label>
+                            <br />
+                            @if (medias?.Count() > 0)
                             {
-                                <label for="MediaId" class="mb-3 control-label">ميديا </label>
-                                <br />
-                                <img src="@media.Path" />
-                                <br />
-                                <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@media.Id">
-                            }
+                                foreach(var med in medias)
+                                {
+                                    
+                                    <img src="@med.Path" />
+                                    <br />
+                                    <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@med.Id">
+
+                                }
+                                                            }
                         </div>
                     </div>
 
