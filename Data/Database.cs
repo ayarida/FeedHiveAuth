@@ -32,7 +32,7 @@
                 "Id,Status,CurrentState,Service,Action,Callback,PostId,MediaId,CreationDate,StartTime,EndTime,Progress,Parameters,Result,Messages,Info";
             public static string Post = "Id,Title,ShortTitle,Summary,Content,PublicLink,PostDate,CreatedBy,ModifiedBy,Status";
             public static string MediaItem = "Id,Caption,PostId,CreationDate, Path, CreatedBy,Extension,Type";
-            public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs";
+            public static string Channel = "Id,Name,Description,Status,CreationDate,LastModified,Network,Account,NetworkId,Code,NetworkUrl,OriginalName,ProfileImageUrl,Credentials,Settings,Order,Configs,ParentId";
             public static string Resources = "Id,Key,Value,Language";
             public static string PostMedias = "MediaItemId,PostId";
             public static string Configs = "Id,EnumKey,Name,JsonValue,MasterId,CreationDate";

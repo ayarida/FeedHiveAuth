@@ -19,6 +19,7 @@
         public string ProfileImageUrl { get; set; }
         public string Credentials { get; set; }
         public string Settings { get; set; }
+        public string ParentId { get; set; }
         public int Order { get; set; }
         public string Configs { get; set; }
     }
