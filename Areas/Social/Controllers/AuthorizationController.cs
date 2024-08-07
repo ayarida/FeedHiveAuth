@@ -11,11 +11,13 @@ using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Security.Claims;
 using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.AuthorizationManager;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -24,11 +26,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     {
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
         protected ChannelRepository _channelService = Instances.Repositories.ChannelRepository;
+        protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<AuthorizationController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthorizationController(ILogger<AuthorizationController> logger)
+        public AuthorizationController(UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger)
         {
             _logger = logger;
+            this._userManager = userManager;
         }
         
         [PermissionFilter("Authorization_OAuthFlow")]
@@ -241,12 +246,19 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
         private async Task<IEnumerable<Channel>> SaveNewChannels(IEnumerable<Channel> channels)
         {
+            //var user = await _userManager.GetUserAsync(User);
+            var isAdmin = this.isAdmin().GetAwaiter().GetResult();
             foreach (var channel in channels)
             {
                 var oldChannel = Collections.Channels().FirstOrDefault(c =>
                     c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
                 if (oldChannel == null)
                 {
+                    if(isAdmin == true)
+                    {
+                        var masterId = _userService.GetUserParent(currUserId());
+                        channel.ParentId = masterId;
+                    }
                     var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);
                     channel.Id = newChannel.Id;
                 }
@@ -273,10 +285,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     channel.Id = oldChannel.Id;
                 }
             }
-
             return channels;
         }
-
 
         [PermissionFilter("Authorization_TelegramSignIn")]
         public IActionResult TelegramSignIn(string username, bool reauthorize = false)
@@ -331,6 +341,22 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             }
             //redirect = Url.Action("Index", "Channel", new { area = "social"});
             return RedirectToAction("Index", "Channels", new { area = "Social" });
+        }
+
+        public async Task<string> identityUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return userId;
+        }
+        public string currUserId()
+        {
+            return identityUserId().GetAwaiter().GetResult();
+        }
+        public async Task<bool> isAdmin()
+        {
+            var currUser = await _userManager.GetUserAsync(User);
+            var isAdmin = currUser!=null && await _userManager.IsInRoleAsync(currUser, "Admin");
+            return isAdmin;
         }
     }
 }
