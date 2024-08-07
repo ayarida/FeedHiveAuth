@@ -1,9 +1,10 @@
 ﻿using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Security.Claims;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
@@ -12,11 +13,15 @@ namespace FeedHiveAuth.Areas.Social.Controllers
     {
         private readonly ApplicationDbContext _context;
         protected ChannelRepository _channelRepository = Instances.Repositories.ChannelRepository;
+        protected UserRepository _userService = Instances.Repositories.UserRepository;
+        private readonly ILogger<AuthorizationController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-
-        public ChannelsController(ApplicationDbContext context)
+        public ChannelsController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger)
         {
             _context = context;
+            _userManager = userManager;
+            _logger = logger;
         }
 
         // GET: Social/Channels
@@ -25,6 +30,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public IActionResult Index()
         {
             var channels = _channelRepository.GlobalGetAll();
+            
+            if (isAdmin().GetAwaiter().GetResult())
+            {
+                var masterId = _userService.GetUserParent(currUserId());
+                channels = channels.Where(ch => ch.ParentId == masterId);
+            }
             return View(channels);
             //return _context.Channel != null ?
             //            View(await _context.Channel.ToListAsync()) :
@@ -188,6 +199,21 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         private bool ChannelExists(string id)
         {
             return (_context.Channel?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        public async Task<string> identityUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return userId;
+        }
+        public string currUserId()
+        {
+            return identityUserId().GetAwaiter().GetResult();
+        }
+        public async Task<bool> isAdmin()
+        {
+            var currUser = await _userManager.GetUserAsync(User);
+            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Admin");
+            return isAdmin;
         }
     }
 }

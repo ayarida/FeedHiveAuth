@@ -241,6 +241,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             /*TempData["channels"] = channels.ToList();*/
             if (channels.Count() >= 1 && !reauthorize)
                 _ = SaveNewChannels(channels);
+            
             return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
 
