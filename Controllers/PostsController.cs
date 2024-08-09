@@ -20,23 +20,18 @@ using System.Xml.Linq;
 namespace FeedHiveAuth.Controllers
 {
 
-    public class PostsController : Controller
+    public class PostsController : BaseController<PostsController>
     {
         protected PostRepository _postService = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
-
         private readonly UserManager<IdentityUser> UserManager;
 
-        public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger)
+        public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger) : base(userManager, logger)
         {
-            this.UserManager = userManager;
-
-            _logger = logger;
         }
-
 
         [HttpGet]
         [PermissionFilter("Posts_Create")]
@@ -504,16 +499,7 @@ namespace FeedHiveAuth.Controllers
             List<Post> publishedPosts = _postService.GetPublishedPosts();
             return publishedPosts;
         }      
-        public async Task<string> identityUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return userId;
-        }
-        public string currUserId()
-        {
-            return identityUserId().GetAwaiter().GetResult();
-        }
-
+        
         [PermissionFilter("Posts_Edit")]
         [HttpGet]
         public ActionResult Edit(string id)

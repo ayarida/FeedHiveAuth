@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Data;
+﻿using FeedHiveAuth.Controllers;
+using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using Microsoft.AspNetCore.Identity;
@@ -9,19 +10,16 @@ using System.Security.Claims;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
-    public class ChannelsController : Controller
+    public class ChannelsController : BaseController<ChannelsController>
     {
         private readonly ApplicationDbContext _context;
         protected ChannelRepository _channelRepository = Instances.Repositories.ChannelRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
-        private readonly ILogger<AuthorizationController> _logger;
+        private readonly ILogger<ChannelsController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ChannelsController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger)
+        public ChannelsController(UserManager<IdentityUser> userManager, ILogger<ChannelsController> logger) : base(userManager , logger)
         {
-            _context = context;
-            _userManager = userManager;
-            _logger = logger;
         }
 
         // GET: Social/Channels
@@ -30,16 +28,17 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public IActionResult Index()
         {
             var channels = _channelRepository.GlobalGetAll();
-            
-            if (isAdmin().GetAwaiter().GetResult())
+            var masterId = "";
+            if (isAdmin())
             {
-                var masterId = _userService.GetUserParent(currUserId());
+                masterId = _userService.GetUserParent(currUserId());
                 channels = channels.Where(ch => ch.ParentId == masterId);
             }
-            return View(channels);
-            //return _context.Channel != null ?
-            //            View(await _context.Channel.ToListAsync()) :
-            //            Problem("Entity set 'ApplicationDbContext.Channel'  is null.");
+            else if(isMaster()) { 
+                masterId = currUserId();
+                channels = channels.Where(ch=> ch.ParentId == masterId); 
+            }
+            return View(channels);    
         }
 
         // GET: Social/Channels/Details/5
@@ -77,19 +76,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return PartialView("~/Areas/Social/Views/Shared/_" + channelName + ".cshtml");
         }
 
-
-
-        /*        [HttpGet]
-                public ActionResult GetNetworkView(string partialName)
-                {
-                    return PartialView("~/Areas/Social/Views/Shared/" + partialName);
-                }
-        */
-
-
-        // POST: Social/Channels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [PermissionFilter("Channels_Create")]
@@ -123,8 +109,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         }
 
         // POST: Social/Channels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [PermissionFilter("Channels_Edit")]
         [ValidateAntiForgeryToken]
@@ -205,15 +189,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
         }
-        public string currUserId()
-        {
-            return identityUserId().GetAwaiter().GetResult();
-        }
-        public async Task<bool> isAdmin()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Admin");
-            return isAdmin;
-        }
+       
     }
 }

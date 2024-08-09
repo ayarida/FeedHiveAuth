@@ -1,4 +1,5 @@
-﻿using FeedHiveAuth.Areas.Social.Models;
+﻿using FeedHiveAuth.Areas.Social.Controllers;
+using FeedHiveAuth.Areas.Social.Models;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
@@ -6,6 +7,7 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Enums;
 using FeedHiveAuth.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -14,10 +16,15 @@ using System.Text.Json;
 
 namespace FeedHiveAuth.Controllers
 {
-    public class ConfigsController : Controller
+    public class ConfigsController : BaseController<ConfigsController>
     {
         protected ConfigsRepository _configsService = Instances.Repositories.ConfigsRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
+        private readonly ILogger<ConfigsController> _logger;
+        public ConfigsController(UserManager<IdentityUser> userManager, ILogger<ConfigsController> logger) : base(userManager, logger)
+        {
+
+        }
 
         [PermissionFilter("Configs_TechnicalConfigs")]
         [HttpGet]
@@ -94,9 +101,9 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public IActionResult Save(SocialConfigsViewModel configs)
         {
-           
-            var isAdmin = User.IsInRole("Admin");
-            var isMaster = User.IsInRole("Master");
+
+            var isAdmin = this.isAdmin();
+            var isMaster = this.isMaster();
             var masterId = GetCurrentUserId().GetAwaiter().GetResult();
             var socialConfigs = new SocialConfigs
             {
