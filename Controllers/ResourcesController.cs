@@ -11,15 +11,15 @@ namespace FeedHiveAuth.Controllers
     public class ResourcesController : Controller
     {
         protected ResourcesRepository _resourcesService = Instances.Repositories.ResourcesRepository;
+        
+        [HttpGet]
         [PermissionFilter("Resources_Index")]
-
         public ActionResult Index()
         {
             var Resources = _resourcesService.GetAll();
             return View(Resources);
         }
         [PermissionFilter("Resources_Create")]
-
         public ActionResult Create()
         {
             return View("Edit");
