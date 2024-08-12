@@ -2,6 +2,7 @@
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTwitter.Clients;
+using FeedHiveAuth.Controllers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Helpers;
@@ -22,18 +23,16 @@ using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
-    public class AuthorizationController : Controller
+    public class AuthorizationController : BaseController<AuthorizationController>
     {
         protected SubscriptionRepository _subscriptionService = Instances.Repositories.SubscriptionRepository;
         protected ChannelRepository _channelService = Instances.Repositories.ChannelRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<AuthorizationController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthorizationController(UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger)
+        public AuthorizationController(UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger) : base(userManager,logger)
         {
-            _logger = logger;
-            this._userManager = userManager;
+            
         }
         
         [PermissionFilter("Authorization_OAuthFlow")]
@@ -205,23 +204,27 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var jsonDmConfigs = JsonConvert.SerializeObject(dailymotionConfigs);
             ChannelErrorEnum error;
             var channel = _channelService.GetById(id, out error);
+            var masterId = "";
             switch (error)
             {
                 case ChannelErrorEnum.NOT_FOUND:
+                    if (isAdmin()) { masterId = _userService.GetUserParent(currUserId()); channel.ParentId = masterId; }
+                    else if (isMaster()) { masterId = currUserId(); }
+
                     channel = _channelService.Create(network, out error);
                     channel.Status = StatusEnum.Active.Value();
-                    channel.SubscriptionId = "1f59028d-15d0-4bf6-a61b-28f33b895310";
                     channel.Id = GuidExtension.GenerateGuid().ToString();
                     channel.Credentials = jsonDmConfigs;
                     channel.OriginalName = dailymotionConfigs.Application.ChannelName;
                     channel.NetworkId = "baaedba16b73e73577d7cd12e07158bd";
+                    channel.ParentId = masterId;
                     _channelService.Insert(channel);
                     break;
                 case ChannelErrorEnum.NO_ERROR:
                     return View(channel);
             }
             var allChannels = Collections.Channels();
-            return View("~/Areas/Social/Views/Channels/Index.cshtml", allChannels);
+            return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
 
         private IActionResult SaveChannels(IEnumerable<Channel> channels, bool reauthorize, SocialNetworkTypeEnum networkTypeEnum)
@@ -248,18 +251,21 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         private async Task<IEnumerable<Channel>> SaveNewChannels(IEnumerable<Channel> channels)
         {
             //var user = await _userManager.GetUserAsync(User);
-            var isAdmin = this.isAdmin().GetAwaiter().GetResult();
+
+            var masterId = "";
             foreach (var channel in channels)
             {
                 var oldChannel = Collections.Channels().FirstOrDefault(c =>
                     c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
                 if (oldChannel == null)
                 {
-                    if(isAdmin == true)
+                    if (isAdmin())
                     {
-                        var masterId = _userService.GetUserParent(currUserId());
+                        masterId = _userService.GetUserParent(currUserId());
                         channel.ParentId = masterId;
                     }
+                    else if (isMaster()) { masterId = currUserId(); channel.ParentId = masterId; }
+
                     var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);
                     channel.Id = newChannel.Id;
                 }
@@ -279,10 +285,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     }
 
                     Instances.Repositories.ChannelRepository.Update(oldChannel);
-                    /* result = oldChannel.Update(oldChannel.OriginalName,
-                         _adminWorkContext.getRequestData(Url.Action("Preview", "Channel",
-                             new { area = "Social", id = oldChannel.Id })));*/
-
                     channel.Id = oldChannel.Id;
                 }
             }
@@ -295,6 +297,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var success = false;
             var redirect = "";
             var message = "";
+            var masterId = "";
             var channels = new List<Channel> { };
             try
             {
@@ -316,12 +319,17 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     channels.Add(channel);
                     foreach (var ch in channels)
                     {
-                        //ch.SubscriptionId = subscription.Id;
                         ChannelErrorEnum error;
                         var oldChannel = _channelService.GetByNetwork(ch.Network, ch.NetworkId, out error);
                         switch (error)
                         {
                             case ChannelErrorEnum.NOT_FOUND:
+                                if (isAdmin())
+                                {
+                                    masterId = _userService.GetUserParent(currUserId());
+                                    ch.ParentId = masterId;
+                                }
+                                else if (isMaster()) { masterId = currUserId(); ch.ParentId = masterId; }
                                 var newChannel = _channelService.AddChannel(ch);
                                 break;
                             case ChannelErrorEnum.NO_ERROR:
@@ -343,7 +351,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             //redirect = Url.Action("Index", "Channel", new { area = "social"});
             return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
-
+/*
         public async Task<string> identityUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -353,11 +361,25 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             return identityUserId().GetAwaiter().GetResult();
         }
-        public async Task<bool> isAdmin()
+        public async Task<bool> isAdminAsync()
         {
             var currUser = await _userManager.GetUserAsync(User);
             var isAdmin = currUser!=null && await _userManager.IsInRoleAsync(currUser, "Admin");
             return isAdmin;
         }
+        public bool isAdmin()
+        {
+            return isAdminAsync().GetAwaiter().GetResult();
+        }
+        public async Task<bool> isMasterAsync()
+        {
+            var currUser = await _userManager.GetUserAsync(User);
+            var isMaster = currUser != null && await _userManager.IsInRoleAsync(currUser, "Master");
+            return isMaster;
+        }
+        public bool isMaster()
+        {
+            return isMasterAsync().GetAwaiter().GetResult();
+        }*/
     }
 }
