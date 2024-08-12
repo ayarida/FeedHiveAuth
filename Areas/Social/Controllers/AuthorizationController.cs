@@ -208,8 +208,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             switch (error)
             {
                 case ChannelErrorEnum.NOT_FOUND:
-                    if (isAdmin()) { masterId = _userService.GetUserParent(currUserId()); channel.ParentId = masterId; }
-                    else if (isMaster()) { masterId = currUserId(); }
+                    if (isAdmin() || isMaster()) { masterId = currUserId(); }
 
                     channel = _channelService.Create(network, out error);
                     channel.Status = StatusEnum.Active.Value();
@@ -259,13 +258,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                     c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
                 if (oldChannel == null)
                 {
-                    if (isAdmin())
+                    if (isAdmin() || isMaster())
                     {
-                        masterId = _userService.GetUserParent(currUserId());
+                        masterId = currUserId();
                         channel.ParentId = masterId;
                     }
-                    else if (isMaster()) { masterId = currUserId(); channel.ParentId = masterId; }
-
+                   
                     var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);
                     channel.Id = newChannel.Id;
                 }
@@ -324,12 +322,11 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                         switch (error)
                         {
                             case ChannelErrorEnum.NOT_FOUND:
-                                if (isAdmin())
+                                if (isAdmin() || isMaster())
                                 {
-                                    masterId = _userService.GetUserParent(currUserId());
+                                    masterId = currUserId();
                                     ch.ParentId = masterId;
                                 }
-                                else if (isMaster()) { masterId = currUserId(); ch.ParentId = masterId; }
                                 var newChannel = _channelService.AddChannel(ch);
                                 break;
                             case ChannelErrorEnum.NO_ERROR:
