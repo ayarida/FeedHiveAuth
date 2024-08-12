@@ -48,5 +48,15 @@ namespace FeedHiveAuth.Controllers
         {
             return isMasterAsync().GetAwaiter().GetResult();
         }
+        public async Task<bool> isEditorAsync()
+        {
+            var currUser = await _userManager.GetUserAsync(User);
+            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Editor");
+            return isAdmin;
+        }
+        public bool isEditor()
+        {
+            return isEditorAsync().GetAwaiter().GetResult();
+        }
     }
 }
