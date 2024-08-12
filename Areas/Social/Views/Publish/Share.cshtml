@@ -3,6 +3,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @model FeedHiveAuth.Areas.Social.Models.ShareView
+@using FeedHiveAuth.Data.Helpers
 
 @{
     var data = Model;
@@ -22,9 +23,18 @@
 
             <form id="form-share" method="post" action="send" class="p-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4>شبكات التواصل</h4>
+                    @if (allChannels.Count() != 0)
+                    {
+                        <h4>شبكات التواصل</h4>
 
-                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="width: 100px;color:white; max-width: 100%; background: #4cb87a; border: none">أرسل<i class="bi bi-share me-2"></i></button>
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="width: 100px;color:white; max-width: 100%; background: #4cb87a; border: none">أرسل<i class="bi bi-share me-2"></i></button>
+                    }
+                    else
+                    {
+                        <h4 style="background-color: #f44336;padding: 10px;border-radius: 4px;color: white;width: 100%;">
+                            @AppResources.Label("NoChannels", "ar")
+                        </h4>
+                    }
                 </div>
                 <hr />
                 <div class="channel-list my-3 d-flex" style="column-gap: 20px; overflow-x: auto">
@@ -86,15 +96,15 @@
                             <br />
                             @if (medias?.Count() > 0)
                             {
-                                foreach(var med in medias)
+                                foreach (var med in medias)
                                 {
-                                    
+
                                     <img src="@med.Path" />
                                     <br />
                                     <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@med.Id">
 
                                 }
-                                                            }
+                            }
                         </div>
                     </div>
 
