@@ -358,7 +358,7 @@ input.btn.btn-primary.mt-3:focus {
 label.custom-file-upload {
     color: white;
     background: #f4793b;
-    height: fit-content;
+    height: 60px;
     display: flex;
     border-radius: 5px;
     align-items: center;
