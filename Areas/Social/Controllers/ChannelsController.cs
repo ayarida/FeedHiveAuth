@@ -28,15 +28,28 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         public IActionResult Index()
         {
             var channels = _channelRepository.GlobalGetAll();
-            var masterId = "";
-            if (isAdmin())
+            var parentId = "";
+            if (isEditor())
             {
-                masterId = _userService.GetUserParent(currUserId());
-                channels = channels.Where(ch => ch.ParentId == masterId);
+                parentId = _userService.GetUserParent(currUserId());
+                channels = channels.Where(ch => ch.ParentId == parentId);
             }
-            else if(isMaster()) { 
-                masterId = currUserId();
-                channels = channels.Where(ch=> ch.ParentId == masterId); 
+            else
+            {
+                if (isAdmin())
+                {
+                    parentId = currUserId();
+                    channels = channels.Where(ch => ch.ParentId == parentId);
+
+                }
+                if (isMaster())
+                {
+                    var masterId = currUserId();
+                    var adminsOfMaster = _userService.GetWhosParentId(masterId).ToList(); //admins of the master
+                    //append masterID to the list before returning whole channels
+                    adminsOfMaster.Add(masterId);
+                    channels = channels.Where(channel => adminsOfMaster.Contains(channel.ParentId)).ToList();
+                }
             }
             return View(channels);    
         }

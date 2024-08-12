@@ -9,34 +9,57 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
 using FeedHiveAuth.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
-    public class PublishController : Controller
+    public class PublishController : BaseController<PublishController>
     {
         PostRepository _postService = Instances.Repositories.PostRepository;
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         OperationRepository _operationService = Instances.Repositories.OperationRepository;
-        ILogger<PostsController> _logger;
-
-        public PublishController(ILogger<PostsController> logger)
+        private readonly ILogger<PublishController> _logger;
+        public PublishController(UserManager<IdentityUser> userManager, ILogger<PublishController> logger) : base(userManager, logger)
         {
-            _logger = logger;
+
         }
         [PermissionFilter("Publish_GetChannels")]
         public IEnumerable<Channel> GetChannels(out PublishErrorEnum error)
         {
             var channels = Collections.Channels().Where(channel => channel.Status.In(new List<int> { StatusEnum.Active.Value(), StatusEnum.Expired.Value() }));
-
+            var parentId = "";
             if (!channels.Any())
             {
                 error = PublishErrorEnum.NO_CHANNELS;
                 return null;
             }
-            //channels.ForEach(x => x.Name = x.Name.Nval(x.OriginalName));
+            else
+            {
+                if (isEditor())
+                {
+                    parentId = _userService.GetUserParent(currUserId());
+                    channels = channels.Where(ch => ch.ParentId == parentId);
+                }
+                else
+                {
+                    if (isAdmin())
+                    {
+                        parentId = currUserId();
+                        channels = channels.Where(ch => ch.ParentId == parentId);
+
+                    }
+                    if (isMaster())
+                    {
+                        var masterId = currUserId();
+                        var adminsOfMaster = _userService.GetWhosParentId(masterId).ToList(); //admins of the master
+                        adminsOfMaster.Add(masterId);
+                        channels = channels.Where(channel => adminsOfMaster.Contains(channel.ParentId)).ToList();
+                    }
+                }
+            }
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
