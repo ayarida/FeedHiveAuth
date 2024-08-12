@@ -130,6 +130,7 @@ namespace FeedHiveAuth.Controllers
             if (isAdmin)
             {
                 var adminUsers = _userService.GetWhosParentId(currUserId()).ToList();
+                adminUsers.Add(currUserId()); //append admin posts to the list
                 posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
                 //posts = _postService.GetPosts();
             }
