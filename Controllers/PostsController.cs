@@ -27,8 +27,6 @@ namespace FeedHiveAuth.Controllers
         protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
-        private readonly UserManager<IdentityUser> UserManager;
-
         public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger) : base(userManager, logger)
         {
         }
@@ -123,24 +121,22 @@ namespace FeedHiveAuth.Controllers
         }
         [HttpGet]
         [PermissionFilter("Posts_List")]
-        
         public async Task<ActionResult> List()
         {
-            var user = await UserManager.GetUserAsync(User);
-            var isAdminTask = UserManager.IsInRoleAsync(user, "Admin");
-            var isAdmin = await isAdminTask;
+
+            var isAdmin = this.isAdmin();
             List<Post> posts;
             //Admin: return all posts who created them is member of admin team
             if (isAdmin)
             {
-                var adminUsers = _userService.GetWhosParentId(user.Id).ToList();
+                var adminUsers = _userService.GetWhosParentId(currUserId()).ToList();
                 posts = _postService.GetAdminUsersPostsSearch(adminUsers, "");
                 //posts = _postService.GetPosts();
             }
             //Else: return curr user posts
             else
             {
-                posts = _postService.GetCurrentUserPostsSearch(user.Id, "");
+                posts = _postService.GetCurrentUserPostsSearch(currUserId(), "");
             }
             foreach (var post in posts)
             {
@@ -179,12 +175,7 @@ namespace FeedHiveAuth.Controllers
             return View(post);
         }
 
-        public async Task<bool> isAdmin()
-        {
-            var currUser = await UserManager.GetUserAsync(User);
-            var isAdmin = await UserManager.IsInRoleAsync(currUser, "Admin");
-            return isAdmin;
-        }        
+            
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
