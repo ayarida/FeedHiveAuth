@@ -121,7 +121,7 @@ namespace FeedHiveAuth.Controllers
         }
         [HttpGet]
         [PermissionFilter("Posts_List")]
-        public async Task<ActionResult> List()
+        public ActionResult List()
         {
 
             var isAdmin = this.isAdmin();
