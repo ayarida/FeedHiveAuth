@@ -14,10 +14,62 @@ namespace FeedHiveAuth.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<T> _logger;
         private readonly UserManager<IdentityUser> _userManager;
-        public BaseController(UserManager<IdentityUser> userManager, ILogger<T> logger)
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public BaseController(UserManager<IdentityUser> userManager, ILogger<T> logger, RoleManager<IdentityRole> roleManager = null)
         {
             _logger = logger;
             _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        public List<IdentityUser> allUsers()
+        {
+            List<IdentityUser> users = _userManager.Users.ToList();
+            return users;
+        }
+        public List<IdentityRole> allRoles()
+        {
+            var availableRoles = _roleManager.Roles.ToList();
+            return availableRoles;
+        }
+
+        public async Task<IdentityUser> getIdentityUser()
+        {
+            return await _userManager.GetUserAsync(User);
+        }
+        public async Task<IdentityUser> getUserById(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
+        public async Task<IdentityResult> userCreateAsync(ApplicationUser user, string password)
+        {
+            return await _userManager.CreateAsync(user,password);
+        }
+        public async Task<IdentityResult> userUpdateAsync(IdentityUser user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+        public async Task<IdentityRole> getRoleById(string roleId)
+        {
+            return await _roleManager.FindByIdAsync(roleId);
+        }
+        public async Task<IdentityRole> getRoleByName(string roleName)
+        {
+            return await _roleManager.FindByNameAsync(roleName);
+        }
+        public async Task<IdentityResult> removeUserFromRoleAsync(IdentityUser user, string oldRole)
+        {
+            return await _userManager.RemoveFromRoleAsync(user, oldRole);
+        }
+        public async Task<IdentityResult> addUserToRole(IdentityUser user, string roleName)
+        {
+            return await _userManager.AddToRoleAsync(user, roleName);
+        }
+        public async Task<List<IdentityUser>> getAdminUsers()
+        {
+            return (List<IdentityUser>)await _userManager.GetUsersInRoleAsync("Admin");
+
         }
         public async Task<string> identityUserId()
         {
