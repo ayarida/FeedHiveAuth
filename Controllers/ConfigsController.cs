@@ -21,230 +21,227 @@ namespace FeedHiveAuth.Controllers
         protected ConfigsRepository _configsService = Instances.Repositories.ConfigsRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<ConfigsController> _logger;
-        public ConfigsController(UserManager<IdentityUser> userManager, ILogger<ConfigsController> logger) : base(userManager, logger)
+        public ConfigsController(UserManager<IdentityUser> userManager, ILogger<ConfigsController> logger) : base  (userManager, logger)
         {
 
         }
-
+/*
         [PermissionFilter("Configs_TechnicalConfigs")]
         [HttpGet]
         public ActionResult TechnicalConfigs()
         {
             var socialConfigs = SocialServiceHelper.getSocialConfigs();
             return View(socialConfigs);
-        }
+        }*/
 
+        [PermissionFilter("Configs_SocialConfigs")]
         [HttpGet]
-        public SocialConfigs SocialConfigs()
+        public ActionResult SocialConfigs()
         {
             var configs = _configsService.GetAllConfigs();
+            var currUser = currUserId();
+            var parentId = (isAdminOrMaster()) ? currUser : "";
 
-            var fbConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.Facebook.Value()).FirstOrDefault();
-            var telegramConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.Telegram.Value()).FirstOrDefault();
-            var wpConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.WhatsApp.Value()).FirstOrDefault();
-            var dailymotionConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.DailyMotion.Value()).FirstOrDefault();
-            var technicalConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.Technical.Value()).FirstOrDefault();
-            var twitterConf = configs.Where(conf => conf.EnumKey == SocialNetworkTypeEnum.Twitter.Value()).FirstOrDefault();
+            Configs GetConfig(SocialNetworkTypeEnum enumValue) => configs.FirstOrDefault(conf => conf.EnumKey == enumValue.Value() && conf.MasterId == parentId);
 
-            FacebookApp fbApp = JsonSerializer.Deserialize<FacebookApp>(fbConf.JsonValue) ?? new FacebookApp();
-            TelegramBot telegramBot = JsonSerializer.Deserialize<TelegramBot>(telegramConf.JsonValue) ?? new TelegramBot();
-            WhatsappApp wpApp = JsonSerializer.Deserialize<WhatsappApp>(wpConf.JsonValue) ?? new WhatsappApp();
-            DailymotionApp dmApp = JsonSerializer.Deserialize<DailymotionApp>(dailymotionConf.JsonValue) ?? new DailymotionApp();
-            AppTechnicalConfigs appTech = JsonSerializer.Deserialize<AppTechnicalConfigs>(technicalConf.JsonValue) ?? new AppTechnicalConfigs();
-            TwitterApp twitterApp = JsonSerializer.Deserialize<TwitterApp>(twitterConf.JsonValue) ?? new TwitterApp();
+            T DeserializeOrDefault<T>(string jsonValue) where T : new() => string.IsNullOrEmpty(jsonValue) ? new T() : JsonSerializer.Deserialize<T>(jsonValue) ?? new T();
 
+            var fbConf = GetConfig(SocialNetworkTypeEnum.Facebook);
+            var telegramConf = GetConfig(SocialNetworkTypeEnum.Telegram);
+            var wpConf = GetConfig(SocialNetworkTypeEnum.WhatsApp);
+            var dailymotionConf = GetConfig(SocialNetworkTypeEnum.DailyMotion);
+            var technicalConf = GetConfig(SocialNetworkTypeEnum.Technical);
+            var twitterConf = GetConfig(SocialNetworkTypeEnum.Twitter);
+
+            var fbApp = DeserializeOrDefault<FacebookApp>(fbConf?.JsonValue);
+            var telegramBot = DeserializeOrDefault<TelegramBot>(telegramConf?.JsonValue);
+            var wpApp = DeserializeOrDefault<WhatsappApp>(wpConf?.JsonValue);
+            var dmApp = DeserializeOrDefault<DailymotionApp>(dailymotionConf?.JsonValue);
+            var appTech = DeserializeOrDefault<AppTechnicalConfigs>(technicalConf?.JsonValue);
+            var twitterApp = DeserializeOrDefault<TwitterApp>(twitterConf?.JsonValue);
 
             var socialConfigs = new SocialConfigs
             {
-                TechnicalConfigs = new TechnicalConfigs
+                TechnicalConfigs = technicalConf != null ? new TechnicalConfigs
                 {
                     Id = technicalConf.Id,
-                    EnumKey = technicalConf.EnumKey,
+                    EnumKey = SocialNetworkTypeEnum.Technical.Value(),
                     appTechnicalConfigs = appTech
-                },
-                FacebookConfigs = new FacebookConfigs
+                } : null,
+                FacebookConfigs = fbConf != null ? new FacebookConfigs
                 {
                     Id = fbConf.Id,
                     EnumKey = fbConf.EnumKey,
                     Application = fbApp
-
-                },
-                TelegramConfigs = new TelegramConfigs
+                } : null,
+                TelegramConfigs = telegramConf != null ? new TelegramConfigs
                 {
                     Id = telegramConf.Id,
-                    EnumKey = telegramConf.EnumKey,
+                    EnumKey = SocialNetworkTypeEnum.Telegram.Value(),
                     Bot = telegramBot
-                },
-                DailymotionConfigs = new DailymotionConfigs
+                } : null,
+                DailymotionConfigs = dailymotionConf != null ? new DailymotionConfigs
                 {
                     Id = dailymotionConf.Id,
-                    EnumKey = dailymotionConf.EnumKey,
+                    EnumKey = SocialNetworkTypeEnum.DailyMotion.Value(),
                     Application = dmApp
-                },
-                TwitterConfigs = new TwitterConfigs
+                } : null,
+                TwitterConfigs = twitterConf != null ? new TwitterConfigs
                 {
                     Id = twitterConf.Id,
-                    EnumKey = twitterConf.EnumKey,
+                    EnumKey = SocialNetworkTypeEnum.Twitter.Value(),
                     Application = twitterApp
-                },
-                WhatsappConfigs = new WhatsappConfigs
+                } : null,
+                WhatsappConfigs = wpConf != null ? new WhatsappConfigs
                 {
                     Id = wpConf.Id,
-                    EnumKey = wpConf.EnumKey,
+                    EnumKey = SocialNetworkTypeEnum.WhatsApp.Value(),
                     Application = wpApp
-                }
+                } : null
             };
-
-            return socialConfigs;
-
+            return View("~/Views/Configs/TechnicalConfigs.cshtml",socialConfigs);
         }
         [HttpPost]
-        public IActionResult Save(SocialConfigsViewModel configs)
+        public async Task<IActionResult> Save(SocialConfigsViewModel configs)
         {
-
-            var isAdmin = this.isAdmin();
-            var isMaster = this.isMaster();
-            var masterId = GetCurrentUserId().GetAwaiter().GetResult();
-            var socialConfigs = new SocialConfigs
+            var parentId = (this.isAdminOrMaster()) ? this.currUserId() : ""; //Master or Admin
+            if(parentId.IsNotNullOrEmpty())
             {
-                TechnicalConfigs = new TechnicalConfigs
+                var socialConfigs = new SocialConfigs
                 {
-                    Id = configs.TechnicalConfigsId,
-                    EnumKey = SocialNetworkTypeEnum.Technical.Value(),
-                    appTechnicalConfigs = new AppTechnicalConfigs {
-                        PublicUrl = configs.PublicUrl,
-                        LocalUrl = configs.LocalUrl,
-                        DefaultImageUrl = configs.DefaultImageUrl
-                    }
-                },
-                FacebookConfigs = new FacebookConfigs
-                {
-                    Id = configs.FacebookConfigsId,
-                    EnumKey =SocialNetworkTypeEnum.Facebook.Value(),
-                    Application = new FacebookApp
+                    TechnicalConfigs = new TechnicalConfigs
                     {
-                        DisplayName = configs.DisplayName,
-                        AppId = configs.AppId,
-                        AppSecret = configs.AppSecret,
-                        Enable = configs.EnableFb
-                    }
-                },
-                TelegramConfigs = new TelegramConfigs
-                {  
-                    Id = configs.TelegramConfigsId,
-                    EnumKey = SocialNetworkTypeEnum.Telegram.Value(),
-                    Bot = new TelegramBot
+                        Id = configs.TechnicalConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.Technical.Value(),
+                        appTechnicalConfigs = new AppTechnicalConfigs
+                        {
+                            PublicUrl = configs.PublicUrl,
+                            LocalUrl = configs.LocalUrl,
+                            DefaultImageUrl = configs.DefaultImageUrl
+                        },
+                    },
+                    FacebookConfigs = new FacebookConfigs
                     {
-                        Username = configs.UsernameTelegram,
-                        Token = configs.TokenTelegram,
-                        Enable = configs.EnableTelegram
-                    }
-                },
-                DailymotionConfigs = new DailymotionConfigs
-                {   
-                    Id = configs.DailymotionConfigsId,
-                    EnumKey = SocialNetworkTypeEnum.DailyMotion.Value(),
-                    Application = new DailymotionApp
-                    {
-                        ChannelName = configs.ChannelName,
-                        APIKey = configs.APIKey,
-                        APISecret = configs.APISecret,
-                        Username = configs.UsernameDM,
-                        Password = configs.Password,
-                        CallBackUrl = configs.CallBackUrl,
-                        LocalPath = configs.LocalPath,
-                        Enable = configs.EnableDM
-                    }
-                },
-                TwitterConfigs = new TwitterConfigs
-                {
-                    Id = configs.TwitterConfigsId,
-                    EnumKey = SocialNetworkTypeEnum.Twitter.Value(),
-                    Application = new TwitterApp
-                    {
-                        ScreenName = configs.ScreenName,
-                        ConsumerKey = configs.ConsumerKey,
-                        ConsumerSecret = configs.ConsumerSecret,
-                        Token = configs.TokenX,
-                        TokenSecret = configs.TokenSecret,
-                        Enable = configs.EnableX
+                        Id = configs.FacebookConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.Facebook.Value(),
+                        Application = new FacebookApp
+                        {
+                            DisplayName = configs.DisplayName,
+                            AppId = configs.AppId,
+                            AppSecret = configs.AppSecret,
+                            Enable = configs.EnableFb
+                        },
 
-                    }
-                },
-                WhatsappConfigs = new WhatsappConfigs
-                {
-                    Id = configs.WhatsappConfigsId,
-                    EnumKey = SocialNetworkTypeEnum.WhatsApp.Value(),
-                    Application = new WhatsappApp
+                    },
+                    TelegramConfigs = new TelegramConfigs
                     {
-                        //bbs = configs
+                        Id = configs.TelegramConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.Telegram.Value(),
+                        Bot = new TelegramBot
+                        {
+                            Username = configs.UsernameTelegram,
+                            Token = configs.TokenTelegram,
+                            Enable = configs.EnableTelegram
+                        }
+                    },
+                    DailymotionConfigs = new DailymotionConfigs
+                    {
+                        Id = configs.DailymotionConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.DailyMotion.Value(),
+                        Application = new DailymotionApp
+                        {
+                            ChannelName = configs.ChannelName,
+                            APIKey = configs.APIKey,
+                            APISecret = configs.APISecret,
+                            Username = configs.UsernameDM,
+                            Password = configs.Password,
+                            CallBackUrl = configs.CallBackUrl,
+                            LocalPath = configs.LocalPath,
+                            Enable = configs.EnableDM
+                        }
+                    },
+                    TwitterConfigs = new TwitterConfigs
+                    {
+                        Id = configs.TwitterConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.Twitter.Value(),
+                        Application = new TwitterApp
+                        {
+                            ScreenName = configs.ScreenName,
+                            ConsumerKey = configs.ConsumerKey,
+                            ConsumerSecret = configs.ConsumerSecret,
+                            Token = configs.TokenX,
+                            TokenSecret = configs.TokenSecret,
+                            Enable = configs.EnableX
+
+                        }
+                    },
+                    WhatsappConfigs = new WhatsappConfigs
+                    {
+                        Id = configs.WhatsappConfigsId,
+                        EnumKey = SocialNetworkTypeEnum.WhatsApp.Value(),
+                        Application = new WhatsappApp
+                        {
+                            //bbs = configs
+                        }
                     }
-                }  
-            };
-            if (!isMaster && isAdmin) //Admin and never an Editor
-            {
-                masterId = _userService.GetUserParent(masterId);
+                };
+                if (socialConfigs.FacebookConfigs != null)
+                {
+                    string fbConfigsJson = JsonSerializer.Serialize(socialConfigs.FacebookConfigs.Application);
+                    //var oldFbConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Facebook.Value());
+
+                    if (socialConfigs.FacebookConfigs.Id == null) //insert new 
+                        _configsService.InsertConfigs(socialConfigs.FacebookConfigs.EnumKey, "FacebookConfigs", fbConfigsJson, parentId);
+                    else //update old
+                        _configsService.UpdateConfigs(socialConfigs.FacebookConfigs.EnumKey, socialConfigs.FacebookConfigs.Id, fbConfigsJson);
+                }
+                if (socialConfigs.TelegramConfigs != null)
+                {
+                    string telegramConfigsJson = JsonSerializer.Serialize(socialConfigs.TelegramConfigs.Bot);
+                    //var oldtelegramConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Telegram.Value());
+
+                    if (socialConfigs.TelegramConfigs.Id == null) //insert new
+                        _configsService.InsertConfigs(socialConfigs.TelegramConfigs.EnumKey, "TelegramConfigs", telegramConfigsJson, parentId);
+                    else //update old
+                        _configsService.UpdateConfigs(socialConfigs.TelegramConfigs.EnumKey, socialConfigs.TelegramConfigs.Id, telegramConfigsJson);
+                }
+                if (socialConfigs.DailymotionConfigs != null)
+                {
+                    string dailymotionConfigsJson = JsonSerializer.Serialize(socialConfigs.DailymotionConfigs.Application);
+                    //var olddailymotionConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.DailyMotion.Value());
+                    if (socialConfigs.DailymotionConfigs.Id == null)
+                        _configsService.InsertConfigs(socialConfigs.DailymotionConfigs.EnumKey, "DailymotionConfigs", dailymotionConfigsJson, parentId);
+                    else
+                        _configsService.UpdateConfigs(socialConfigs.DailymotionConfigs.EnumKey, socialConfigs.DailymotionConfigs.Id, dailymotionConfigsJson);
+                }
+                if (socialConfigs.TechnicalConfigs != null)
+                {
+                    string appConfigsJson = JsonSerializer.Serialize(socialConfigs.TechnicalConfigs.appTechnicalConfigs);
+                    //var oldTechnicalConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Technical.Value());
+                    if (socialConfigs.TechnicalConfigs.Id == null)
+                        _configsService.InsertConfigs(socialConfigs.TechnicalConfigs.EnumKey, "TechnicalConfigs", appConfigsJson, parentId);
+                    else
+                        _configsService.UpdateConfigs(socialConfigs.TechnicalConfigs.EnumKey, socialConfigs.TechnicalConfigs.Id, appConfigsJson);
+                }
+                if (socialConfigs.WhatsappConfigs != null)
+                {
+                    string wpConfigsJson = JsonSerializer.Serialize(socialConfigs.WhatsappConfigs.Application);
+                    if (socialConfigs.WhatsappConfigs.Id == null)
+                        _configsService.InsertConfigs(socialConfigs.WhatsappConfigs.EnumKey, "WhatsappConfigs", wpConfigsJson, parentId);
+                    else
+                        _configsService.UpdateConfigs(socialConfigs.WhatsappConfigs.EnumKey, socialConfigs.WhatsappConfigs.Id, wpConfigsJson);
+                }
+                if (socialConfigs.TwitterConfigs != null)
+                {
+                    string twitterConfigsJson = JsonSerializer.Serialize(socialConfigs.TwitterConfigs.Application);
+                    if (socialConfigs.TwitterConfigs.Id == null)
+                        _configsService.InsertConfigs(socialConfigs.TwitterConfigs.EnumKey, "TwitterConfigs", twitterConfigsJson, parentId);
+                    else
+                        _configsService.UpdateConfigs(socialConfigs.TwitterConfigs.EnumKey, socialConfigs.TwitterConfigs.Id, twitterConfigsJson);
+                }
             }
             
-            if (socialConfigs.FacebookConfigs != null)
-            {
-                string fbConfigsJson = JsonSerializer.Serialize(socialConfigs.FacebookConfigs.Application);
-                //var oldFbConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Facebook.Value());
-                
-                if(socialConfigs.FacebookConfigs.Id == null) //insert new 
-                    _configsService.InsertConfigs(socialConfigs.FacebookConfigs.EnumKey,"FacebookConfigs", fbConfigsJson, masterId);
-                else //update old
-                    _configsService.UpdateConfigs(socialConfigs.FacebookConfigs.EnumKey, socialConfigs.FacebookConfigs.Id, fbConfigsJson);
-            }
-            if (socialConfigs.TelegramConfigs != null)
-            {
-                string telegramConfigsJson = JsonSerializer.Serialize(socialConfigs.TelegramConfigs.Bot);
-                //var oldtelegramConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Telegram.Value());
-                
-                if (socialConfigs.TelegramConfigs.Id == null) //insert new
-                    _configsService.InsertConfigs(socialConfigs.TelegramConfigs.EnumKey, "TelegramConfigs", telegramConfigsJson, masterId); 
-                else //update old
-                    _configsService.UpdateConfigs(socialConfigs.TelegramConfigs.EnumKey,socialConfigs.TelegramConfigs.Id,telegramConfigsJson);
-            }
-            if (socialConfigs.DailymotionConfigs != null)
-            {
-                string dailymotionConfigsJson = JsonSerializer.Serialize(socialConfigs.DailymotionConfigs.Application);
-                //var olddailymotionConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.DailyMotion.Value());
-                if(socialConfigs.DailymotionConfigs.Id == null)
-                    _configsService.InsertConfigs(socialConfigs.DailymotionConfigs.EnumKey, "DailymotionConfigs", dailymotionConfigsJson, masterId);
-                else
-                    _configsService.UpdateConfigs(socialConfigs.DailymotionConfigs.EnumKey, socialConfigs.DailymotionConfigs.Id, dailymotionConfigsJson);
-            }
-            if (socialConfigs.TechnicalConfigs != null)
-            {
-                string appConfigsJson = JsonSerializer.Serialize(socialConfigs.TechnicalConfigs.appTechnicalConfigs);
-                //var oldTechnicalConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Technical.Value());
-                if (socialConfigs.TechnicalConfigs.Id == null)
-                    _configsService.InsertConfigs(socialConfigs.TechnicalConfigs.EnumKey, "TechnicalConfigs", appConfigsJson, masterId);
-                else
-                    _configsService.UpdateConfigs(socialConfigs.TechnicalConfigs.EnumKey, socialConfigs.TechnicalConfigs.Id, appConfigsJson);
-            }
-            if (socialConfigs.WhatsappConfigs != null)            {
-                string wpConfigsJson = JsonSerializer.Serialize(socialConfigs.WhatsappConfigs.Application);
-                if (socialConfigs.WhatsappConfigs.Id == null)
-                    _configsService.InsertConfigs(socialConfigs.WhatsappConfigs.EnumKey, "WhatsappConfigs", wpConfigsJson, masterId);
-                else
-                    _configsService.UpdateConfigs(socialConfigs.WhatsappConfigs.EnumKey, socialConfigs.WhatsappConfigs.Id, wpConfigsJson);
-            }
-            if (socialConfigs.TwitterConfigs != null)
-            {
-                string twitterConfigsJson = JsonSerializer.Serialize(socialConfigs.TwitterConfigs.Application);
-                if (socialConfigs.TwitterConfigs.Id == null)
-                    _configsService.InsertConfigs(socialConfigs.TwitterConfigs.EnumKey, "TwitterConfigs", twitterConfigsJson, masterId);
-                else
-                    _configsService.UpdateConfigs(socialConfigs.TwitterConfigs.EnumKey,socialConfigs.TwitterConfigs.Id, twitterConfigsJson);
-            }
-            return RedirectToAction("TechnicalConfigs", "Configs");
-        }
-        public async Task<string> GetCurrentUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return userId;
+            return RedirectToAction("SocialConfigs", "Configs");
         }
     }
 }
