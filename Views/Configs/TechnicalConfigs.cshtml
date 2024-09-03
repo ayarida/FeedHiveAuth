@@ -18,7 +18,7 @@
 
         <form asp-asp-controller="Configs" asp-action="Save" method="post">
             <div id="technicalConfigs" class="mt-3">
-                <input type="hidden" value="@(technicalConfigs.Id ?? "")" name="TechnicalConfigsId" />
+                <input type="hidden" value="@(technicalConfigs?.Id ?? "")" name="TechnicalConfigsId" />
                 <div id="PublicUrl">
                     <h6 class="config-title">Public Url</h6>
                     <div class="config-settings ps-md-5">
@@ -51,28 +51,28 @@
         @* FacebookConfigs *@
         <div id="facebookConfigs" class="mt-3">
             <h6 class="config-title mb-5">Facebook Configs</h6>
-            <input type="hidden" value="@(fbConfigs.Id ?? "")" name="FacebookConfigsId" />
+            <input type="hidden" value="@(fbConfigs?.Id ?? "")" name="FacebookConfigsId" />
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="facebook-name">Display Name</label>
-                    <input type="text" id="facebook-name" name="DisplayName" value="@(fbConfigs.Application?.DisplayName ?? "")">
+                    <input type="text" id="facebook-name" name="DisplayName" value="@(fbConfigs?.Application?.DisplayName ?? "")">
                 </div>
 
                 <div class="setting-instance">
                     <label for="facebook-id">App ID</label>
-                    <input type="text" id="facebook-id" name="AppId" value="@(fbConfigs.Application?.AppId ?? "")" />
+                    <input type="text" id="facebook-id" name="AppId" value="@(fbConfigs?.Application?.AppId ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="facebook-id">App Secrete</label>
-                    <input type="text" id="facebook-id" name="AppSecret" value="@(fbConfigs.Application?.AppSecret ?? "")" />
+                    <input type="text" id="facebook-id" name="AppSecret" value="@(fbConfigs?.Application?.AppSecret ?? "")" />
                 </div>
 
 
                     <div class="setting-instance enable-setting">
                         <label for="EnableFb">Enabled</label>
                         <label class="switch">
-                            <input type="checkbox" name="EnableFb" value="true" checked="@(fbConfigs.Application?.Enable ?? false)" id="EnableFb">
+                            <input type="checkbox" name="EnableFb" value="true" checked="@(fbConfigs?.Application?.Enable ?? false)" id="EnableFb">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -83,39 +83,39 @@
         @* TwitterConfigs *@
         <div id="twitterConfigs" class="mt-5">
             <h6 class="config-title mb-5">Twitter Configs</h6>
-                <input type="hidden" value="@(twitterConfigs.Id ?? "")" name="TwitterConfigsId" />
+                <input type="hidden" value="@(twitterConfigs?.Id ?? "")" name="TwitterConfigsId" />
 
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="twitter-name">Display Name</label>
-                    <input type="text" id="twitter-name" name="ScreenName" value="@(twitterConfigs.Application?.ScreenName ?? "")" />
+                    <input type="text" id="twitter-name" name="ScreenName" value="@(twitterConfigs?.Application?.ScreenName ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Cosumer Key</label>
-                    <input type="text" id="twitter-id" name="ConsumerKey" value="@(twitterConfigs.Application?.ConsumerKey ?? "")" />
+                    <input type="text" id="twitter-id" name="ConsumerKey" value="@(twitterConfigs?.Application?.ConsumerKey ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Cosumer Secret</label>
-                    <input type="text" id="twitter-id" name="ConsumerSecret" value="@(twitterConfigs.Application?.ConsumerSecret ?? "")" />
+                    <input type="text" id="twitter-id" name="ConsumerSecret" value="@(twitterConfigs?.Application?.ConsumerSecret ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Token</label>
-                    <input type="text" id="twitter-id" name="TokenX" value="@(twitterConfigs.Application?.Token ?? "")" />
+                    <input type="text" id="twitter-id" name="TokenX" value="@(twitterConfigs?.Application?.Token ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="twitter-id">Secret Token</label>
-                    <input type="text" id="twitter-id" name="TokenSecret" value="@(twitterConfigs.Application?.TokenSecret ?? "")" />
+                    <input type="text" id="twitter-id" name="TokenSecret" value="@(twitterConfigs?.Application?.TokenSecret ?? "")" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="twitter-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="twitter-status" name="EnableX" value="true" checked="@(twitterConfigs.Application?.Enabled ?? false)">
+                        <input type="checkbox" id="twitter-status" name="EnableX" value="true" checked="@(twitterConfigs?.Application?.Enabled ?? false)">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -125,24 +125,24 @@
         @* TelegramConfigs *@
         <div id="telegramConfigs" class="mt-5">
             <h6 class="config-title mb-5">Telegram Configs</h6>
-                <input type="hidden" value="@(telegramConfigs.Id ?? "")" name="TelegramConfigsId" />
+                <input type="hidden" value="@(telegramConfigs?.Id ?? "")" name="TelegramConfigsId" />
 
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="telegram-name">User Name</label>
-                        <input type="text" id="telegram-name" name="UsernameTelegram" value="@(telegramConfigs.Bot?.Username ?? "")" />
+                        <input type="text" id="telegram-name" name="UsernameTelegram" value="@(telegramConfigs?.Bot?.Username ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="telegram-id">Token</label>
-                    <input type="text" id="telegram-id" name="TokenTelegram" value="@(telegramConfigs.Bot?.Token ?? "")" />
+                    <input type="text" id="telegram-id" name="TokenTelegram" value="@(telegramConfigs?.Bot?.Token ?? "")" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="telegram-status">Enabled</label>
                     <label class="switch">
-                            <input type="checkbox" id="telegram-status" name="EnableTelegram" checked="@(telegramConfigs.Bot?.Enabled ?? false)" value="true">
+                            <input type="checkbox" id="telegram-status" name="EnableTelegram" checked="@(telegramConfigs?.Bot?.Enabled ?? false)" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -186,24 +186,24 @@
  *@        @* WhatsappConfigs *@
         <div id="whatsappConfigs" class="mt-5">
             <h6 class="config-title mb-5">Whatsapp Configs</h6>
-                <input type="hidden" value="@(wpConfigs.Id ?? "")" name="WhatsappConfigsId" />
+                <input type="hidden" value="@(wpConfigs?.Id ?? "")" name="WhatsappConfigsId" />
 
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="whatsapp-name">Display Name</label>
-                    <input type="text" id="whatsapp-name" name="Nickname" value="@(wpConfigs.Application?.Nickname ?? "")" />
+                    <input type="text" id="whatsapp-name" name="Nickname" value="@(wpConfigs?.Application?.Nickname ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="whatsapp-id">Whatsapp BBS</label>
-                    <input type="text" id="whatsapp-id" name="bbs" value="@(wpConfigs.Application?.bbs ?? "" )" />
+                    <input type="text" id="whatsapp-id" name="bbs" value="@(wpConfigs?.Application?.bbs ?? "" )" />
                 </div>
 
 
                 <div class="setting-instance enable-setting">
                     <label for="whatsapp-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="whatsapp-status" name="EnableWhatsapp" checked="@(wpConfigs.Application?.Enabled ?? false )" value="true">
+                        <input type="checkbox" id="whatsapp-status" name="EnableWhatsapp" checked="@(wpConfigs?.Application?.Enabled ?? false )" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -212,43 +212,43 @@
         @* DailyConfigs *@
         <div id="dailyMotionConfigs" class="mt-5">
             <h6 class="config-title mb-5">Dailymotion Configs</h6>
-                <input type="hidden" value="@(dailymotionConfigs.Id ?? "")" name="DailymotionConfigsId" />
+                <input type="hidden" value="@(dailymotionConfigs?.Id ?? "")" name="DailymotionConfigsId" />
 
             <div class="config-settings ps-md-5">
                 <div class="setting-instance">
                     <label for="dailymotion-name">Channel Name</label>
-                    <input type="text" id="dailymotion-name" name="ChannelName" value="@(dailymotionConfigs.Application?.ChannelName ?? "")" />
+                    <input type="text" id="dailymotion-name" name="ChannelName" value="@(dailymotionConfigs?.Application?.ChannelName ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-username">UserName</label>
-                    <input type="text" id="dailymotion-username" name="UsernameDM" value="@(dailymotionConfigs.Application?.Username ?? "")" />
+                    <input type="text" id="dailymotion-username" name="UsernameDM" value="@(dailymotionConfigs?.Application?.Username ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-apisecrete">API Secrete</label>
-                        <input type="text" id="dailymotion-apisecrete" name="APISecret" value="@(dailymotionConfigs.Application?.APISecret ?? "")" />
+                        <input type="text" id="dailymotion-apisecrete" name="APISecret" value="@(dailymotionConfigs?.Application?.APISecret ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-apikey">API Key</label>
-                        <input type="text" id="dailymotion-apikey" name="APIKey" value="@(dailymotionConfigs.Application?.APIKey ?? "")" />
+                        <input type="text" id="dailymotion-apikey" name="APIKey" value="@(dailymotionConfigs?.Application?.APIKey ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-callbackurl">Callback Url</label>
-                    <input type="text" id="dailymotion-callbackurl" name="CallBackUrl" value="@(dailymotionConfigs.Application?.CallBackUrl ?? "")" />
+                    <input type="text" id="dailymotion-callbackurl" name="CallBackUrl" value="@(dailymotionConfigs?.Application?.CallBackUrl ?? "")" />
                 </div>
 
 
                 <div class="setting-instance">
                     <label for="dailymotion-localpath">Local Path</label>
-                    <input type="text" id="dailymotion-localpath" name="LocalPath" value="@(dailymotionConfigs.Application?.LocalPath ?? "")" />
+                    <input type="text" id="dailymotion-localpath" name="LocalPath" value="@(dailymotionConfigs?.Application?.LocalPath ?? "")" />
                 </div>
 
                 <div class="setting-instance">
                     <label for="dailymotion-password">Password</label>
-                    <input type="text" id="dailymotion-password" name="Password" value="@(dailymotionConfigs.Application?.Password ?? "")" />
+                    <input type="text" id="dailymotion-password" name="Password" value="@(dailymotionConfigs?.Application?.Password ?? "")" />
                 </div>
 
 
@@ -256,7 +256,7 @@
                 <div class="setting-instance enable-setting">
                     <label for="dailymotion-status">Enabled</label>
                     <label class="switch">
-                        <input type="checkbox" id="dailymotion-status" name="EnableDM" checked="@(dailymotionConfigs.Application?.Enabled ?? false)" value="true">
+                        <input type="checkbox" id="dailymotion-status" name="EnableDM" checked="@(dailymotionConfigs?.Application?.Enabled ?? false)" value="true">
                         <span class="slider round"></span>
                     </label>
                 </div>
