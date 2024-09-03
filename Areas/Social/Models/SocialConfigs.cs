@@ -13,10 +13,9 @@ namespace FeedHiveAuth.Areas.Social.Models
         public Configs() : this(string.Empty)
         {
         }
-        public string Id { get; set; }
+        //public string ParentId { get; set; }
         public int EnumKey { get; set; }
         public DateTime CreationDate { get; set; }
-        //public int EnumKey { get; set; }
         public string Name { get; set; }
         public string JsonValue { get; set; }
         public string MasterId { get; set; }
