@@ -110,5 +110,10 @@ namespace FeedHiveAuth.Controllers
         {
             return isEditorAsync().GetAwaiter().GetResult();
         }
+
+        public bool isAdminOrMaster()
+        {
+            return (isMaster() || isAdmin());
+        }
     }
 }
