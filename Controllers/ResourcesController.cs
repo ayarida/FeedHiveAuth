@@ -16,7 +16,7 @@ namespace FeedHiveAuth.Controllers
         [PermissionFilter("Resources_Index")]
         public ActionResult Index()
         {
-            var Resources = _resourcesService.GetAll();
+            var Resources = _resourcesService.GetAll().OrderBy(r => r.Key);
             return View(Resources);
         }
         [PermissionFilter("Resources_Create")]
