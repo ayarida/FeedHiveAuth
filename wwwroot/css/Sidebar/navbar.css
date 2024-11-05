@@ -11,15 +11,15 @@
     justify-content: space-evenly;
 }
 
-    .card-banner .title {
-        color: #3a7cf4;
-    }
+.card-banner .title {
+    color: #3a7cf4;
+}
 
-    .card-banner button {
-        background: #3477f5;
-        border-radius: 15px;
-        color: white;
-    }
+.card-banner button {
+    background: #3477f5;
+    border-radius: 15px;
+    color: white;
+}
 
 .search {
     width: 20%;
@@ -47,10 +47,10 @@
     width: 25%;
 }
 
-    .left-header .bell-icon {
-        margin-top: 40px;
-        font-size: 20px;
-    }
+.left-header .bell-icon {
+    margin-top: 40px;
+    font-size: 20px;
+}
 
 .dot {
     height: 30px;
@@ -110,6 +110,8 @@ i.bi.bi-bell.bell-icon {
         display: flex;
         height: 100%;
         flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 
     .bottom-list {
@@ -161,6 +163,6 @@ nav#main-navbar {
 
 @media (min-width: 992px) {
     .list-group.list-group-flush {
-        max-height: 280px;
+        /*! max-height: 280px; */
     }
 }
