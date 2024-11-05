@@ -2,6 +2,7 @@
 using FeedHiveAuth.Areas.Social.SocialFacebook.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTelegram.Handlers;
 using FeedHiveAuth.Areas.Social.SocialTwitter.Clients;
+using FeedHiveAuth.Areas.Social.SocialTwitter.Handlers;
 using FeedHiveAuth.Controllers;
 using FeedHiveAuth.Data;
 using FeedHiveAuth.Data.Extensions;
@@ -19,7 +20,10 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Channels;
+using Channel = FeedHiveAuth.Models.Channel;
 using twtAuthorizationManager =FeedHiveAuth.Areas.Social.SocialTwitter.Handlers.AuthorizationManager;
+using fbAuthorizationManager = FeedHiveAuth.Areas.Social.SocialFacebook.Handlers.AuthorizationManager;
 namespace FeedHiveAuth.Areas.Social.Controllers
 {
     [Area("Social")]
@@ -82,10 +86,12 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             var success = false;
             var redirect = "";
             var message = "";
+            var result = "";
             try
             {
                 var baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs.appTechnicalConfigs.LocalUrl;
-                var result = twtAuthorizationManager.StartOAuthFlow(baseUrl,false);
+                var twitterConfigs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
+                result = twtAuthorizationManager.StartOAuthFlow(baseUrl,false, twitterConfigs);
                 if (result.IsNotNullOrEmpty())
                 {
                     success = true;
@@ -101,7 +107,8 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 //Logger.Error(this, "Couldn't start twitter authentication process", ex);
                 message = "Couldn't start twitter authentication process: " + ex.FullMessage();
             }
-            return Json(new { success, redirect, message });
+            return Redirect(result);
+           // return Json(new { success, redirect, message });
         }
         #region facebook
         [PermissionFilter("Authorization_FacebookOAuthFlow")]
@@ -119,7 +126,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 #else
             baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.PublicUrl;
 #endif
-                var result = AuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize).Decode();
+                var result = fbAuthorizationManager.StartOAuthFlow(baseUrl, type, reauthorize).Decode();
                 //var result = "";
                 if (result.IsNotNullOrEmpty())
                 {
@@ -177,7 +184,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 return null;
             }
         }
-        [PermissionFilter("Authorization_TwitterSignIn")]
+       // [PermissionFilter("Authorization_TwitterSignIn")]
         public async Task<IActionResult> TwitterSignIn(string oauth_token, string oauth_verifier)
         {
             if (string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_verifier))
@@ -185,17 +192,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 return BadRequest("Missing OAuth token or verifier");
             }
 
-            /*var twitterClient = twtAuthorizationManager.
-
-            var accessToken = await twitterClient.GetAccessTokenAsync(oauth_token, oauth_verifier);
-            var twitterUser = await twitterClient.GetUserProfileAsync(accessToken);*/
-
-            // Here, you can use the twitterUser object to create or update the user in your application
-            // Example: var user = await _userService.FindOrCreateUserAsync(twitterUser.Name, twitterUser.Email, twitterUser.Id);
-
-            // Sign in the user using a local cookie or other method
-
-            return Redirect("https://socialpublisher.net/"); // Redirect to the desired URL after successful sign-in
+            var channel = TwitterService.GetChannelInfo(oauth_token, oauth_verifier);
+            if (channel.NetworkId == null)
+            {
+                Debug.WriteLine("Couldn't authorize the selected twitter account");
+                return RedirectToAction("Create", "Channels", new { area = "social", type = SocialNetworkTypeEnum.Twitter.Key() });
+            }
+            var reauthorize = false;
+            return SaveChannel(channel, reauthorize, SocialNetworkTypeEnum.Twitter);
         }
         [PermissionFilter("Authorization_DailymotionSignIn")]
         public IActionResult DailymotionSignIn(string network, string id)
@@ -246,7 +250,67 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             
             return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
+        private IActionResult SaveChannel(Channel channel,bool  reauthorize, SocialNetworkTypeEnum networkTypeEnum)
+        {
+            if (reauthorize)
+            {
+                var networkType = networkTypeEnum.Key();
+                var existingChannelsIds = Collections.Channels().Where(channel => channel.Network.EqualsIgnoreCase(networkType) && channel.Status.NotIn(new List<int> { StatusEnum.Deleted.Value() })).Select(channel => channel.NetworkId);
+                
+                channel = existingChannelsIds.ContainsIgnoreCase(channel.NetworkId) == true ? null : channel ;
+                if (channel== null)
+                {
+                    _logger.LogError("********************* The reauthorized channel doesn't exist *********************");
+                    return RedirectToAction("Create", "Channels", new { area = "social", type = networkType });
+                }
+            }
 
+            /*TempData["channels"] = channels.ToList();*/
+            if ( !reauthorize)
+                _ = SaveNewChannel(channel);
+
+            return RedirectToAction("Index", "Channels", new { area = "Social" });
+        }
+        private async Task<Channel> SaveNewChannel(Channel channel)
+        {
+            //var user = await _userManager.GetUserAsync(User);
+
+            var masterId = "";
+           
+                var oldChannel = Collections.Channels().FirstOrDefault(c =>
+                    c.NetworkId.EqualsIgnoreCase(channel.NetworkId) && c.Network.EqualsIgnoreCase(channel.Network));
+                if (oldChannel == null)
+                {
+                    if (isAdmin() || isMaster())
+                    {
+                        masterId = currUserId();
+                        channel.ParentId = masterId;
+                    }
+
+                    var newChannel = Instances.Repositories.ChannelRepository.AddChannel(channel);
+                    channel.Id = newChannel.Id;
+                }
+                else
+                {
+                    oldChannel.OriginalName = channel.OriginalName;
+                    oldChannel.NetworkUrl = channel.NetworkUrl;
+                    oldChannel.Credentials = channel.Credentials;
+                    oldChannel.Status = StatusEnum.Active.Value();
+                    if (oldChannel.Status.Equals(StatusEnum.Deleted.Value()))
+                    {
+                        oldChannel.Name = channel.Name;
+                        oldChannel.Description = channel.Description;
+                        oldChannel.ProfileImageUrl = channel.ProfileImageUrl;
+                        oldChannel.CreationDate = channel.CreationDate;
+                        oldChannel.Settings = channel.Settings;
+                    }
+
+                    Instances.Repositories.ChannelRepository.Update(oldChannel);
+                    channel.Id = oldChannel.Id;
+                
+            }
+            return channel;
+        }
         private async Task<IEnumerable<Channel>> SaveNewChannels(IEnumerable<Channel> channels)
         {
             //var user = await _userManager.GetUserAsync(User);

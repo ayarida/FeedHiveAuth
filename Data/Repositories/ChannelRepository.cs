@@ -86,10 +86,16 @@ namespace FeedHiveAuth.Data.Repositories
         {
             foreach (var ch in channels)
             {
-                ch.Status = StatusEnum.Active.Value();
-                ch.Id = GuidExtension.GenerateGuid().ToString();
-                ch.CreationDate = DomainTime.Now();
-                this.Insert(ch);
+                try
+                {
+                    ch.Status = StatusEnum.Active.Value();
+                    ch.Id = GuidExtension.GenerateGuid().ToString();
+                    ch.CreationDate = DomainTime.Now();
+                    this.Insert(ch);
+                }
+                catch (Exception ex)
+                {
+                }
             }
             //this.Insert(channels);
             //Collections.RefreshChannels();

@@ -24,9 +24,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
         private readonly ILogger<ExternalLoginModel> _logger;
         #region account
         protected readonly TwitterConfigs tConfigs;
-        public static Channel GetChannelInfo(string token, string verifier, Guid subscriptionId)
+        public static Channel GetChannelInfo(string token, string verifier)
         {
-            var credentials = AuthorizationManager.GenerateAccessToken(token, verifier, subscriptionId);
+            var credentials = AuthorizationManager.GenerateAccessToken(token, verifier);
             if (credentials == null)
             {
                 return null;
@@ -48,14 +48,14 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
 
             return new Channel()
             {
+                Network = SocialNetworkTypeEnum.Twitter.Key(),
                 OriginalName = user.Name,
                 Description = user.Description,
                 ProfileImageUrl = user.ProfileImageUrlHttps,
                 NetworkId = credentials.UserId.ToString(),
                 NetworkUrl = "https://twitter.com/" + user.ScreenName,
-                Network = SocialNetworkTypeEnum.Twitter.Key(),
+                Credentials = credentials.Serialize(),
                 Account = SocialAccountTypeEnum.Profile.Key(),
-                Credentials = credentials.Serialize()
             };
         }
 

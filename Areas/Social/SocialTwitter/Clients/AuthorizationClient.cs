@@ -23,10 +23,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Clients
 
         public IRestResponse GenerateRequestToken( bool reauthorize = false)
         {
-          var url = "oauth / request_token";
-          var parms = new Dictionary<string, object>
+            var parms = new Dictionary<string, object>
             {
-                { "oauth_callback", $"{CallbackUrl}&reauthorize={reauthorize.ToString().ToLower()}" }
+                { "oauth_callback", $"{CallbackUrl}?reauthorize={reauthorize.ToString().ToLower()}" }
             };
             return Post("/request_token", parms);
         }
