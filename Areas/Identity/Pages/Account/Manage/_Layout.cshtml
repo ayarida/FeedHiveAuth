@@ -1,19 +1,21 @@
-﻿@{
+﻿@using FeedHiveAuth.Data.Helpers;
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
     {
         Layout = parentLayout.ToString();
     }
     else
     {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        // Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }
+
 }
 
 <div class="card p-3">
-    <h1>إدارة حسابك</h1>
+    <h1>@AppResources.Label("Manage Account")</h1>
 
     <div>
-        <h2>تغيير إعدادات حسابك</h2>
+        <h2>@AppResources.Label("change account settings")</h2>
         <hr />
         <div class="row g-5">
             <div class="col-md-3">
