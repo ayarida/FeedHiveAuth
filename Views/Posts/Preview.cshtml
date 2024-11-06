@@ -12,6 +12,8 @@
     var post = Model;
     var operation = post.Operations.OrderBy(o => o.CreationDate).Reverse();
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var configs = SocialServiceHelper.getSocialConfigs();
+    var defaultimg = configs.TechnicalConfigs?.appTechnicalConfigs?.DefaultImageUrl ?? "";
 
 }
 
@@ -105,7 +107,7 @@
                                 </h5>
 
                                 <div>
-                                    <img src="~/Static/Images/no-img.jpg" style="border: 1px solid grey; width: 300px; max-width: 100%" />
+                                    <img src="@defaultimg" style="border: 1px solid grey; width: 300px; max-width: 100%" />
                                 </div>
                             }
                         </div>

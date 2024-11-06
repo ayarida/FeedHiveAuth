@@ -1,8 +1,10 @@
 ﻿@model FeedHiveAuth.Models.Post
-
+@using FeedHiveAuth.Data.Helpers;
 
 @{
     var postInfo = Model;
+    var configs = SocialServiceHelper.getSocialConfigs();
+    var defaultimg = configs.TechnicalConfigs?.appTechnicalConfigs?.DefaultImageUrl ?? "";
 }
 
 
@@ -11,7 +13,7 @@
     <div class="channelTop">
         <i class="bi bi-three-dots"></i>
         <div class="facebookChannelInfo">
-            <img src="~/Static/Images/no-img.jpg" class="channel-img">
+            <img src="@defaultimg" class="channel-img">
             <div class="publish-info">
                 <div>Feedhive</div>
                 <div class="d-flex" id="facebook-time"><span>Published by OCPublisher </span><i class="bi bi-question-circle"></i> <p>Just now</p> <i class="bi bi-globe-americas"></i> </div>
