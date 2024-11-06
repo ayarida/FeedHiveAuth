@@ -1,8 +1,9 @@
 ﻿@page
 @using Microsoft.AspNetCore.Http.Features
 @model TwoFactorAuthenticationModel
+@using FeedHiveAuth.Data.Helpers;
 @{
-    ViewData["Title"] = "المصادقة الثنائية";
+    ViewData["Title"] = @AppResources.Label("two factor authentication");
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 

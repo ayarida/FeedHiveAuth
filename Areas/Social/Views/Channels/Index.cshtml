@@ -2,6 +2,8 @@
 @using FeedHiveAuth.Models.Enums
 @using FeedHiveAuth.Data.Extensions
 @using FeedHiveAuth.Services
+@using FeedHiveAuth.Data.Helpers;
+
 
 @{
     ViewData["Title"] = "Index";
@@ -11,6 +13,8 @@
     var networks = EnumExtension.GetAllList<SocialNetworkTypeEnum>();
     var accounts = EnumExtension.GetAllList<SocialAccountTypeEnum>();
     var curr = GlobalContext.UserConfigs?.UserData;
+    var configs = SocialServiceHelper.getSocialConfigs();
+    var defaultimg = configs.TechnicalConfigs?.appTechnicalConfigs?.DefaultImageUrl ?? "";
 }
 
 
@@ -41,7 +45,7 @@
                     else
                     {
                         <div class="d-flex align-items-center">
-                            <img src="~/Static/Images/no-img.jpg" style="border: 1px solid grey;" />
+                            <img src="@defaultimg" style="border: 1px solid grey;" />
 
                             <span>@channel.OriginalName</span>
                         </div>

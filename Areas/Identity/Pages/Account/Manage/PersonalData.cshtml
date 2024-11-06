@@ -1,5 +1,6 @@
 ﻿@page
 @model PersonalDataModel
+@using FeedHiveAuth.Data.Helpers;
 @{
     ViewData["Title"] = "البيانات الشخصية";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
@@ -9,21 +10,21 @@
 
 <div class="row">
     <div class="col-md-6">
-        <p>يحتوي حسابك على البيانات الشخصية التي منحتنا إياها. تتيح لك هذه الصفحة بتنزيل تلك البيانات أو حذفها.</p>
+        <p>@AppResources.Label("account content")</p>
         <p>
-            <strong>سيؤدي حذف هذه البيانات إلى إزالة حسابك بشكل دائم، ولا يمكن استرداد هذه البيانات.</strong>
+            <strong>@AppResources.Label("delete account warning")</strong>
         </p>
         <form id="download-data" asp-page="DownloadPersonalData" method="post">
-            <button class="btn btn-primary mb-3" type="submit" style="max-width: 100%">تحميل</button>
+            <button class="btn btn-primary mb-3" type="submit" style="max-width: 100%">@AppResources.Label("upload")</button>
         </form>
         <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">احذف هذا الحساب</a>
+            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">@AppResources.Label("delete account")</a>
         </p>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
 
 <style>
