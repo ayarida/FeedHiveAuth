@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
-
+using FeedHiveAuth.Data.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -126,11 +126,11 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account.Manage
                     "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                StatusMessage = "تم إرسال رابط التأكيد لتغيير البريد الإلكتروني. يرجى التحقق من بريدك الإلكتروني.";
+                StatusMessage = @AppResources.Label("confirm email");
                 return RedirectToPage();
             }
 
-            StatusMessage = "تم تحديث بريدك الإلكتروني";
+            StatusMessage =@AppResources.Label("email updated");
             return RedirectToPage();
         }
 
