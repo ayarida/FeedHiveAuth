@@ -134,8 +134,9 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             try
             {
                 var isVideo = mediaItem.Type.Equals(MediaTypeEnum.Video.Value());
-                
-                fileStream = MediaExtension.GetStream((isVideo ? null : "twitter"));
+
+                //fileStream = MediaExtension.GetStream((isVideo ? null : "twitter"));
+                fileStream = mediaItem.GetStream();
                 var length = fileStream.Length;
                 var type = MimeTypes.GetMimeType(mediaItem.Path);
                 var configs = SocialServiceHelper.getSocialConfigs().TwitterConfigs;
@@ -150,7 +151,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
                     return null;
                 }
 
-                var chunkSize = configs.ChunkSizeMB * 1000000;
+                var chunkSize = configs.Application.ChunkSizeMB * 1000000;
                 var start = 0;
                 var index = 0;
                 var remaining = length;
@@ -204,7 +205,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
         private static IRestResponse<TwitterWebResponse> ChunkUploadWithRetry(Operation operation, MediaClient client, ulong id, byte[] chunk, int index, int retry = 5, int sleep = 1000)
         {
             var retryTimes = 6 - retry;
-            operation.UpdateCurrentState("Uploading video retry " + retryTimes);
+            operation.UpdateCurrentState("Uploading media retry " + retryTimes);
             var result = client.AppendUpload(id, chunk, index);
             if (result.IsSuccessful || retry <= 0)
             {

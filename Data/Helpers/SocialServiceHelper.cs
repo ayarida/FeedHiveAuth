@@ -4,7 +4,11 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Models.Enums;
+using Microsoft.Build.Evaluation;
+using System.Net;
+using System.Security.Policy;
 using System.Text.Json;
+using Operation = FeedHiveAuth.Models.Operation;
 
 namespace FeedHiveAuth.Data.Helpers
 {
@@ -61,6 +65,7 @@ namespace FeedHiveAuth.Data.Helpers
                 {
                     Id = twitterConf.Id,
                     EnumKey = twitterConf.EnumKey,
+                 
                     Application = twitterApp
                 },
                 WhatsappConfigs = new WhatsappConfigs
@@ -141,14 +146,12 @@ namespace FeedHiveAuth.Data.Helpers
 
         public static Stream GetStream(this MediaItem mediaItem, string preset = null)
         {
-            //var isLocal = mediaItem.Storage()?.Type == MediaSourceEnum.Local.Key() && string.IsNullOrWhiteSpace(preset);
-            //if (!isLocal && operation != null)
-            //{
-            //    operation.UpdateCurrentState("Downloading media from url");
-            //}
+            byte[] imageData = null;
 
-                          
-                return (string.IsNullOrWhiteSpace(preset) ? mediaItem.ThumbnailUrl.GetStreamFromUrl() : mediaItem.ThumbnailUrl.AddParameter("preset", preset).GetStreamFromUrl());
+            using (var wc = new WebClient())
+                imageData = wc.DownloadData(mediaItem.Path.ComposeSafeUrl(false));
+
+            return new MemoryStream(imageData);
         }
     }
 }

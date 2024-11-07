@@ -69,9 +69,11 @@ namespace FeedHiveAuth.Areas.Social.Models
                         ConsumerKey= "xlqMf0BnlgrJ99GESlxgJGMeg",
                         ConsumerSecret= "OUfKiyqJmJlh6EDIS6rDkzUV524qfy20QJErzNi7nyATBuO7Jv",
                         Token= "1801170753942896641-5AQZtfUTrDX7IRpXciHwowL0k02EUe",
-                        TokenSecret= "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5",
-                        Enable=true
+                       TokenSecret= "EF2rJuHcWam6aMjgZVH1f67KytxO41FWIbqQwn7Sj9BC5",
+                        Enable=true,
+                        ChunkSizeMB = 5
                     }
+                  
                 },
                 InstagramConfigs = new FacebookConfigs { Application = new FacebookApp() },
                 DailymotionConfigs = new DailymotionConfigs
@@ -151,7 +153,7 @@ namespace FeedHiveAuth.Areas.Social.Models
     public class TwitterConfigs : Configs
     {
         public TwitterApp Application { get; set; }
-        public int ChunkSizeMB { get; set; }
+       
         public TrendingTopics TrendingTopics { get; set; }
     }
     public class TwitterApp
@@ -163,6 +165,7 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string TokenSecret { get; set; }
         public bool Enable { get; set; } = false;
         public bool Enabled => Enable && ConsumerKey.IsNotNullOrEmpty() && ConsumerSecret.IsNotNullOrEmpty();
+        public int ChunkSizeMB { get; set; }
     }
     public class TrendingTopics
     {

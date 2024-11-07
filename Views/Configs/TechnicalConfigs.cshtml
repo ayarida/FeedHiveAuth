@@ -110,7 +110,10 @@
                     <label for="twitter-id">Secret Token</label>
                     <input type="text" id="twitter-id" name="TokenSecret" value="@(twitterConfigs?.Application?.TokenSecret ?? "")" />
                 </div>
-
+                    <div class="setting-instance">
+                        <label for="twitter-id">Chunk Size (MB)</label>
+                        <input type="text" id="twitter-id" name="ChunkSizeMB" value="@(twitterConfigs?.Application?.ChunkSizeMB ?? 0)" />
+                    </div>
 
                 <div class="setting-instance enable-setting">
                     <label for="twitter-status">Enabled</label>
