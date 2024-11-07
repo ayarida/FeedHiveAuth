@@ -10,6 +10,7 @@ namespace FeedHiveAuth.Controllers
     public class MediaItemController : Controller
     {
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
+        protected PostRepository _postService = Instances.Repositories.PostRepository;
         private readonly ILogger<PostsController> _logger;
         public MediaItemController()
         {
@@ -50,7 +51,7 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [HttpPost]
         [PermissionFilter("MediaItem_SaveMedia")]
- 
+
         public IActionResult SaveMedia()
         {
             if (HttpContext.Request.Form.Files.Any())
@@ -92,13 +93,23 @@ namespace FeedHiveAuth.Controllers
         }
         [HttpDelete]
         [PermissionFilter("MediaItem_DeleteMediaItem")]
-        public void DeleteMediaItem(MediaItem mediaItem)
+        public void DeleteMediaItem(string id)
         {
-            _mediaItemService.Delete(mediaItem.Id);
+            var relatedPostMedias = _mediaItemService.GetPostMediaRelations(id);
+
+            // If related, delete those entries first
+            if (relatedPostMedias != null && relatedPostMedias.Any())
+            {
+                foreach (var postMedia in relatedPostMedias)
+                {
+                    _mediaItemService.DeletePostMedia(postMedia.MediaItemId, postMedia.PostId);
+                }
+            }
+            _mediaItemService.Delete(id);
         }
         [HttpDelete]
         [PermissionFilter("MediaItem_DeletePostMedia")]
-        public void DeletePostMedia(string media,string post)
+        public void DeletePostMedia(string media, string post)
         {
             _mediaItemService.DeletePostMedia(media, post);
         }
