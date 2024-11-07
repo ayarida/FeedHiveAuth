@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Data.Repositories
             Columns = Database.Columns.MediaItem;
         }
 
-        public List<MediaItem> MediasList(IFormFileCollection files,string currentuser)
+        public List<MediaItem> MediasList(IFormFileCollection files, string currentuser)
         {
             //convert post.medias list to objects 
             //convert objects to mediaItem objects 
@@ -43,7 +43,7 @@ namespace FeedHiveAuth.Data.Repositories
                 mediaItem.Path = baseUrl + "uploads/" + file.FileName;
                 //mediaItem.CreatedBy = GlobalContext.UserConfigs?.UserData?.Id;
                 medias.Add(mediaItem);
-                
+
             }
             return medias;
 
@@ -88,11 +88,11 @@ namespace FeedHiveAuth.Data.Repositories
         //create the media in mediaitem table 
         public List<MediaItem> InsertPostMedia(List<MediaItem> postMedias, string postId)
         {
-            foreach(var mediaItem in postMedias) 
+            foreach (var mediaItem in postMedias)
             {
                 //Id, Caption, postId, creationDate, path, createdBy
                 var extension = mediaItem.Caption.Split('.')[1];
-                switch(extension)
+                switch (extension)
                 {
                     case "mp3":
                         mediaItem.Type = 20;
@@ -115,10 +115,10 @@ namespace FeedHiveAuth.Data.Repositories
                                     mid.EscapeForSql(),
                                     mediaItem.Caption.EscapeForSql(),
                                     postId.EscapeForSql(),
-                                    DateTime.Now.EscapeForSql(), 
-                                    mediaItem.Path.EscapeForSql(), 
-                                    mediaItem.CreatedBy.EscapeForSql(), 
-                                    extension.EscapeForSql(), 
+                                    DateTime.Now.EscapeForSql(),
+                                    mediaItem.Path.EscapeForSql(),
+                                    mediaItem.CreatedBy.EscapeForSql(),
+                                    extension.EscapeForSql(),
                                     mediaItem.Type
                                     );
                 mediaItem.Id = mid.ToString();
@@ -129,21 +129,22 @@ namespace FeedHiveAuth.Data.Repositories
 
         public IEnumerable<MediaItem> GetMediaList()
         {
-            
+
             var query = SqlSelectWhole;
-            IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList(); 
+            IEnumerable<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList();
             return mediaItems;
         }
 
-        public List<MediaItem> GetMediaByPostId(string id) {
-            var query = "select * from MediaItem where Id in  (select MediaItemId from PostMedias where PostId='" + @id + "')"; 
-            List<MediaItem> postMediaItem =  connection.Query<MediaItem>(query).ToList();
+        public List<MediaItem> GetMediaByPostId(string id)
+        {
+            var query = "select * from MediaItem where Id in  (select MediaItemId from PostMedias where PostId='" + @id + "')";
+            List<MediaItem> postMediaItem = connection.Query<MediaItem>(query).ToList();
             return postMediaItem;
         }
-        public List <PostMedia> GetPostMedias(string id)
+        public List<PostMedia> GetPostMedias(string id)
         {
             var query = "SELECT * FROM PostMedias Where PostId='" + @id + "' ";
-            List<PostMedia> postmedias= connection.Query<PostMedia>(query).ToList();
+            List<PostMedia> postmedias = connection.Query<PostMedia>(query).ToList();
             return postmedias;
         }
         public List<MediaItem> GetMediasByPostId(string id)
@@ -164,10 +165,19 @@ namespace FeedHiveAuth.Data.Repositories
             List<MediaItem> postMediaItems = connection.Query<MediaItem>(query).ToList();
             return postMediaItems;
         }
-        public void DeletePostMedia(string mediaId,string postId)
+
+        public IEnumerable<PostMedia> GetPostMediaRelations(string mediaId)
         {
-           var query = "Delete from PostMedias Where postId='" + postId + "' and mediaItemId='"+ mediaId + "' ";
-           var result= connection.Query<int>(query).FirstOrDefault();
+            using (connection)
+            {
+                var query = "SELECT * FROM PostMedias WHERE MediaItemId = @mediaId";
+                return connection.Query<PostMedia>(query, new { mediaId = mediaId });
+            }
+        }
+        public void DeletePostMedia(string mediaId, string postId)
+        {
+            var query = "Delete from PostMedias Where postId='" + postId + "' and mediaItemId='" + mediaId + "' ";
+            var result = connection.Query<int>(query).FirstOrDefault();
         }
     }
 }
