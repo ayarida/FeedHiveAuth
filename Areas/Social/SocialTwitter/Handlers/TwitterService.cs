@@ -88,7 +88,7 @@ namespace FeedHiveAuth.Areas.Social.SocialTwitter.Handlers
             var mediaIds = new List<ulong>();
             if (operation.MediaId != null || operationData.MediaItemIds.NotEmpty())
             {
-                var mediaItems = operation.MediaId != null ? new List<MediaItem> { operation._mediaItem } : Instances.Repositories.MediaItemRepository.Get(operationData.MediaItemIds);
+                var mediaItems = operation._mediaItem != null ? new List<MediaItem> { operation._mediaItem } : Instances.Repositories.MediaItemRepository.Get(operationData.MediaItemIds);
                 var index = 1;
                 foreach (var mediaItem in mediaItems)
                 {
