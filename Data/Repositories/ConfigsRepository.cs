@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Data.Repositories
         }
         protected string SqlUpdate => Columns.GenerateUpdateQuery(TableName, "Id", "Id,EnumKey,Name,CreationDate,MasterId");
 
-        public void InsertConfigs(int enumKey, string Name, string jsonValue, string masterId)
+        public void InsertConfigs(int enumKey, string Name, string jsonValue)
         {
             //var query = string.Format("INSERT INTO {0} ({1}) VALUES({2});", TableName, Columns.AddBraces(), (enumKey,Name,jsonValue));
             // "Id,EnumKey,Name,JsonValue,MasterId,CreationDate"
@@ -33,7 +33,6 @@ namespace FeedHiveAuth.Data.Repositories
                                     enumKey,
                                     Name.EscapeForSql(),
                                     jsonValue.EscapeForSql(),
-                                    masterId.EscapeForSql(),
                                     DomainTime.Now().EscapeForSql(true)
                                     );
             ExecuteQuery(query);

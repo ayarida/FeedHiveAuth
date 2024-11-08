@@ -40,9 +40,9 @@ namespace FeedHiveAuth.Controllers
         {
             var configs = _configsService.GetAllConfigs();
             var currUser = currUserId();
-            var parentId = (isAdminOrMaster()) ? currUser : "";
+            //var parentId = (isAdminOrMaster()) ? currUser : "";
 
-            Configs GetConfig(SocialNetworkTypeEnum enumValue) => configs.FirstOrDefault(conf => conf.EnumKey == enumValue.Value() && conf.MasterId == parentId);
+            Configs GetConfig(SocialNetworkTypeEnum enumValue) => configs.FirstOrDefault(conf => conf.EnumKey == enumValue.Value());
 
             T DeserializeOrDefault<T>(string jsonValue) where T : new() => string.IsNullOrEmpty(jsonValue) ? new T() : JsonSerializer.Deserialize<T>(jsonValue) ?? new T();
 
@@ -104,8 +104,9 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(SocialConfigsViewModel configs)
         {
-            var parentId = (this.isAdminOrMaster()) ? this.currUserId() : ""; //Master or Admin
-            if(parentId.IsNotNullOrEmpty())
+            //var parentId = (this.isAdminOrMaster()) ? this.currUserId() : ""; //Master or Admin
+            var isSuperAdmin = this.isSuperAdmin();
+            if(isSuperAdmin)
             {
                 var socialConfigs = new SocialConfigs
                 {
@@ -191,7 +192,7 @@ namespace FeedHiveAuth.Controllers
                     //var oldFbConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Facebook.Value());
 
                     if (socialConfigs.FacebookConfigs.Id == null) //insert new 
-                        _configsService.InsertConfigs(socialConfigs.FacebookConfigs.EnumKey, "FacebookConfigs", fbConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.FacebookConfigs.EnumKey, "FacebookConfigs", fbConfigsJson);
                     else //update old
                         _configsService.UpdateConfigs(socialConfigs.FacebookConfigs.EnumKey, socialConfigs.FacebookConfigs.Id, fbConfigsJson);
                 }
@@ -201,7 +202,7 @@ namespace FeedHiveAuth.Controllers
                     //var oldtelegramConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Telegram.Value());
 
                     if (socialConfigs.TelegramConfigs.Id == null) //insert new
-                        _configsService.InsertConfigs(socialConfigs.TelegramConfigs.EnumKey, "TelegramConfigs", telegramConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.TelegramConfigs.EnumKey, "TelegramConfigs", telegramConfigsJson);
                     else //update old
                         _configsService.UpdateConfigs(socialConfigs.TelegramConfigs.EnumKey, socialConfigs.TelegramConfigs.Id, telegramConfigsJson);
                 }
@@ -210,7 +211,7 @@ namespace FeedHiveAuth.Controllers
                     string dailymotionConfigsJson = JsonSerializer.Serialize(socialConfigs.DailymotionConfigs.Application);
                     //var olddailymotionConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.DailyMotion.Value());
                     if (socialConfigs.DailymotionConfigs.Id == null)
-                        _configsService.InsertConfigs(socialConfigs.DailymotionConfigs.EnumKey, "DailymotionConfigs", dailymotionConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.DailymotionConfigs.EnumKey, "DailymotionConfigs", dailymotionConfigsJson);
                     else
                         _configsService.UpdateConfigs(socialConfigs.DailymotionConfigs.EnumKey, socialConfigs.DailymotionConfigs.Id, dailymotionConfigsJson);
                 }
@@ -219,7 +220,7 @@ namespace FeedHiveAuth.Controllers
                     string appConfigsJson = JsonSerializer.Serialize(socialConfigs.TechnicalConfigs.appTechnicalConfigs);
                     //var oldTechnicalConf = _configsService.GetConfigsByKey(SocialNetworkTypeEnum.Technical.Value());
                     if (socialConfigs.TechnicalConfigs.Id == null)
-                        _configsService.InsertConfigs(socialConfigs.TechnicalConfigs.EnumKey, "TechnicalConfigs", appConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.TechnicalConfigs.EnumKey, "TechnicalConfigs", appConfigsJson);
                     else
                         _configsService.UpdateConfigs(socialConfigs.TechnicalConfigs.EnumKey, socialConfigs.TechnicalConfigs.Id, appConfigsJson);
                 }
@@ -227,7 +228,7 @@ namespace FeedHiveAuth.Controllers
                 {
                     string wpConfigsJson = JsonSerializer.Serialize(socialConfigs.WhatsappConfigs.Application);
                     if (socialConfigs.WhatsappConfigs.Id == null)
-                        _configsService.InsertConfigs(socialConfigs.WhatsappConfigs.EnumKey, "WhatsappConfigs", wpConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.WhatsappConfigs.EnumKey, "WhatsappConfigs", wpConfigsJson);
                     else
                         _configsService.UpdateConfigs(socialConfigs.WhatsappConfigs.EnumKey, socialConfigs.WhatsappConfigs.Id, wpConfigsJson);
                 }
@@ -235,7 +236,7 @@ namespace FeedHiveAuth.Controllers
                 {
                     string twitterConfigsJson = JsonSerializer.Serialize(socialConfigs.TwitterConfigs.Application);
                     if (socialConfigs.TwitterConfigs.Id == null)
-                        _configsService.InsertConfigs(socialConfigs.TwitterConfigs.EnumKey, "TwitterConfigs", twitterConfigsJson, parentId);
+                        _configsService.InsertConfigs(socialConfigs.TwitterConfigs.EnumKey, "TwitterConfigs", twitterConfigsJson);
                     else
                         _configsService.UpdateConfigs(socialConfigs.TwitterConfigs.EnumKey, socialConfigs.TwitterConfigs.Id, twitterConfigsJson);
                 }
