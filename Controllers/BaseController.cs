@@ -80,40 +80,26 @@ namespace FeedHiveAuth.Controllers
         {
             return identityUserId().GetAwaiter().GetResult();
         }
-        public async Task<bool> isAdminAsync()
+        public async Task<bool> IsInRoleAsync(string role)
         {
             var currUser = await _userManager.GetUserAsync(User);
-            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Admin");
-            return isAdmin;
-        }
-        public bool isAdmin()
-        {
-            return isAdminAsync().GetAwaiter().GetResult();
-        }
-        public async Task<bool> isMasterAsync()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isMaster = currUser != null && await _userManager.IsInRoleAsync(currUser, "Master");
-            return isMaster;
-        }
-        public bool isMaster()
-        {
-            return isMasterAsync().GetAwaiter().GetResult();
-        }
-        public async Task<bool> isEditorAsync()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Editor");
-            return isAdmin;
-        }
-        public bool isEditor()
-        {
-            return isEditorAsync().GetAwaiter().GetResult();
+            return currUser != null && await _userManager.IsInRoleAsync(currUser, role.ToLower());
         }
 
-        public bool isAdminOrMaster()
+        public bool IsInRole(string role)
         {
-            return (isMaster() || isAdmin());
+            return IsInRoleAsync(role.ToLower()).GetAwaiter().GetResult();
         }
+
+        public bool isAdmin() => IsInRole("Admin");
+
+        public bool isMaster() => IsInRole("Master");
+
+        public bool isEditor() => IsInRole("Editor");
+
+        public bool isSuperAdmin() => IsInRole("SuperAdmin");
+
+        public bool isAdminOrMaster() => isAdmin() || isMaster();
+
     }
 }
