@@ -44,4 +44,8 @@
     <Folder Include="wwwroot\js\Lib\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\js\tinymce\tinymce.d.ts" />
+  </ItemGroup>
+
 </Project>
