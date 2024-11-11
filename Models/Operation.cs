@@ -1,5 +1,7 @@
-﻿using FeedHiveAuth.Data.Extensions;
+﻿using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Models.JSON;
+using RestSharp.Extensions;
 
 namespace FeedHiveAuth.Models
 {
@@ -30,13 +32,24 @@ namespace FeedHiveAuth.Models
         public string? ChannelId { get; set; }
 
         public Post _post { get; set; }
-        public MediaItem _mediaItem { get; set; }
+        private MediaItem _mediaItem { get; set; }
 
         private OperationInfo _info;
 
         public OperationInfo OperationInfo
         {
             get { return _info ?? (_info = Info.FromJson<OperationInfo>()); }
+        }
+        public MediaItem MediaItem
+        {
+            get
+            {
+                return _mediaItem ?? (!string.IsNullOrEmpty(MediaId) ? Instances.Repositories.MediaItemRepository.Get(MediaId) : null);
+            }
+            set
+            {
+                _mediaItem = value;
+            }
         }
     }
 }
