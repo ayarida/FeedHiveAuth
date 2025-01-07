@@ -26,6 +26,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+            returnUrl = Url.Content("/");
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
