@@ -89,6 +89,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+app.UseMiddleware<BlockRegistrationMiddleware>();
 app.UseCors("AllowAll");
 app.UseEndpoints(endpoints =>
 {
