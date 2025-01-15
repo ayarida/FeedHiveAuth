@@ -27,6 +27,7 @@ namespace FeedHiveAuth.Data.Repositories
 
             }
         }
+        
         public IEnumerable<string> GetUserClaims(string roleid)
         {
             using (connection)
@@ -49,6 +50,24 @@ namespace FeedHiveAuth.Data.Repositories
                 var result = connection.Query<string>("select Description from AspNetRoles where Id=@Id", new { Id = new[] { roleId }}).FirstOrDefault();
                 return result;
 
+            }
+        }
+        public string getRoleName(string roleId)
+        {
+            using (connection)
+            {
+                var result = connection.Query<string>("select Name from AspNetRoles where Id=@Id", new { Id = new[] { roleId } }).FirstOrDefault();
+                return result;
+
+            }
+        }
+        public Role userRole(string userId)
+        {
+            using (connection)
+            {
+                var userRoleId = GetUserRole(userId);
+                var result = connection.Query<Role>("select * from AspNetRoles where Id=@Id", new { Id = new[] { userRoleId } }).FirstOrDefault();
+                return result;
             }
         }
 

@@ -66,7 +66,14 @@ namespace FeedHiveAuth.Data.Repositories
                 return resultQuery;
             }
         }
-
+        public IEnumerable<ApplicationUser> GetUsersWhosParentId(string adminId)
+        {
+            using (connection)
+            {
+                var resultQuery = connection.Query<ApplicationUser>("SELECT * FROM AspNetUsers WHERE ParentId=@ParentId", new { ParentId = new[] { adminId } }).ToList();
+                return resultQuery;
+            }
+        }
         public string GetNameById(string id)
         {
             using (connection)
