@@ -5,7 +5,7 @@ namespace FeedHiveAuth.Models
     public class RoleEdit
     {
         public Role Role { get; set; }
-        public IEnumerable<IdentityUser> Members { get; set; }
-        public IEnumerable<IdentityUser> NonMembers { get; set; }
+        public IEnumerable<ApplicationUser> Members { get; set; }
+        public IEnumerable<ApplicationUser> NonMembers { get; set; }
     }
 }
