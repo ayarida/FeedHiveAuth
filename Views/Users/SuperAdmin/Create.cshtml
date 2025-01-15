@@ -1,0 +1,102 @@
+﻿@using FeedHiveAuth.Models.ViewModels;
+@using FeedHiveAuth.Data.Helpers
+
+@model AddUserViewModel
+@{
+    var roles = Model.Roles;
+    var parentUsers = Model.ParentUsers;
+    var isAdmin = Model.IsAdmin;
+}
+
+
+<div class="card p-4 ms-auto" style="background: white !important; width: fit-content">
+    <div class="row justify-content-end create-user">
+        <form asp-controller="Users" asp-action="RegisterNewUserSA" method="POST" dir="rtl">
+            <!-- Add your form fields -->
+            <div class="form-group mb-4">
+                <label for="Username">@AppResources.Label("Username")</label>
+                <input class="form-control" name="Username" id="Username" />
+                @* <span asp-validation-for="Username"></span> *@
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="Email">@AppResources.Label("Email")</label>
+                <input class="form-control" name="Email" id="Email" />
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="password">@AppResources.Label("Password")</label>
+                <input type="password" class="form-control" name="PasswordHash" id="PasswordHash" />
+                @* <span asp-validation-for="PasswordHash"></span> *@
+            </div>
+
+            <label for="rolesid">@AppResources.Label("ChooseRole"):</label>
+            <div class="custom-select">
+                <select name="RoleId" id="rolesid" class="form-select">
+                    <option disabled selected> Select Role </option>
+
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role.Id">@role</option>
+                    }
+                    <div class="d-flex justify-content-center">
+                        <button type="submit">Create User</button>
+                    </div>
+
+                </select>
+            </div>
+            @if (isAdmin)
+            {
+                <input type="hidden" value="" name="ParentId" id="parentId" />
+            }
+            else
+            {
+                <div id="parentDropdown" style="display: none;">
+                    @if (parentUsers != null && Model.IsAdmin == false)
+                    {
+                        <label for="parentId" class="mt-3">@AppResources.Label("Team")</label>
+                        <div class="custom-select">
+                            <select name="ParentId" id="parentId">
+                                <option disabled selected> Select Parent </option>
+                                @foreach (var parent in parentUsers)
+                                {
+                                    <option value="@parent.Id">@parent.UserName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+            }
+            <input type="submit" value="@AppResources.Label("SaveUser")" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
+
+
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="~/css/Users/create.css" />
+<script>
+    $("#rolesid").on("click", function (event) {
+        var selectedRole = $("#rolesid").find(":selected").text();
+        var parentDropdown = $('#parentDropdown');
+
+        if (selectedRole === 'Editor') {
+            console.log("editor")
+            parentDropdown.show();
+        } else {
+            console.log("not")
+            parentDropdown.hide();
+        }
+    })
+        // document.getElementById('rolesid').addEventListener('change', function () {
+        //     var selectedRole = this.valuez;
+        //     var parentDropdown = document.getElementById('parentDropdown');
+
+        //     if (selectedRole === 'editor') {
+        //         parentDropdown.style.display = 'block';
+        //     } else {
+        //         parentDropdown.style.display = 'none';
+        //     }
+        // });
+</script>
+<script src="~/js/Users/create.js"></script>

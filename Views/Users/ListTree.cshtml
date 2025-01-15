@@ -1,7 +1,7 @@
 ﻿@using FeedHiveAuth.Models.ViewModels;
 @model List<UsersWithRolesViewModel>
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     var users = Model;
     //var Master = users.Where(x => x.role == "Master").FirstOrDefault()?.user.UserName;

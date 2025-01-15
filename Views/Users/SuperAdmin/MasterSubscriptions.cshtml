@@ -1,0 +1,45 @@
+﻿@using FeedHiveAuth.Models.ViewModels;
+@model List<SubscriptionViewModel>
+
+@{
+    var masters = Model;
+}
+<h2>Master/Admin Users:</h2>
+
+
+@if (Model.Count() > 0)
+{
+    foreach(var subscription in Model)
+    {
+        <div class="card">
+            <img src="img_avatar.png" alt="" style="width:100%">
+            <div class="container">
+                <h2><b>@subscription.Master</b></h2>
+
+                @foreach(var admins in subscription.Editors)
+                {
+                    <h5><b>@admins.Key</b></h5>
+                    foreach(var ed in admins.Value)
+                    {
+                        <span>@ed.UserName</span>
+                    }
+                }
+            </div>
+        </div>
+    }
+}
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 40%;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .container {
+        padding: 2px 16px;
+    }
+</style>
