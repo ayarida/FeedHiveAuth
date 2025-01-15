@@ -25,12 +25,12 @@ namespace FeedHiveAuth.Controllers
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
-        private UserManager<IdentityUser> userManager;
+        private UserManager<ApplicationUser> userManager;
         private readonly ILogger<RolesController> _logger;
 
         protected RoleRepository roleRepository = Instances.Repositories.RoleRepository;
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ILogger<RolesController> logger)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<RolesController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -152,9 +152,9 @@ namespace FeedHiveAuth.Controllers
         public async Task<IActionResult> Update(string id)
         {
             Role role = await GetRoleById(id);
-            List<IdentityUser> members = new List<IdentityUser>();
-            List<IdentityUser> nonMembers = new List<IdentityUser>();
-            foreach (IdentityUser user in userManager.Users)
+            List<ApplicationUser> members = new List<ApplicationUser>();
+            List<ApplicationUser> nonMembers = new List<ApplicationUser>();
+            foreach (ApplicationUser user in userManager.Users)
             {
                 var checkIfHasRole = await userManager.GetRolesAsync(user);
                 if (checkIfHasRole.Any())
@@ -174,9 +174,9 @@ namespace FeedHiveAuth.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             Role role = await GetRoleById(id);
-            List<IdentityUser> members = new List<IdentityUser>();
-            List<IdentityUser> nonMembers = new List<IdentityUser>();
-            foreach (IdentityUser user in userManager.Users)
+            List<ApplicationUser> members = new List<ApplicationUser>();
+            List<ApplicationUser> nonMembers = new List<ApplicationUser>();
+            foreach (ApplicationUser user in userManager.Users)
             {
                 var checkIfHasRole = await userManager.GetRolesAsync(user);
                 if (checkIfHasRole.Any())
@@ -202,7 +202,7 @@ namespace FeedHiveAuth.Controllers
             {
                 foreach (string userId in model.AddIds ?? new string[] { })
                 {
-                    IdentityUser user = await userManager.FindByIdAsync(userId);
+                    ApplicationUser user = await userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
                         result = await userManager.AddToRoleAsync(user, model.RoleName);
@@ -212,7 +212,7 @@ namespace FeedHiveAuth.Controllers
                 }
                 foreach (string userId in model.DeleteIds ?? new string[] { })
                 {
-                    IdentityUser user = await userManager.FindByIdAsync(userId);
+                    ApplicationUser user = await userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
                         result = await userManager.RemoveFromRoleAsync(user, model.RoleName);

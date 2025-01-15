@@ -17,6 +17,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Xml;
 using System.Xml.Linq;
+using Tweetinvi.Core.Extensions;
+
 namespace FeedHiveAuth.Controllers
 {
 
@@ -27,7 +29,7 @@ namespace FeedHiveAuth.Controllers
         protected OperationRepository _operationService = Instances.Repositories.OperationRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<PostsController> _logger;
-        public PostsController(UserManager<IdentityUser> userManager, ILogger<PostsController> logger) : base(userManager, logger)
+        public PostsController(UserManager<ApplicationUser> userManager, ILogger<PostsController> logger) : base(userManager, logger)
         {
         }
 
@@ -159,19 +161,14 @@ namespace FeedHiveAuth.Controllers
 
         [HttpGet]
         public IActionResult Preview(string id)
+        
         {
             var post = _postService.GetPostById(id);
             var ops = Instances.Repositories.OperationRepository.getPostOperationsById(id);
             post.Operations = (ops?.Count > 0) ? ops : new List<Operation>();
 
-            var postMedia = _mediaItemService.GetPostMedias(id);
-            var mediaList=new List<MediaItem>();
-            foreach(var postmed in postMedia)
-            {
-               var media= _mediaItemService.GetMediaById(postmed.MediaItemId);
-                mediaList.Add(media);
-            }
-            if (postMedia != null) { post.PostMediaItems = mediaList; };
+            var postMedia = _mediaItemService.GetMediaByPostId(id);
+            post.PostMediaItems = postMedia;
 
             return View(post);
         }
@@ -186,20 +183,12 @@ namespace FeedHiveAuth.Controllers
             {
                 postForm.PublicLink = "/Posts/" + GeneratePostLink(postForm.Title);
             }
-            //Post post = new Post
-            //{
-            //    //Title = HttpContext.Request.Form["Title"],
-            //    //ShortTitle = HttpContext.Request.Form["ShortTitle"],
-            //    //Summary = HttpContext.Request.Form["Summary"],
-            //    //Content = HttpContext.Request.Form["Content"],
-            //    PublicLink = "/Posts/" + GeneratePostLink(HttpContext.Request.Form["Title"]),
-            //    PostDate = DateTime.Parse(HttpContext.Request.Form["PostDate"])
-            //};
             string userId = currUserId();
             if (userId != null)
             {
-                
-                postForm.ModifiedBy = postForm.CreatedBy = userId;
+                //Edit or Create - same CreatedBy
+                postForm.CreatedBy = postForm.CreatedBy.IsNullOrEmpty() ? userId : postForm.CreatedBy;
+                postForm.ModifiedBy = userId;
             }
             _postService.Save(postForm);
 
