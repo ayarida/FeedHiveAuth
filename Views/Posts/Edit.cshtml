@@ -59,6 +59,7 @@
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
                         <input type="hidden" asp-for="Id" class="form-control req" value="@Model.Id"/>
+                        <input type="hidden" asp-for="CreatedBy" value="@Model.CreatedBy" ></input>
                     </div>
                     @* PreviewIamge and handle exceptions *@
                     <div class="submitPreview">
