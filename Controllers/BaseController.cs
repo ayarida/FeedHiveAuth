@@ -13,19 +13,19 @@ namespace FeedHiveAuth.Controllers
         protected ChannelRepository _channelService = Instances.Repositories.ChannelRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<T> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public BaseController(UserManager<IdentityUser> userManager, ILogger<T> logger, RoleManager<IdentityRole> roleManager = null)
+        public BaseController(UserManager<ApplicationUser> userManager, ILogger<T> logger, RoleManager<IdentityRole> roleManager = null)
         {
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-        public List<IdentityUser> allUsers()
+        public List<ApplicationUser> allUsers()
         {
-            List<IdentityUser> users = _userManager.Users.ToList();
+            List<ApplicationUser> users = _userManager.Users.ToList();
             return users;
         }
         public List<IdentityRole> allRoles()
@@ -34,11 +34,11 @@ namespace FeedHiveAuth.Controllers
             return availableRoles;
         }
 
-        public async Task<IdentityUser> getIdentityUser()
+        public async Task<ApplicationUser> getApplicationUser()
         {
             return await _userManager.GetUserAsync(User);
         }
-        public async Task<IdentityUser> getUserById(string userId)
+        public async Task<ApplicationUser> getUserById(string userId)
         {
             return await _userManager.FindByIdAsync(userId);
         }
@@ -46,7 +46,7 @@ namespace FeedHiveAuth.Controllers
         {
             return await _userManager.CreateAsync(user,password);
         }
-        public async Task<IdentityResult> userUpdateAsync(IdentityUser user)
+        public async Task<IdentityResult> userUpdateAsync(ApplicationUser user)
         {
             return await _userManager.UpdateAsync(user);
         }
@@ -58,27 +58,27 @@ namespace FeedHiveAuth.Controllers
         {
             return await _roleManager.FindByNameAsync(roleName);
         }
-        public async Task<IdentityResult> removeUserFromRoleAsync(IdentityUser user, string oldRole)
+        public async Task<IdentityResult> removeUserFromRoleAsync(ApplicationUser user, string oldRole)
         {
             return await _userManager.RemoveFromRoleAsync(user, oldRole);
         }
-        public async Task<IdentityResult> addUserToRole(IdentityUser user, string roleName)
+        public async Task<IdentityResult> addUserToRole(ApplicationUser user, string roleName)
         {
             return await _userManager.AddToRoleAsync(user, roleName);
         }
-        public async Task<List<IdentityUser>> getAdminUsers()
+        public async Task<List<ApplicationUser>> getAdminUsers()
         {
-            return (List<IdentityUser>)await _userManager.GetUsersInRoleAsync("Admin");
+            return (List<ApplicationUser>)await _userManager.GetUsersInRoleAsync("Admin");
 
         }
-        public async Task<string> identityUserId()
+        public async Task<string> ApplicationUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
         }
         public string currUserId()
         {
-            return identityUserId().GetAwaiter().GetResult();
+            return ApplicationUserId().GetAwaiter().GetResult();
         }
         public async Task<bool> isAdminAsync()
         {
@@ -115,5 +115,16 @@ namespace FeedHiveAuth.Controllers
         {
             return (isMaster() || isAdmin());
         }
+        public async Task<bool> isSuperAdminAsync()
+        {
+            var currUser = await _userManager.GetUserAsync(User);
+            var isSuperAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "SuperAdmin");
+            return isSuperAdmin;
+        }
+        public bool isSuperAdmin()
+        {
+            return isSuperAdminAsync().GetAwaiter().GetResult();
+        }
+
     }
 }

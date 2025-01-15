@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 public class PermissionFilterAttribute : Attribute, IAuthorizationFilter
 {
     private readonly string _permissionName;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     public PermissionFilterAttribute(string permissionName)
     {
         _permissionName = permissionName;
@@ -16,7 +16,7 @@ public class PermissionFilterAttribute : Attribute, IAuthorizationFilter
 
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var user = new IdentityUser();
+        var user = new ApplicationUser();
         user.UserName = context.HttpContext.User.Identity.Name;
         var currentuser = Instances.Repositories.UserRepository.GetByUsername(user.UserName);
         var userrole = Instances.Repositories.RoleRepository.GetUserRole(currentuser.Id);

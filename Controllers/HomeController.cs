@@ -13,8 +13,8 @@ namespace FeedHiveAuth.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public SignInManager<IdentityUser> SignInManager;
-        public UserManager<IdentityUser> UserManager;
+        public SignInManager<ApplicationUser> SignInManager;
+        public UserManager<ApplicationUser> UserManager;
 
         protected PostRepository _postRepository = Instances.Repositories.PostRepository;
         protected MediaItemRepository _mediaRepository = Instances.Repositories.MediaItemRepository;

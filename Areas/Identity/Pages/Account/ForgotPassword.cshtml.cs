@@ -19,11 +19,11 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly SmtpClient _smtpClient;
 
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender, SmtpClient smtpClient)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, SmtpClient smtpClient)
         {
             _userManager = userManager;
             _emailSender = emailSender;

@@ -1,6 +1,6 @@
-﻿@model List<IdentityUser>
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@model List<ApplicationUser>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @using FeedHiveAuth.Data.Helpers
 @{
     var users = Model;

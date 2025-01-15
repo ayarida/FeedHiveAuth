@@ -34,7 +34,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<AuthorizationController> _logger;
 
-        public AuthorizationController(UserManager<IdentityUser> userManager, ILogger<AuthorizationController> logger) : base(userManager,logger)
+        public AuthorizationController(UserManager<ApplicationUser> userManager, ILogger<AuthorizationController> logger) : base(userManager,logger)
         {
             
         }
@@ -413,14 +413,14 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             return RedirectToAction("Index", "Channels", new { area = "Social" });
         }
 /*
-        public async Task<string> identityUserId()
+        public async Task<string> ApplicationUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
         }
         public string currUserId()
         {
-            return identityUserId().GetAwaiter().GetResult();
+            return ApplicationUserId().GetAwaiter().GetResult();
         }
         public async Task<bool> isAdminAsync()
         {

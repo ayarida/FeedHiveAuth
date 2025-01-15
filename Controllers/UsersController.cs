@@ -1,5 +1,6 @@
 ﻿using FeedHiveAuth.Areas.Identity.Pages.Account;
 using FeedHiveAuth.Data;
+using FeedHiveAuth.Data.Extensions;
 using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.ViewModels;
@@ -15,7 +16,7 @@ namespace FeedHiveAuth.Controllers
 {
     public class UsersController : BaseController<UsersController>
     {
-        public UsersController(UserManager<IdentityUser> userManager, ILogger<UsersController> logger, RoleManager<IdentityRole> roleManager) : base(userManager, logger,roleManager)
+        public UsersController(UserManager<ApplicationUser> userManager, ILogger<UsersController> logger, RoleManager<IdentityRole> roleManager) : base(userManager, logger,roleManager)
         {
         }
         public UserRepository _userService = Instances.Repositories.UserRepository;
@@ -29,23 +30,33 @@ namespace FeedHiveAuth.Controllers
             
             //if master : show only admins and whos parentId is this master
             //else: assign current admin as parentId
-            var user = await getIdentityUser();
+            var user = await getApplicationUser();
             var isAdmin = this.isAdmin();           
-            var isInMasterRole = this.isMaster();
+            var isMaster = this.isMaster();
             var createUserVM = new AddUserViewModel
             {
                 User = user,
                 IsAdmin = isAdmin,
             };
-            if (isInMasterRole)
+            //SA can add admin/master users
+            if (isSuperAdmin())
             {
-                var withAdminRoleAndMasterMembers = await getAdminUsers();
-                createUserVM.ParentUsers = withAdminRoleAndMasterMembers.ToList();
-                createUserVM.Roles = availableRoles.ToList();
+                createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() == "admin" || r.Name.ToLower() == "master").ToList();
+                return View("~/Views/Users/SuperAdmin/Create.cshtml",createUserVM);
             }
-            else
+            else 
             {
-                createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() != "admin" && r.Name.ToLower() != "master").ToList();            
+                if (isMaster)
+                {
+                    var withAdminRoleAndMasterMembers = getMasterAdmins(user.Id);
+                    var rolesToExclude = new List<string> { "master", "superadmin" };
+                    createUserVM.ParentUsers = withAdminRoleAndMasterMembers.ToList();
+                    createUserVM.Roles = availableRoles.Where(role => !rolesToExclude.ContainsIgnoreCase(role.Name)).ToList();
+                }
+                else
+                {
+                    createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() != "admin" && r.Name.ToLower() != "master").ToList();            
+                }
             }
             return View(createUserVM);
         }
@@ -71,7 +82,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveUser(ApplicationUser model)
         {
-            var currentuser = await getUserById(model.Id);
+            var currentuser = (ApplicationUser)await getUserById(model.Id);
             currentuser.UserName = model.UserName;
             currentuser.Email = model.Email;
             currentuser.EmailConfirmed = true;
@@ -119,7 +130,7 @@ namespace FeedHiveAuth.Controllers
                 if (model.ParentId != null) { //Master adding a editor
                     _userService.AssignParentToUser(model.ParentId, GetByName(model.UserName).Id);
                 }
-                else { //Adding an editor
+                else {
                     _userService.AssignParentToUser(currentuser.Result, GetByName(model.UserName).Id);
                 }
 
@@ -135,8 +146,59 @@ namespace FeedHiveAuth.Controllers
             }
             return RedirectToAction("ListTree", "Users");
         }
-        
-        [PermissionFilter("Users_Login")]
+
+        public async Task<IActionResult> RegisterNewUserSA(ApplicationUser userForm)
+        {
+            var currentuser = GetCurrentUserId();
+            var currentUserRole = _roleService.userRole(currentuser.Result);
+            var userFormRole = getRoleById(userForm.RoleId).Result;
+            if (currentUserRole.Name.EqualsIgnoreCase("superadmin"))
+            {
+                //if superAdmin and registering Master then save it without parentId (adding new subscription)
+                if (userFormRole.Name.EqualsIgnoreCase("master"))
+                {
+                    var result = await userCreateAsync(userForm, userForm.PasswordHash);
+                    if (result.Succeeded && result.Errors.Count() == 0)
+                    {
+                        var assignRole = await addUserToRole(userForm, userFormRole.Name);
+                        if (assignRole.Succeeded)
+                        {
+                            return RedirectToAction("ListTree", "Users");
+                        }
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                        return BadRequest(error.Description);
+                    }
+                }
+                else
+                {
+                    //if superAdmin and registering Admin then save it with parentId as current user
+                    var result = await userCreateAsync(userForm, userForm.PasswordHash);
+                    if (result.Succeeded && result.Errors.Count() == 0)
+                    {
+                        var assignRole = await addUserToRole(userForm, userForm.RoleId);
+                        if (assignRole.Succeeded)
+                        {
+                            _userService.AssignParentToUser(currentuser.Result, GetByName(userForm.UserName).Id);
+                            return RedirectToAction("ListTree", "Users");
+                        }
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                        return BadRequest(error.Description);
+                    }
+                }   
+            }
+            return View();
+            
+        }
+
+
+
+    [PermissionFilter("Users_Login")]
         public IActionResult Login()
         {
             return View("~/Areas/Identity/Pages/Account/Login.cshtml");
@@ -153,7 +215,7 @@ namespace FeedHiveAuth.Controllers
         public IActionResult List()
         {
             //TODO: Update users returned based on current subscriptionId
-            List<IdentityUser> users = allUsers();
+            List<ApplicationUser> users = allUsers();
             return View(users);
         }*/
         [PermissionFilter("Users_ListTree")]
@@ -162,8 +224,41 @@ namespace FeedHiveAuth.Controllers
         {
             var users = allUsers();
             var userList = new List<UsersWithRolesViewModel>();
-           
-            if(isMaster())
+            var masterArr = new List<ApplicationUser>();
+
+            var subscriptions = new List<SubscriptionViewModel>();
+            //if the role is superAdmin then fetch all aspnetusers db table and return the ones with master role
+            if (isSuperAdmin())
+            {
+                foreach(var user in users)
+                {
+                    var uRole = _roleService.userRole(user.Id);
+                    if(string.Equals(uRole.Name, "Master", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var subscription = new SubscriptionViewModel
+                        {
+                            Master = user,
+                            Admins = getChildren(user.Id), // Fetch Admins for this Master
+                            Editors = new Dictionary<ApplicationUser, List<ApplicationUser>>() // Initialize Editors dictionary
+                        };
+                        //masterArr.Add(user);
+                        //admins for master
+                        //var admins = getChildren(user.Id);
+
+                        //iterate each admin to return its childs
+                        foreach (var admin in subscription.Admins)
+                        {                            
+                            var editors = getChildren(admin.Id);
+                            subscription.Editors[admin] = editors;
+                        }
+                        subscriptions.Add(subscription);
+                    }
+                }
+                //return View("~/Views/Users/SuperAdmin/MasterSubscriptions.cshtml", masterArr);
+                return View("~/Views/Users/SuperAdmin/MasterSubscriptions.cshtml", subscriptions);
+            }
+
+            if (isMaster())
             {
                 var MasterViewModel = new UsersWithRolesViewModel();
                 MasterViewModel.user = _userService.GetByUsername(User.Identity.Name);
@@ -219,17 +314,53 @@ namespace FeedHiveAuth.Controllers
             }
             return View(userList);
         }
-        [PermissionFilter("Users_GetById")]
-        public IdentityUser GetById(string id)
+
+        //function that returns admin users that are related to a master
+        public List<ApplicationUser> getChildren(string Parent)
         {
-            IdentityUser identityUser = allUsers().FirstOrDefault(x => x.Id == id);
-            return identityUser;
+            var childs = _userService.GetUsersWhosParentId(Parent).ToList();
+            if (childs.Any())
+            {
+
+            }
+            return childs;
+            /*var masterId = await GetCurrentUserId();
+            var adminsOfMaster = _userService.GetWhosParentId(masterId).ToList(); //admins of the master
+            var admins = new List<ApplicationUser>();
+            foreach (var admin in adminsOfMaster)
+            {
+                admins.Add(_userService.GetById(admin));
+            }
+            return admins;*/
+        }
+        public List<ApplicationUser> getMasterAdmins(string masterId)
+        {
+            var childs = getChildren(masterId);
+            var admins = new List<ApplicationUser>();
+            foreach (var child in childs)
+            {
+                var userRole = _roleService.GetUserRole(child.Id);
+                if (userRole == getRoleByName("Admin").Result.Id)
+                {
+                    admins.Add(child);
+                }
+            }
+            //function that uses getchildren function, return those whose parentId is the masterId and whose rolename is "Admin"
+            //return getChildren(masterId).Where(x => x.RoleId == getRoleByName("Admin").Result.Id).ToList();
+            return admins;
+        }
+
+        [PermissionFilter("Users_GetById")]
+        public ApplicationUser GetById(string id)
+        {
+            ApplicationUser ApplicationUser = allUsers().FirstOrDefault(x => x.Id == id);
+            return ApplicationUser;
         }
         [PermissionFilter("Users_GetByName")]
-        public IdentityUser GetByName(string userName)
+        public ApplicationUser GetByName(string userName)
         {
-            IdentityUser identityUser = allUsers().FirstOrDefault(x => x.UserName.Equals(userName));
-            return identityUser;
+            ApplicationUser ApplicationUser = allUsers().FirstOrDefault(x => x.UserName.Equals(userName));
+            return ApplicationUser;
         }
         [PermissionFilter("Users_Deactivate")]
         [HttpGet]

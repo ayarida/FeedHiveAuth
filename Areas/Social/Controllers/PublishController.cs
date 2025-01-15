@@ -22,7 +22,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         OperationRepository _operationService = Instances.Repositories.OperationRepository;
         private readonly ILogger<PublishController> _logger;
-        public PublishController(UserManager<IdentityUser> userManager, ILogger<PublishController> logger) : base(userManager, logger)
+        public PublishController(UserManager<ApplicationUser> userManager, ILogger<PublishController> logger) : base(userManager, logger)
         {
 
         }

@@ -9,7 +9,7 @@ namespace FeedHiveAuth.Services
     public static class GlobalContext
     {
         public static UserConfigs UserConfigs {  get; set; }       
-        public static UserConfigs Construct(IdentityUser user)
+        public static UserConfigs Construct(ApplicationUser user)
         {
             UserConfigs = new UserConfigs
             {

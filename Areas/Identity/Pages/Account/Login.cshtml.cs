@@ -15,19 +15,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using FeedHiveAuth.Services;
+using FeedHiveAuth.Data.Extensions;
 
 namespace FeedHiveAuth.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly ILogger<LoginModel> _logger;
         
 
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger)
         {
            
             _signInManager = signInManager;
@@ -125,6 +126,16 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByNameAsync(Input.Username);
                     GlobalContext.UserConfigs = GlobalContext.Construct(user);
+                    //get the role of the current user
+                    var role = await _userManager.GetRolesAsync(user);
+                    //IF ROLE IS SUPERADMIN THEN REDIRECT TO A SPECIFIC PAGE
+                    if (role.ContainsIgnoreCase("superadmin"))
+                    {
+                        returnUrl = Url.Page("/Account/SuperAdmin/Index", new { area = "Identity" });
+
+                        return LocalRedirect(returnUrl);
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

@@ -16,9 +16,9 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         protected ChannelRepository _channelRepository = Instances.Repositories.ChannelRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<ChannelsController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChannelsController(UserManager<IdentityUser> userManager, ILogger<ChannelsController> logger) : base(userManager , logger)
+        public ChannelsController(UserManager<ApplicationUser> userManager, ILogger<ChannelsController> logger) : base(userManager , logger)
         {
         }
 
@@ -197,7 +197,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
         {
             return (_context.Channel?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        public async Task<string> identityUserId()
+        public async Task<string> ApplicationUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;

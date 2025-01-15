@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Controllers
         protected ConfigsRepository _configsService = Instances.Repositories.ConfigsRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<ConfigsController> _logger;
-        public ConfigsController(UserManager<IdentityUser> userManager, ILogger<ConfigsController> logger) : base  (userManager, logger)
+        public ConfigsController(UserManager<ApplicationUser> userManager, ILogger<ConfigsController> logger) : base  (userManager, logger)
         {
 
         }
@@ -42,7 +42,7 @@ namespace FeedHiveAuth.Controllers
             var currUser = currUserId();
             var parentId = (isAdminOrMaster()) ? currUser : "";
 
-            Configs GetConfig(SocialNetworkTypeEnum enumValue) => configs.FirstOrDefault(conf => conf.EnumKey == enumValue.Value() && conf.MasterId == parentId);
+            Configs GetConfig(SocialNetworkTypeEnum enumValue) => configs.FirstOrDefault(conf => conf.EnumKey == enumValue.Value());
 
             T DeserializeOrDefault<T>(string jsonValue) where T : new() => string.IsNullOrEmpty(jsonValue) ? new T() : JsonSerializer.Deserialize<T>(jsonValue) ?? new T();
 

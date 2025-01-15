@@ -19,12 +19,12 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _sender;
         private readonly SmtpClient _smtpClient;
 
 
-        public RegisterConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender sender, SmtpClient smtpClient)
+        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender sender, SmtpClient smtpClient)
         {
             _userManager = userManager;
             _sender = sender;
@@ -65,7 +65,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
 
             Email = email;
             // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
@@ -85,7 +85,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                 try
                 {
                     var smtp = _smtpClient;
-                    // Send the email
+                    // require to be in the configure services cibfurnsb 
                     _smtpClient.Send(message);
                 }
                 catch (Exception ex)
