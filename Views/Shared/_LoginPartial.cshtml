@@ -30,6 +30,7 @@
   
         var userRoles = User.Claims.Where(x => x.Type == User.Identities.Select(x => x.RoleClaimType).FirstOrDefault()).Select(c => c.Value);
 
+        <partial name="_SearchResult" />
     }
     else
     {

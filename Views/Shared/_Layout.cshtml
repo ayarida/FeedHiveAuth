@@ -55,7 +55,6 @@
 <body>
     @using FeedHiveAuth.Data.Helpers
     @inject SignInManager<IdentityUser> SignInManager
-    <div class="container">
         <header>
             @{
                 var postslink = User.IsInRole("Master") ? "/Posts/Admins" : "/Posts/List";
@@ -69,33 +68,29 @@
                      class="collapse d-lg-block sidebar collapse bg-white" style="">
                     <div class="position-sticky">
                         <div class="list-group list-group-flush mx-3">
-
-                            <partial name="_accountDisplay" />
-
-                            <a href="/Posts/Create" style="color: white !important;     background-color: #4984ed; border-color: #1861ac !important; text-wrap: nowrap; border-radius: 14px;" class="d-flex w-100 h-100 align-items-center justify-content-center btn btn-primary py-2 mt-3 mb-4">
+                            <img src="~/Static/Images/logo.png" alt="logo" class="side-bar-logo"/>
+                            
+                            <a href="/Posts/Create" class="side-create">
                                 @AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
                             </a>
-
-
-                            <a href="/Home/Index"
-                               class="list-group-item list-group-item-action py-2 mt-5 mb-3 active"
-                               aria-current="true">
-                                <i class="bi bi-house-fill"></i><span>@AppResources.Label("Dashboard")</span>
-                            </a>
-
-                            <hr />
+                            
+                            <div class="panel-link">
+                                <a href="/Home/Index"
+                                   class="list-group-item list-group-item-action"
+                                   aria-current="true">
+                                    <icon name="home" size="25"></icon>
+                                    <span>@AppResources.Label("Dashboard")</span>
+                                </a>
+                            </div>
 
                             <a href="/Posts/Create"
                                class="list-group-item list-group-item-action py-2"
                                aria-current="true">
-                                <i class="bi bi-pencil-square"></i><span>@AppResources.Label("CreatePost")</span>
+                                <icon name="create"></icon><span>@AppResources.Label("CreatePost")</span>
                             </a>
-                            @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
-                        <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
-                        </a> *@
                             <a href="@postslink"
                                class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-grid"></i><span>@AppResources.Label("Posts")</span>
+                                <img src="/Static/Icons/suitcase.svg"/> <span>@AppResources.Label("Posts")</span>
                             </a>
                             <a href="/Social/Channels/Create"
                                class="list-group-item list-group-item-action py-2 ">
@@ -139,8 +134,6 @@
                         </div>
                     </div>
                 </nav>
-
-                <partial name="_SearchResult" />
             }
 
 
@@ -149,6 +142,7 @@
             @*Calling navbar*@
 
         </header>
+    <div class="container">
         <div class="container">
             <main role="main" class="pb-3" dir="auto">
                 @RenderBody()

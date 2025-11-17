@@ -14,11 +14,12 @@
     --green-status-color: #136825;
     --blue-status-color: #294c66;
     --blue-status-back: #bae1ff;
+    --primary-orange: #FA961E;
 }
 
 @font-face {
     font-family: "Arabic";
-    src: url("Fonts/HelveticaArabic/HelveticaArabic.ttf") format("truetype");
+    src: url("Fonts/ElMessiri/ElMessiri-VariableFont_wght.ttf") format("truetype");
 }
 
 *,
@@ -455,10 +456,10 @@ div[class^="ripple"] {
     box-shadow: -5px 6px 0px 0 rgb(219 214 245 / 5%), -2px 7px 10px 0 rgb(219 214 245/ 5%) !important;
 }
 
-.list-group.list-group-flush a {
+/*.list-group.list-group-flush a {
     background: transparent;
     color: black !important;
-}
+}*/
 
 .sidebar .active {
     border-radius: 5px;
@@ -471,13 +472,6 @@ div[class^="ripple"] {
 
 .warning {
     background-color: #dfaa0f !important;
-}
-
-a.list-group-item.list-group-item-action.py-2.active {
-    background: #dce7fc;
-    border-radius: 5px;
-    color: #5f93ef !important;
-    font-weight: bold;
 }
 
 
@@ -625,4 +619,9 @@ input#txtSearch {
 
 .tox.tox-tinymce button {
     padding: unset !important;
+}
+
+
+body {
+    background-color: #e4e4e4 !important;
 }

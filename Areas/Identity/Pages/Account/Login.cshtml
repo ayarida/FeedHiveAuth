@@ -8,187 +8,154 @@
 
 <h1 class="mt-5">@ViewData["Title"]</h1>
 <div class="row gy-5 justify-content-center mt-auto">
-    <div class="col-md-6 login-section p-5 rounded-1">
+    <div class="login-section">
         <section>
+            <img src="/Static/Images/logo-minimal.png" alt="logo"/>
             <form id="account" method="post" dir="rtl">
                 <h2>تسجيل الدخول</h2>
                 @*  <hr /> *@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating">
-                    <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" placeholder="اسم المستخدم" />
+                    <input asp-for="Input.Username" id="username" class="form-control" autocomplete="username" aria-required="true" placeholder="اسم المستخدم"/>
                     @* <label asp-for="Input.Username" class="form-label"></label> *@
                     <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
 
                 <div class="form-floating">
-                    <input asp-for="Input.Password" id="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="كلمة المرور" />
+                    <input asp-for="Input.Password" id="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="كلمة المرور"/>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="mt-3">
-                    <div class="checkbox" style="display: flex;justify-content: flex-start;" dir="auto">
-
+                    <div class="checkbox">
                         <label asp-for="Input.RememberMe" class="form-label">
                             حفظ المعلومات
                         </label>
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        <input class="form-check-input" asp-for="Input.RememberMe"/>
 
 
                     </div>
                 </div>
                 <div class="mt-3" style="text-align: center">
-                    <button id="login-submit" type="submit" class=" btn btn-lg btn-primary p-3" style="width: 100%; font-size: 17px">تسجيل الدخول</button>
+                    <button id="login-submit" type="submit" class=" btn btn-lg btn-primary p-3">تسجيل الدخول</button>
                 </div>
-                <div class="mt-4 account-options">
-                    <p style="text-align: left !important; font-size: 17px">
-                        <a id="forgot-password" asp-page="./ForgotPassword" style=" font-weight: bold">نسيت كلمة السر ؟</a>
-                    </p>
-                    <hr>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" dir="auto" style="font-size: 18px;">تسجيل مستخدم جديد</a>
-                    </p>
-
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" dir="auto" style="font-size: 18px;">إعادة إرسال تأكيد البريد الإلكتروني</a>
-                    </p>
-                </div>
+                <p class="forget">
+                    <a id="forgot-password" asp-page="./ForgotPassword" style=" font-weight: bold">نسيت كلمة السر ؟</a>
+                </p>
             </form>
         </section>
     </div>
-    @* <div class="col-md-12 col-md-offset-2">
-    <section>
-    <h3>Use another service to log in.</h3>
-    <hr />
-    @{
-    if ((Model.ExternalLogins?.Count ?? 0) == 0)
-    {
-    <div>
-    <p>
-    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-    article
-    about setting up this ASP.NET application to support logging in via external services
-    </a>.
-    </p>
-    </div>
-    }
-    else
-    {
-    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-    <div>
-    <p>
-    @foreach (var provider in Model.ExternalLogins!)
-    {
-    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-    }
-    </p>
-    </div>
-    </form>
-    }
-    }
-    </section>
-    </div> *@
 </div>
 
 
 <style>
-    main {
-        direction: ltr;
-        text-align: left;
+    
+    body {
+        background-image: url("/Static/Images/login-background.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        direction: rtl;
+    }
+
+    main, h2 {
+        direction: rtl;
+        text-align: right;
     }
 
     p {
-        direction: ltr;
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-
-
-    /*     .login-section {
-            box-shadow: 0px 3px 7px 2px #00000029;
-        }
-     */
-    #account {
-        row-gap: 5px;
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-    }
-
-    .account-options p {
-        text-align: end;
-    }
-
-    .login-section a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    form input:not(#Input_RememberMe) {
-        width: 400px;
-        height: 60px;
-        background: white !important;
-        font-size: 1.1rem;
-        /* box-shadow: none; */
-        text-align: right;
-        padding-left: 20px;
-        text-align: right;
-        padding-right: 10px;
-        margin-top: 30px;
-        border: 2px solid #E0E2E9;
-        border-radius: 7px;
-    }
-
-    form input:not([type='checkbox']):focus {
-        padding-bottom: 1.625rem !important;
-        padding-top: 1.625rem !important;
-    }
-
-    .form-floating > .form-control:-webkit-autofill {
-        padding-bottom: 1.625rem !important;
-        padding-top: 1.625rem !important;
-    }
-
-    form * {
-        text-align: right;
-    }
-
-    .account-options p {
-        text-align: right !important;
+        direction: rtl;
     }
 
     .login-section {
+        box-shadow: 0 4px 100px 0 #00000040;
         background: white;
-        width: fit-content !important;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+        border-radius: 16px !important;
+        max-width: 500px !important;
+        padding: 20px 30px !important;
     }
 
-    .checkbox {
-        column-gap: 10px;
+    .login-section img {
+        width: 118px;
+        height: 108px;
+        display: flex;
+        margin: auto;
     }
 
-    form input::placeholder {
-        color: #969AB8 !important;
-        padding-bottom: 1.625rem !important;
-        padding-top: 1.625rem !important;
+    .login-section h2 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 30px;
+        margin-top: 30px;
     }
 
-    h1, h2, h3, h4, p, a, label, input, span, div {
-        font-family: sans-serif !important;
+    .login-section input {
+        box-shadow: 1px 1px 10px 0 #00000040;
+        border-radius: 29px !important;
+    }
+    .form-floating input {
+        padding: 12px !important;
+        height: 50px !important;
+    }
+    
+    .login-section  input::placeholder {
+        color: #575757 !important;
+        opacity: 0.8;
+    }
+    
+    .login-section .form-floating {
+        position: relative;
+        margin: 25px auto auto;
+    }
+    
+    .login-section .checkbox {
+        margin: auto;
+            display: flex;
+            column-gap: 10px;
     }
 
-    ul {
-        padding-right: 0;
-        margin-bottom: 0;
+    .login-section .checkbox .form-label {
+        order: 1;
     }
 
-
-    li {
-        list-style: none;
+    .login-section input.form-check-input {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px !important;
+        box-shadow: none;
+        border: 2px solid #272727;
     }
 
+    input.form-check-input:checked {
+        background-color: transparent !important;
+        border-color: #272727 !important;
+        background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>\
+<path fill='black' d='M13.485 1.929l-7.071 7.071-3.536-3.536-1.414 1.414 4.95 4.95 8.485-8.485z'/>\
+</svg>") !important;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 14px 14px;
+    }
+    
+        #login-submit {
+            background: #FA961E;
+            border-color: transparent;
+            border-radius: 30px;
+            box-shadow: none;
+            color: black;
+            font-weight: bold;
+            display: flex;
+            margin: auto;
+            width: 100%;
+            height: 50px;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .forget {
+        text-align: right;
+        margin-top: 15px;
+    }
+    
 </style>
 
 
