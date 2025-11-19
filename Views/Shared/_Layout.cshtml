@@ -11,7 +11,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Your Website Name" />
 
-    <title>@ViewData["Title"] - FeedHiveAuth</title>
+    <title>@(Convert.ToString(ViewData["Title"])) - FeedHiveAuth</title>
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -71,7 +71,7 @@
                             <img src="~/Static/Images/logo.png" alt="logo" class="side-bar-logo"/>
                             
                             <a href="/Posts/Create" class="side-create">
-                                @AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
+                                <icon name="create" size="25"></icon>@AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
                             </a>
                             
                             <div class="panel-link">
@@ -86,31 +86,31 @@
                             <a href="/Posts/Create"
                                class="list-group-item list-group-item-action py-2"
                                aria-current="true">
-                                <icon name="create"></icon><span>@AppResources.Label("CreatePost")</span>
+                                <icon name="create" size="25"></icon><span>@AppResources.Label("CreatePost")</span>
                             </a>
                             <a href="@postslink"
                                class="list-group-item list-group-item-action py-2 ">
-                                <img src="/Static/Icons/suitcase.svg"/> <span>@AppResources.Label("Posts")</span>
+                                <icon name="posts" size="27"></icon> <span>@AppResources.Label("Posts")</span>
                             </a>
                             <a href="/Social/Channels/Create"
                                class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-building-gear"></i><span>@AppResources.Label("SocialMedia")</span>
+                                <icon name="platforms" size="25"></icon><span>@AppResources.Label("SocialMedia")</span>
                             </a>
                             <a href="/MediaItem/List"
                                class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-collection"></i><span>@AppResources.Label("Media")</span>
+                                <icon name="media" size="25"></icon><span>@AppResources.Label("Media")</span>
                             </a>
                             <a href="/Users/ListTree"
                                class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-people"></i><span>@AppResources.Label("Team")</span>
+                                <icon name="team" size="25"></icon><span>@AppResources.Label("Team")</span>
                             </a>
 
                             <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-tv"></i><span>@AppResources.Label("Channels")</span>
+                                <icon name="channels" size="25"></icon><span>@AppResources.Label("Channels")</span>
                             </a>
 
                             <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-briefcase"></i><span>@AppResources.Label("Roles")</span>
+                                <icon name="posts" size="27"></icon><span>@AppResources.Label("Roles")</span>
                             </a>
                         </div>
 
@@ -119,17 +119,17 @@
                             <a href="/Resources/Index"
                                class="list-group-item list-group-item-action py-2 "
                                aria-current="true">
-                                <i class="bi bi-gear"></i><span>@AppResources.Label("Dictionary")</span>
+                                <icon name="translate" size="25"></icon><span>@AppResources.Label("Dictionary")</span>
                             </a>
 
                             <a href="/Configs/SocialConfigs"
                                class="list-group-item list-group-item-action py-2 "
                                aria-current="true">
-                                <i class="bi bi-gear"></i><span>@AppResources.Label("Settings")</span>
+                                <icon name="settings" size="23"></icon><span>@AppResources.Label("Settings")</span>
                             </a>
                             <a href="/Identity/Account/Manage"
                                class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-person-circle"></i><span>@AppResources.Label("Account")</span>
+                                <icon name="account" size="20"></icon><span>@AppResources.Label("Account")</span>
                             </a>
                         </div>
                     </div>
