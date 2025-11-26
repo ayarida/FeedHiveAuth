@@ -80,32 +80,32 @@ namespace FeedHiveAuth.Controllers
         {
             return ApplicationUserId().GetAwaiter().GetResult();
         }
-        public async Task<bool> isAdminAsync()
+        //public async Task<bool> IsInRoleIgnoreCaseAsync(string role)
+        //{
+        //    var roles = await _userManager.GetRolesAsync(CurrentUser);
+        //    return roles.Any(r => r.Equals(role, StringComparison.OrdinalIgnoreCase));
+        //}
+        private async Task<bool> IsInRoleAsync(string roleName)
         {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Admin");
-            return isAdmin;
+            var user = await _userManager.GetUserAsync(User);
+            return user != null && await _userManager.IsInRoleAsync(user, roleName);
         }
+
+        public Task<bool> isAdminAsync() => IsInRoleAsync("Admin");
+        //public Task<bool> isSuperAdmin() =>  IsInRoleAsync()
+        public Task<bool> isMasterAsync() => IsInRoleAsync("Master");
+        public Task<bool> isEditorAsync() => IsInRoleAsync("Editor");
+        public Task<bool> isSuperAdminAsync() => IsInRoleAsync("SuperAdmin");
         public bool isAdmin()
         {
             return isAdminAsync().GetAwaiter().GetResult();
         }
-        public async Task<bool> isMasterAsync()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isMaster = currUser != null && await _userManager.IsInRoleAsync(currUser, "Master");
-            return isMaster;
-        }
+
         public bool isMaster()
         {
             return isMasterAsync().GetAwaiter().GetResult();
         }
-        public async Task<bool> isEditorAsync()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "Editor");
-            return isAdmin;
-        }
+      
         public bool isEditor()
         {
             return isEditorAsync().GetAwaiter().GetResult();
@@ -115,16 +115,11 @@ namespace FeedHiveAuth.Controllers
         {
             return (isMaster() || isAdmin());
         }
-        public async Task<bool> isSuperAdminAsync()
-        {
-            var currUser = await _userManager.GetUserAsync(User);
-            var isSuperAdmin = currUser != null && await _userManager.IsInRoleAsync(currUser, "SuperAdmin");
-            return isSuperAdmin;
-        }
+        
         public bool isSuperAdmin()
         {
             return isSuperAdminAsync().GetAwaiter().GetResult();
         }
-
+        
     }
 }

@@ -186,5 +186,11 @@ namespace FeedHiveAuth.Data.Repositories
             var query = "Delete from PostMedias Where postId='" + postId + "' and mediaItemId='" + mediaId + "' ";
             var result = connection.Query<int>(query).FirstOrDefault();
         }
+        public string GetPath(string id)
+        {
+            var query = "Select Path from MediaItem Where Id='" + id + "' ";
+            var result = connection.Query<string>(query).FirstOrDefault();
+            return result;
+        }
     }
 }

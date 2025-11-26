@@ -6,7 +6,9 @@
         {
             SubscriptionId = subscriptionId;
         }
-
+        public BaseModel()
+        {
+        }
         public string? Id { get; set; }
         public int Status { get; set; }
         public DateTime? CreationDate { get; set; } = DateTime.MinValue;

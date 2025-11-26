@@ -36,7 +36,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                 error = PublishErrorEnum.NO_CHANNELS;
                 return null;
             }
-            else
+            /*else
             {
                 if (isEditor())
                 {
@@ -59,7 +59,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
                         channels = channels.Where(channel => adminsOfMaster.Contains(channel.ParentId)).ToList();
                     }
                 }
-            }
+            }*/
             error = PublishErrorEnum.NO_ERROR;
             return channels;
         }
@@ -89,7 +89,7 @@ namespace FeedHiveAuth.Areas.Social.Controllers
             if (socialConfigs.WhatsappConfigs?.Application?.Enabled ?? false)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.WhatsApp);
 
-            if (socialConfigs.TwitterConfigs?.Application?.Enabled ?? false)
+            if (socialConfigs.TwitterConfigs?.Application?.Enabled ?? true)
                 activeNetworkTypes.Add(SocialNetworkTypeEnum.Twitter);
 
             /*if (socialConfigs.InstagramConfigs?.Application?.Enabled ?? false)

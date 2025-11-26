@@ -143,10 +143,10 @@ namespace FeedHiveAuth.Controllers
             }
             foreach (var post in posts)
             {
-                var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
+                ///var postMedia = _mediaItemService.GetMediasByPostId(post.Id);
                 var createdByName = _userService.GetNameById(post.CreatedBy);
                 var postOps = GetPostOperations(post.Id);
-                if (postMedia != null) post.PostMediaItems = postMedia;
+                //if (postMedia != null) post.PostMediaItems = postMedia;
                 if (postOps != null) post.Operations = postOps.Where(op => op.Status == StatusEnum.Success.Value() || op.Status == StatusEnum.Processing.Value()).ToList();
                 post.CreatedByName = createdByName;
             }

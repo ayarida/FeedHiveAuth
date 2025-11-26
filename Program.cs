@@ -65,6 +65,14 @@ builder.Services.AddCors(options =>
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             });
+    options.AddPolicy("AllowSpecificOrigins",
+            builder =>
+            {
+                builder.WithOrigins("https://localhost:44352", "https://localhost:44352/Authorization/FacebookSignIn") // Replace {URL} with your actual redirect URL
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+            });
 });
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHostedService<TasksBgService>();
@@ -159,6 +167,11 @@ app.UseEndpoints(endpoints =>
         "RegisterNewUser",
         "{controller = User}/{action = Register}/{id?}",
         new { controller = "Posts", action = "UpdatePost" }
+    );
+    endpoints.MapControllerRoute(
+        "Channels",
+        "{area = Social}/{controller = Channels}/{action = List}",
+        new { area = "Social" , controller = "Channels", action = "List" }
     );
 });
 app.UseEndpoints(endpoints =>

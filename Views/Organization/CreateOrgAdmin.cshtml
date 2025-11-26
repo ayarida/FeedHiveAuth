@@ -1,0 +1,62 @@
+﻿@model FeedHiveAuth.Models.ViewModels.CreateOrgAdminViewModel
+
+@{
+    ViewData["Title"] = "Create Organization Admin";
+    var orgs = ViewBag.Organizations as IEnumerable<FeedHiveAuth.Models.Organization>;
+}
+
+<input type="hidden" asp-for="OrganizationId" />
+<h5>Organization: @Model.OrganizationId</h5>
+
+<div class="container mt-4">
+    <h2>Create Organization Admin</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <form asp-action="CreateOrgAdmin" method="post" asp-controller="Organization">
+        <div class="form-group mb-3">
+            <label asp-for="UserName" class="form-label">Username</label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="OrganizationId" class="form-label">Organization</label>
+            <select asp-for="OrganizationId" class="form-select">
+                <option value="">-- Select Organization --</option>
+                @foreach (var org in orgs)
+                {
+                    <option value="@org.Id">@org.Name</option>
+                }
+            </select>
+            <span asp-validation-for="OrganizationId" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="isActive" class="form-check-input" />
+            <label asp-for="isActive" class="form-check-label">Active</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

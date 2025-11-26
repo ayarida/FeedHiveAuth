@@ -6,6 +6,7 @@
     var roles = Model.Roles;
     var parentUsers = Model.ParentUsers;
     var isAdmin = Model.IsAdmin;
+    var organizationId = Model.OrganizationId;
 }
 
 
@@ -66,7 +67,7 @@
                 </div>
             }
             <input type="submit" value="@AppResources.Label("SaveUser")" class="btn btn-primary mt-4" style="max-width: 200px;" id="submit-user" />
-
+            <input type ="hidden" name="OrganizationId" value="@Model.OrganizationId" />
 
         </form>
     </div>

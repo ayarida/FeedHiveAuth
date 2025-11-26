@@ -10,5 +10,6 @@ namespace FeedHiveAuth.Models.ViewModels
 
         public IList<ApplicationUser> ParentUsers { get; set; }
         public bool IsAdmin { get; set; } = false;
+        public string OrganizationId { get; set; }
     }
 }

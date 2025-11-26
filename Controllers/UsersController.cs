@@ -16,50 +16,67 @@ namespace FeedHiveAuth.Controllers
 {
     public class UsersController : BaseController<UsersController>
     {
+        private RoleManager<IdentityRole> roleManager;
+        private UserManager<ApplicationUser> userManager;
+        private readonly ILogger<UsersController> _logger;
         public UsersController(UserManager<ApplicationUser> userManager, ILogger<UsersController> logger, RoleManager<IdentityRole> roleManager) : base(userManager, logger,roleManager)
         {
+            this.roleManager = roleManager;
+            this.userManager = userManager;
+            this._logger = logger;
         }
         public UserRepository _userService = Instances.Repositories.UserRepository;
         public RoleRepository _roleService = Instances.Repositories.RoleRepository;
+        public OrganizationRepository _orgService = Instances.Repositories.OrganizationRepository;
         
         [PermissionFilter("Users_Create")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var availableRoles = allRoles();
-            
-            //if master : show only admins and whos parentId is this master
-            //else: assign current admin as parentId
+
             var user = await getApplicationUser();
-            var isAdmin = this.isAdmin();           
-            var isMaster = this.isMaster();
+            var organizatinId = user.OrganizationId;
+            bool isAdmin = this.isAdmin();
+            bool isSuperAdmin = this.isSuperAdmin();
+
             var createUserVM = new AddUserViewModel
             {
                 User = user,
                 IsAdmin = isAdmin,
+                OrganizationId = organizatinId
             };
-            //SA can add admin/master users
-            if (isSuperAdmin())
+
+            // SUPERADMIN → can add ANY role
+            if (isSuperAdmin)
             {
-                createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() == "admin" || r.Name.ToLower() == "master").ToList();
-                return View("~/Views/Users/SuperAdmin/Create.cshtml",createUserVM);
+                createUserVM.Roles = availableRoles;
+                return View("~/Views/Users/SuperAdmin/Create.cshtml", createUserVM);
             }
-            else 
+
+            // ADMIN → can add roles except superadmin, admin, orgadmin
+            if (isAdmin)
             {
-                if (isMaster)
-                {
-                    var withAdminRoleAndMasterMembers = getMasterAdmins(user.Id);
-                    var rolesToExclude = new List<string> { "master", "superadmin" };
-                    createUserVM.ParentUsers = withAdminRoleAndMasterMembers.ToList();
-                    createUserVM.Roles = availableRoles.Where(role => !rolesToExclude.ContainsIgnoreCase(role.Name)).ToList();
-                }
-                else
-                {
-                    createUserVM.Roles = availableRoles.Where(r => r.Name.ToLower() != "admin" && r.Name.ToLower() != "master").ToList();            
-                }
+                var excluded = new List<string> { "superadmin", "admin", "orgadmin" };
+                createUserVM.Roles = availableRoles
+                    .Where(r => !excluded.ContainsIgnoreCase(r.Name))
+                    .ToList();
+
+                return View(createUserVM);
             }
-            return View(createUserVM);
+
+            {
+                var excluded = new List<string> { "superadmin", "admin", "orgadmin", "master" };
+                createUserVM.Roles = availableRoles
+                    .Where(r => !excluded.ContainsIgnoreCase(r.Name))
+                    .ToList();
+
+                return View(createUserVM);
+            }
         }
+
+
+
 
         [PermissionFilter("Users_Edit")]
         [HttpGet]
@@ -119,7 +136,7 @@ namespace FeedHiveAuth.Controllers
                 Email = model.Email,
                 EmailConfirmed = true,
                 PasswordHash = model.PasswordHash,
-                //ParentId = model.ParentId
+                OrganizationId = model.OrganizationId
             };
             var currentuser = GetCurrentUserId();
             var result = await userCreateAsync(customUser, model.PasswordHash);
@@ -380,8 +397,6 @@ namespace FeedHiveAuth.Controllers
         [PermissionFilter("Users_MultipleDelete")]
         public void MultipleDelete([FromQuery] string userList)
         {
-
-
             Guid[] idsArray = userList?.Split(',').Select(Guid.Parse).ToArray() ?? Array.Empty<Guid>();
             List<string> stringList = new List<string>();
             foreach (Guid guid in idsArray)

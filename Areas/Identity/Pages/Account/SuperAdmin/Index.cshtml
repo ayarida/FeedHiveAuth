@@ -1,15 +1,39 @@
 ﻿@page
 @{
-    ViewData["Title"] = "SA Index";
-    //Layout = null;
+    ViewData["Title"] = "Super Admin Dashboard";
 }
-<h1>Welcome SuperAdmin</h1>
 
-<a href="~/Roles/Index">Add New Role</a>
-<hr />
-<a href="~/Configs/SocialConfigs">General Configs</a>
-<hr />
-<a href="~/Users/ListTree">All Users</a>
-<hr />
-<a href="~/Users/SuperAdmin/Create">New Master/Admin</a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Super Admin Dashboard</h2>
 
+    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+
+        <a href="@Url.Action("Create", "Organization")"
+           class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">
+            <i class="bi bi-building"></i> Add New Organization
+        </a>
+
+        <a href="@Url.Action("Create", "Roles")"
+           class="btn btn-success px-4 py-2 rounded-3 shadow-sm">
+            <i class="bi bi-person-gear"></i> Add New Role
+        </a>
+
+        <a href="@Url.Action("SocialConfigs", "Configs")"
+           class="btn btn-secondary px-4 py-2 rounded-3 shadow-sm">
+            <i class="bi bi-gear"></i> Go to Configs
+        </a>
+
+    </div>
+</div>
+
+<style>
+    .btn {
+        font-size: 1.05rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+</style>

@@ -17,6 +17,7 @@
         public DateTime? LastLogin { get; set; }
         public string? RoleId { get; set; }
         public string? AvatarId { get; set; }
+        public string? OrganizationId { get; set; }
         //public MediaItem Avatar { get; set; }
         //public Role RoleProperties { get; set; }
     }

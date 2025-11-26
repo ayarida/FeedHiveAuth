@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Social\Data\" />
+    <Folder Include="Views\SuperAdmin\" />
     <Folder Include="Views\Posts\Partials\" />
     <Folder Include="wwwroot\js\JsonForm\" />
     <Folder Include="wwwroot\js\Lib\" />

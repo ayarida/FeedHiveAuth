@@ -1,0 +1,48 @@
+﻿@model FeedHiveAuth.Models.ViewModels.CreateEditorViewModel
+
+@{
+    ViewData["Title"] = "Create Editor";
+}
+
+<div class="container mt-4">
+    <h2>Create Editor</h2>
+
+    <div class="alert alert-info">
+        Organization: <strong>@ViewBag.OrganizationName</strong>
+    </div>
+
+    <form asp-controller="Organization" asp-action="CreateEditor" method="post">
+
+        <input type="hidden" asp-for="OrganizationId" />
+        <input type="hidden" asp-for="ParentId" />
+
+        <div class="form-group mb-3">
+            <label asp-for="UserName" class="form-label"></label>
+            <input asp-for="UserName" class="form-control" placeholder="editor username" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" placeholder="editor@mail.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label">Active</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Editor</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

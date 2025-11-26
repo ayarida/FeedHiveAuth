@@ -66,6 +66,14 @@ namespace FeedHiveAuth.Data.Repositories
                 return resultQuery;
             }
         }
+        public IEnumerable<ApplicationUser> FindByOrgId(string orgId)
+        {
+            using (connection)
+            {
+                var orgUsers = connection.Query<ApplicationUser>("SELECT * FROM AspNetUsers WHERE OrganizationId IN @id", new { Id = new[] { orgId } });
+                return orgUsers;
+            }
+        }
         public IEnumerable<ApplicationUser> GetUsersWhosParentId(string adminId)
         {
             using (connection)

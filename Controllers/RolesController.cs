@@ -76,6 +76,7 @@ namespace FeedHiveAuth.Controllers
                 Id = roleData.Id,
                 Name = roleData.Name,
                 Description = roleData.Description,
+                ConcurrencyStamp = Guid.NewGuid().ToString()
             };
             if (roleToEdit == null) // new role
             {

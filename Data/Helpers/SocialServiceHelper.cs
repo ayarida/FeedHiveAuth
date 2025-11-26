@@ -16,6 +16,8 @@ namespace FeedHiveAuth.Data.Helpers
     {
         public static ConfigsRepository _configsService = Instances.Repositories.ConfigsRepository;
 
+        
+
         public static SocialConfigs getSocialConfigs()
         {
             var configs = _configsService.GetAllConfigs();
@@ -65,7 +67,7 @@ namespace FeedHiveAuth.Data.Helpers
                 {
                     Id = twitterConf.Id,
                     EnumKey = twitterConf.EnumKey,
-                 
+                    
                     Application = twitterApp
                 },
                 WhatsappConfigs = new WhatsappConfigs

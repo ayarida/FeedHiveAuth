@@ -32,6 +32,8 @@ namespace FeedHiveAuth.Areas.Social.Models.Services
             };
             Instances.Repositories.OperationRepository.Insert(operation);
 
+
+
             OperationsService.ProcessOperation(operation);
             return operation.Id;
         }

@@ -1,0 +1,21 @@
+﻿@using FeedHiveAuth.Models.ViewModels
+@model OrganizationEditViewModel
+
+<h3>Edit Organization</h3>
+
+<form asp-action="Update" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">Active</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="@Url.Action("Index", "Organization")" class="btn btn-secondary">Cancel</a>
+</form>

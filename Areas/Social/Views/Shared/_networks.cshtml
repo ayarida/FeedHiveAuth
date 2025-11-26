@@ -9,33 +9,33 @@
     var facebookEnabled = socialConfigs.FacebookConfigs.Application.Enabled ? true : false;
     var telegramEnabled = socialConfigs.TelegramConfigs != null && socialConfigs.TelegramConfigs.Bot.Enabled;
     var instagramEnabled = socialConfigs.InstagramConfigs != null && socialConfigs.InstagramConfigs.Application.Enabled;
-    var twitterEnabled = socialConfigs.TwitterConfigs != null && socialConfigs.TwitterConfigs.Application.Enabled;
+    var twitterEnabled = true;
+
+    //var twitterEnabled = socialConfigs.TwitterConfigs != null && socialConfigs.TwitterConfigs.Application.Enabled;
     var whatsappEnabled = socialConfigs.WhatsappConfigs != null && socialConfigs.WhatsappConfigs.Application.Enabled;
     var DailymotionEnabled = socialConfigs.DailymotionConfigs != null && socialConfigs.DailymotionConfigs.Application.Enabled;
     var googleEnabled = false;
     var youtubeEnabled = false;
     var soundcloudEnabled = false;
-    // var googleEnabled = socialConfigs.GoogleConfigs != null && socialConfigs.GoogleConfigs.Application.Enabled;
-    // var youtubeEnabled = googleEnabled && (socialConfigs.GoogleConfigs.YoutubeConfigs?.Enable ?? false);
-    // var soundcloudEnabled = socialConfigs.SoundcloudConfigs != null && socialConfigs.SoundcloudConfigs.Application.Enabled;
-    // var telegramEnabled = socialConfigs.TelegramConfigs != null && socialConfigs.TelegramConfigs.Bot.Enabled;
-   
-    //var instagramEnabled = false;
-    //var twitterEnabled = true;
-    //var whatsappEnabled = true;
-    //var DailymotionEnabled = true;
-
+    var threadsEnabled = false;
+    var linkedinEnabled = false;
+    var hostURL = "";
 }
+
+
 <div class="social" id="channelContainer">
     <div class="step-pane active networks" data-step="1" id="channelHolder">
         <div class="infobox-container mb-5 social">
             <button class="infobox next-page @(facebookEnabled ? "" : "disabled")" id="callFacebook" @(facebookEnabled ? "" : "disabled") >
+
+                <a href="https://localhost:44352/Home/OAuthFlow?network=Facebook&redirect_uri=https://localhost:44352/Authorization/FacebookSignIn"><i class="ace-icon bi bi-facebook"></i>
                 <div class="infobox-icon">
-                    <i class="ace-icon bi bi-facebook"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Facebook</span>
                 </div>
+                </a>
+
             </button>
             <button class="infobox next-page @(instagramEnabled ? "":  "disabledbutton")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Instagram.Key()', @(instagramEnabled ? "true" : "false"))" @(instagramEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
@@ -54,13 +54,17 @@
                     <span class="infobox-text">Twitter</span>
                 </div>
             </button> *@
-            <button type="button" onclick="location.href='@Url.Action("TwitterOAuthFlow", "Authorization",new { Area = "Social" })'" class="infobox next-page  @(twitterEnabled ? "" : "disabled")" id="callTwitter()" @(twitterEnabled ? "" : "disabled")>
+            <button type="button" class="infobox next-page  @(twitterEnabled ? "" : "disabled")" id="callTwitter()" @(twitterEnabled ? "" : "disabled")>
+                <a href="https://localhost:44352/Home/OAuthFlow?network=Twitter&redirect_uri=https://localhost:44352/Authorization/TwitterSignIn">
+
                 <div class="infobox-icon">
                     <i class="ace-icon bi bi-twitter-x"></i>
                 </div>
                 <div class="infobox-data">
                     <span class="infobox-text">Twitter</span>
                 </div>
+                </a>
+
             </button>
           @*  // <button type="button" onclick="location.href='@Url.Action("TwitterOAuthFlow", "Authorization",new { Area = "Social" })'" /> *@
             <button class="infobox next-page @(youtubeEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Youtube.Key()', @(youtubeEnabled ? "true" : "false"))" @(youtubeEnabled ? "" : "disabled")>
@@ -71,15 +75,17 @@
                     <span class="infobox-text">Youtube</span>
                 </div>
             </button>
-            <button class="infobox next-page @(soundcloudEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Soundcloud.Key()', @(soundcloudEnabled ? "true" : "false"))" @(soundcloudEnabled ? "" : "disabled")>
+            <button class="infobox next-page @(threadsEnabled ? "" : "disabled")" v-on:click="updateNetwork('@SocialNetworkTypeEnum.Threads.Key()', @(threadsEnabled ? "true" : "false"))" @(threadsEnabled ? "" : "disabled")>
                 <div class="infobox-icon">
-                    <i class="ace-icon bi bi-mic-fill"></i>
+                    <i class="ace-icon bi bi-threads"></i>
                 </div>
                 <div class="infobox-data">
-                    <span class="infobox-text">Soundcloud</span>
+                    <span class="infobox-text">Threads</span>
                 </div>
             </button>
             <button class="infobox next-page @(telegramEnabled ? "" : "disabled")" id="callTelegram" @(telegramEnabled ? "" : "disabled")>
+                <a href="https://localhost:44352/Social/Channels/GetNetworks?networkName=telegram">
+
                 <div class="infobox-icon">
                     <i class="ace-icon  bi bi-telegram"></i>
                 </div>
@@ -129,13 +135,13 @@
             }
         })
 
-        $("#callFacebook").on("click", function (event) {
-            if (!$("#callFacebook").is(':disabled')) {
-                $("#channelHolder").load("/Social/Channels/GetNetworks?networkName=facebook");
-                event.preventDefault();
-            }
+        // $("#callFacebook").on("click", function (event) {
+        //     if (!$("#callFacebook").is(':disabled')) {
+        //         $("#channelHolder").load("https://localhost:44352/Home/OAuthFlow?network=Facebook&redirect_uri=https://dev.socialpublisher.net/Authorization/FacebookSignIn");
+        //         event.preventDefault();
+        //     }
 
-        })
+        // })
     });
            
 </script>

@@ -12,5 +12,6 @@ namespace FeedHiveAuth.Areas.Social.Models
         public string Text { get; set; } // Title
         public DateTime? ScheduleTime { get; set; }
         public IEnumerable<string> MediaItemIds { get; set; }
+        public string mediaLink { get; set; }
     }
 }

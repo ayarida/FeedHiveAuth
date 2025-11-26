@@ -11,6 +11,7 @@
         DailyMotion = 60,
         Telegram = 70,
         WhatsApp = 80,
+        Threads = 90,
         Technical = 100
     }
 }

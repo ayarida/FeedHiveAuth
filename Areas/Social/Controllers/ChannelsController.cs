@@ -82,7 +82,6 @@ namespace FeedHiveAuth.Areas.Social.Controllers
 
 
         [HttpGet]
-        [PermissionFilter("Channels_GetNetworks")]
         public ActionResult GetNetworks(string networkName)
         {
             var channelName = networkName;

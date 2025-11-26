@@ -128,6 +128,7 @@ namespace FeedHiveAuth.Areas.Identity.Pages.Account
                     GlobalContext.UserConfigs = GlobalContext.Construct(user);
                     //get the role of the current user
                     var role = await _userManager.GetRolesAsync(user);
+                    var roles = await _userManager.GetRolesAsync(user);
                     //IF ROLE IS SUPERADMIN THEN REDIRECT TO A SPECIFIC PAGE
                     if (role.ContainsIgnoreCase("superadmin"))
                     {
