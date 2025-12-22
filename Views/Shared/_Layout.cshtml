@@ -11,7 +11,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Your Website Name" />
 
-    <title>@ViewData["Title"] - FeedHiveAuth</title>
+    <title>@(Convert.ToString(ViewData["Title"])) - FeedHiveAuth</title>
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,100 +55,94 @@
 <body>
     @using FeedHiveAuth.Data.Helpers
     @inject SignInManager<ApplicationUser> SignInManager
-    <div class="container">
-        <header>
-            @{
-                var postslink = User.IsInRole("Master") ? "/Posts/Admins" : "/Posts/List";
-            }
-            @*Calling Sidebar*@
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <partial name="_LoginPartial" />
+    <header>
+        @{
+            var postslink = User.IsInRole("Master") ? "/Posts/Admins" : "/Posts/List";
+        }
+        @*Calling Sidebar*@
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <partial name="_LoginPartial" />
 
-                <nav dir="auto" id="sidebarMenu"
-                     class="collapse d-lg-block sidebar collapse bg-white" style="">
-                    <div class="position-sticky">
-                        <div class="list-group list-group-flush mx-3">
+            <nav dir="auto" id="sidebarMenu"
+                 class="collapse d-lg-block sidebar collapse bg-white" style="">
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush mx-3">
+                        <img src="~/Static/Images/logo.png" alt="logo" class="side-bar-logo" />
 
-                            <partial name="_accountDisplay" />
+                        <a href="/Posts/Create" class="side-create">
+                            <icon name="create" size="25"></icon>@AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
+                        </a>
 
-                            <a href="/Posts/Create" style="color: white !important;     background-color: #4984ed; border-color: #1861ac !important; text-wrap: nowrap; border-radius: 14px;" class="d-flex w-100 h-100 align-items-center justify-content-center btn btn-primary py-2 mt-3 mb-4">
-                                @AppResources.Label("CreatePost") <i class="bi bi-plus-lg"></i>
-                            </a>
-
-
+                        <div class="panel-link">
                             <a href="/Home/Index"
-                               class="list-group-item list-group-item-action py-2 mt-5 mb-3 active"
+                               class="list-group-item list-group-item-action"
                                aria-current="true">
-                                <i class="bi bi-house-fill"></i><span>@AppResources.Label("Dashboard")</span>
-                            </a>
-
-                            <hr />
-
-                            <a href="/Posts/Create"
-                               class="list-group-item list-group-item-action py-2"
-                               aria-current="true">
-                                <i class="bi bi-pencil-square"></i><span>@AppResources.Label("CreatePost")</span>
-                            </a>
-                            @*          <a href="/Posts/Calendar" class="list-group-item list-group-item-action py-2 ">
-                        <i class="bi bi-calendar"></i><span>جدول المحتوى</span>
-                        </a> *@
-                            <a href="@postslink"
-                               class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-grid"></i><span>@AppResources.Label("Posts")</span>
-                            </a>
-                            <a href="/Social/Channels/Create"
-                               class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-building-gear"></i><span>@AppResources.Label("SocialMedia")</span>
-                            </a>
-                            <a href="/MediaItem/List"
-                               class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-collection"></i><span>@AppResources.Label("Media")</span>
-                            </a>
-                            <a href="/Users/ListTree"
-                               class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-people"></i><span>@AppResources.Label("Team")</span>
-                            </a>
-
-                            <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-tv"></i><span>@AppResources.Label("Channels")</span>
-                            </a>
-
-                            <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-briefcase"></i><span>@AppResources.Label("Roles")</span>
+                                <icon name="home" size="25"></icon>
+                                <span>@AppResources.Label("Dashboard")</span>
                             </a>
                         </div>
 
-                        <div class="list-group list-group-flush mx-3 bottom-list">
-                            <hr />
-                            <a href="/Resources/Index"
-                               class="list-group-item list-group-item-action py-2 "
-                               aria-current="true">
-                                <i class="bi bi-gear"></i><span>@AppResources.Label("Dictionary")</span>
-                            </a>
+                        <a href="/Posts/Create"
+                           class="list-group-item list-group-item-action py-2"
+                           aria-current="true">
+                            <icon name="create" size="25"></icon><span>@AppResources.Label("CreatePost")</span>
+                        </a>
+                        <a href="@postslink"
+                           class="list-group-item list-group-item-action py-2 ">
+                            <icon name="posts" size="27"></icon> <span>@AppResources.Label("Posts")</span>
+                        </a>
+                        <a href="/Social/Channels/Create"
+                           class="list-group-item list-group-item-action py-2 ">
+                            <icon name="platforms" size="25"></icon><span>@AppResources.Label("SocialMedia")</span>
+                        </a>
+                        <a href="/MediaItem/List"
+                           class="list-group-item list-group-item-action py-2 ">
+                            <icon name="media" size="25"></icon><span>@AppResources.Label("Media")</span>
+                        </a>
+                        <a href="/Users/ListTree"
+                           class="list-group-item list-group-item-action py-2 ">
+                            <icon name="team" size="25"></icon><span>@AppResources.Label("Team")</span>
+                        </a>
 
-                            <a href="/Configs/SocialConfigs"
-                               class="list-group-item list-group-item-action py-2 "
-                               aria-current="true">
-                                <i class="bi bi-gear"></i><span>@AppResources.Label("Settings")</span>
-                            </a>
-                            <a href="/Identity/Account/Manage"
-                               class="list-group-item list-group-item-action py-2 ">
-                                <i class="bi bi-person-circle"></i><span>@AppResources.Label("Account")</span>
-                            </a>
-                        </div>
+                        <a href="/Social/channels/Index" class="list-group-item list-group-item-action py-2 ">
+                            <icon name="channels" size="25"></icon><span>@AppResources.Label("Channels")</span>
+                        </a>
+
+                        <a href="/Roles/Index" class="list-group-item list-group-item-action py-2 ">
+                            <icon name="posts" size="27"></icon><span>@AppResources.Label("Roles")</span>
+                        </a>
                     </div>
-                </nav>
 
-                <partial name="_SearchResult" />
-            }
+                    <div class="list-group list-group-flush mx-3 bottom-list">
+                        <hr />
+                        <a href="/Resources/Index"
+                           class="list-group-item list-group-item-action py-2 "
+                           aria-current="true">
+                            <icon name="translate" size="25"></icon><span>@AppResources.Label("Dictionary")</span>
+                        </a>
+
+                        <a href="/Configs/SocialConfigs"
+                           class="list-group-item list-group-item-action py-2 "
+                           aria-current="true">
+                            <icon name="settings" size="23"></icon><span>@AppResources.Label("Settings")</span>
+                        </a>
+                        <a href="/Identity/Account/Manage"
+                           class="list-group-item list-group-item-action py-2 ">
+                            <icon name="account" size="20"></icon><span>@AppResources.Label("Account")</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        }
 
 
 
 
-            @*Calling navbar*@
+        @*Calling navbar*@
 
-        </header>
+    </header>
+    <div class="container">
         <div class="container">
             <main role="main" class="pb-3" dir="auto">
                 @RenderBody()

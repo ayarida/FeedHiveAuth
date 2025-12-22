@@ -27,12 +27,14 @@
         </form>
 
 
-  
+
         var userRoles = User.Claims.Where(x => x.Type == User.Identities.Select(x => x.RoleClaimType).FirstOrDefault()).Select(c => c.Value);
 
+        <partial name="_SearchResult" />
     }
     else
     {
+        <div class="register"><a class="nav-link text-dark register" asp-area="Identity" asp-page="/Account/Register">@AppResources.Label("Register")</a></div>
         <div class="login">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">@AppResources.Label("Login")</a>
         </div>

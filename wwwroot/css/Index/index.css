@@ -27,3 +27,40 @@
         padding: 25px;
     }
 }
+
+.vertical-separator {
+    border-left: 1px solid #ccc; /* Adjust width, style, and color */
+    height: 50px; /* Set the desired height of the line */
+    margin: 0 10px; /* Optional: Add spacing around the line */
+    display: inline-block; /* Allows it to sit next to other inline elements */
+    vertical-align: middle; /* Aligns the line vertically with surrounding content */
+}
+
+.card.status-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    border-radius: 16px;
+    column-gap: 10px;
+}
+
+    .card.status-cards h1, .card.status-cards h2 {
+        margin: 0;
+    }
+
+.archive-card {
+    border-radius: 12px;
+    min-height: 200px;
+}
+
+.archive-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.post-metas {
+    margin-top: auto;
+}
