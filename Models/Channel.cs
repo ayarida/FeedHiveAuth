@@ -22,6 +22,7 @@
         public string ParentId { get; set; }
         public int Order { get; set; }
         public string Configs { get; set; }
+        public string OrganizationId { get; set; }
     }
 }
 

@@ -21,7 +21,7 @@ namespace FeedHiveAuth.Data.Repositories
             Columns = Database.Columns.MediaItem;
         }
 
-        public List<MediaItem> MediasList(IFormFileCollection files, string currentuser)
+        public List<MediaItem> MediasList(IFormFileCollection files, ApplicationUser currentuser)
         {
             //convert post.medias list to objects 
             //convert objects to mediaItem objects 
@@ -32,8 +32,9 @@ namespace FeedHiveAuth.Data.Repositories
             {
                 MediaItem mediaItem = new MediaItem();
                 mediaItem.ThumbnailUrl = file.FileName;
-                mediaItem.CreatedBy = currentuser;
+                mediaItem.CreatedBy = currentuser.Id;
                 mediaItem.Caption = file.FileName;
+                mediaItem.OrganizationId = currentuser.OrganizationId;
 #if DEBUG
 
                 baseUrl = SocialServiceHelper.getSocialConfigs().TechnicalConfigs?.appTechnicalConfigs?.LocalUrl;
@@ -70,7 +71,7 @@ namespace FeedHiveAuth.Data.Repositories
                         break;
                 }
                 string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9})",
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9},{10})",
                                     TableName,
                                     Columns.AddBraces(),
                                     Guid.NewGuid().EscapeForSql(),
@@ -80,7 +81,8 @@ namespace FeedHiveAuth.Data.Repositories
                                     mediaItem.Path.EscapeForSql(),
                                     mediaItem.CreatedBy.EscapeForSql(),
                                     extension.EscapeForSql(),
-                                    mediaItem.Type
+                                    mediaItem.Type,
+                                    mediaItem.OrganizationId.EscapeForSql()
                                     );
                 ExecuteQuery(query);
             }
@@ -109,7 +111,7 @@ namespace FeedHiveAuth.Data.Repositories
                 }
                 var mid = Guid.NewGuid();
                 string query = string.Format(
-                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9})",
+                                    "Insert Into {0} ({1}) Values ({2},{3},{4},{5},{6},{7},{8},{9},{10})",
                                     TableName,
                                     Columns.AddBraces(),
                                     mid.EscapeForSql(),
@@ -119,7 +121,8 @@ namespace FeedHiveAuth.Data.Repositories
                                     mediaItem.Path.EscapeForSql(),
                                     mediaItem.CreatedBy.EscapeForSql(),
                                     extension.EscapeForSql(),
-                                    mediaItem.Type
+                                    mediaItem.Type,
+                                    mediaItem.OrganizationId.EscapeForSql()
                                     );
                 mediaItem.Id = mid.ToString();
                 ExecuteQuery(query);
@@ -172,7 +175,12 @@ namespace FeedHiveAuth.Data.Repositories
             List<MediaItem> postMediaItems = connection.Query<MediaItem>(query).ToList();
             return postMediaItems;
         }
-
+        public List<MediaItem> GetOrganizationMedia(string orgId)
+        {
+            var query = "SELECT * FROM MediaItem Where OrganizationId='" + @orgId + "' ";
+            List<MediaItem> mediaItems = connection.Query<MediaItem>(query).ToList();
+            return mediaItems;
+        }
         public IEnumerable<PostMedia> GetPostMediaRelations(string mediaId)
         {
             using (connection)

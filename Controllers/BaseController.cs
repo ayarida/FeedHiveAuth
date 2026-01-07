@@ -4,6 +4,7 @@ using FeedHiveAuth.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using FeedHiveAuth.Models;
 
 namespace FeedHiveAuth.Controllers
 {
@@ -15,12 +16,15 @@ namespace FeedHiveAuth.Controllers
         private readonly ILogger<T> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public BaseController(UserManager<ApplicationUser> userManager, ILogger<T> logger, RoleManager<IdentityRole> roleManager = null)
+
+        public BaseController(UserManager<ApplicationUser> userManager, ILogger<T> logger, RoleManager<IdentityRole> roleManager = null, IHttpContextAccessor contextAccessor = null)
         {
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
+            _contextAccessor = contextAccessor;
         }
 
         public List<ApplicationUser> allUsers()
@@ -37,6 +41,11 @@ namespace FeedHiveAuth.Controllers
         public async Task<ApplicationUser> getApplicationUser()
         {
             return await _userManager.GetUserAsync(User);
+        }
+        public async Task<ApplicationUser> GetApplicationUser()
+        {
+            var user = _contextAccessor.HttpContext?.User;
+            return await _userManager.GetUserAsync(user);
         }
         public async Task<ApplicationUser> getUserById(string userId)
         {
@@ -69,7 +78,6 @@ namespace FeedHiveAuth.Controllers
         public async Task<List<ApplicationUser>> getAdminUsers()
         {
             return (List<ApplicationUser>)await _userManager.GetUsersInRoleAsync("Admin");
-
         }
         public async Task<string> ApplicationUserId()
         {
@@ -89,6 +97,11 @@ namespace FeedHiveAuth.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             return user != null && await _userManager.IsInRoleAsync(user, roleName);
+        }
+        public async Task<string> getCurrentOrganizationId()
+        {
+            var currUser = await getApplicationUser();
+            return currUser.OrganizationId;
         }
 
         public Task<bool> isAdminAsync() => IsInRoleAsync("Admin");
@@ -119,7 +132,6 @@ namespace FeedHiveAuth.Controllers
         public bool isSuperAdmin()
         {
             return isSuperAdminAsync().GetAwaiter().GetResult();
-        }
-        
+        }  
     }
 }
