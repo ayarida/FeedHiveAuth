@@ -322,11 +322,11 @@ namespace FeedHiveAuth.Controllers
         [HttpGet]
         [PermissionFilter("Organization_CreateOrgAdmin")]
 
-        public IActionResult CreateOrgAdmin(string orgId)
+        public IActionResult CreateOrgAdmin()
         {
             var orgs = _organizationService.GetAll();
             ViewBag.Organizations = orgs;
-            return View(new CreateOrgAdminViewModel { OrganizationId = orgId} );
+            return View(new CreateOrgAdminViewModel {} );
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

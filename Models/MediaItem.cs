@@ -32,5 +32,6 @@ namespace FeedHiveAuth.Models
         [NotMapped]
 
         public List<IFormFile> Files { get; set; }
+        public string OrganizationId { get; set; }
     }
 }
