@@ -33,9 +33,8 @@ namespace FeedHiveAuth.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var organizations = _organizationService.GetAll();
+            var organizations = _organizationService.GetAll().Where(o=> !o.IsDeleted);
             var model = new List<OrganizationViewModel>();
-
             foreach (var org in organizations)
             {
                 var users = _userService.FindByOrgId(org.Id);
@@ -44,7 +43,7 @@ namespace FeedHiveAuth.Controllers
                 {
                     Id = org.Id,
                     Name = org.Name,
-                    CreatedOn = org.CreationDate,
+                    CreationDate = org.CreationDate,
                     Status = org.IsActive ? "Active" : "Inactive",
                     OrgAdminsCount = users.Count(u => _userManager.IsInRoleAsync(u, "OrgAdmin").Result),
                     EditorsCount = users.Count(u => _userManager.IsInRoleAsync(u, "Editor").Result)
@@ -76,7 +75,8 @@ namespace FeedHiveAuth.Controllers
                     Name = model.Name,
                     SubscriptionType = model.SubscriptionType,
                     IsActive = model.IsActive,
-                    Description = model.Description
+                    Description = model.Description,
+                    CreationDate = DateTime.UtcNow
                 };
 
                 _organizationService.Save(organization);
@@ -207,23 +207,26 @@ namespace FeedHiveAuth.Controllers
         //    return View(org);
         //}
 
-        [HttpPost, ActionName("Delete")]
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [PermissionFilter("Organization_DeleteConfirmed")]
-        public IActionResult DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            try
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var result = _organizationService
+                .TryDeleteOrganization(id, currentUser.Id);
+
+            if (!result.IsSuccess)
             {
-                _organizationService.DeleteOrganization(id);
-                TempData["Success"] = "Organization deleted successfully!";
-                return RedirectToAction("Index");
+                TempData["SwalError"] = result.Message;
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error deleting organization: {ex}");
-                ModelState.AddModelError("", "Error deleting organization");
-                return RedirectToAction("Index");
-            }
+
+            TempData["SwalSuccess"] = "Organization deleted successfully.";
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
