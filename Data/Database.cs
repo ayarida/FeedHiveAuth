@@ -38,7 +38,7 @@
             public static string Resources = "Id,Key,Value,Language";
             public static string PostMedias = "MediaItemId,PostId";
             public static string Configs = "Id,EnumKey,Name,JsonValue,MasterId,CreationDate";
-            public static string Organization = "Id,Name,SubscriptionType,IsActive";
+            public static string Organization = "Id,Name,CreationDate,LastModified,SubscriptionType,IsActive";
         }
         public static class ExcludedColumns
         {
