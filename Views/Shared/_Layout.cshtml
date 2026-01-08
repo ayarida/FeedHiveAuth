@@ -49,6 +49,35 @@
     <script src="/js/Lib/axios.js"></script>
 
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            @if (TempData["SwalSuccess"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: '@TempData["SwalSuccess"]',
+                        confirmButtonColor: '#3085d6'
+                    });
+                    </text>
+            }
+
+            @if (TempData["SwalError"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Action blocked',
+                        text: '@TempData["SwalError"]',
+                        confirmButtonColor: '#d33'
+                    });
+                    </text>
+            }
+
+        });
+    </script>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
 </head>
