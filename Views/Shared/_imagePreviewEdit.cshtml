@@ -6,17 +6,15 @@
 }
 
 
-<div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column" id="media-section">
-
-
+<div id="existing-image">
     @if (model.PostMediaItems != null)
     {
         @foreach (var media in mediaItems)
         {
             @if (!media.Path.ToString().Contains(".mp4"))
             {
-                <div class="d-flex flex-column justify-content-center uploaded-img mt-3 w-100">
-                    <img src="@media.Path" />
+                <div class="uploaded-img">
+                    <img alt="preview" src="@media.Path" />
                     <div onclick="deleteMedia(this)" class="deleteIcon">
                         <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
                     </div>

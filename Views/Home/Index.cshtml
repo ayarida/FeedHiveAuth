@@ -93,6 +93,7 @@
 
 </div>
 
+
 <script>
     var quickPostTitle = '@AppResources.Label("FillAllRequiredFields", "ar")';
 </script>
@@ -102,3 +103,35 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="~/js/Index/index.js"></script>
 <script src="~/js/Posts/quickpost.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // 1. Select all archive menu containers
+        const archiveMenus = document.querySelectorAll('.archive_menu');
+
+        // 2. Add click event to each menu
+        archiveMenus.forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent the click from bubbling to the document
+
+                // Optional: Close all other open menus first
+                archiveMenus.forEach(otherMenu => {
+                    if (otherMenu !== menu) {
+                        otherMenu.classList.remove('active');
+                    }
+                });
+
+                // Toggle the 'active' class on the clicked menu
+                this.classList.toggle('active');
+            });
+        });
+
+        // 3. Close menu when clicking anywhere else on the document
+        document.addEventListener('click', function() {
+            archiveMenus.forEach(menu => {
+                menu.classList.remove('active');
+            });
+        });
+    });
+</script>

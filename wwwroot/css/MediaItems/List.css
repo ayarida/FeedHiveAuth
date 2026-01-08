@@ -266,14 +266,6 @@ input.submit-button:not(.save-submit) {
     font-size: 20px;
 }
 
-.createUpper {
-    border: 1px solid #eaecee;
-    background: #f8fafc;
-    padding: 10px 25px;
-    border-radius: 6px;
-    margin-top: 17px;
-}
-
 .createHeader {
     display: flex;
     align-items: center;

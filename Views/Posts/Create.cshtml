@@ -8,6 +8,7 @@
 
 
 
+
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -29,33 +30,36 @@
 
 
     <div class="p-3 col-md-10 col-sm-12 createForm">
-        <div class="createHeader">
-            <div class="chatIcon">
-                <i class="bi bi-chat-right-text"></i>
-            </div>
-            <div>
-                <p class="headerTitle">إنشاء منشور</p>
-                <p class="headerSubtitle">أنشئ منشورًا عالي الأداء لتوصيل رسالتك.</p>
-            </div>
-        </div>
         <div class="row">
             <div class="create-post my-2">
                 <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                 
                     <div class="createUpper">
-                        <div class="form-group mb-4">
+                        <div class="container-create-header">
+                            <h2>منشور جديد</h2>
+                            <div class="post-actions">
+                                <button type="submit" class="submit-button btn btn-primary save-submit">
+                                    <span>@AppResources.Label("Save")</span>
+                                    <icon name="save" size="25" class="ms-2"></icon> 
+                                </button>
+                                <a asp-controller="Home" asp-action="Index" class="back-home">@AppResources.Label("back") <icon name="back" size="25"></icon></a>                          
+                            </div>
+                        </div>
+                        <div class="form-body">
+                             <div class="form-group mb-4">
                             <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
-                            <input asp-for="Title" class="form-control req" />
+                            <input asp-for="Title" class="form-control req"/>
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
                             <label asp-for="ShortTitle" class="control-label ">@AppResources.Label("Shorttitle")</label>
-                            <input asp-for="ShortTitle" class="form-control" />
+                            <input asp-for="ShortTitle" class="form-control"/>
                             <span asp-validation-for="ShortTitle" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
                             <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
-                            <input asp-for="Summary" class="form-control" />
+                            <input asp-for="Summary" class="form-control"/>
                             <span asp-validation-for="Summary" class="text-danger"></span>
                         </div>
                         <div class="form-group mb-4">
@@ -65,22 +69,23 @@
                         </div>
                         <div class="form-group mb-4" style="display:none;">
                             <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
-                            <input asp-for="PostDate" class="form-control req" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" min=" @DateTime.Now" max=" @DateTime.Now" />
+                            <input asp-for="PostDate" class="form-control req" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" min=" @DateTime.Now" max=" @DateTime.Now"/>
                             <span asp-validation-for="PostDate" class="text-danger"></span>
                         </div>
-                        <input type="hidden" asp-for="mediaItemsPaths" class="form-control" id="mediaItemsPaths" name="mediaItemsPaths" />
+                        <input type="hidden" asp-for="mediaItemsPaths" class="form-control" id="mediaItemsPaths" name="mediaItemsPaths"/>
 
+                        </div>
                     </div>
                     @* PreviewIamge and handle exceptions *@
+                    <div class="image-upload-title">@AppResources.Label("image")</div>
                     <div class="submitPreview p-3">
                         <partial name="_imagePreview" />
                         <partial name="_imageFromArchive" />
-                        <div class="form-group d-flex justify-content-center">
-                        </div>
+                        @* <div class="form-group d-flex justify-content-center"> *@
+                        @* </div> *@
                     </div>
                     <div id="imgPreview">
                     </div>
-                    <input type="submit" value="@AppResources.Label("Save")" class="submit-button btn btn-primary save-submit m-0 mt-2" style="width: 200px; border: none !important" />
                 </form>
             </div>
         </div>

@@ -3,112 +3,115 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var model = Model;
-    string[] imgExtenstions = { "png", "jpg", "jpeg" };
-    var mediaItems = model.PostMediaItems;
 }
 
-<div dir="rtl">
-    <h2>@AppResources.Label("UpdateContent"):</h2>
-    <h3> @Model?.Title </h3>
-</div>
-<hr />
-
 <div class="d-flex flex-wrap create popup-media">
-
-
     <div class="p-3 col-md-10 col-sm-12 createForm">
-        <div class="createHeader">
-            <div class="chatIcon">
-                <i class="bi bi-chat-right-text"></i>
-            </div>
-            <div>
-                <p class="headerTitle">إنشاء منشور</p>
-                <p class="headerSubtitle">أنشئ منشورًا عالي الأداء لتوصيل رسالتك.</p>
-            </div>
-        </div>
         <div class="row">
             <div class="create-post my-2">
-                <form asp-controller="Posts" asp-action="CreatePost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="createUpper">
-                        <div class="form-group mb-4">
-                            <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
-                            <input asp-for="Title" class="form-control req" />
-                            <span asp-validation-for="Title" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="ShortTitle" class="control-label ">@AppResources.Label("ShortTitle")</label>
-                            <input asp-for="ShortTitle" class="form-control" />
-                            <span asp-validation-for="ShortTitle" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
-                            <input asp-for="Summary" class="form-control" />
-                            <span asp-validation-for="Summary" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
-                            <textarea asp-for="Content" class="form-control" id="mytextarea"></textarea>
-                            <span asp-validation-for="Content" class="text-danger"></span>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
-                            <input asp-for="PostDate" class="form-control req" />
-                            <span asp-validation-for="PostDate" class="text-danger"></span>
-                        </div>
-                        <input type="hidden" asp-for="Id" class="form-control req" value="@Model.Id"/>
-                        <input type="hidden" asp-for="CreatedBy" value="@Model.CreatedBy" ></input>
-                    </div>
-                    @* PreviewIamge and handle exceptions *@
-                    <div class="submitPreview">
+                
+               <form asp-controller="Posts" asp-action="EditPost" enctype="multipart/form-data" method="post" style="max-width: 100%;width: 100%" id="create-form" dir="rtl">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+    <div class="createUpper">
+        <div class="container-create-header">
+            <h2>تعديل المنشور</h2>
+            <div class="post-actions">
+                <button type="submit" class="submit-button btn btn-primary save-submit">
+                    <span>@AppResources.Label("Update")</span>
+                    <icon name="save" size="25" class="ms-2"></icon> 
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="back-home">
+                    @AppResources.Label("back") 
+                    <icon name="back" size="25"></icon>
+                </a>                          
+            </div>
+        </div>
 
-                        <label class="custom-file-upload">
-                            <i class="bi bi-camera"></i>
-                            <input type="file" name="File" id="mediaInput" multiple />
-                        </label>
-                        <div class="form-group d-flex justify-content-center">
-                            <div class="submit-div">
-                                <input type="submit" value="+" class="submit-button" />
+        <div class="form-body">
+             <div class="form-group mb-4">
+                <label asp-for="Title" class="control-label">@AppResources.Label("Title")</label>
+                <input asp-for="Title" class="form-control req"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="ShortTitle" class="control-label ">@AppResources.Label("Shorttitle")</label>
+                <input asp-for="ShortTitle" class="form-control"/>
+                <span asp-validation-for="ShortTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="Summary" class="control-label">@AppResources.Label("Summary")</label>
+                <input asp-for="Summary" class="form-control"/>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="Content" class="control-label">@AppResources.Label("Content")</label>
+                <textarea asp-for="Content" class="form-control" id="mytextarea"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="PostDate" class="control-label">@AppResources.Label("PostDate")</label>
+                <input asp-for="PostDate" class="form-control req" />
+                <span asp-validation-for="PostDate" class="text-danger"></span>
+            </div>
+            
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="mediaItemsPaths" class="form-control" id="mediaItemsPaths" name="mediaItemsPaths"/>
+        </div>
+    </div>
 
-                            </div>
-                        </div>
-                    </div>
+    <div class="image-upload-title mt-4">@AppResources.Label("image")</div>
+    
+    <div class="submitPreview p-3">
+        <label class="custom-file-upload">
+            <i class="bi bi-camera"></i>
+            <p class="upload-button">@AppResources.Label("upload")</p>
+            <input type="file" name="File" id="mediaInput" multiple style="display:none;" /> </label>
+        <div class="archive-button">
+            <partial name="_imageFromArchive" />
+        </div>
+    </div>
 
+    <div class="media-gallery-container mt-3">
+        
+        <div class="existing-images">
+            <partial name="_imagePreviewEdit" />
+        </div>
 
-                    <partial name="_imagePreviewEdit" />
-                    <div id="imgPreview">
-                    </div>
-                    <input type="submit" value="@AppResources.Label("Update")" class="submit-button btn btn-primary mt-3 save-submit" style="width: 200px; border:none" />
-                </form>
+        <div id="imgPreview" class="d-flex flex-wrap" style="gap: 20px;">
+            </div>
+
+    </div>
+
+</form>
             </div>
         </div>
     </div>
 </div>
 
+<link rel="stylesheet" href="~/css/Posts/edit.css" />
+<script>
+    var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
+    var subFields = '@Html.Raw(AppResources.Label("StarFields", "ar"))';
+    var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
+    var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
+</script>
 
 <script>
     tinymce.init({
         forced_root_block: " ",
         selector: '#mytextarea',
         menubar: 'file edit view',
-        plugins: 'code  fullscreen insertdatetime searchreplace',
+        plugins: 'code fullscreen insertdatetime searchreplace',
         toolbar: 'fullscreen | undo redo | styleselect | insertdatetime | searchreplace',
         branding: false,
         statusbar: false,
     });
 </script>
-
-<script>
-
-    var fields = '@AppResources.Label("FillAllRequiredFields", "ar")';
-    var subFields = '@Html.Raw(AppResources.Label("StarFields", "ar"))';
-
-    var wrongType = '@Html.Raw(AppResources.Label("WrongMediaType", "ar"))';
-    var requiredMediaType = '@Html.Raw(AppResources.Label("requiredType", "ar"))';
-
-</script>
-
-<link rel="stylesheet" href="~/css/Posts/edit.css" />
 <script src="~/js/Posts/edit.js"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -3,7 +3,6 @@
 @using FeedHiveAuth.Models.Enums;
 @using FeedHiveAuth.Data.Helpers
 
-
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @model FeedHiveAuth.Models.Post
@@ -14,244 +13,159 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var configs = SocialServiceHelper.getSocialConfigs();
     var defaultimg = configs.TechnicalConfigs?.appTechnicalConfigs?.DefaultImageUrl ?? "";
-
+    ViewData["Title"] = "Preview";
 }
 
+<div class="d-flex flex-wrap create popup-media">
+    <div class="p-3 col-md-10 col-sm-12 createForm">
+        
+        <form id="form-share" method="post" action="send" style="max-width: 100%; width: 100%" dir="rtl">
+            
+            <div class="createUpper">
+                <div class="container-create-header">
+                    <div class="header-text">
+                        <h2>استعراض المنشور</h2>
+                        <p class="text-muted">مراجعة التفاصيل قبل النشر</p>
+                    </div>
 
-<div class="editor ms-auto card" dir="rtl" style="max-width: 100%; background-color: white;">
-    <div class="mt-4">
-        <div class="form-items">
-            <div class="row mx-4 gx-5">
-                <div class="d-flex justify-content-between ">
-                    <h2>استعراض المنشور</h2>
-                    <div class="action-buttons d-flex">
-                        <a href="/Posts/Edit/@post.Id">
-                            <button class="edit btn">
-
-                                @AppResources.Label("edit", "ar") <i class="bi bi-pencil-square"></i>
-
-                            </button>
+                    <div class="post-actions">
+                        <a href="/Social/Publish/Share?postid=@post.Id" class="submit-button btn btn-primary save-submit" style="text-decoration: none;">
+                            <span>@AppResources.Label("share", "ar")</span>
+                            <i class="bi bi-share ms-2"></i>
                         </a>
-                        <a href="/Social/Publish/Share?postid=@post.Id">
-                            <button class="share btn">@AppResources.Label("share", "ar") <i class="bi bi-share me-2"></i></button>
+
+                        <a href="/Posts/Edit/@post.Id" class="edit-btn">
+                            @AppResources.Label("edit", "ar") 
+                            <i class="bi bi-pencil-square ms-1"></i>
+                        </a>
+
+                        <a href="/Home/Index" class="back-home">
+                            @AppResources.Label("back") 
+                            <icon name="back" size="25"></icon>
                         </a>
                     </div>
                 </div>
-            </div>
 
-            <form id="form-share" method="post" action="send" class="">
-
-                <div class="row m-4 gx-5 p-3 preview-box">
-                    <div class="input-fields col-md-6 d-flex justify-content-between w-100">
-
-                        <div style="width: 400px">
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-7">
                             <div class="form-group mb-4">
-                                <label class="mb-3 control-label">عنوان المنشور</label>
-                                <br />
-                                <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" id="post-title" />
+                                <label class="control-label">عنوان المنشور</label>
+                                <input class="form-control" value="@post.Title" name="Data[0].Text" readonly type="text" />
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="mb-3 control-label">عنوان قصير</label>
-                                <br />
+                                <label class="control-label">عنوان قصير</label>
                                 <input value="@post.ShortTitle" name="ShortTitle" readonly type="text" class="form-control" />
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="mb-3 control-label">ملخص</label>
-                                <br />
+                                <label class="control-label">ملخص</label>
                                 <input value="@post.Summary" name="Summary" readonly class="form-control" />
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="mb-3 control-label">محتوى</label>
-                                <br />
-                                <input value="@post.Content" name="Content" readonly class="form-control" id="post-description" />
+                                <label class="control-label">محتوى</label>
+                                <textarea readonly class="form-control" style="height: 120px">@post.Content</textarea>
                             </div>
-
-                            <input class="form-control req" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
+                            
+                            <div class="form-group mb-4">
+                                <label class="control-label">وقت النجدولة</label>
+                                <input class="form-control" type="datetime-local" id="ScheduleTime" name="Data[0].ScheduleTime" value="">
+                            </div>
                         </div>
 
-                        <div class="form-group mb-4 mt-3 d-flex flex-column">
-                            @if (post.PostMediaItems != null && post.PostMediaItems.Count > 0)
-                            {
-                                <br />
-                                <label for="MediaId" class="mb-3 control-label">ميديا </label>
-                                foreach (var media in post.PostMediaItems)
+                        <div class="col-md-5">
+                            <label class="control-label mb-3">الوسائط المتعددة</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                @if (post.PostMediaItems != null && post.PostMediaItems.Count > 0)
                                 {
-                                    if (media.Type == 10)
+                                    foreach (var media in post.PostMediaItems)
                                     {
-                                        <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
-                                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                                        <div class="media-container">
+                                            @if (media.Type == 10) // Image
+                                            {
+                                                <div class="uploaded-img">
+                                                    <img src="@media?.Path" />
+                                                    <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (media.Type == 30) // Video
+                                            {
+                                                <div class="video-holder uploaded-img">
+                                                    <iframe src="@media?.Path" allowfullscreen style="width: 100%; height: 100%"></iframe>
+                                                     <div onclick="deletePostMedia('@media.Id','@post.Id')" class="deleteIcon">
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
-                                        <img src="@media?.Path" style="width: 300px; max-width: 100%" />
-                                        <br />
                                     }
-                                    if (media.Type == 30)
-                                    {
-                                        <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe class="embed-responsive-item" src="@media?.Path" allowfullscreen></iframe>
-                                        </div>
-                                    }
-
+                                    <input type="hidden" name="MediaId" class="shareImage" value="@post.PostMediaItems.FirstOrDefault()?.Path">
                                 }
-
-
-
-                                <input type="hidden" name="MediaId" alt="Submit" class="shareImage form-control" value="@post.PostMediaItems.FirstOrDefault()?.Path">
-                            }
-                            else
-                            {
-                                <h5 class="mb-3 control-label" style="font-weight: bold">
-                                    لا بوجد ميديا
-                                </h5>
-
-                                <div>
-                                    <img src="@defaultimg" style="border: 1px solid grey; width: 300px; max-width: 100%" />
-                                </div>
-                            }
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <input type="hidden" value="@post.Id" name="PostId" />
-
-            </form>
-
-
-        </div>
-    </div>
-
-</div>
-
-<div class="card ms-auto p-3 mt-4">
-
-    <h3 class="card-title" style="text-align: left"> @AppResources.Label("PostOperations") </h3>
-
-    @if (operation != null)
-    {
-
-        @foreach (var op in operation)
-        {
-            <div class="@((StatusEnum)op.Status == StatusEnum.Success ? "success" : "fail")">
-
-                <div class="section">
-                    <div class="section-title">Service</div>
-                    <div class="section-info"> @op.Service?.ToString()</div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">Messages</div>
-                    <div class="section-info">
-                        @{
-                            var splitValue = "************************************************";
-
-                            var message = op.Messages.Split(splitValue);
-                            <div>@splitValue</div>
-                            <div>@(message[1])</div>
-                            <div>
-                                @splitValue
+                                else
+                                {
+                                    <div class="text-center w-100">
+                                        <p class="text-muted">لا يوجد ميديا</p>
+                                        <img src="@defaultimg" class="default-img-preview" />
+                                    </div>
+                                }
                             </div>
-
-                        }
-
-                        @switch ((StatusEnum)op.Status)
-                        {
-
-                            case StatusEnum.Success:
-                                <div>Succes</div>
-                                break;
-
-                            case StatusEnum.Failed:
-                                <div>Failed</div>
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        <div>@op.CurrentState?.ToString()</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        }
-    }
-    else
-    {
-        <p>No operations yet</p>
-    }
+
+            <input type="hidden" value="@post.Id" name="PostId" />
+        </form>
+
+        <div class="mt-4 p-3 operations-card">
+            <h3 class="card-title mb-3">@AppResources.Label("PostOperations")</h3>
+            @if (operation != null && operation.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var op in operation)
+                            {
+                                <tr class="@((StatusEnum)op.Status == StatusEnum.Success ? "table-success" : "table-danger")">
+                                    <td>@op.Service?.ToString()</td>
+                                    <td>
+                                        @if((StatusEnum)op.Status == StatusEnum.Success) { <span class="badge bg-success">Success</span> }
+                                        else { <span class="badge bg-danger">Failed</span> }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var msg = op.Messages;
+                                            if(msg.Contains("************************************************")) {
+                                                msg = msg.Split(new[] { "************************************************" }, StringSplitOptions.None)[1];
+                                            }
+                                        }
+                                        @msg
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No operations recorded yet.</p>
+            }
+        </div>
+
+    </div>
 </div>
 
-
 <link rel="stylesheet" href="~/css/Posts/share.css" />
-<script src="~/js/Posts/share.js"> </script>
-<script>
-    function deletePostMedia(mediaid, postid) {
-        console.log("media" + mediaid);
-        console.log("post" + postid);
-        swal.fire({
-            customClass: {
-                confirmButton: "btn btn-success",
-            },
-            title: "SureDeletePostMedia",
-            text: "CannotUndo",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-            // buttons: ["كلّا", "نعم"],
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            showCancelButton: true,
-            showConfirmButton: true,
-            className: {
-                text: 'pleaseWork',
-            },
-        })
-            .then((willDelete) => {
-                if (willDelete.isConfirmed) {
-
-                    var serviceURL = "/MediaItem/DeletePostMedia";
-                    // var mediaId = id;
-                    var data = {
-
-                        media: mediaid,
-
-                        post: postid
-
-
-
-                    };
-                    $.ajax({
-                        type: "DELETE",
-                        url: serviceURL,
-                        data: $.param(data),
-                        success: function (data) {
-                            swal.fire({
-                                title: "DeletedSuccesfully",
-                                text: "MediaDeleted",
-                                icon: "success"
-                            }).then(function () {
-                                window.location.reload();
-                            }
-                            )
-                        },
-                        error: function (data) {
-                            swal.fire("DeleteError", "PlzTryagain", "error");
-                        },
-                    })
-
-                }
-                else {
-                    swal.fire({
-                        title: "DeleteCanceled",
-                        confirmButtonText: "Confirm"
-                    });
-                }
-            });
-    }
-
-
-</script>
-
+<script src="~/js/Posts/share.js"></script>

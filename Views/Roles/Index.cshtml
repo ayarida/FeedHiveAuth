@@ -6,7 +6,7 @@
 
 <a asp-action="Create" class="btn btn-primary mt-2 mb-4 create-role" style="border: none">أنشئ دور +</a>
 <div style="overflow-x:auto;" class="card">
-    <table class="table table-sm table-bordered mb-0">
+    <table class="role-table">
         <tr>
             <th>@AppResources.Label("Name")</th><th>@AppResources.Label("Description")</th><th>@AppResources.Label("Operations")</th>
         </tr>
@@ -17,11 +17,10 @@
                 <td>@role.Description</td>
                 <td>
                     <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@role.Id">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
+                        <icon name="edit" size="25"></icon></a>
                     <a type="submit" onclick="deleteRole(this.id)" id="@role.Id" class="btn btn-sm btn-danger delete-role">
-                        <i class="bi bi-trash3-fill"></i>
-                    </a>
+                        <icon name="delete" size="25">
+                        </icon></a>
                 </td>
             </tr>
         }

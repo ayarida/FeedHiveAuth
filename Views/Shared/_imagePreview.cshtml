@@ -1,13 +1,12 @@
 ﻿@using FeedHiveAuth.Data.Helpers
 
 
-<div style="display: flex;align-items: center;column-gap: 20px; flex-direction: column; height: 58px; border: 2px solid grey !important;" id="media-section" class="ms-3">
-
+<div id="media-section" class="image-select">
     <label class="custom-file-upload">
-        <i class="bi bi-camera"></i>
+        <icon name="upload" size="25"></icon>
+        @AppResources.Label("Upload")
     </label>
     <input type="file" name="File" id="mediaInput" multiple />
-
 </div>
 
 
