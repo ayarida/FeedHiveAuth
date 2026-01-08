@@ -154,12 +154,10 @@ td {
 
 input.form-control {
     height: 40px;
-    border: none;
     background-color: transparent !important;
-    border-bottom: 1px solid;
-    border-radius: 0px !important;
     outline: none !important;
     -webkit-appearance: none !important;
+    border: 1px solid #979797 !important;
 }
 
 .form input:focus {
@@ -195,23 +193,23 @@ input.submit-button:not(.save-submit) {
     border-radius: 4px;
 }
 
-.createForm {
-    background-color: white;
-    border-radius: 10px;
-}
+/*.createForm {*/
+/*    background-color: white;*/
+/*    border-radius: 10px;*/
+/*}*/
 
 .chatIcon i {
     color: #5681ed;
     font-size: 20px;
 }
 
-.createUpper {
-    border: 1px solid #eaecee;
-    background: #f8fafc;
-    padding: 10px 25px;
-    border-radius: 6px;
-    margin-top: 17px;
-}
+/*.createUpper {*/
+/*    border: 1px solid #eaecee;*/
+/*    background: #f8fafc;*/
+/*    padding: 10px 25px;*/
+/*    border-radius: 6px;*/
+/*    margin-top: 17px;*/
+/*}*/
 
 .createHeader {
     display: flex;
@@ -240,12 +238,12 @@ input.submit-button:not(.save-submit) {
     box-shadow: none;
 }
 
-.custom-file-upload {
-    border: none;
-    width: fit-content;
-    padding: 5px 10px;
-    font-size: 26px;
-}
+/*.custom-file-upload {*/
+/*    border: none;*/
+/*    width: fit-content;*/
+/*    padding: 5px 10px;*/
+/*    font-size: 26px;*/
+/*}*/
 
 
 .submitPreview {
@@ -254,7 +252,6 @@ input.submit-button:not(.save-submit) {
     border-radius: 10px;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #E3E8EF;
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
     border-top: none;
@@ -268,7 +265,9 @@ input.submit-button:not(.save-submit) {
 
 
 .uploaded-img img {
-    width: 100%;
+    width: 200px;
+    height: 125px;
+    object-fit: contain;
 }
 
 
@@ -285,14 +284,7 @@ input.btn.btn-primary.mt-3:focus {
     .archive-button .bi-archive-fill {
         color: grey;
     }
-
-
-#media-section {
-    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
-    height: 60px;
-}
-
-
+    
 /*selectfrom archive*/
 .create .media-item {
     display: flex;
@@ -315,4 +307,89 @@ div#imgPreview {
     column-gap: 20px;
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 20px;
 }
+
+
+.save-button svg {
+    color: #4CB855 !important;
+}
+
+.container-create-header {
+    display: flex;
+    align-items: center;
+}
+
+
+button.submit-button.btn.btn-primary.save-submit {
+    width: fit-content;
+    background: transparent;
+    color: #4CB855;
+    border: 1px solid #4CB855 !important;
+    box-shadow: none;
+    padding: 0px 15px !important;
+    border-radius: 12px;
+}
+
+a.back-home {
+    color: #FA961E;
+    text-decoration: none;
+    border-radius: 12px;
+    border: 1px solid #FA961E;
+    padding: 16px 15px;
+}
+
+.post-actions {
+    margin-right: auto;
+    display: flex;
+    column-gap: 8px;
+}
+
+.form-body {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.form-body label.control-label {
+    color: #025E73;
+}
+
+.tox.tox-tinymce {
+    border: 1px solid #979797;
+}
+
+
+.container-create-header {
+    display: flex;
+    align-items: center;
+    background: #e4e4e4 !important;
+    padding-bottom: 10px;
+}
+
+form#create-form {
+    background: white;
+    border-radius: 15px;
+}
+
+/*---------Sweet Alert -------*/
+
+.swal2-actions {
+    width: 150px;
+    margin-top: 0;
+}
+
+.swal2-popup.swal2-modal.swal2-show {
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+h2#swal2-title {
+    font-size: 20px;
+    padding-top: 15px;
+}
+
+button.swal2-confirm.btn.btn-primary.warning.swal2-styled {
+    height: 45px;
+}
+

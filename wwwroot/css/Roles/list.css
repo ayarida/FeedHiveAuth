@@ -16,6 +16,37 @@
     background-color: var(--blue-color);
 }
 
-th {
-    background: #F6F9FC !important;
+.role-table th {
+    color: var(--petrol-color);
+    text-align: center;
+    padding-top: 15px;
+}
+.role-table td {
+    border: 1px solid #979797;
+}
+
+/* Your Table Class */
+.role-table {
+    border-collapse: collapse; /* Essential for clean lines */
+    width: 100%;
+}
+
+/* Table Headers and Data Cells */
+.role-table th,
+.role-table td {
+    padding: 15px;
+    /* Add border to the LEFT side */
+    border-left: 1px solid #979797;
+}
+
+/* Remove the border from the very last column */
+.role-table th:last-child,
+.role-table td:last-child {
+    border-left: none;
+}
+
+.role-table td {
+    border: 1px solid #979797;
+    border-right: 0;
+    border-bottom: 0;
 }

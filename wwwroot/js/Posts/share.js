@@ -1,44 +1,54 @@
-﻿document.getElementById('form-share').addEventListener('submit',
-    function (event) {
+﻿// Function to delete media with updated SweetAlert syntax
+function deletePostMedia(mediaid, postid) {
 
-        if ($("input[type=radio]:checked").length == 0) {
-            event.preventDefault();
-            swal.fire({
-                customClass: {
-                    confirmButton: "btn btn-primary",
-                },
-                title: "الرجاء تحديد قناة",
-                confirmButtonText: "موافق"
-            });
+    swal.fire({
+        title: "هل أنت متأكد؟", // Or use your resource string
+        text: "لا يمكن التراجع عن هذا الإجراء",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "نعم، احذف",
+        cancelButtonText: "إلغاء",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        position: "top", // <--- Requested Position
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: "btn btn-secondary ms-2"
         }
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-        else {
-            var serviceURL = "/Social/Publish/Send" + event;
-            var shareForm = $(':input').serializeArray();
-
-            if ($('.shareImage')) {
-                var imgName = $('.shareImage').attr('name');
-                var imgId = $('.shareImage').attr('value');
-                shareForm.push({ name: imgName, value: imgId })
-            }
-
-            var channelId = $("input[name='Channels[0]']:checked").val();
-
+            var serviceURL = "/MediaItem/DeletePostMedia";
+            var data = {
+                media: mediaid,
+                post: postid
+            };
 
             $.ajax({
-                type: "POST",
+                type: "DELETE",
                 url: serviceURL,
-                data: shareForm,
-                success: function () {
-                    // location.href = "/Posts/List"
-                    //customized alert for success
-                    window.location.reload();
+                data: $.param(data),
+                success: function (data) {
+                    swal.fire({
+                        title: "تم الحذف بنجاح",
+                        icon: "success",
+                        position: "top",
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(function () {
+                        window.location.reload();
+                    });
                 },
-                error: function (xhr, status, error) {
-                    var err = eval("(" + xhr.responseText + ")");
-                    alert(err.Message);
+                error: function (data) {
+                    swal.fire({
+                        title: "خطأ",
+                        text: "حدث خطأ أثناء الحذف، يرجى المحاولة مرة أخرى",
+                        icon: "error",
+                        position: "top"
+                    });
                 },
-            })
+            });
+
         }
     });
-
+}

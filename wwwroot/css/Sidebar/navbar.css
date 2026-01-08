@@ -204,6 +204,8 @@ a.list-group-item.list-group-item-action.active {
     display: flex;
     align-items: center;
     column-gap: 10px;
+    margin-bottom: 0;
+    text-wrap: nowrap;
 }
 
 .side-bar-logo {

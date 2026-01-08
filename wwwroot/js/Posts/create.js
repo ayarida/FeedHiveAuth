@@ -1,94 +1,90 @@
-﻿// check media type and preview it
+﻿var fileTypes = ['jpg', 'jpeg', 'png', 'webp', 'mp4'];
 
-var fileTypes = ['jpg', 'jpeg', 'png', 'webp', 'mp4'];
-$(".custom-file-upload").on("click", function () {
-    $("#mediaInput").trigger("click");
-})
+// Handle Media Change
 $("#mediaInput").on("change", e => {
 
     let reader = new FileReader();
-    var extension = e.target.files[0].name.split('.').pop().toLowerCase();
 
+    // Safety check if user cancels the explorer window
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    var extension = e.target.files[0].name.split('.').pop().toLowerCase();
     var isAccepted = fileTypes.indexOf(extension) > -1;
 
-    // Check if file type is valid and show error message if not
+    // Check validity
     if (!isAccepted) {
         swal.fire({
             customClass: {
-                confirmButton: "btn btn-primary  warning",
+                confirmButton: "btn btn-primary warning",
             },
-            title: `${wrongType}`,
+            title: `${wrongType}`, // Ensure these variables are defined in your view
             text: `${requiredMediaType}`,
             confirmButtonText: "موافق",
+            position: "top"
         });
+        // Clear the input so they can try again
+        $("#mediaInput").val('');
     } else {
-
-        // If file type is image
+        // Image Logic
         if (extension !== "mp4") {
             reader.readAsDataURL(e.target.files[0]);
             reader.onload = function (e) {
                 let html = `
-                                 <div class = "uploaded-img mt-3">
-                                     <img src = "${e.target.result}" alt="placeholder" class="mb-3" />
-                                     <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                     </div>
-                                 </div>
-                             `;
+                     <div>
+                         <img src="${e.target.result}" alt="placeholder" class="mb-3" />
+                         <div onclick="deleteMedia(this)" class="deleteIcon">
+                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                         </div>
+                     </div>
+                 `;
+                $("#imgPreview").append(html);
+            }
+        }
+
+        // Video Logic
+        if (extension === "mp4") {
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function (e) {
+                let html = `
+                   <div class="video-holder mt-3">
+                        <video controls class="uploaded-img">
+                            <source src="${e.target.result}" alt="placeholder" class="mb-3" type="video/mp4"/>
+                        </video>
+                         <div onclick="deleteMedia(this)" class="deleteIcon">
+                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+                         </div>
+                    </div>
+                   `;
                 $("#imgPreview").append(html);
             }
         }
     }
+});
 
-    // If file type is video
-    if (extension === "mp4") {
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onload = function (e) {
-            let html = `
-                               <div class="video-holder">
-                                <video controls class = "uploaded-img">
-                                    <source src = "${e.target.result}" alt="placeholder" class="mb-3" type="video/mp4"/>
-                                   
-                                </video>
-                                 <div onclick="deleteMedia(this)" class="deleteIcon"><i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                                 </div>
-                            </div>
-                               `;
-            $("#imgPreview").append(html);
-        }
-    }
-
-})
-
-
-
-//check for missing fields
+// Validation and Submit Logic
 $(function (e) {
-
-    $(".submit-button").on("click", function () {
+    $(".submit-button").on("click", function (event) {
 
         $("input.form-control.req").each(function (index, element) {
-            if ($(element).val() === 0 || $(element).val() === '') {
+            if ($(element).val() == 0 || $(element).val() == '') {
                 event.preventDefault();
                 $(this).prev().addClass("star");
+
                 swal.fire({
                     customClass: {
-                        confirmButton: "btn btn-primary  warning",
+                        confirmButton: "btn btn-primary warning",
                     },
                     title: `${fields}`,
                     text: `${subFields}`,
                     confirmButtonText: "موافق",
+                    position: "top",
+                    width: "400px"
                 });
-
             }
-
-        })
-
-    })
+        });
+    });
 });
 
-
-// Delete media              
 function deleteMedia(event) {
-    // console.log(event)
     $(event).parent().remove();
 }
