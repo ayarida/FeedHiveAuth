@@ -96,10 +96,11 @@ namespace FeedHiveAuth.Controllers
             var mediaItemsList = currUserMediaItems();
             return View(mediaItemsList);
         }
-        public JsonResult GetFromArchive()
+        public async Task<JsonResult> GetFromArchive()
         {
-            var mediaItemsList = currUserMediaItems();
-            return new JsonResult(mediaItemsList);
+            //var mediaItemsList = currUserMediaItems();
+            var orgMediaList = await getOrganizationMedia();
+            return new JsonResult(orgMediaList);
         }
         [HttpDelete]
         [PermissionFilter("MediaItem_DeleteMediaItem")]
