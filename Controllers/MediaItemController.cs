@@ -3,18 +3,20 @@ using FeedHiveAuth.Data.Repositories;
 using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.JSON;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FeedHiveAuth.Controllers
 {
-    public class MediaItemController : Controller
+    public class MediaItemController : BaseController<MediaItemController>
     {
         protected MediaItemRepository _mediaItemService = Instances.Repositories.MediaItemRepository;
         protected PostRepository _postService = Instances.Repositories.PostRepository;
-        private readonly ILogger<PostsController> _logger;
-        public MediaItemController()
+        private readonly ILogger<MediaItemController> _logger;
+        
+        public MediaItemController(UserManager<ApplicationUser> userManager, ILogger<MediaItemController> _logger) : base(userManager, _logger)
         {
-
         }
         public int InsertMedia(List<MediaItem> mediaItems)
         {
@@ -52,14 +54,15 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         [PermissionFilter("MediaItem_SaveMedia")]
 
-        public IActionResult SaveMedia()
+        public async Task<IActionResult> SaveMedia()
         {
             if (HttpContext.Request.Form.Files.Any())
             {
-                var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+                //var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
+                var currUser = await getApplicationUser();
                 var oneFile = HttpContext.Request.Form.Files[0];
                 UploadFile(oneFile);
-                List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files, currentUser);//mapFileToMediaItem
+                List<MediaItem> Medias = _mediaItemService.MediasList(HttpContext.Request.Form.Files, currUser);//mapFileToMediaItem
                 InsertMedia(Medias.ToList());
             }
             return RedirectToAction("List", "MediaItem");
@@ -78,6 +81,13 @@ namespace FeedHiveAuth.Controllers
             var currentUser = Instances.Repositories.UserRepository.GetByUsername(User.Identity.Name).Id;
             var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
             return mediaItemsList;
+        }
+        public async Task<List<MediaItem>> getOrganizationMedia()
+        {
+            var currentUser = await getApplicationUser();
+            var mediaItems = _mediaItemService.GetOrganizationMedia(currentUser.OrganizationId);
+            //var mediaItemsList = _mediaItemService.GetMediasByUser(currentUser.ToString());
+            return mediaItems;
         }
         [HttpGet]
         [PermissionFilter("MediaItem_List")]

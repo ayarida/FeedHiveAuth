@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Tweetinvi.Core.Extensions;
@@ -177,23 +178,24 @@ namespace FeedHiveAuth.Controllers
         [Authorize]
         [PermissionFilter("Posts_CreatePost")]
         [HttpPost]
-        public ActionResult CreatePost(Post postForm)
+        public async Task<ActionResult> CreatePost(Post postForm)
         {
             if (postForm.Title != null)
             {
                 postForm.PublicLink = "/Posts/" + GeneratePostLink(postForm.Title);
             }
-            string userId = currUserId();
-            if (userId != null)
+            //string userId = currUserId();
+            var currentUser = await getApplicationUser();
+            if (currentUser!=null)
             {
                 //Edit or Create - same CreatedBy
-                postForm.CreatedBy = postForm.CreatedBy.IsNullOrEmpty() ? userId : postForm.CreatedBy;
-                postForm.ModifiedBy = userId;
+                postForm.CreatedBy = postForm.CreatedBy.IsNullOrEmpty() ? currentUser.Id : postForm.CreatedBy;
+                postForm.ModifiedBy = currentUser.Id;
+                postForm.OrganizationId = currentUser.OrganizationId;
             }
             _postService.Save(postForm);
 
             /////////SaveMedia////////////////////
-
             //Medias from archive 
             var MediasFromArchive = new List<MediaData>();
             var med = HttpContext.Request.Form["mediaItemsPaths"];
@@ -210,13 +212,12 @@ namespace FeedHiveAuth.Controllers
                 }
 
             }
-            //New Medias ( from File)
-
+            //New Medias (from File)
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
-                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,currentUser);
 
                 //SavePostMedias(post);
                 var result = SaveMedia(postMedias, postForm.Id);
@@ -231,7 +232,7 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateQuickPost()
+        public async Task<ActionResult> CreateQuickPost()
         {
 
             Post post = new Post
@@ -242,17 +243,17 @@ namespace FeedHiveAuth.Controllers
                 PostDate = DateTime.Now
             };
             var med = HttpContext.Request.Form["mediaItemPaths"];
-            string userId = currUserId();
-            if (userId != null)
+            var currUser = await getApplicationUser();
+            if (currUser != null)
             {
-                post.ModifiedBy = post.CreatedBy = userId;
+                post.ModifiedBy = post.CreatedBy = currUser.Id;
             }
             _postService.SaveQuickPost(post);
             if (HttpContext.Request.Form.Files.Any())
             {
                 var oneFile = HttpContext.Request.Form.Files[0];
                 var message = UploadMedia(oneFile);
-                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files,userId);
+                List<MediaItem> postMedias = _mediaItemService.MediasList(HttpContext.Request.Form.Files, currUser);
                 //SavePostMedias(post);
                 var result = SaveMedia(postMedias, post.Id);
                 //UploadMedia(post.PostMediaItems.FirstOrDefault());
@@ -381,12 +382,12 @@ namespace FeedHiveAuth.Controllers
             var postOps = _postService.GetPostOperations(post.Id);
             var errors = new List<string>();
 
-            if (postMedia.Count > 0)
+            if (postMedia.Any())
                 foreach (var med in postMedia)
                 {
                     _mediaItemService.DeletePostMedia(med.Id, post.Id);
                 }
-            if (postOps != null)
+            if (postOps.Any())
             {
                 foreach (var op in postOps)
                 {
