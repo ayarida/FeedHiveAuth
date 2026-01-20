@@ -6,6 +6,7 @@ using FeedHiveAuth.Models;
 using FeedHiveAuth.Models.Common;
 using FeedHiveAuth.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Configuration;
@@ -74,6 +75,7 @@ builder.Services.AddCors(options =>
                        .AllowCredentials();
             });
 });
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHostedService<TasksBgService>();
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
