@@ -1,0 +1,39 @@
+﻿@using FeedHiveAuth.Models.ViewModels
+@model OrgDetailsViewModel
+
+<h3>@Model.OrganizationName – Users by Role</h3>
+<hr />
+
+<a asp-action="Index" asp-controller="Organization" class="btn btn-success mb-3">
+    Back to List
+</a>
+
+<a asp-action="CreateUser" asp-controller="Organization"
+   asp-route-orgId="@Model.OrganizationId"
+   class="btn btn-success mb-3">
+    + Add User
+</a>
+
+@foreach (var role in Model.Roles)
+{
+    <div class="card mb-4 p-3">
+        <h5>🔐 @role.RoleName</h5>
+
+        @if (role.Users.Any())
+        {
+            <ul>
+                @foreach (var user in role.Users)
+                {
+                    <li>
+                        @user.FullName
+                        <small class="text-muted">(@user.Email)</small>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No users assigned</p>
+        }
+    </div>
+}

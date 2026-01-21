@@ -9,10 +9,10 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Admins of @org?.Name</h2>
 
-        <a asp-action="CreateAdmin"
-           asp-route-orgId="@org.Id"
+        <a asp-action="Index"
+           asp-controller="Organization"
            class="btn btn-primary">
-            Add Admin for @org.Name
+            Organizations List
         </a>
     </div>
 
@@ -36,7 +36,6 @@
                 <tr>
                     <th>UserName</th>
                     <th>Email</th>
-                    <th>Status</th>
                     <th style="width: 180px;">Actions</th>
                 </tr>
             </thead>
@@ -46,16 +45,7 @@
                     <tr>
                         <td>@admin.UserName</td>
                         <td>@admin.Email</td>
-                        <td>
-                            @* @if (admin.IsActive)
-                            {
-                                <span class="badge bg-success">Active</span>
-                            } *@
-                            else
-                            {
-                                <span class="badge bg-secondary">Inactive</span>
-                            }
-                        </td>
+                        
                         <td>
                             <a asp-action="EditAdmin"
                                asp-route-id="@admin.Id"

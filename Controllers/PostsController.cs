@@ -32,6 +32,7 @@ namespace FeedHiveAuth.Controllers
         private readonly ILogger<PostsController> _logger;
         public PostsController(UserManager<ApplicationUser> userManager, ILogger<PostsController> logger) : base(userManager, logger)
         {
+            _logger = logger;
         }
 
         [HttpGet]

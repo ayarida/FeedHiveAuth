@@ -58,7 +58,7 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: '@TempData["SwalSuccess"]',
+                            text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["SwalSuccess"])),
                         confirmButtonColor: '#3085d6'
                     });
                     </text>
@@ -69,8 +69,8 @@
                     <text>
                     Swal.fire({
                         icon: 'error',
-                        title: 'Action blocked',
-                        text: '@TempData["SwalError"]',
+                        title: 'Error',
+                            text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["SwalError"])),
                         confirmButtonColor: '#d33'
                     });
                     </text>
