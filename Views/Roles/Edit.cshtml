@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Update ROLE";
     var controllers = PermissionHelper.Controllers();
+    
 }
 
 <div class="card p-3" dir="ltr" style="text-align: left">
@@ -42,6 +43,7 @@
 
                     @foreach (var controller in controllers.OrderBy(x => x.Value.Item2))
                     {
+                        
                         <tr>
                             <td id="@controller.Key.ToLower()">
                                 <h5>@controller.Key</h5>
@@ -50,10 +52,17 @@
                                 <ul class="ks-cboxtags @(controller.Key.ToLower() + "data")">
                                     @foreach (var action in controller.Value.Item1)
                                     {
-                                        @* <span>@action</span> *@
+                                        var key = $"{controller.Key}:{action}";
+                                        //var checkboxId = $"{controller.Key}_{action}";
                                         <li>
-                                            <input value="@(action.ToString())" type="checkbox" id="@(controller.Key.ToLower())@action.ToString()" name="permissions" data-controller="@(controller.Key)" @(Model.Role.Permissions.Any(x => x.Controller == controller.Key && x.Action == action) ? "checked" : "") />
-                                            <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
+                                            <input value="@action"
+                                                   type="checkbox"
+                                                   name="permissions"
+                                                   id="@(controller.Key.ToLower())@action.ToString()"
+
+                                                   data-controller="@controller.Key"
+                                                   @(Model.PermissionSet.Contains(key) ? "checked" : "") />
+                                                   <label for="@(controller.Key.ToLower())@action.ToString()">@action.ToString()</label>
                                         </li>
                                     }
                                 </ul>
@@ -63,77 +72,56 @@
                 </table>
             </div>
         </form>
-       @*  <h4 class="my-3" style="font-weight: lighter !important; text-align: left">Members</h4>
-
-        @if (Model.Members != null)
-        {
-            <div class="d-flex flex-row-reverse mb-4 flex-wrap" style="column-gap: 10px;">
-                @foreach (var userMember in Model.Members)
-                {
-                    <div class="d-flex flex-row-reverse" style="column-gap: 5px">
-                        <i class="bi bi-person-fill"></i>
-                        <span>@userMember.UserName</span>
-                    </div>
-
-                }
-            </div>
-        }
-
-        <hr />
-
-        <h4 class="my-3" style="font-weight: lighter !important; text-align: left">Non-members</h4>
-
-        @if (Model.NonMembers != null)
-        {
-            <div class="d-flex flex-row-reverse flex-wrap" style="column-gap: 10px;">
-                @foreach (var userNotMember in Model.NonMembers)
-                {
-                    <div class="d-flex flex-row-reverse" style="column-gap: 5px">
-                        <i class="bi bi-person-fill"></i>
-                        <span>@userNotMember.UserName</span>
-                    </div>
-                }
-            </div>
-        } *@
     </div>
 
 </div>
 <script>
     function submitPermissions() {
-        var roleName = $('#role-name').val();
-        var roleDescription = $('#role-description').val();
-        var roleId = $('#role-id').val();
-        var permissions = [];
+
+        var roleData = {
+            Id: $('#role-id').val(),
+            Name: $('#role-name').val(),
+            Description: $('#role-description').val(),
+            Permissions: []
+        };
 
         // Get all checked checkboxes
         $('input[name="permissions"]:checked').each(function () {
-            var controllerName = $(this).data('controller');
-            var actionName = $(this).val();
-            permissions.push({ controller: controllerName, action: actionName });
+            roleData.Permissions.push({
+                Controller: $(this).data('controller'),
+                Action: $(this).val()
+            });
         });
-        var roleData = {
-            Id:roleId,
-            Name: roleName,
-            Description: roleDescription,
-            permissions: permissions
-        };
+       
         //Send permissions to the server using AJAX
         $.ajax({
             type: 'POST',
             url: '/Roles/SavePermissions',
             contentType: 'application/json',
+            dataType: 'json',
             data: JSON.stringify(roleData),
             success: function (data) {
                 swal.fire({
-                    title: "Role Added Successfully!",
+                    title: "Role Saved Successfully!",
                 }).then(function () {
                     window.location.replace("/Roles/Index");
 
                 });
             },
-            error: function (error) {
-                swal.fire("Error occured!" + error, "error");
+            error: function (xhr) {
+                let message = 'Unexpected error occurred';
 
+                if (xhr.responseJSON) {
+                    message = JSON.stringify(xhr.responseJSON);
+                } else if (xhr.responseText) {
+                    message = xhr.responseText;
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Save failed!',
+                    text: message
+                });
             }
         });
     }

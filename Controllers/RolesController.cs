@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace FeedHiveAuth.Controllers
@@ -67,88 +68,63 @@ namespace FeedHiveAuth.Controllers
             return list;
         }
         [HttpPost]
-        public async Task<IActionResult> SavePermissions([FromBody] Role roleData)
+        public async Task<IActionResult> SavePermissions([FromBody] RolePermissionDto roleData)
         {
-            IdentityRole roleToEdit = await roleManager.FindByIdAsync(roleData.Id.ToString());
-            var curr = await userManager.GetUserAsync(User);
-            var role = new Role
-            {
-                Id = roleData.Id,
-                Name = roleData.Name,
-                Description = roleData.Description,
-                ConcurrencyStamp = Guid.NewGuid().ToString()
-            };
-            if (roleToEdit == null) // new role
-            {
-                if (ModelState.IsValid)
-                {
-                    var result = await roleManager.CreateAsync(role);
-                    if (result.Succeeded)
-                    {
-                        var permissions = roleData.Permissions
-                            .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
-                            .ToList();
-
-                        foreach (var permission in permissions)
-                        {
-
-                            await roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", permission.Name));
-                            //await userManager.AddClaimAsync(curr, new System.Security.Claims.Claim("Permission", permission.Name));
-                        }
-                        if (roleData.Description != null)
-                        {
-                            roleRepository.saveRoleDescription(roleData.Id, roleData.Description);
-                        }
-                        return Ok(); // or return a specific result based on your needs
-                    }
-                    else
-                    {
-                        // Handle role creation failure
-                        return BadRequest(result.Errors);
-                    }
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-            }//end if new
-            else //update role
-            {
-                if (roleToEdit.Name != roleData.Name)
-                {
-                    roleToEdit.Name = roleData.Name;
-                }
-
-                IdentityResult result = await roleManager.UpdateAsync(roleToEdit);
-                if (result.Succeeded)
-                {
-                    var permissions = roleData.Permissions
-                           .Select(p => new Permission { Name = $"{p.Controller}_{p.Action}" })
-                           .ToList(); //list of new permissions
-                    //////////remove old permission
-                    var oldpermissions = await roleManager.GetClaimsAsync(roleToEdit);
-                    foreach(var oldclaim in oldpermissions)
-                    {
-                        var resultdelete = await roleManager.RemoveClaimAsync(roleToEdit,oldclaim);
-                    }
-                    ///
-                    
-                    foreach (var permission in permissions)
-                    {
-                        await roleManager.AddClaimAsync(roleToEdit, new System.Security.Claims.Claim("Permission", permission.Name));   
-                    }
-                    if (roleData.Description != null)
-                    {
-                        roleRepository.saveRoleDescription(roleData.Id, roleData.Description);
-                    }
-
-                    return RedirectToAction("Index", "Home", new { Id = roleData.Id });
-                }
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var role = await roleManager.FindByIdAsync(roleData.Id);
+            if (role == null)
+                return NotFound();
+
+            // Update role name if changed
+            if (role.Name != roleData.Name)
+            {
+                role.Name = roleData.Name;
+                var updateResult = await roleManager.UpdateAsync(role);
+                if (!updateResult.Succeeded)
+                    return BadRequest(updateResult.Errors);
             }
-            
+
+            // Build NEW permission set
+            var newPermissions = roleData.Permissions
+                .Select(p => $"Permission:{p.Controller}_{p.Action}")
+                .ToHashSet();
+
+            // Get CURRENT claims
+            var currentClaims = await roleManager.GetClaimsAsync(role);
+            var currentPermissions = currentClaims
+                .Where(c => c.Type == "Permission")
+                .Select(c => $"{c.Type}:{c.Value}")
+                .ToHashSet();
+
+            // DIFF calculation (FAST)
+            var permissionsToAdd = newPermissions.Except(currentPermissions);
+            var permissionsToRemove = currentPermissions.Except(newPermissions);
+
+            // Remove only removed permissions
+            foreach (var perm in permissionsToRemove)
+            {
+                var value = perm.Split('_')[1];
+                await roleManager.RemoveClaimAsync(role, new Claim("Permission", value));
+            }
+
+            // Add only new permissions
+            foreach (var perm in permissionsToAdd)
+            {
+                var value = perm.Split(':')[1];
+                await roleManager.AddClaimAsync(role, new Claim("Permission", value));
+            }
+
+            // Save description (non-identity)
+            if (!string.IsNullOrWhiteSpace(roleData.Description))
+            {
+                roleRepository.saveRoleDescription(roleData.Id, roleData.Description);
+            }
+
+            return Ok(new { success = true });
         }
+
         [PermissionFilter("Roles_Update")]
         public async Task<IActionResult> Update(string id)
         {
@@ -175,23 +151,25 @@ namespace FeedHiveAuth.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             Role role = await GetRoleById(id);
-            List<ApplicationUser> members = new List<ApplicationUser>();
-            List<ApplicationUser> nonMembers = new List<ApplicationUser>();
-            foreach (ApplicationUser user in userManager.Users)
-            {
-                var checkIfHasRole = await userManager.GetRolesAsync(user);
-                if (checkIfHasRole.Any())
-                {
-                    var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
-                    list.Add(user);
-                }
+            var permissionSet = role.Permissions.Select(p => $"{p.Controller}:{p.Action}")
+        .ToHashSet();
+            //List<ApplicationUser> members = new List<ApplicationUser>();
+            //List<ApplicationUser> nonMembers = new List<ApplicationUser>();
 
-            }
+            //foreach (ApplicationUser user in userManager.Users)
+            //{
+            //    var checkIfHasRole = await userManager.GetRolesAsync(user);
+            //    if (checkIfHasRole.Any())
+            //    {
+            //        var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+            //        list.Add(user);
+            //    }
+
+            //}
             return View(new RoleEdit
             {
                 Role = role,
-                Members = members,
-                NonMembers = nonMembers
+                PermissionSet = permissionSet
             });
         }
         [PermissionFilter("Roles_Update")]
