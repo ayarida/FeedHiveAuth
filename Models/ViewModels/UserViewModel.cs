@@ -6,6 +6,7 @@
         public string FullName { get; set; }
         public string Email { get; set; }
         public string ParentId { get; set; }  // Needed to group editors under orgadmin
+        public string OrganizationId { get; set; }
     }
 
 }

@@ -31,7 +31,10 @@
 </table>
  *@
 @model List<OrganizationViewModel>
-
+<a href="/Identity/Account/SuperAdmin"
+   class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">
+    <i class="bi bi-building"></i> Back
+</a>
 <h2>Organizations</h2>
 
 <table class="table table-striped">
@@ -40,7 +43,7 @@
             <th>Name</th>
             <th>Created On</th>
             <th>Status</th>
-            <th>Org Admins</th>
+            <th>Admins</th>
             <th>Editors</th>
             <th>Actions</th>
             <th>Formatted Date</th>
@@ -63,8 +66,8 @@
                         Edit
                     </a>
 
-                    <a href="@Url.Action("OrgDetails", "Organization", new { orgId = item.Id })" class="btn btn-primary btn-sm">
-                        View OrgAdmins
+                    <a href="@Url.Action("Details", "Organization", new { orgId = item.Id })" class="btn btn-primary btn-sm">
+                        Hierarchy Tree
                     </a>
                     <form asp-controller="Organization" asp-action="DeleteConfirmed"
                           asp-route-id="@item.Id"

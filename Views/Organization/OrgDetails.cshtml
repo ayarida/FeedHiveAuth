@@ -1,15 +1,21 @@
 ﻿@using FeedHiveAuth.Models.ViewModels
 @model OrgDetailsViewModel
 
+@{
+    var orgId = @Model.OrganizationId;
+}
 <h3>@Model.OrganizationName – Admins & Editors</h3>
 
 <hr />
 
-<h4>Org Admins</h4>
-
-<a href="@Url.Action("CreateOrgAdmin", "Organization", new { orgId = Model.OrganizationId })"
+<h3>Organization Hierarchy Tree</h3>
+<a href="@Url.Action("Index", "Organization")"
    class="btn btn-success mb-3">
-    + Add Org Admin
+    Back to List
+</a>
+<a href="@Url.Action("CreateUser", "Organization", new { orgId = orgId })"
+   class="btn btn-success mb-3">
+    + Add Users
 </a>
 
 @foreach (var admin in Model.OrgAdmins)

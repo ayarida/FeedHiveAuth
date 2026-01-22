@@ -70,6 +70,5 @@ namespace FeedHiveAuth.Data.Repositories
                 return result;
             }
         }
-
     }
 }

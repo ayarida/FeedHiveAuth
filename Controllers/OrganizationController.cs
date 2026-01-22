@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -16,14 +17,15 @@ namespace FeedHiveAuth.Controllers
         protected OrganizationRepository _organizationService = Instances.Repositories.OrganizationRepository;
         protected UserRepository _userService = Instances.Repositories.UserRepository;
         private readonly ILogger<OrganizationController> _logger;
-        private RoleManager<IdentityRole> roleManager;
+        private RoleManager<IdentityRole> _roleManager;
         private UserManager<ApplicationUser> _userManager;
 
-        public OrganizationController(UserManager<ApplicationUser> userManager, ILogger<OrganizationController> logger)
+        public OrganizationController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<OrganizationController> logger)
             : base(userManager, logger)
         {
             _logger = logger;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
         //////////////////////////////// SUPER ADMIN ////////////////////////////////
 
@@ -45,7 +47,7 @@ namespace FeedHiveAuth.Controllers
                     Name = org.Name,
                     CreationDate = org.CreationDate,
                     Status = org.IsActive ? "Active" : "Inactive",
-                    OrgAdminsCount = users.Count(u => _userManager.IsInRoleAsync(u, "OrgAdmin").Result),
+                    OrgAdminsCount = users.Count(u => _userManager.IsInRoleAsync(u, "Admin").Result),
                     EditorsCount = users.Count(u => _userManager.IsInRoleAsync(u, "Editor").Result)
                 });
             }
@@ -115,7 +117,10 @@ namespace FeedHiveAuth.Controllers
         public async Task<IActionResult> Update(OrganizationEditViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                TempData["SwalError"] = "An Error Occured!";
                 return View(model);
+            }
 
             var org =  _organizationService.GetById(model.Id);
             if (org == null)
@@ -125,6 +130,7 @@ namespace FeedHiveAuth.Controllers
             org.IsActive = model.IsActive;
 
             _organizationService.Update(org);
+            TempData["SwalSuccess"] = "Updated Successfully!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -164,13 +170,14 @@ namespace FeedHiveAuth.Controllers
 
             foreach (var user in users)
             {
-                if (await _userManager.IsInRoleAsync(user, "OrgAdmin"))
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
                 {
                     orgAdmins.Add(new UserViewModel
                     {
                         Id = user.Id,
                         FullName = user.UserName,
-                        Email = user.Email
+                        Email = user.Email,
+                        OrganizationId = orgId
                     });
                 }
 
@@ -188,6 +195,7 @@ namespace FeedHiveAuth.Controllers
 
             var model = new OrgDetailsViewModel
             {
+                OrganizationId = org.Id,
                 OrganizationName = org.Name,
                 OrgAdmins = orgAdmins,
                 Editors = editors
@@ -244,17 +252,15 @@ namespace FeedHiveAuth.Controllers
             ViewBag.Organization = org;
 
             // get all users in OrgAdmin role
-            var allAdmins = await _userManager.GetUsersInRoleAsync("OrgAdmin");
+            var allAdmins = await _userManager.GetUsersInRoleAsync("Admin");
+            var organizationAdmins = allAdmins.Where(x => x.OrganizationId == orgId).ToList();
 
-            // filter by this organization
-            var admins = allAdmins.Where(x => x.OrganizationId == orgId).ToList();
-
-            return View(admins);
+            return View(organizationAdmins);
         }
         [HttpGet]
         [Authorize(Roles = "SuperAdmin")]
         [PermissionFilter("Organization_CreateAdmin")]
-        public IActionResult CreateAdmin(string orgId)
+        public IActionResult CreateNewAdmin(string orgId)
         {
             var org = _organizationService.GetById(orgId);
             if (org == null)
@@ -273,7 +279,7 @@ namespace FeedHiveAuth.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> CreateAdmin(CreateOrgAdminViewModel model)
+        public async Task<IActionResult> CreateNewAdmin(CreateOrgAdminViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -323,9 +329,9 @@ namespace FeedHiveAuth.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpGet]
-        [PermissionFilter("Organization_CreateOrgAdmin")]
+        [PermissionFilter("Organization_CreateAdmin")]
 
-        public IActionResult CreateOrgAdmin()
+        public IActionResult CreateAdmin()
         {
             var orgs = _organizationService.GetAll();
             ViewBag.Organizations = orgs;
@@ -333,8 +339,8 @@ namespace FeedHiveAuth.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [PermissionFilter("Organization_CreateOrgAdmin")]
-        public async Task<IActionResult> CreateOrgAdmin(CreateOrgAdminViewModel model)
+        [PermissionFilter("Organization_CreateAdmin")]
+        public async Task<IActionResult> CreateAdmin(CreateOrgAdminViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -362,21 +368,21 @@ namespace FeedHiveAuth.Controllers
                     return View(model);
                 }
 
-                await _userManager.AddToRoleAsync(user, "OrgAdmin");
+                await _userManager.AddToRoleAsync(user, "Admin");
 
-                TempData["Success"] = "Organization Admin created successfully!";
+                TempData["SwalSuccess"] = "Organization Admin created successfully!";
                 return RedirectToAction("ListAdmins", new {orgId = model.OrganizationId});
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "An error occurred while creating the organization admin.");
+                TempData["SwalError"] = "An error occurred while creating the organization admin!";
                 ViewBag.Organizations = _organizationService.GetAll();
                 return View(model);
             }
         }
 
         [HttpGet]
-        [Authorize(Roles = "OrgAdmin")]
         [PermissionFilter("Organization_ListEditors")]
         public IActionResult ListEditors()
         {
@@ -392,7 +398,6 @@ namespace FeedHiveAuth.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "OrgAdmin")]
         [PermissionFilter("Organization_CreateEditor")]
         public IActionResult CreateEditor()
         
@@ -451,8 +456,157 @@ namespace FeedHiveAuth.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CreateUser(string orgId)
+        {
+            var org = _organizationService.GetById(orgId);
+            if (org == null)
+                return NotFound();
 
-        
+            var roles = await _roleManager.Roles
+                .Where(r => r.Name != "SuperAdmin")
+                .Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                })
+                .ToListAsync();
+
+            var model = new CreateOrganizationUserViewModel
+            {
+                OrganizationId = orgId,
+                Roles = roles
+            };
+
+            ViewBag.Organization = org;
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(CreateOrganizationUserViewModel model)
+        {
+            var org = _organizationService.GetById(model.OrganizationId);
+            if (org == null)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                model.Roles = await _roleManager.Roles
+                    .Where(r => r.Name != "SuperAdmin")
+                    .Select(r => new SelectListItem
+                    {
+                        Text = r.Name,
+                        Value = r.Name
+                    })
+                    .ToListAsync();
+
+                ViewBag.Organization = org;
+                return View(model);
+            }
+
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    OrganizationId = model.OrganizationId,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (!result.Succeeded)
+                {
+                    
+                    var errorMessage = string.Join("<br/>", result.Errors.Select(e => e.Description));
+                    model.Roles = await _roleManager.Roles
+                        .Where(r => r.Name != "SuperAdmin")
+                        .Select(r => new SelectListItem
+                        {
+                            Text = r.Name,
+                            Value = r.Name
+                        })
+                        .ToListAsync();
+
+                    ViewBag.Organization = org;
+                    TempData["SwalError"] = errorMessage;
+                    return View(model);
+                }
+
+                await _userManager.AddToRoleAsync(user, model.SelectedRole);
+
+                TempData["SwalSuccess"] = "User created successfully!";
+                return RedirectToAction("Details","Organization", new { orgId = model.OrganizationId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating user");
+
+                ModelState.AddModelError("", "An unexpected error occurred.");
+
+                model.Roles = await _roleManager.Roles
+                    .Where(r => r.Name != "SuperAdmin")
+                    .Select(r => new SelectListItem
+                    {
+                        Text = r.Name,
+                        Value = r.Name
+                    })
+                    .ToListAsync();
+
+                ViewBag.Organization = org;
+                TempData["SwalError"] = "An unexpected error occurred!";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string orgId)
+        {
+            var org = _organizationService.GetById(orgId);
+            if (org == null)
+                return NotFound();
+
+            var users = _userService.FindByOrgId(orgId);
+
+            var roleGroups = new Dictionary<string, RoleGroupViewModel>();
+
+            foreach (var user in users)
+            {
+                // Identity supports multiple roles per user
+                var roles = await _userManager.GetRolesAsync(user);
+
+                foreach (var role in roles)
+                {
+                    if (!roleGroups.ContainsKey(role))
+                    {
+                        roleGroups[role] = new RoleGroupViewModel
+                        {
+                            RoleName = role
+                        };
+                    }
+
+                    roleGroups[role].Users.Add(new UserViewModel
+                    {
+                        Id = user.Id,
+                        FullName = user.UserName,
+                        Email = user.Email,
+                        
+                    });
+                }
+            }
+
+            var model = new OrgDetailsViewModel
+            {
+                OrganizationId = org.Id,
+                OrganizationName = org.Name,
+                Roles = roleGroups.Values.ToList()
+            };
+            return View(model);
+        }
+
 
     }
 }
