@@ -10,10 +10,18 @@
     width: fit-content;
     max-width: 100%;
     height: fit-content;
+    color: var(--red-color);
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 5px;
 }
 
 .update-link {
-    background-color: var(--blue-color);
+    background-color: transparent;
+    color: var(--blue-color);
+    border-color: var(--blue-color);
+    border-radius: 8px;
+    padding: 5px;
 }
 
 .role-table th {
@@ -49,4 +57,9 @@
     border: 1px solid #979797;
     border-right: 0;
     border-bottom: 0;
+}
+
+.create-role {
+    color: var(--blue-color);
+    border: 1px solid var(--blue-color);
 }

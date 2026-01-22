@@ -4,7 +4,14 @@
     ViewData["Title"] = "Roles";
 }
 
-<a asp-action="Create" class="btn btn-primary mt-2 mb-4 create-role" style="border: none">أنشئ دور +</a>
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2>@AppResources.Label("roles")</h2>
+    <a asp-action="Create" class="btn create-role">
+        <icon name="edit-role" size="30"></icon>
+        @AppResources.Label("CreateRole")
+    </a>
+</div>
 <div style="overflow-x:auto;" class="card">
     <table class="role-table">
         <tr>
@@ -16,11 +23,13 @@
                 <td>@role.Name</td>
                 <td>@role.Description</td>
                 <td>
-                    <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@role.Id">
-                        <icon name="edit" size="25"></icon></a>
-                    <a type="submit" onclick="deleteRole(this.id)" id="@role.Id" class="btn btn-sm btn-danger delete-role">
-                        <icon name="delete" size="25">
-                        </icon></a>
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <a class="btn btn-sm btn-primary update-link" asp-action="Edit" asp-route-id="@role.Id">
+                            <icon name="edit-role" size="30"></icon></a>
+                        <a type="submit" onclick="deleteRole(this.id)" id="@role.Id" class="btn btn-sm btn-danger delete-role">
+                            <icon name="delete" size="30">
+                            </icon></a>
+                    </div>
                 </td>
             </tr>
         }

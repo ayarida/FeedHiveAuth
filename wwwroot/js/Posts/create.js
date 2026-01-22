@@ -1,90 +1,80 @@
-﻿var fileTypes = ['jpg', 'jpeg', 'png', 'webp', 'mp4'];
+﻿
+    // 1. Create a global DataTransfer object to hold files
+    const dt = new DataTransfer();
+    var fileTypes = ['jpg', 'jpeg', 'png', 'webp', 'mp4'];
 
-// Handle Media Change
-$("#mediaInput").on("change", e => {
+    $("#mediaInput").on("change", function(e) {
+    // If no files selected, return
+    if (!this.files || this.files.length === 0) return;
 
-    let reader = new FileReader();
+    // Loop through all selected files (in case user selects multiple)
+    for (let i = 0; i < this.files.length; i++) {
+    let file = this.files[i];
+    let extension = file.name.split('.').pop().toLowerCase();
+    let isAccepted = fileTypes.indexOf(extension) > -1;
 
-    // Safety check if user cancels the explorer window
-    if (!e.target.files || e.target.files.length === 0) return;
-
-    var extension = e.target.files[0].name.split('.').pop().toLowerCase();
-    var isAccepted = fileTypes.indexOf(extension) > -1;
-
-    // Check validity
     if (!isAccepted) {
-        swal.fire({
-            customClass: {
-                confirmButton: "btn btn-primary warning",
-            },
-            title: `${wrongType}`, // Ensure these variables are defined in your view
-            text: `${requiredMediaType}`,
-            confirmButtonText: "موافق",
-            position: "top"
-        });
-        // Clear the input so they can try again
-        $("#mediaInput").val('');
-    } else {
-        // Image Logic
-        if (extension !== "mp4") {
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onload = function (e) {
-                let html = `
-                     <div>
-                         <img src="${e.target.result}" alt="placeholder" class="mb-3" />
-                         <div onclick="deleteMedia(this)" class="deleteIcon">
-                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
+    // Warning Alert
+    swal.fire({
+    customClass: { confirmButton: "btn btn-primary warning" },
+    title: `${wrongType}`,
+    text: `${requiredMediaType}`,
+    confirmButtonText: "موافق",
+    position: "top"
+});
+    continue; // Skip this invalid file
+}
+
+    // Add valid file to our DataTransfer object
+    dt.items.add(file);
+
+    // Preview Logic
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function (event) {
+
+    // We use the file name as a data attribute to find it later for deletion
+    let mediaHtml = '';
+
+    if (extension !== "mp4") {
+    // IMAGE
+    mediaHtml = `<img src="${event.target.result}" alt="preview" />`;
+} else {
+    // VIDEO
+    mediaHtml = `<video controls><source src="${event.target.result}" type="video/mp4"/></video>`;
+}
+
+        var deleteIconHtml = $("#trash-icon-template").html();
+    
+    let html = `
+                     <div class="media-preview-item" data-filename="${file.name}">
+                         ${mediaHtml}
+                         <div onclick="deleteMedia(this, '${file.name}')" class="delete-btn-overlay">
+                           ${deleteIconHtml}
                          </div>
                      </div>
                  `;
-                $("#imgPreview").append(html);
-            }
-        }
+    $("#imgPreview").append(html);
+}
+}
 
-        // Video Logic
-        if (extension === "mp4") {
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onload = function (e) {
-                let html = `
-                   <div class="video-holder mt-3">
-                        <video controls class="uploaded-img">
-                            <source src="${e.target.result}" alt="placeholder" class="mb-3" type="video/mp4"/>
-                        </video>
-                         <div onclick="deleteMedia(this)" class="deleteIcon">
-                            <i class="bi bi-trash3-fill" style="cursor: pointer"></i>
-                         </div>
-                    </div>
-                   `;
-                $("#imgPreview").append(html);
-            }
-        }
-    }
+    // Update the actual input with the accumulated files
+    this.files = dt.files;
 });
 
-// Validation and Submit Logic
-$(function (e) {
-    $(".submit-button").on("click", function (event) {
+    // Updated Delete Function
+    function deleteMedia(element, fileName) {
+    // 1. Remove visual element
+    $(element).closest('.media-preview-item').remove();
 
-        $("input.form-control.req").each(function (index, element) {
-            if ($(element).val() == 0 || $(element).val() == '') {
-                event.preventDefault();
-                $(this).prev().addClass("star");
+    // 2. Remove actual file from DataTransfer object
+    for (let i = 0; i < dt.items.length; i++) {
+    if (fileName === dt.items[i].getAsFile().name) {
+    dt.items.remove(i);
+    break;
+}
+}
 
-                swal.fire({
-                    customClass: {
-                        confirmButton: "btn btn-primary warning",
-                    },
-                    title: `${fields}`,
-                    text: `${subFields}`,
-                    confirmButtonText: "موافق",
-                    position: "top",
-                    width: "400px"
-                });
-            }
-        });
-    });
-});
-
-function deleteMedia(event) {
-    $(event).parent().remove();
+    // 3. Update the input element so the backend receives the correct list
+    document.getElementById('mediaInput').files = dt.files;
 }
