@@ -87,17 +87,23 @@ namespace FeedHiveAuth.Controllers
             }
 
             // Build NEW permission set
+            //var newPermissions = roleData.Permissions
+            //    .Select(p => $"Permission:{p.Controller}_{p.Action}")
+            //    .ToHashSet();
             var newPermissions = roleData.Permissions
-                .Select(p => $"Permission:{p.Controller}_{p.Action}")
-                .ToHashSet();
+    .Select(p => $"{p.Controller}_{p.Action}")
+    .ToHashSet();
 
             // Get CURRENT claims
             var currentClaims = await roleManager.GetClaimsAsync(role);
+            //var currentPermissions = currentClaims
+            //    .Where(c => c.Type == "Permission")
+            //    .Select(c => $"{c.Type}:{c.Value}")
+            //    .ToHashSet();
             var currentPermissions = currentClaims
-                .Where(c => c.Type == "Permission")
-                .Select(c => $"{c.Type}:{c.Value}")
-                .ToHashSet();
-
+    .Where(c => c.Type == "Permission")
+    .Select(c => c.Value)
+    .ToHashSet();
             // DIFF calculation (FAST)
             var permissionsToAdd = newPermissions.Except(currentPermissions);
             var permissionsToRemove = currentPermissions.Except(newPermissions);
@@ -105,15 +111,19 @@ namespace FeedHiveAuth.Controllers
             // Remove only removed permissions
             foreach (var perm in permissionsToRemove)
             {
-                var value = perm.Split('_')[1];
-                await roleManager.RemoveClaimAsync(role, new Claim("Permission", value));
+                await roleManager.RemoveClaimAsync(
+                    role,
+                    new Claim("Permission", perm)
+                );
             }
 
             // Add only new permissions
             foreach (var perm in permissionsToAdd)
             {
-                var value = perm.Split(':')[1];
-                await roleManager.AddClaimAsync(role, new Claim("Permission", value));
+                await roleManager.AddClaimAsync(
+                    role,
+                    new Claim("Permission", perm)
+                );
             }
 
             // Save description (non-identity)
